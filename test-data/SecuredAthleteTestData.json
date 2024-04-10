@@ -1,0 +1,14 @@
+{
+  "signedInUser": {
+    "email": "dcsgorgs+5@gmail.com",
+    "password": "345CourtStreet!"
+  },
+  "passwordResetUser": {
+    "email": "autpasswordreset@dcuv6tc9.mailosaur.net"
+  },
+  "urls": {
+    "dicksSportingGoods": "https://www.dickssportinggoods.com/",
+    "golfGalaxy": "https://www.golfgalaxy.com/",
+    "publicLands": "https://www.publiclands.com/"
+  }
+}
