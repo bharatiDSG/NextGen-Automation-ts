@@ -1,5 +1,5 @@
 // @SecuredAthleteProd
-const {test, expect} = require('@playwright/test');
+const {test} = require('@playwright/test');
 const {AccountSignIn} = require("./page-objects/AccountSignIn");
 const testData = JSON.parse(JSON.stringify(require('../test-data/SecuredAthleteTestData.json')));
 const url = testData.urls.dicksSportingGoods;
@@ -20,7 +20,7 @@ test.describe("Secured Athlete Prod Tests", () => {
 
         // Click the My Account link.
         await accountSignIn.myAccountLink.click();
-
+   
         // Sign In
         await accountSignIn.signIn(testData.signedInUser.email, testData.signedInUser.password);
         console.log("Sign in successful")

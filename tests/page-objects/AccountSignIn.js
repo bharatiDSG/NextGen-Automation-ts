@@ -4,8 +4,8 @@ exports.AccountSignIn = class AccountSignIn {
     constructor(page) {
         this.page = page;
         // Home Page
-        this.myAccountLink = page.getByRole('link', { name: 'My Account', exact: true });
-
+        this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
+  
         // Sign In Page
         this.signInPageHeader = page.getByRole('heading', { name: 'Sign in' });
         this.signInEmailField = page.getByLabel('Email address');
