@@ -64,7 +64,6 @@ exports.AccountSignIn = class AccountSignIn {
     }
 
     async extractChangeEmailPasswordLink(resetEmail, dateSent) {
-
         const mailosaur = new MailosaurClient("Yllvkk64VJxnA9L");
         const serverId = "dcuv6tc9";
 

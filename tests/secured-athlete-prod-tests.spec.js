@@ -1,6 +1,6 @@
 // @SecuredAthleteProd
 const { test, expect } = require('@playwright/test');
-const { getBaseUrl} = require('../config.ts');
+const { getBaseUrl} = require('../config.js');
 const { AccountSignIn } = require("./page-objects/AccountSignIn");
 const testData = JSON.parse(JSON.stringify(require('../test-data/SecuredAthleteTestData.json')));
 
