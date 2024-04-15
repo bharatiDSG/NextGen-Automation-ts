@@ -28,7 +28,7 @@ jobs:
 
       - name: DSG - Run Login and Forgot PW tests
         run: |
-          echo "Run login and forgot pw tests on GG"
+          echo "Run login and forgot pw tests on DSG"
           npx playwright test
         env:
             ENV: dsg_prod
@@ -53,7 +53,7 @@ jobs:
           retention-days: 3`
       - name: Public Lands - Run Login and Forgot PW tests
         run: |
-          echo "Run login and forgot pw tests on GG"
+          echo "Run login and forgot pw tests on PL"
           npx playwright test
         env:
             ENV: pl_prod      
