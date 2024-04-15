@@ -33,7 +33,7 @@ jobs:
         env:
             ENV: dsg_prod
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-report-DSG
           path: playwright-report/
@@ -46,7 +46,7 @@ jobs:
         env:
             ENV: gg_prod
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-report-GG
           path: playwright-report/
@@ -58,7 +58,7 @@ jobs:
         env:
             ENV: pl_prod      
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-report-PL
           path: playwright-report/
