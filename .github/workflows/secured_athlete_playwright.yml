@@ -23,8 +23,8 @@ jobs:
           echo "Install dependencies from lock file"
           npm ci
 
-          echo "Install Playwright and dependencies"
-          npx playwright install --with-deps
+        # echo "Install Playwright and dependencies"
+        # npx playwright install --with-deps
 
       - name: Run Login and Forgot PW tests on GG
         run: |
