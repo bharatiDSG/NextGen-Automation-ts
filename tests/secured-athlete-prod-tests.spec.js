@@ -1,6 +1,5 @@
 // @SecuredAthleteProd
 import { test, expect } from '@playwright/test';
-// const { expect } = require('@playwright/test');
 const { getBaseUrl} = require('../config.js');
 const { AccountSignIn } = require("./page-objects/AccountSignIn");
 const testData = JSON.parse(JSON.stringify(require('../test-data/SecuredAthleteTestData.json')));
@@ -16,6 +15,7 @@ test.describe("Secured Athlete Prod Tests", () => {
         const accountSignIn = new AccountSignIn(page);
 
         // Click the My Account link.
+        console.log("test")
         await accountSignIn.myAccountLink.click();
 
         // Sign In
