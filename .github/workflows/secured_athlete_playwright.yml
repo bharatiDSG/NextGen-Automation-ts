@@ -18,14 +18,16 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run GG Tests
+      - name: Install Dependencies
         run: |
           echo "Install dependencies from lock file"
           npm ci
 
-          echo "Install Playwright and dependencies"
-          npx playwright install --with-deps
+         # echo "Install Playwright and dependencies"
+         # npx playwright install --with-deps
 
+      - name: Run Login and Forgot PW tests on GG
+        run: |
           echo "Run login and forgot pw tests on GG"
           npx playwright test
         env:
