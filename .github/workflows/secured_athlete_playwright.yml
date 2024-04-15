@@ -24,6 +24,6 @@ jobs:
           npm ci
 
           echo "Run login and forgot pw tests on GG"
-          npm test
+          npx playwright test
 
          
