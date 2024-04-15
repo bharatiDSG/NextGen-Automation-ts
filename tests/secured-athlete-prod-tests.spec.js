@@ -15,7 +15,6 @@ test.describe("Secured Athlete Prod Tests", () => {
         const accountSignIn = new AccountSignIn(page);
 
         // Click the My Account link.
-        console.log("test")
         await accountSignIn.myAccountLink.click();
 
         // Sign In

@@ -8,7 +8,7 @@ on:
 jobs:
   playwright:
     name: 'Secured Athlete Playwright'
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.43.0-jammy
     steps:
