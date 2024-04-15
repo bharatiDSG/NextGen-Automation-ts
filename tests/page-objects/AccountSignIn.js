@@ -24,7 +24,7 @@ exports.AccountSignIn = class AccountSignIn {
         this.backToSignInLink = page.getByRole('link', { name: 'Back to Sign In' });
 
         // Account Page
-        this.hiTitle = page.getByText('Hi, ');
+        this.accountUserInfo = page.locator('[class="user-info"]');
         this.summaryLink = page.getByRole('link', { name: 'Summary' });
     }
 
@@ -46,7 +46,7 @@ exports.AccountSignIn = class AccountSignIn {
         await this.signInButton.click();
 
         // Verify account page
-        await expect(this.hiTitle).toBeVisible();
+        await expect(this.accountUserInfo).toBeVisible();
         await expect(this.summaryLink).toBeVisible();
     }
 
