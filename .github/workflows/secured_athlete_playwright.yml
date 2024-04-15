@@ -23,6 +23,9 @@ jobs:
           echo "Install dependencies from lock file"
           npm ci
 
+          echo "Install Playwright and dependencies"
+          npx playwright install --with-deps
+
           echo "Run login and forgot pw tests on GG"
           npx playwright test
         env:
