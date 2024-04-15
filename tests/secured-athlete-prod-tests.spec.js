@@ -4,7 +4,6 @@ const { getBaseUrl} = require('../config.js');
 const { AccountSignIn } = require("./page-objects/AccountSignIn");
 const testData = JSON.parse(JSON.stringify(require('../test-data/SecuredAthleteTestData.json')));
 
-
 test.describe("Secured Athlete Prod Tests", () => {
     test.beforeEach(async ({ page }) => {
         const accountSignIn = new AccountSignIn(page);
@@ -12,7 +11,7 @@ test.describe("Secured Athlete Prod Tests", () => {
         console.log("URL: " + getBaseUrl());
     });
 
-    test('sign in', async ({ page }) => {
+    test('1: sign in', async ({ page }) => {
         const accountSignIn = new AccountSignIn(page);
 
         // Click the My Account link.
@@ -23,7 +22,7 @@ test.describe("Secured Athlete Prod Tests", () => {
         console.log("Sign in successful")
     });
 
-    test('forgot password', async ({ page }) => {
+    test('2: forgot password', async ({ page }) => {
         const accountSignIn = new AccountSignIn(page);
         const resetEmail = testData.passwordResetUser.email;
 

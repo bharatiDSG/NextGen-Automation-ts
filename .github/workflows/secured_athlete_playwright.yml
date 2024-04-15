@@ -1,0 +1,25 @@
+name: Secured Athlete Playwright Tests
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  playwrighttests:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run GG Tests
+        run: |
+          echo "Install dependencies from lock file"
+          npm ci
+
+          echo "Run login and forgot pw tests on GG"
+          ENV=gg_prod npm test
+
+         
