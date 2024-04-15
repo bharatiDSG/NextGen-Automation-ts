@@ -19,6 +19,8 @@ jobs:
           echo "Install dependencies from lock file"
           npm ci
 
+          echo node -v
+
           echo "Run login and forgot pw tests on GG"
           npm test
 
