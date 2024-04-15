@@ -25,5 +25,7 @@ jobs:
 
           echo "Run login and forgot pw tests on GG"
           npx playwright test
+        env:
+            ENV: gg_prod
 
          
