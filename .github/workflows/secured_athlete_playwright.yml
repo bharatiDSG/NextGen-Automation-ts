@@ -8,8 +8,8 @@ on:
 jobs:
   playwrighttests:
     runs-on: ubuntu-latest
-    # container:
-      # image: mcr.microsoft.com/playwright:v1.43.0-jammy
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
