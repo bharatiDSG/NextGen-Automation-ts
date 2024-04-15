@@ -32,5 +32,6 @@ jobs:
           npx playwright test
         env:
             ENV: gg_prod
+            HOME: /root
 
          
