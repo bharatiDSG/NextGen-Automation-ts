@@ -33,6 +33,13 @@ jobs:
         env:
             ENV: gg_prod
 
+      - name: Run Login and Forgot PW tests on GG
+        run: |
+          echo "Run login and forgot pw tests on GG"
+          npx playwright test
+        env:
+            ENV: pl_prod      
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
