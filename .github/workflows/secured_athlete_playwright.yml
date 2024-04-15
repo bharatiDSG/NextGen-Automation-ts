@@ -23,27 +23,44 @@ jobs:
           echo "Install dependencies from lock file"
           npm ci
 
-        # echo "Install Playwright and dependencies"
-        # npx playwright install --with-deps
+          echo "Install Playwright and dependencies"
+          npx playwright install --with-deps
 
-      - name: Run Login and Forgot PW tests on GG
+      - name: DSG - Run Login and Forgot PW tests
+        run: |
+          echo "Run login and forgot pw tests on GG"
+          npx playwright test
+        env:
+            ENV: dsg_prod
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-DSG
+          path: playwright-report/
+          retention-days: 3`     
+
+      - name: Golf Galaxy - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on GG"
           npx playwright test
         env:
             ENV: gg_prod
-
-      - name: Run Login and Forgot PW tests on GG
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-GG
+          path: playwright-report/
+          retention-days: 3`
+      - name: Public Lands - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on GG"
           npx playwright test
         env:
             ENV: pl_prod      
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-PL
           path: playwright-report/
           retention-days: 3`
 
