@@ -1,8 +1,8 @@
 name: Secured Athlete Playwright Tests
 
 on:
-  push:
-    branches: [ master ]
+  schedule:
+    - cron: '*/4 * * * *'  # Run every 4 minutes
   workflow_dispatch:
 
 jobs:
@@ -30,7 +30,6 @@ jobs:
         run: |
           echo "Run login and forgot pw tests on DSG"
           npx playwright test
-          exit 1
         env:
             ENV: dsg_prod    
           
