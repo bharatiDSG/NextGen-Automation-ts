@@ -33,7 +33,7 @@ jobs:
         env:
             ENV: dsg_prod
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: playwright-report-DSG
           path: playwright-report/
