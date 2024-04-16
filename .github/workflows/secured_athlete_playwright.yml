@@ -80,14 +80,12 @@ jobs:
           path: playwright-report/
           retention-days: 3`
 
-      - uses: actions/checkout@master
-      - name: Microsoft Teams Notification
+      # - uses: actions/checkout@master
+      - name: Microsoft Teams Alert Notification
         uses: skitionek/notify-microsoft-teams@master
         if: always()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          steps: ${{ toJson(steps) }}      
+          overwrite: "{title: `**Test ALERT** Falure in ${workflow_link}`}"     
 
          
