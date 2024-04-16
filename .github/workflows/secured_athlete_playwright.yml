@@ -30,30 +30,30 @@ jobs:
         run: |
           echo "Run login and forgot pw tests on DSG"
           npx playwright test
+
+          curl -H "Content-Type: application/json" -d '{
+          "text": "DSG Login Scenarios Failed",
+          "themeColor": "FF0000",
+          "sections": [
+            {
+              "activityTitle": "Test Hook",
+              "activitySubtitle": "${{ github.workflow }} in ${{ github.repository }}",
+              "activityImage": "https://github.githubassets.com/favicon.ico",
+              "activityText": "Test Hook for new job.\n\nWorkflow Run URL: ${{ github.run_url }}"
+            }
+          ]
+            }' https://dcsgcloud.webhook.office.com/webhookb2/c9b9da52-70ce-4787-8344-6800ce16635e@e04b15c8-7a1e-4390-9b5b-28c7c205a233/IncomingWebhook/eb18995d565041d9a0ca5b6e89cf8728/af5dcb2c-9e23-4513-bfa1-7d9bbc064d73
+          exit 1
+
         env:
-            ENV: dsg_prod
+            ENV: dsg_prod    
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-report-DSG
           path: playwright-report/
           retention-days: 3`   
-          run: |
-            curl -H "Content-Type: application/json" -d '{
-            "text": "DSG Login Scenarios Failed",
-            "themeColor": "FF0000",
-            "sections": [
-              {
-                "activityTitle": "Test Hook",
-                "activitySubtitle": "${{ github.workflow }} in ${{ github.repository }}",
-                "activityImage": "https://github.githubassets.com/favicon.ico",
-                "activityText": "Test Hook for new job.\n\nWorkflow Run URL: ${{ github.run_url }}"
-              }
-            ]
-              }' https://dcsgcloud.webhook.office.com/webhookb2/c9b9da52-70ce-4787-8344-6800ce16635e@e04b15c8-7a1e-4390-9b5b-28c7c205a233/IncomingWebhook/eb18995d565041d9a0ca5b6e89cf8728/af5dcb2c-9e23-4513-bfa1-7d9bbc064d73
-            exit 1
-
-
+          
       - name: Golf Galaxy - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on GG"
@@ -66,6 +66,7 @@ jobs:
           name: playwright-report-GG
           path: playwright-report/
           retention-days: 3`
+
       - name: Public Lands - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on PL"
