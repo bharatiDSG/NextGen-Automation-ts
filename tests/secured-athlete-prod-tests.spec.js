@@ -1,7 +1,6 @@
-// @SecuredAthleteProd
 import { test, expect } from '@playwright/test';
-const { getBaseUrl} = require('../config.js');
-const { AccountSignIn } = require("./page-objects/AccountSignIn");
+import { getBaseUrl } from '../config.js';
+import { AccountSignIn } from '../page-objects/AccountSignIn.js';
 const testData = JSON.parse(JSON.stringify(require('../test-data/SecuredAthleteTestData.json')));
 
 test.describe("Secured Athlete Prod Tests", () => {
@@ -19,7 +18,6 @@ test.describe("Secured Athlete Prod Tests", () => {
 
         // Sign In
         await accountSignIn.signIn(testData.signedInUser.email, testData.signedInUser.password);
-        console.log("Sign in successful")
     });
 
     test('2: forgot password', async ({ page }) => {
@@ -50,8 +48,6 @@ test.describe("Secured Athlete Prod Tests", () => {
 
         // Sign In
         await accountSignIn.signIn(resetEmail, newPassword);
-        console.log("Sign in successful")
-
     });
 
 });

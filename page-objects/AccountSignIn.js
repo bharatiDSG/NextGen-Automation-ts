@@ -1,5 +1,5 @@
-const { expect } = require("@playwright/test");
-import MailosaurClient from "mailosaur";
+import { expect } from '@playwright/test'
+import MailosaurClient from 'mailosaur'
 
 exports.AccountSignIn = class AccountSignIn {
     constructor(page) {
@@ -9,10 +9,11 @@ exports.AccountSignIn = class AccountSignIn {
   
         // Sign In Page
         this.signInPageHeader = page.getByRole('heading', { name: 'Sign in' });
-        this.signInEmailField = page.getByLabel('Email address');
-        this.signInPasswordField = page.getByLabel('Password');
+        this.signInEmailField = page.locator('[id = "username"]') //page.getByLabel('Email address');
+        this.signInPasswordField = page.locator('[id = "password"]') //page.getByLabel('Password');
         this.signInButton = page.getByRole('button', {name: 'Sign In'});
         this.forgotPasswordLink = page.getByRole('link', { name: 'Forgot password?' });
+        this.forgotPasswordEmailField = page.locator('[id = "email"]')
         this.forgotPasswordHeader = page.getByRole('heading', { name: 'Forgot Your Password?' });
         this.continueButton = page.getByRole('button', { name: 'Continue' });
         this.checkYourEmailHeader = page.getByRole('heading', { name: 'Check Your Email' });
@@ -48,6 +49,8 @@ exports.AccountSignIn = class AccountSignIn {
         // Verify account page
         await expect(this.accountUserInfo).toBeVisible();
         await expect(this.summaryLink).toBeVisible();
+
+        console.log("Sign In Successful for: " + email)
     }
 
     async forgotPassword(email) {
@@ -55,10 +58,10 @@ exports.AccountSignIn = class AccountSignIn {
         await this.forgotPasswordLink.click();
 
         await expect(this.forgotPasswordHeader).toBeVisible();
-        await expect(this.signInEmailField).toBeVisible();
+        await expect(this.forgotPasswordEmailField).toBeVisible();
 
-        await this.signInEmailField.click();
-        await this.signInEmailField.fill(email);
+        await this.forgotPasswordEmailField.click();
+        await this.forgotPasswordEmailField.fill(email);
 
         await this.continueButton.click();
     }
