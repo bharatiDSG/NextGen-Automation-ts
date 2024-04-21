@@ -1,5 +1,5 @@
-import config from './config.json'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
+import config from './globalEnvironments.json'
 
 dotenv.config()
 

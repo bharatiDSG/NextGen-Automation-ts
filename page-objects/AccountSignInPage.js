@@ -1,7 +1,8 @@
 import { expect } from '@playwright/test'
 import MailosaurClient from 'mailosaur'
+import { getBaseUrl } from '../globalSetup.js';
 
-exports.AccountSignIn = class AccountSignIn {
+exports.AccountSignInPage = class AccountSignInPage {
     constructor(page) {
         this.page = page;
         // Home Page
@@ -34,6 +35,8 @@ exports.AccountSignIn = class AccountSignIn {
     }
 
     async signIn(email, password) {
+        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**")
+
         await expect(this.signInPageHeader).toBeVisible();
 
         await expect(this.signInEmailField).toBeVisible();
@@ -46,7 +49,8 @@ exports.AccountSignIn = class AccountSignIn {
 
         await this.signInButton.click();
 
-        // Verify account page
+        // Verify account page and links
+        await this.page.waitForURL(getBaseUrl() + "MyAccount/AccountSummary")
         await expect(this.accountUserInfo).toBeVisible();
         await expect(this.summaryLink).toBeVisible();
 
@@ -103,6 +107,12 @@ exports.AccountSignIn = class AccountSignIn {
         const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
         await sleep(seconds * 1000)
         console.log("Sleep: " + seconds + " seconds")
+    }
+
+    async addCookieToBlockMedallia() {
+        await this.page.evaluate(() => {
+            document.cookie = "BlockedTags=Medallia"
+        })
     }
 
 };
