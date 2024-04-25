@@ -1,11 +1,11 @@
 {
     "dsg_prod": {
         "baseUrl": "https://www.dickssportinggoods.com/"
-},
+    },
     "gg_prod": {
         "baseUrl": "https://www.golfgalaxy.com/"
-},
-    "pl_prod": {    
+    },
+    "pl_prod": {
         "baseUrl": "https://www.publiclands.com/"
-}  
+    }
 }

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { getBaseUrl } from '../globalSetup.js';
 import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
+import { CommonPage } from '../page-objects/CommonPage.js';
 import { signInUser, forgotPasswordUser } from '../test-data/securedAthleteTestData.js';
 
 
@@ -25,12 +26,13 @@ test.describe("Secured Athlete Prod Tests", () => {
 
     test('2: forgot password', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
+        const commonPage = new CommonPage(page)
         const resetEmail = forgotPasswordUser.email
 
         // Forgot password
         const dateSent = new Date();
         await accountSignInPage.forgotPassword(resetEmail);
-        await accountSignInPage.sleep(5);
+        await commonPage.sleep(5);
 
         // get password reset link
         const resetLink = await accountSignInPage.extractChangeEmailPasswordLink(resetEmail, dateSent);

@@ -2,7 +2,7 @@ import { expect } from '@playwright/test'
 import MailosaurClient from 'mailosaur'
 import { getBaseUrl } from '../globalSetup.js';
 
-exports.AccountSignInPage = class AccountSignInPage {
+export class AccountSignInPage {
     constructor(page) {
         this.page = page;
         // Home Page
@@ -102,17 +102,4 @@ exports.AccountSignInPage = class AccountSignInPage {
         await this.resetPasswordButton.click();
 
     }
-
-    async sleep(seconds) {
-        const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-        await sleep(seconds * 1000)
-        console.log("Sleep: " + seconds + " seconds")
-    }
-
-    async addCookieToBlockMedallia() {
-        await this.page.evaluate(() => {
-            document.cookie = "BlockedTags=Medallia"
-        })
-    }
-
 };
