@@ -9,7 +9,6 @@ export class DoorDashPage {
     }
 
     async goToLoginPage(url) {
-        
         await this.page.goto(url)
     }
 

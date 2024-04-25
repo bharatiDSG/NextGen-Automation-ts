@@ -10,7 +10,6 @@ test.describe("Door Dash", () => {
         // Go to baseUrl set in .env or defaults to dsg_prod
         await doorDashPage.goToLoginPage(getBaseUrl());
         console.log("URL: " + getBaseUrl());
-
     });
 
     test.only('1: sign in', async ({ page }) => {
@@ -23,7 +22,7 @@ test.describe("Door Dash", () => {
 
         // If login worked, end test, else enter code
         if (expect(page.getByRole('button', { name: 'DS Dick\'s Sporting Goods' })).toBeVisible()) {
-            console.log("Signed in without sixDigitCode!")
+            console.log("Signed in without sixDigitCode")
 
         } else {
             console.log("Let's get the sixDigitCode")
@@ -44,7 +43,5 @@ test.describe("Door Dash", () => {
         await page.getByRole('link', { name: 'Overview' }).click();
         await page.getByRole('link', { name: 'Organization' }).click();
         await page.getByRole('link', { name: 'Simulator' }).click();
-
     });
-
 });
