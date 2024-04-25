@@ -2,7 +2,7 @@ import { expect } from '@playwright/test'
 import MailosaurClient from 'mailosaur'
 import { getBaseUrl } from '../globalSetup.js';
 
-exports.AccountSignInPage = class AccountSignInPage {
+export class AccountSignInPage {
     constructor(page) {
         this.page = page;
         // Home Page

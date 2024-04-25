@@ -1,11 +1,14 @@
 {
     "dsg_prod": {
         "baseUrl": "https://www.dickssportinggoods.com/"
-},
+    },
     "gg_prod": {
         "baseUrl": "https://www.golfgalaxy.com/"
-},
-    "pl_prod": {    
+    },
+    "pl_prod": {
         "baseUrl": "https://www.publiclands.com/"
-}  
+    },
+    "door_dash": {
+        "baseUrl": "https://developer.doordash.com/portal/integration/drive_classic/delivery_simulator/"
+    }
 }
