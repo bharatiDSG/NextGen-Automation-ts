@@ -19,8 +19,8 @@ export class AccountSignInPage {
         this.continueButton = page.getByRole('button', { name: 'Continue' });
         this.checkYourEmailHeader = page.getByRole('heading', { name: 'Check Your Email' });
         this.changeYourPasswordHeader = page.getByRole('heading', { name: 'Change Your Password' });
-        this.newPasswordField = page.getByLabel('New password', { exact: true });
-        this.reEnterNewPasswordField = page.getByLabel('Re-enter new password');
+        this.newPasswordField = page.locator('[id="password-reset"]')
+        this.reEnterNewPasswordField = page.locator('[id="re-enter-password"]')
         this.resetPasswordButton = page.getByRole('button', { name: 'Reset password' });
         this.passwordChangedHeader = page.getByRole('heading', { name: 'Password Changed!' });
         this.backToSignInLink = page.getByRole('link', { name: 'Back to Sign In' });
