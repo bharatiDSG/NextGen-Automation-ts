@@ -26,6 +26,7 @@ export class AccountSignInPage {
         this.backToSignInLink = page.getByRole('link', { name: 'Back to Sign In' });
         this.continueWithAppleButton = page.getByRole('button', { name: 'Continue with Apple' })
         this.continueWithGoogleButton = page.getByRole('button', { name: 'Continue with Google' })
+        this.passwordError = page.locator('[id="error-element-password"]')
 
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
@@ -80,6 +81,9 @@ export class AccountSignInPage {
         await this.signInPasswordField.press('Tab');
 
         await this.signInButton.click();
+
+        // Verify no error since we can't validate bat genie page
+        await expect(this.passwordError).not.toBeVisible();
 
         console.log("Sign In Successful for: " + email)
 
