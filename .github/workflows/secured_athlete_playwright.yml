@@ -29,21 +29,21 @@ jobs:
       - name: DSG - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on DSG"
-          npx playwright test
+          npx playwright test secured_athlete_prod_tests.spec.js
         env:
             ENV: dsg_prod    
           
       - name: Golf Galaxy - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on GG"
-          npx playwright test
+          npx playwright test secured_athlete_prod_tests.spec.js
         env:
             ENV: gg_prod
 
       - name: Public Lands - Run Login and Forgot PW tests
         run: |
           echo "Run login and forgot pw tests on PL"
-          npx playwright test
+          npx playwright test secured_athlete_prod_tests.spec.js
         env:
             ENV: pl_prod 
 
