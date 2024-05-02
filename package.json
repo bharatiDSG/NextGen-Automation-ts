@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test secured_athlete_prod_tests.spec.js --headed",
+    "batgenie": "playwright test bat_genie_prod_tests.spec.js --headed"
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { getBaseUrl } from '../globalSetup.js';
 import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
 import { CommonPage } from '../page-objects/CommonPage.js';
-import { signInUser, forgotPasswordUser } from '../test-data/securedAthleteTestData.js';
+import { testData_DSG_PL_GG } from '../test-data/securedAthleteTestData.js';
 
 
 test.describe("Secured Athlete Prod Tests", () => {
@@ -21,13 +21,14 @@ test.describe("Secured Athlete Prod Tests", () => {
         const accountSignInPage = new AccountSignInPage(page);
 
         // Sign In
-        await accountSignInPage.signIn(signInUser.email, signInUser.password)
+        await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password)
     });
 
-    test('2: forgot password', async ({ page }) => {
+    test('2: reset password and sign in', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
         const commonPage = new CommonPage(page)
-        const resetEmail = forgotPasswordUser.email
+        const resetEmail = testData_DSG_PL_GG.resetEmail
+        const emailServerId = testData_DSG_PL_GG.emailServerId
 
         // Forgot password
         const dateSent = new Date();
@@ -35,7 +36,7 @@ test.describe("Secured Athlete Prod Tests", () => {
         await commonPage.sleep(5);
 
         // get password reset link
-        const resetLink = await accountSignInPage.extractChangeEmailPasswordLink(resetEmail, dateSent);
+        const resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
 
         // Change password
         const newPassword = dateSent.toISOString();

@@ -24,6 +24,8 @@ export class AccountSignInPage {
         this.resetPasswordButton = page.getByRole('button', { name: 'Reset password' });
         this.passwordChangedHeader = page.getByRole('heading', { name: 'Password Changed!' });
         this.backToSignInLink = page.getByRole('link', { name: 'Back to Sign In' });
+        this.continueWithAppleButton = page.getByRole('button', { name: 'Continue with Apple' })
+        this.continueWithGoogleButton = page.getByRole('button', { name: 'Continue with Google' })
 
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
@@ -38,8 +40,11 @@ export class AccountSignInPage {
         await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**")
 
         await expect(this.signInPageHeader).toBeVisible();
-
         await expect(this.signInEmailField).toBeVisible();
+
+        await expect(this.continueWithAppleButton).toBeVisible();
+        await expect(this.continueWithGoogleButton).toBeVisible();
+
         await this.signInEmailField.click();
         await this.signInEmailField.fill(email);
         await this.signInEmailField.press('Tab');
@@ -57,6 +62,30 @@ export class AccountSignInPage {
         console.log("Sign In Successful for: " + email)
     }
 
+
+    async signInBatGenie(email, password) {
+        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**")
+
+        await expect(this.signInPageHeader).toBeVisible();
+        await expect(this.signInEmailField).toBeVisible();
+
+        await expect(this.continueWithGoogleButton).not.toBeVisible();
+        await expect(this.continueWithAppleButton).not.toBeVisible();
+
+        await this.signInEmailField.click();
+        await this.signInEmailField.fill(email);
+        await this.signInEmailField.press('Tab');
+
+        await this.signInPasswordField.fill(password);
+        await this.signInPasswordField.press('Tab');
+
+        await this.signInButton.click();
+
+        console.log("Sign In Successful for: " + email)
+
+    }
+
+
     async forgotPassword(email) {
         await expect(this.forgotPasswordLink).toBeVisible();
         await this.forgotPasswordLink.click();
@@ -70,12 +99,11 @@ export class AccountSignInPage {
         await this.continueButton.click();
     }
 
-    async extractChangeEmailPasswordLink(resetEmail, dateSent) {
+    async extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent) {
         const mailosaur = new MailosaurClient("Yllvkk64VJxnA9L");
-        const serverId = "dcuv6tc9";
 
         // Connect to Mailosaur, and wait for that email to arrive
-        const email = await mailosaur.messages.get(serverId, {
+        const email = await mailosaur.messages.get(emailServerId, {
             sentTo: resetEmail,
         });
 
