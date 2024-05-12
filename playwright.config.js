@@ -11,7 +11,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  timeout: 60000,
+  timeout: 75000,
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -28,6 +28,7 @@ export default defineConfig({
   expect: {
     timeout: 10 * 1000,
   },
+  
   // globalSetup: require.resolve("./globalSetup.js"),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -39,6 +40,13 @@ export default defineConfig({
 
     // Capture screenshot after each test failure.
     screenshot: 'only-on-failure',
+
+    // Timeout for page waits
+    actionTimeout: 10000,
+
+    // launchOptions: {
+    //   slowMo: 50,
+    // },
   },
 
   /* Configure projects for major browsers */

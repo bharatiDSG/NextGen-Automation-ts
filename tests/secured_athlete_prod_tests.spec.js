@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { getBaseUrl } from '../globalSetup.js';
+import { HomePage } from '../page-objects/HomePage.js';
 import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
 import { CommonPage } from '../page-objects/CommonPage.js';
 import { testData_DSG_PL_GG } from '../test-data/securedAthleteTestData.js';
@@ -7,14 +8,14 @@ import { testData_DSG_PL_GG } from '../test-data/securedAthleteTestData.js';
 
 test.describe("Secured Athlete Prod Tests", () => {
     test.beforeEach(async ({ page }) => {
-        const accountSignInPage = new AccountSignInPage(page);
+        const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
-        await accountSignInPage.goToHomePage(getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl());
         console.log("URL: " + getBaseUrl());
 
         // Click the My Account link.
-        await accountSignInPage.myAccountLink.click();
+        await homePage.myAccountLink.click();
     });
 
     test('1: sign in', async ({ page }) => {
