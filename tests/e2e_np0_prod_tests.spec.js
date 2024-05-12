@@ -110,7 +110,7 @@ test.describe("E2E NP0 Prod", () => {
     });
 
 
-    test.only('2: STH - Guest - CC', async ({ page }) => {
+    test('2: STH - Guest - CC', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page)
         const productDisplayPage = new ProductDisplayPage(page)

@@ -29,7 +29,7 @@ jobs:
       - name: E2E NP0 GG STH Place Order
         run: |
           echo "Run E2E NP0 GG STH Place Order Test"
-          npx playwright test e2e_np0_prod_tests.spec.js
+          npx playwright test -g "2: STH - Guest - CC" 
         env:
             ENV: gg_np0prod    
 
