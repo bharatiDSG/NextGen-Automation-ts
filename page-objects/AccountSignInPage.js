@@ -5,14 +5,12 @@ import { getBaseUrl } from '../globalSetup.js';
 export class AccountSignInPage {
     constructor(page) {
         this.page = page;
-        // Home Page
-        this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
-  
+
         // Sign In Page
         this.signInPageHeader = page.getByRole('heading', { name: 'Sign in' });
         this.signInEmailField = page.locator('[id = "username"]') //page.getByLabel('Email address');
         this.signInPasswordField = page.locator('[id = "password"]') //page.getByLabel('Password');
-        this.signInButton = page.getByRole('button', {name: 'Sign In'});
+        this.signInButton = page.getByRole('button', { name: 'Sign In' });
         this.forgotPasswordLink = page.getByRole('link', { name: 'Forgot password?' });
         this.forgotPasswordEmailField = page.locator('[id = "email"]')
         this.forgotPasswordHeader = page.getByRole('heading', { name: 'Forgot Your Password?' });
@@ -31,10 +29,6 @@ export class AccountSignInPage {
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
         this.summaryLink = page.getByRole('link', { name: 'Summary' });
-    }
-
-    async goToHomePage(url) {
-        await this.page.goto(url);
     }
 
     async signIn(email, password) {
@@ -112,16 +106,35 @@ export class AccountSignInPage {
         });
 
         // console.log(email);
-  
+
         // Validate email is recent and correct subject
         expect(dateSent < email.received).toBeTruthy();
         expect(email.subject).toBe("Reset your password");
-        
+
         // Get the reset link (TODO: use text instead of index in the future)
         const passwordResetLink = email.html.links[5].href;
         console.log("Reset Link: " + passwordResetLink);
 
         return passwordResetLink;
+    }
+
+    async validateOrderConfirmationEmail(emailServerId, emailAddress) {
+        const mailosaur = new MailosaurClient("Yllvkk64VJxnA9L");
+
+        // Connect to Mailosaur, and wait for that email to arrive
+        const email = await mailosaur.messages.get(emailServerId, {
+            sentTo: emailAddress,
+        });
+
+        // console.log(email);
+
+        const orderNumber = email.html.codes[0].value;
+        console.log("orderNumberFromEmail: " + orderNumber)
+
+        expect(email.subject).toBe("Thank you for your order!")
+
+        return orderNumber;
+
     }
 
     async changePassword(newPassword) {
