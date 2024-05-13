@@ -8,8 +8,8 @@ export class AccountSignInPage {
 
         // Sign In Page
         this.signInPageHeader = page.getByRole('heading', { name: 'Sign in' });
-        this.signInEmailField = page.locator('[id = "username"]') //page.getByLabel('Email address');
-        this.signInPasswordField = page.locator('[id = "password"]') //page.getByLabel('Password');
+        this.signInEmailField = page.locator('[id = "username"]')
+        this.signInPasswordField = page.locator('[id = "password"]')
         this.signInButton = page.getByRole('button', { name: 'Sign In' });
         this.forgotPasswordLink = page.getByRole('link', { name: 'Forgot password?' });
         this.forgotPasswordEmailField = page.locator('[id = "email"]')

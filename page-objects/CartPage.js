@@ -81,23 +81,6 @@ export class CartPage {
         details.estimatedOrderTotal = getNextValueFromArray(cartAction, 'Estimated Order Total')
 
         return details;
-
-        // const orderSubtotal = getNextValueFromArray(cartPriceDetailsArray, 'Order Subtotal')
-        // console.log({ orderSubtotal })
-
-        // const estimatedShipping = getNextValueFromArray(cartPriceDetailsArray, 'Estimated Shipping')
-        // console.log({ estimatedShipping })
-
-        // const storePickup = getNextValueFromArray(cartPriceDetailsArray, 'Store Pickup')
-        // console.log({ storePickup })
-
-        // const estimatedTax = getNextValueFromArray(cartPriceDetailsArray, 'Estimated Tax ')
-        // console.log({ estimatedTax })
-
-        // const estimatedOrderTotal = getNextValueFromArray(cartPriceDetailsArray, 'Estimated Order Total')
-        // console.log({ estimatedOrderTotal })
-
-        // const cartPriceDetailsObject = 
     }
 
 
