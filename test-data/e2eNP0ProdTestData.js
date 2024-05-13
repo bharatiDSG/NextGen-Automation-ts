@@ -13,5 +13,4 @@ export const testData_e2e_np0_prod = {
     expiryDate: "03/30",
     securityCode: "7373",
     mailosaurServerID: "4imxgawu"
-
 }
