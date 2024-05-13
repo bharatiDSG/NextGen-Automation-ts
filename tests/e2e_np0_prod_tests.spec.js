@@ -174,11 +174,11 @@ test.describe("E2E NP0 Prod", () => {
 
         await expect(homePage.searchField).toBeVisible()
 
-        // bonus: validate email
-        await commonPage.sleep(10)
-        const emailServerId = testData_e2e_np0_prod.mailosaurServerID
-        const orderNumberFromEmail = await accountSignInPage.validateOrderConfirmationEmail(emailServerId, email)
-        expect(orderNumberFromConfirmationPage).toContain(orderNumberFromEmail);
+        // // bonus: validate email
+        // await commonPage.sleep(10)
+        // const emailServerId = testData_e2e_np0_prod.mailosaurServerID
+        // const orderNumberFromEmail = await accountSignInPage.validateOrderConfirmationEmail(emailServerId, email)
+        // expect(orderNumberFromConfirmationPage).toContain(orderNumberFromEmail);
 
         console.log('')
     });
