@@ -2,7 +2,7 @@ name: E2E GG NP0 PROD Playwright Tests
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run every hour
+    - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
 jobs:
