@@ -14,6 +14,11 @@ test.describe("Secured Athlete Prod Tests", () => {
         await homePage.goToHomePage(getBaseUrl());
         console.log("URL: " + getBaseUrl());
 
+        // Close popup if it displays
+        if (await page.getByLabel('Close button').isVisible()) {
+            await page.getByLabel('Close button').click()
+        }
+
         // Click the My Account link.
         await homePage.myAccountLink.click();
     });
