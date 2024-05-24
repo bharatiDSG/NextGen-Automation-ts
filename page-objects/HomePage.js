@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test";
+
 export class HomePage {
     constructor(page) {
         this.page = page;
@@ -11,6 +13,7 @@ export class HomePage {
     }
 
     async searchForProduct(searchInput) {
+        await expect(this.searchField).toBeVisible();
         await this.searchField.click()
         await this.searchField.fill(searchInput)
         await this.searchField.press('Enter')
