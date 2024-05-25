@@ -13,7 +13,7 @@ export class HomePage {
     }
 
     async searchForProduct(searchInput) {
-        await expect(this.searchField).toBeVisible();
+        await this.searchField.waitFor()
         await this.searchField.click()
         await this.searchField.fill(searchInput)
         await this.searchField.press('Enter')
