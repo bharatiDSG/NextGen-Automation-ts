@@ -15,7 +15,11 @@ export class ProductDisplayPage {
         this.oneItemCart = page.locator("//*[contains(text(), '1 item')]")
         this.colorsPDPList = page.locator("//div[contains(@class,'color-attributes-container pricing-color hmf-pl-s hmf-pl-m-0 sliding_row_inner not-pricing')]//button");
         this.shipToMeFullfilmentButton = page.locator('#pdp-homefield-ship-to-me')
+        this.freeStorePickupButton = page.locator('pdp-feature-in-store-pickup-button')
+        this.changeStoreButton = getByRole('button', { name: 'Change Store' })
+        this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability')
     }
+
 }
 
 

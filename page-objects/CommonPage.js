@@ -19,15 +19,18 @@ export class CommonPage {
             document.cookie = "BlockedTags=Medallia"
         })
     }
+    async assertCheckboxIsChecked(checkbox) {
+        assertTrue(checkbox).isChecked();
+    }
 
     async addRewriteFlagToUrl() {
             const currentUrl = this.page.url();
             console.log("URL actual:", currentUrl);
-            const rewriteFlagUrl = currentUrl + 'flag_useQVProductService=true&flag_useQVProductTemplate=true';
+            const rewriteFlagUrl = currentUrl + '?flag_useQVProductService=true&flag_useQVProductTemplate=true';
 
             console.log('Rewrite flag added: ' + rewriteFlagUrl);
             await this.page.goto(rewriteFlagUrl);
-        }
+    }
     }
 
     export async function isTextVisible(page, locator, expectedText) {
@@ -48,7 +51,7 @@ export class CommonPage {
             console.log("First color option clicked");
         } else {
             throw new Error('Cannot select color option');
-        }      
+        }
     }
 
     
