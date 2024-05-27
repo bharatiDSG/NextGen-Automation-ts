@@ -1,10 +1,10 @@
-import { test, expect } from '@playwright/test'
-import { getBaseUrl } from '../../../globalSetup.js'
+import { expect, test } from '@playwright/test'
+
+import { CommonPage } from '../../../page-objects/CommonPage.js'
 import { HomePage } from '../../../page-objects/HomePage.js'
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
-import { CommonPage} from '../../../page-objects/CommonPage.js'
 import { ProductListingPage } from '../../../page-objects/ProductListingPage.js'
-
+import { getBaseUrl } from '../../../globalSetup.js'
 
 test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
     test.beforeEach(async ({ page }) => {
@@ -23,29 +23,9 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         const commonPage = new CommonPage(page)
         const productListingPage = new ProductListingPage(page)
 
-    
-    //Add cookies
-        await commonPage.addCookieToBlockMedallia()
-
-    // Search for product
-        await homePage.searchForProduct("yeti brand")
-            console.log("Query search entered")
-
-    //Click Ship To Me
-        await commonPage.isElementVisibleAndEnabled(productDisplayPage.shipToMeButton)
-        await productDisplayPage.shipToMeButton.click({timeout: 15000})
-             console.log("Ship to me button clicked")
-
-    //Filter by color Blue
-    await commonPage.scrollIfElementNotVisible(productDisplayPage.colorFilterButton)
-        productDisplayPage.colorFilterButton.click()
-        
-        await productDisplayPage.blueColorButton.click({timeout: 15000})
-                console.log("Blue color filter clicked")
-
-    //Select a product
+        //Select a product
         await productListingPage.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid")
-            console.log("Selecting product...")
+        console.log("Selecting product...")
 
     //Click Add to Cart
         await commonPage.scrollIfElementNotVisible(productDisplayPage.addToCartButton)
@@ -71,7 +51,6 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
     
     //We should see "ADDED TO CART"
     await commonPage.isTextVisible(productDisplayPage.addedToCartMessage, "ADDED TO CART")
-            
     
     //Validate 'ADDED TO CART' is centered
        const isCentered = await productDisplayPage.addedToCartMessage.evaluate(element => {

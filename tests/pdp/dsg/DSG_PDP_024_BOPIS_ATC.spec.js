@@ -15,7 +15,6 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
         // Go to baseUrl set in .env
         await homePage.goToHomePage(getBaseUrl() + 'homr');
         console.log("URL: " + getBaseUrl());
-    
     });
 
     test('BOPIS ATC - Desktop', async ({ page }) => {
@@ -26,6 +25,5 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
         await ProductDisplayPage.freeStorePickupButton.click();
         await ProductDisplayPage.changeStoreButton.click();
         await CommonPage.assertCheckboxIsChecked(ProductDisplayPage.storesWithAvailabilityCheckbox);
-
     });
 });

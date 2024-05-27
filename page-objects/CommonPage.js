@@ -31,7 +31,6 @@ export class CommonPage {
             console.log('Rewrite flag added: ' + rewriteFlagUrl);
             await this.page.goto(rewriteFlagUrl);
     }
-    }
 
     async isTextVisible(locator, expectedText) {
         try {
