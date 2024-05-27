@@ -1,10 +1,10 @@
-const { expect } = require('@playwright/test');
+const { expect } = require('@playwright/test')
 
 
 export class CommonPage {
 
     constructor(page) {
-        this.page = page;
+        this.page = page
     }
 
     async sleep(seconds) {
@@ -63,11 +63,11 @@ export class CommonPage {
                 return
 
             } catch (error) {
-                console.error(`Element '${locator}' is not visible: ${error}`);
+                console.error(`Element '${locator}' is not visible: ${error}`)
                 retries--;
                 if (retries > 0) {
-                    console.log(`Trying to scroll to element '${locator}'...`);
-                    await this.scrollIntoViewIfNeeded(locator);
+                    console.log(`Trying to scroll to element '${locator}'...`)
+                    await this.scrollIntoViewIfNeeded(locator)
                 }
             }
         }

@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { getBaseUrl } from '../../../globalSetup.js';
-import { HomePage } from '../../../page-objects/HomePage.js';
-import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js';
-import { CommonPage} from '../../../page-objects/CommonPage.js';
-import { ProductListingPage } from '../../../page-objects/ProductListingPage.js';
+import { test, expect } from '@playwright/test'
+import { getBaseUrl } from '../../../globalSetup.js'
+import { HomePage } from '../../../page-objects/HomePage.js'
+import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
+import { CommonPage} from '../../../page-objects/CommonPage.js'
+import { ProductListingPage } from '../../../page-objects/ProductListingPage.js'
 
 
 test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
@@ -77,7 +77,7 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
        const isCentered = await productDisplayPage.addedToCartMessage.evaluate(element => {
        const computedStyle = window.getComputedStyle(element).textAlign;
          return computedStyle === 'center'
-    });
+    })
         console.log('Element centered: ', isCentered)
 
     //We should see Continue Shopping
@@ -94,5 +94,5 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
 
     //We should see "1 item"
     await commonPage.isTextVisible(productDisplayPage.oneItemCart, "(1 item)")
-    });
-});
+    })
+})
