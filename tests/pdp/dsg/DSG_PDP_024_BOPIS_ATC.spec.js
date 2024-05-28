@@ -25,7 +25,7 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
         console.log("URL: " + getBaseUrl());
     });
 
-    test('BOPIS ATC - Desktop', async ({ page }) => {
+    test('BOPIS ATC - Desktop', {tag: ['@rewrite']}, async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/mongoose-adult-switchback-comp-mountain-bike-24mona29swtchbckcprf/24mona29swtchbckcprf');
         await commonPage.addRewriteFlagToUrl();
         await commonPage.isTextVisible(productDisplayPage.freeStorePickupButton, "Select product options");
