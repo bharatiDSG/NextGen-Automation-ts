@@ -9,18 +9,23 @@ import { getBaseUrl } from '../../../globalSetup.js';
 
 test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
     let page;
-    let homePage = new HomePage(page);
-    let productDisplayPage = new ProductDisplayPage(page);
-    let commonPage = new CommonPage(page);
-    let headerPage = new HeaderPage(page);
-    let cartPage = new CartPage(page);
+    let homePage;
+    let productDisplayPage;
+    let commonPage;
+    let headerPage;
+    let cartPage;
     test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
+        commonPage = new CommonPage(page);
+        productDisplayPage = new ProductDisplayPage(page);
+        headerPage = new HeaderPage(page);
+        cartPage = new CartPage(page);
         // Go to baseUrl set in .env
         await homePage.goToHomePage(getBaseUrl() + 'homr');
         console.log("URL: " + getBaseUrl());
     });
 
-    test.only('BOPIS ATC - Desktop', async ({ page }) => {
+    test('BOPIS ATC - Desktop', async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/mongoose-adult-switchback-comp-mountain-bike-24mona29swtchbckcprf/24mona29swtchbckcprf');
         await commonPage.addRewriteFlagToUrl();
         await commonPage.isTextVisible(productDisplayPage.freeStorePickupButton, "Select product options");

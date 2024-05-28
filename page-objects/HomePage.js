@@ -1,8 +1,10 @@
+import { expect } from "@playwright/test";
+
 export class HomePage {
     constructor(page) {
         this.page = page;
 
-        this.searchField = page.locator('#searchInput');
+        this.searchField = page.locator('[id="searchInput"]').first()
         this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
     }
 
