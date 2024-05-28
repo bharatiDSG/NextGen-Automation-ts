@@ -62,8 +62,8 @@ export class CommonPage {
             try {
                 await expect(locator).toBeVisible({timeout:10000})
                 console.log(`Element: '${locator}' is VISIBLE`)
-            return
-            } catch (error) {
+                return
+        } catch (error) {
                 console.error(`Element '${locator}' is not visible: ${error}`)
                 retries--;
                 if (retries > 0) {
@@ -76,12 +76,11 @@ export class CommonPage {
     }
 
     async isElementCentered(locator) {
-    const isCentered = await locator.evaluate(element => {
+        const isCentered = await locator.evaluate(element => {
         const computedStyle = window.getComputedStyle(element).textAlign
-        return computedStyle === 'center'
+            return computedStyle === 'center'
     })
-    console.log('Element centered: ', isCentered)
-    return isCentered
+        console.log('Element centered: ', isCentered)
+            return isCentered
     }
-
 }
