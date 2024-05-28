@@ -66,14 +66,13 @@ export class CommonPage {
             try {
                 await expect(locator).toBeVisible({timeout:10000})
                 console.log(`Element: '${locator}' is VISIBLE`)
-                return
-
+            return
             } catch (error) {
                 console.error(`Element '${locator}' is not visible: ${error}`)
                 retries--;
                 if (retries > 0) {
                     console.log(`Trying to scroll to element '${locator}'...`)
-                    await this.scrollIntoViewIfNeeded(locator)
+                    await locator.scrollIntoViewIfNeeded()
                 }
             }
         }
@@ -82,5 +81,13 @@ export class CommonPage {
     async fillTextField(locator, text) {
         await locator.fill(text)
     }
+    async isElementCentered(locator) {
+        const isCentered = await locator.evaluate(element => {
+            const computedStyle = window.getComputedStyle(element).textAlign
+            return computedStyle === 'center'
+        })
+        console.log('Element centered: ', isCentered)
+        return isCentered
+        }
 
 }

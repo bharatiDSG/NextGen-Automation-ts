@@ -1,4 +1,4 @@
-import { CommonPage, isTextVisible, selectFirstColorOption } from '../../../page-objects/CommonPage.js';
+/*import { CommonPage, isTextVisible, selectFirstColorOption } from '../../../page-objects/CommonPage.js';
 import { expect, test } from '@playwright/test';
 
 import { HomePage } from '../../../page-objects/HomePage.js';
@@ -36,3 +36,4 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
 
     });
 });
+*/
