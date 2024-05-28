@@ -16,8 +16,5 @@
     },
     "batgenie_prod": {
         "baseUrl": "https://sso.dickssportinggoods.com/authorize?redirect_uri=com.batgenie://sso.dickssportinggoods.com/android/com.batgenie/callback&client_id=nG4ftngDcW7UADr5mi8M32HupYaXbdzQ&audience=dsg-jwts&scope=openid%20profile%20email%20read%3Aidentity%20offline_access%20read%3Aauthenticators%20remove%3Aauthenticators%20enroll&response_type=code&state=eyJ0YXJnZXRVcmwiOiJodHRwczovL3d3dy5kaWNrc3Nwb3J0aW5nZ29vZHMuY29tIiwic2tpcENvbXBsZXRlUHJvZmlsZSI6ZmFsc2V9/"
-    },
-    "dsg_preview": {
-        "baseUrl": "https://preview.dickssportinggoods.com/"
     }
 }
