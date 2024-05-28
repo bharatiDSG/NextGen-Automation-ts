@@ -22,8 +22,17 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
         await ProductListingPage.selectMatchingProduct("Nishiki Men's Colorado Sport Mountain Bike");
         await CommonPage.addRewriteFlagToUrl();
         await CommonPage.isTextVisible(page, ProductDisplayPage.shipToMeButton, "Select product options");
+        await ProductDisplayPage.availableProductColor.first().click();
+        await ProductDisplayPage.availableBikeFrameSize.first().click();
         await ProductDisplayPage.freeStorePickupButton.click();
         await ProductDisplayPage.changeStoreButton.click();
-        await CommonPage.assertCheckboxIsChecked(ProductDisplayPage.storesWithAvailabilityCheckbox);
+        await CommonPage.assertCheckboxIsChecked(CommonPage.storesWithAvailabilityCheckbox);
+        await CommonPage.fillTextField(CommonPage.zipCodeTextField,"15108");
+        await CommonPage.storesNearMe.first().click();
+        await CommonPage.selectStoreCloseButton.click();
+        await ProductDisplayPage.addToCartButton.click();
+        await CommonPage.isTextVisible(page, ProductDisplayPage.shipToMeButton, "Select product options");
+        await CommonPage.isTextVisible(page, ProductDisplayPage.shipToMeButton, "Select product options");
+
     });
 });

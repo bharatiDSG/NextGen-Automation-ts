@@ -18,8 +18,11 @@ export class ProductDisplayPage {
         this.shipToMeFullfilmentButton = page.locator('#pdp-homefield-ship-to-me')
         this.freeStorePickupButton = page.locator('pdp-feature-in-store-pickup-button')
         this.changeStoreButton = getByRole('button', { name: 'Change Store' })
-        this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability')
-    }
+        this.availableProductColor = page.locator("//button[contains(@class, 'pdp-color-swatch-selected') and not(contains(@class, 'disabled'))]")
+        this.availableBikeFrameSize = page.locator("//button[contains(@class, 'large-variant') and not(contains(@class, 'unavailable'))]")
+        this.page.locator('#pdp-atc-succes-cart-btn')).toContainText('Go To Cart');
+    }  
+
 
     async selectFirstColorOption(colorsPDPList) {
         const colorButtons = await this.colorsPDPList.count()

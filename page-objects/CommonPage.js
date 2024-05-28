@@ -5,6 +5,10 @@ export class CommonPage {
 
     constructor(page) {
         this.page = page
+        this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability')
+        this.zipCodeTextField = getByPlaceholder('Enter Zip code')
+        this.storesNearMe = page.locator('.store-details-container > .hmf-button')
+        this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true })
     }
 
     async sleep(seconds) {
@@ -75,6 +79,8 @@ export class CommonPage {
         }
         throw new Error(`Element '${locator}' is not visible`)
     }
-    
-    
+    async fillTextField(locator, text) {
+        await locator.fill(text)
+    }
+
 }
