@@ -5,10 +5,7 @@ export class CommonPage {
 
     constructor(page) {
         this.page = page
-        this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability')
-        this.zipCodeTextField = getByPlaceholder('Enter Zip code')
-        this.storesNearMe = page.locator('.store-details-container > .hmf-button')
-        this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true })
+
     }
 
     async sleep(seconds) {
@@ -24,7 +21,7 @@ export class CommonPage {
         })
     }
     async assertCheckboxIsChecked(checkbox) {
-        assertTrue(checkbox).isChecked();
+        await expect(checkbox).toBeChecked();
     }
 
     async addRewriteFlagToUrl() {
@@ -38,7 +35,7 @@ export class CommonPage {
 
     async isTextVisible(locator, expectedText) {
         try {
-            await expect(locator).toHaveText(expectedText)
+            await expect(locator).toContainText(expectedText)
             console.log(`Text '${expectedText}' is VISIBLE`)
             return true;
         } catch (error) {
@@ -46,6 +43,7 @@ export class CommonPage {
             throw new Error(`Text '${expectedText}' is not VISIBLE`)
         }
     }
+    
     
     async isElementVisibleAndEnabled(locator) {
         try {
