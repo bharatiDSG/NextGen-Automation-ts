@@ -18,6 +18,4 @@ export class HomePage {
         await this.searchField.fill(searchInput)
         await this.searchField.press('Enter')
     }
-
-
 }

@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-
 import { CommonPage } from '../../../page-objects/CommonPage.js'
 import { HomePage } from '../../../page-objects/HomePage.js'
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
@@ -7,71 +6,96 @@ import { ProductListingPage } from '../../../page-objects/ProductListingPage.js'
 import { getBaseUrl } from '../../../globalSetup.js'
 
 test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
-    test.beforeEach(async ({ page }) => {
-        const homePage = new HomePage(page)
+    let page;
+    let homePage;
+    let PDP;
+    let commonPage;
+    let PLP;
+
+    test.beforeEach(async ({ page: _page }) => {
+        page = _page;
+        homePage = new HomePage(page);
+        PDP = new ProductDisplayPage(page);
+        commonPage = new CommonPage(page);
+        PLP = new ProductListingPage(page);
 
         // Go to baseUrl set in .env
-        await homePage.goToHomePage(getBaseUrl())
-        console.log("URL: " + getBaseUrl())
-
+        await homePage.goToHomePage(getBaseUrl());
+        console.log("URL: " + getBaseUrl() + 'homr');
     });
 
+    test('1: DSG Yeti ATC - Desktop', async () => {
+        await homePage.searchForProduct("yeti brand");
+        console.log("Query search entered");
 
-    test('1: DSG Yeti ATC - Desktop', async ({ page }) => {
-        const productDisplayPage = new ProductDisplayPage(page)
-        const homePage = new HomePage(page)
-        const commonPage = new CommonPage(page)
-        const productListingPage = new ProductListingPage(page)
+        await PLP.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid");
+        console.log("Selecting product...");
 
-        //Select a product
-        await productListingPage.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid")
-        console.log("Selecting product...")
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
+        await PDP.addToCartButton.click();
+        console.log("Add to Cart button clicked");
 
-    //Click Add to Cart
-        await commonPage.scrollIfElementNotVisible(productDisplayPage.addToCartButton)
-        await productDisplayPage.addToCartButton.click()
-         //Expect to be disabled after click - Waiting confirmation
-         //await expect (productDisplayPage.addToCartButton).toBeDisabled()
-             console.log("Add to Cart button clicked")
+        await expect(PDP.addToCartButton).toBeDisabled();
+        await commonPage.isTextVisible(PDP.pleaseSelectColor, "Please Select Color");
+        await commonPage.scrollIfElementNotVisible(PDP.firstColorAvailable);
+        await PDP.firstColorAvailable.click();
 
-    //Should see "Please Select Color"
-        await commonPage.isTextVisible(productDisplayPage.pleaseSelectColor, "Please Select Color")
-            
-    //Select first color option
-    await productDisplayPage.selectFirstColorOption(productDisplayPage.colorsPDPList)
+        await expect(PDP.shipToMeFullfilmentButton).toBeEnabled();
+        console.log("Available to Ship is enabled");
 
-    //Validate Available to ship
-        await expect(productDisplayPage.shipToMeFullfilmentButton).toBeEnabled()
-        console.log("Available to Ship is enabled")
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
+        await PDP.addToCartButton.click();
+        console.log("Add to Cart button clicked");
 
-    //Click on Add to Cart button
-        await commonPage.scrollIfElementNotVisible(productDisplayPage.addToCartButton)
-        await productDisplayPage.addToCartButton.click({timeout: 15000})
-         console.log("Add to Cart button clicked")
-    
-    //We should see "ADDED TO CART"
-    await commonPage.isTextVisible(productDisplayPage.addedToCartMessage, "ADDED TO CART")
-    
-    //Validate 'ADDED TO CART' is centered
-       const isCentered = await productDisplayPage.addedToCartMessage.evaluate(element => {
-       const computedStyle = window.getComputedStyle(element).textAlign;
-         return computedStyle === 'center'
-    })
-        console.log('Element centered: ', isCentered)
+        await commonPage.isTextVisible(PDP.addedToCartMessage, "ADDED TO CART");
+        await commonPage.isElementCentered(PDP.addedToCartMessage);
 
-    //We should see Continue Shopping
-    await commonPage.isElementVisibleAndEnabled(productDisplayPage.continueShoppingMessage)
-    await commonPage.isTextVisible(productDisplayPage.continueShoppingMessage, " Continue Shopping ")
+        await commonPage.isElementVisibleAndEnabled(PDP.continueShoppingMessage);
+        await commonPage.isTextVisible(PDP.continueShoppingMessage, " Continue Shopping ");
 
-    //We should see "GO TO CART"
-    //await expect(productDisplayPage.goToCartMessage).toBeVisible()
-    await commonPage.isTextVisible(productDisplayPage.goToCartMessage, "GO TO CART")
+        await commonPage.isTextVisible(PDP.goToCartMessage, "GO TO CART");
 
-    //We click GO TO CART
-    await commonPage.isElementVisibleAndEnabled(productDisplayPage.goToCartButton)
-    await productDisplayPage.goToCartButton.click()
+        await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
+        await PDP.goToCartButton.click();
 
-    //We should see "1 item"
-    await commonPage.isTextVisible(productDisplayPage.oneItemCart, "(1 item)")
-    })
-})
+        await commonPage.isTextVisible(PDP.oneItemCart, "(1 item)");
+    });
+
+    test('1: DSG Yeti ATC - Rewrite', async () => {
+        await homePage.searchForProduct("yeti brand");
+        console.log("Query search entered");
+
+        await PLP.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid");
+        console.log("Selecting product...");
+
+        await commonPage.addRewriteFlagToUrl();
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
+        await PDP.addToCartButton.click();
+        console.log("Add to Cart button clicked");
+
+        await expect(PDP.addToCartButton).toBeEnabled();
+        await commonPage.isTextVisible(PDP.pleaseSelectColor, "Please Select Color");
+        await commonPage.scrollIfElementNotVisible(PDP.firstColorAvailable);
+        await PDP.firstColorAvailable.click();
+
+        await expect(PDP.shipToMeFullfilmentButton).toBeEnabled();
+        console.log("Available to Ship is enabled");
+
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
+        await PDP.addToCartButton.click();
+        console.log("Add to Cart button clicked");
+
+        await commonPage.isTextVisible(PDP.addedToCartMessage, "ADDED TO CART");
+        await commonPage.isElementCentered(PDP.addedToCartMessage);
+
+        await commonPage.isElementVisibleAndEnabled(PDP.continueShoppingMessage);
+        await commonPage.isTextVisible(PDP.continueShoppingMessage, " Continue Shopping ");
+
+        await commonPage.isTextVisible(PDP.goToCartMessage, "GO TO CART");
+
+        await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
+        await PDP.goToCartButton.click();
+
+        await commonPage.isTextVisible(PDP.oneItemCart, "(1 item)");
+    });
+});
