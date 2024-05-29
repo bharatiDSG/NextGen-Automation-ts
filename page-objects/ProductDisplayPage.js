@@ -14,7 +14,7 @@ export class ProductDisplayPage {
         this.goToCartMessage = page.getByText('GO TO CART')
         this.oneItemCart = page.getByText('1 item')
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available')
-        this.freeStorePickupButton = page.locator('pdp-feature-in-store-pickup-button')
+        this.freeStorePickupButton = page.locator('#pdp-in-store-pickup-button')
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' })
         this.availableProductColor = page.locator("//button[contains(@class, 'pdp-color-swatch-selected') and not(contains(@class, 'disabled'))]")
         this.availableBikeFrameSize = page.locator("//button[(contains(@aria-label,'S') or contains(@aria-label,'M') or contains(@aria-label,'L')) and not(contains(@class,'unavailable'))]")

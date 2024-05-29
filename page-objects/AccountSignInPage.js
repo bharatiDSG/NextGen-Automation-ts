@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test'
 import MailosaurClient from 'mailosaur'
+import { expect } from '@playwright/test'
 import { getBaseUrl } from '../globalSetup.js';
 
 export class AccountSignInPage {
