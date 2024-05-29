@@ -1,11 +1,7 @@
-const { expect } = require('@playwright/test')
-
-
 export class CommonPage {
 
     constructor(page) {
-        this.page = page
-
+        this.page = page;
     }
 
     async sleep(seconds) {
