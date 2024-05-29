@@ -20,7 +20,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     test.beforeAll(async ({ playwright }) => {
       apiContext = await playwright.request.newContext({
         // All requests we send go to this API endpoint.
-        baseURL: 'https://customer-order.dcsg.com/'
+        baseURL: 'https://customer-order.dcsg.com'
       });
     });
 
@@ -89,12 +89,14 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
         await page.waitForTimeout(20000); // waits for 20 seconds
         await expect(orderConfirmationPage.orderNumberText).toBeVisible()
         const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
+        const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage.replace("Order# ", "").trim()
         console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
+        console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
 
         //cancel the order
         //documentation - https://playwright.dev/docs/api-testing
         //currently this call does not work from a ui test; the below stand alone 1a test does successfully work
-        const newIssue = await apiContext.put(`https://customer-order.dcsg.com/api/v1/orders/${orderNumberFromConfirmationPage}/cancel`, {
+        const newIssue = await apiContext.put(`/api/v1/orders/${orderNumberFromConfirmationPageModified}/cancel`, {
             data: {
                 "athleteOrderCancelRequest": {
                     "agent": "choitali.chakraborty@dcsg.com",
@@ -108,6 +110,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
                 }
             }
         });
+        // console.log(newIssue)
         expect(newIssue.ok()).toBeTruthy();
         /*
         await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()
@@ -122,7 +125,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     //use this order number from the above test to cancel the order
     test('1a: Smoke Checkout Prod - cancel order', async ({ request }) => {
         //replace the order number here
-        const orderNumberFromConfirmationPage = '10489006074'
+        const orderNumberFromConfirmationPage = '20130177825'
 
         //Cancel the order via API request
         const newIssue = await request.put(`https://customer-order.dcsg.com/api/v1/orders/${orderNumberFromConfirmationPage}/cancel`, {
@@ -139,6 +142,8 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
                 }
             }
         });
+    
+        // console.log(newIssue)
         expect(newIssue.ok()).toBeTruthy();
       });
 });
