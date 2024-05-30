@@ -25,13 +25,8 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         console.log("URL: " + getBaseUrl() + 'homr');
     });
 
-    test('1: DSG Yeti ATC - Desktop', async () => {
-        await homePage.searchForProduct("yeti brand");
-        console.log("Query search entered");
-
-        await PLP.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid");
-        console.log("Selecting product...");
-
+    test('DSG ATC STH - Desktop', async () => {
+        await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
         await PDP.addToCartButton.click();
         console.log("Add to Cart button clicked");
@@ -62,13 +57,8 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         await commonPage.isTextVisible(PDP.oneItemCart, "(1 item)");
     });
 
-    test('1: DSG Yeti ATC - Rewrite', async () => {
-        await homePage.searchForProduct("yeti brand");
-        console.log("Query search entered");
-
-        await PLP.selectMatchingProduct("YETI 20 oz. Rambler Tumbler with MagSlider Lid");
-        console.log("Selecting product...");
-
+    test('DSG ATC STH - Rewrite', {tag: ['@rewrite']}, async () => {
+        await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await commonPage.addRewriteFlagToUrl();
         await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
         await PDP.addToCartButton.click();

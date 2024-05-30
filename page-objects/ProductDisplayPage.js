@@ -19,6 +19,10 @@ export class ProductDisplayPage {
         this.availableProductColor = page.locator("//button[contains(@class, 'pdp-color-swatch-selected') and not(contains(@class, 'disabled'))]")
         this.availableBikeFrameSize = page.locator("//button[(contains(@aria-label,'S') or contains(@aria-label,'M') or contains(@aria-label,'L')) and not(contains(@class,'unavailable'))]")
         this.availableWheelSize = page.locator("//button[(contains(@aria-label,'27.5 IN.') or contains(@aria-label,'29 IN.')) and not(contains(@class,'unavailable'))]")
+        this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
+        this.zipCodeTextField = page.getByPlaceholder('Enter Zip code');
+        this.storesNearMe = page.locator('.store-details-container > .hmf-button');
+        this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true });
     }  
 
 
