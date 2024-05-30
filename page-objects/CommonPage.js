@@ -31,7 +31,8 @@ export class CommonPage {
     }
 
     async isTextVisible(locator, expectedText) {
-            await expect(locator).toContainText(expectedText)
+            await expect(locator).toContainText(expectedText);
+            await expect(locator).toBeVisible();
             console.log(`Text '${expectedText}' is VISIBLE`)
             return true;
     }

@@ -13,8 +13,7 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
     let commonPage;
     let PLP;
 
-    test.beforeEach(async ({ page: _page }) => {
-        page = _page;
+    test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         PDP = new ProductDisplayPage(page);
         commonPage = new CommonPage(page);
@@ -54,7 +53,7 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
         await PDP.goToCartButton.click();
 
-        await commonPage.isTextVisible(PDP.oneItemCart, "(1 item)");
+        await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
     });
 
     test('DSG ATC STH - Rewrite', {tag: ['@rewrite']}, async () => {
@@ -87,6 +86,6 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
         await PDP.goToCartButton.click();
 
-        await commonPage.isTextVisible(PDP.oneItemCart, "(1 item)");
+        await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
     });
 });
