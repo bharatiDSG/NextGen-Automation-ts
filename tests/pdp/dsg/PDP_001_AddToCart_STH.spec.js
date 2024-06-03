@@ -1,12 +1,11 @@
 import { expect, test } from '@playwright/test'
-
 import { CartPage } from '../../../page-objects/CartPage.js';
 import { CommonPage } from '../../../page-objects/CommonPage.js'
 import { HomePage } from '../../../page-objects/HomePage.js'
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
 import { getBaseUrl } from '../../../globalSetup.js'
 
-test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
+test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     let homePage;
     let PDP;
     let commonPage;
@@ -23,7 +22,7 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         console.log("URL: " + getBaseUrl());
     });
 
-    test('DSG ATC STH - Desktop', async ({page}) => {
+    test('DSG ATC STH - Desktop', async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await PDP.addToCartButton.click();
         console.log("Add to Cart button clicked");
@@ -49,7 +48,7 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
     });
 
-    test('DSG ATC STH - Rewrite', {tag: ['@rewrite']}, async ({page}) => {
+    test('DSG ATC STH - Rewrite', { tag: ['@rewrite'] }, async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await commonPage.addRewriteFlagToUrl();
         await commonPage.scrollIfElementNotVisible(PDP.addToCartButtonRewrite);
