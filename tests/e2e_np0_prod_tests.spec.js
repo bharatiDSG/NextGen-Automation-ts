@@ -54,7 +54,7 @@ test.describe("E2E NP0 Prod", () => {
 
         // Verify correct store and add to cart
         await expect(productDisplayPage.storePickupSubText.filter({ hasText: storeName })).toBeVisible()
-        await productDisplayPage.addToCartButton.click();
+        await productDisplayPage.addToCartButtonRewrite.click();
 
         // Click Go to Cart
         await productDisplayPage.goToCartButton.click();
@@ -117,7 +117,6 @@ test.describe("E2E NP0 Prod", () => {
         const cartPage = new CartPage(page)
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
-        const accountSignInPage = new AccountSignInPage(page)
         const commonPage = new CommonPage(page)
 
         // Search for product
@@ -131,9 +130,9 @@ test.describe("E2E NP0 Prod", () => {
 
         // Click add to cart
         await commonPage.sleep(2)
-        await productDisplayPage.addToCartButton.scrollIntoViewIfNeeded()
-        await expect(productDisplayPage.addToCartButton).toBeVisible()
-        await productDisplayPage.addToCartButton.click();
+        await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
+        await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
+        await productDisplayPage.addToCartButtonRewrite.click();
 
         // Click Go to Cart
         await productDisplayPage.goToCartButton.click();

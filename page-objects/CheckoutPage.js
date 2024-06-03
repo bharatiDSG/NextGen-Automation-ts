@@ -23,9 +23,9 @@ export class CheckoutPage {
         this.billingShippingZipcode = page.locator('[id="zipcode"]')
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').getByLabel('completed').getByRole('img')
 
-        this.creditCardNumberField = page.frameLocator('iframe[title="Iframe for card number"]').locator('input[id="encryptedCardNumber"]')
-        this.creditCardExpiryDateField = page.frameLocator('iframe[title="Iframe for expiry date"]').locator('input[id="encryptedExpiryDate"]')
-        this.creditCardSecurityCodeField = page.frameLocator('iframe[title="Iframe for security code"]').locator('input[id="encryptedSecurityCode"]')
+        this.creditCardNumberField = page.frameLocator('iframe[title="Iframe for card number"] >> visible=true').locator('input[id="encryptedCardNumber"]')
+        this.creditCardExpiryDateField = page.frameLocator('iframe[title="Iframe for expiry date"] >> visible=true').locator('input[id="encryptedExpiryDate"]')
+        this.creditCardSecurityCodeField = page.frameLocator('iframe[title="Iframe for security code"] >> visible=true').locator('input[id="encryptedSecurityCode"]')
 
 
     }

@@ -4,6 +4,7 @@ export class ProductDisplayPage {
         this.page = page;
 
         this.storePickupEnabledButton = page.getByRole('button', { name: 'Free Store Pickup In stock at' })
+        this.shipToMeButton = page.getByRole('button', { name: 'Ship' })
         this.storePickupSubText = page.locator('#pdp-in-store-pickup-subtext div')
         this.addToCartButton = page.locator('#add-to-cart')
         this.addToCartButtonRewrite = page.locator('#pdp-add-to-cart-button')
@@ -23,18 +24,14 @@ export class ProductDisplayPage {
         this.zipCodeTextField = page.getByPlaceholder('Enter Zip code');
         this.storesNearMe = page.locator('.store-details-container > .hmf-button');
         this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true });
+
+        //PDP attributes
+        this.flexAttribute = page.getByRole('button',{ name: 'Tour Flex'})
+        this.handAttribute = page.getByRole('button',{ name: 'Right Hand'})
+        this.shaftAttribute = page.getByRole('button',{ name: 'Fujikura Ventus TR 6 Graphite'})
+        this.loftAttribute = page.getByRole('button',{ name: '9.0'})
+
     }  
-
-
-    async selectFirstColorOption(colorsPDPList) {
-        const colorButtons = await this.colorsPDPList.count()
-        if (colorButtons > 0) {
-            await this.colorsPDPList.first().click()
-            console.log("First color option clicked")
-        } else {
-            throw new Error('Cannot select color option')
-        }  
-    }
 }
 
 
