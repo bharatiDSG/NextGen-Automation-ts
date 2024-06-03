@@ -47,7 +47,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
         await productDisplayPage.loftAttribute.click();
 
         //add to cart
-        await productDisplayPage.addToCartButtonProd.click();
+        await productDisplayPage.addToCartButton.click();
 
         // Click Go to Cart
         await productDisplayPage.goToCartButton.click();
@@ -90,7 +90,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
 
         //cancel the order
         //documentation - https://playwright.dev/docs/api-testing
-        await orderConfirmationPage.cancelOrder(orderNumberFromConfirmationPageModified, apiContext)
+        await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext)
 
         //verify orderConfirmationPage
         await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()

@@ -7,7 +7,7 @@ export class CartPage {
         this.freeStorePickupRadioButtonText = page.getByText('Free Store Pickup at');
         this.cartPriceDetails = page.locator('[analyticeventname="CartAction"]');
         this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
-
+        this.cartItemAmount = page.locator('cart-valid-cart');
     }
 
     async getCartPriceDetailsArray() {
