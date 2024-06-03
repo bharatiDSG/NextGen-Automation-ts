@@ -1,17 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
 import { CartPage } from '../page-objects/CartPage.js';
 import { CheckoutPage } from '../page-objects/CheckoutPage.js';
-import { CommonPage } from '../page-objects/CommonPage.js';
 import { HomePage } from '../page-objects/HomePage.js';
 import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
 import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
-import { ProductListingPage } from '../page-objects/ProductListingPage.js';
 import { getBaseUrl } from '../globalSetup.js';
-import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData.js';
 import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData.js';
-import { timeStamp } from 'console';
 
 test.describe("DSG Prod Smoke Checkout Tests", () => {
     // Request context is reused by all tests in the file.
@@ -95,55 +90,12 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
 
         //cancel the order
         //documentation - https://playwright.dev/docs/api-testing
-        //currently this call does not work from a ui test; the below stand alone 1a test does successfully work
-        const newIssue = await apiContext.put(`/api/v1/orders/${orderNumberFromConfirmationPageModified}/cancel`, {
-            data: {
-                "athleteOrderCancelRequest": {
-                    "agent": "choitali.chakraborty@dcsg.com",
-                    "cancelDate": timeStamp,
-                    "cancelSource": "CallCenter",
-                    "reason": "CANCEL_ATHLETE_REQUEST"
-                },
-                "orderNumber": orderNumberFromConfirmationPage,
-                "wcsCancelRequest": {
-                    "storeId": "15108"
-                }
-            }
-        });
-        // console.log(newIssue)
-        expect(newIssue.ok()).toBeTruthy();
-        /*
+        await orderConfirmationPage.cancelOrder(orderNumberFromConfirmationPageModified, apiContext)
+
+        //verify orderConfirmationPage
         await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()
         await orderConfirmationPage.continueShoppingLink.click()
 
         await expect(homePage.searchField).toBeVisible()
-        */
-
     });
-
-
-    //use this order number from the above test to cancel the order
-    test('1a: Smoke Checkout Prod - cancel order', async ({ request }) => {
-        //replace the order number here
-        const orderNumberFromConfirmationPage = '20130177825'
-
-        //Cancel the order via API request
-        const newIssue = await request.put(`https://customer-order.dcsg.com/api/v1/orders/${orderNumberFromConfirmationPage}/cancel`, {
-            data: {
-                "athleteOrderCancelRequest": {
-                    "agent": "choitali.chakraborty@dcsg.com",
-                    "cancelDate": timeStamp,
-                    "cancelSource": "CallCenter",
-                    "reason": "CANCEL_ATHLETE_REQUEST"
-                },
-                "orderNumber": orderNumberFromConfirmationPage,
-                "wcsCancelRequest": {
-                    "storeId": "15108"
-                }
-            }
-        });
-    
-        // console.log(newIssue)
-        expect(newIssue.ok()).toBeTruthy();
-      });
 });

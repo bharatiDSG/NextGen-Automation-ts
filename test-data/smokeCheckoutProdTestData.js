@@ -12,7 +12,6 @@ export const testData_smokeCheckout_prod = {
     creditCardNumber: "4111 1111 1111 1111",
     expiryDate: "03/30",
     securityCode: "737",
-    mailosaurServerID: "4imxgawu",
-    usernameOrderAPI: "choitali.chakraborty@dcsg.com",
+    usernameOrderAPI: "sean.clawson@dcsg.com",
     passwordOrderAPI: "July@2021"
 }
