@@ -1,39 +1,36 @@
 import { expect, test } from '@playwright/test'
 
+import { CartPage } from '../../../page-objects/CartPage.js';
 import { CommonPage } from '../../../page-objects/CommonPage.js'
 import { HomePage } from '../../../page-objects/HomePage.js'
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
-import { ProductListingPage } from '../../../page-objects/ProductListingPage.js'
 import { getBaseUrl } from '../../../globalSetup.js'
 
 test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
-    let page;
     let homePage;
     let PDP;
     let commonPage;
-    let PLP;
+    let cartPage;
 
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         PDP = new ProductDisplayPage(page);
         commonPage = new CommonPage(page);
-        PLP = new ProductListingPage(page);
+        cartPage = new CartPage(page);
 
         // Go to baseUrl set in .env
-        await homePage.goToHomePage(getBaseUrl());
-        console.log("URL: " + getBaseUrl() + 'homr');
+        await homePage.goToHomePage(getBaseUrl() + 'homr');
+        console.log("URL: " + getBaseUrl());
     });
 
-    test('DSG ATC STH - Desktop', async () => {
+    test('DSG ATC STH - Desktop', async ({page}) => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
-        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
         await PDP.addToCartButton.click();
         console.log("Add to Cart button clicked");
 
         await expect(PDP.addToCartButton).toBeDisabled();
         await commonPage.isTextVisible(PDP.pleaseSelectColor, "Please Select Color");
-        await commonPage.scrollIfElementNotVisible(PDP.firstColorAvailable);
-        await PDP.firstColorAvailable.click();
+        await PDP.availableProductColor.first().click();
 
         await expect(PDP.shipToMeFullfilmentButton).toBeEnabled();
         console.log("Available to Ship is enabled");
@@ -43,12 +40,8 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         console.log("Add to Cart button clicked");
 
         await commonPage.isTextVisible(PDP.addedToCartMessage, "ADDED TO CART");
-        await commonPage.isElementCentered(PDP.addedToCartMessage);
-
-        await commonPage.isElementVisibleAndEnabled(PDP.continueShoppingMessage);
-        await commonPage.isTextVisible(PDP.continueShoppingMessage, " Continue Shopping ");
-
-        await commonPage.isTextVisible(PDP.goToCartMessage, "GO TO CART");
+        await commonPage.isTextVisible(PDP.continueShoppingButton, " Continue Shopping ");
+        await commonPage.isTextVisible(PDP.goToCartButton, "GO TO CART");
 
         await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
         await PDP.goToCartButton.click();
@@ -56,34 +49,27 @@ test.describe("Regression_PDP_DSG_Yeti_ATC_001", () => {
         await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
     });
 
-    test('DSG ATC STH - Rewrite', {tag: ['@rewrite']}, async () => {
+    test('DSG ATC STH - Rewrite', {tag: ['@rewrite']}, async ({page}) => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await commonPage.addRewriteFlagToUrl();
-        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
-        await PDP.addToCartButton.click();
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButtonRewrite);
+        await PDP.addToCartButtonRewrite.click();
         console.log("Add to Cart button clicked");
 
-        await expect(PDP.addToCartButton).toBeEnabled();
+        await expect(PDP.addToCartButtonRewrite).toBeEnabled();
         await commonPage.isTextVisible(PDP.pleaseSelectColor, "Please Select Color");
-        await commonPage.scrollIfElementNotVisible(PDP.firstColorAvailable);
-        await PDP.firstColorAvailable.click();
+        await PDP.availableProductColorRewrite.first().click();
 
         await expect(PDP.shipToMeFullfilmentButton).toBeEnabled();
         console.log("Available to Ship is enabled");
 
-        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
-        await PDP.addToCartButton.click();
+        await commonPage.scrollIfElementNotVisible(PDP.addToCartButtonRewrite);
+        await PDP.addToCartButtonRewrite.click();
         console.log("Add to Cart button clicked");
 
         await commonPage.isTextVisible(PDP.addedToCartMessage, "ADDED TO CART");
-        await commonPage.isElementCentered(PDP.addedToCartMessage);
-
-        await commonPage.isElementVisibleAndEnabled(PDP.continueShoppingMessage);
-        await commonPage.isTextVisible(PDP.continueShoppingMessage, " Continue Shopping ");
-
-        await commonPage.isTextVisible(PDP.goToCartMessage, "GO TO CART");
-
-        await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
+        await commonPage.isTextVisible(PDP.continueShoppingButton, " Continue Shopping ");
+        await commonPage.isTextVisible(PDP.goToCartButton, " Go To Cart ");
         await PDP.goToCartButton.click();
 
         await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");

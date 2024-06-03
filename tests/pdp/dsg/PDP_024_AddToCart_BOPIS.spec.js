@@ -8,7 +8,6 @@ import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
 import { getBaseUrl } from '../../../globalSetup.js';
 
 test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
-    let page;
     let homePage;
     let productDisplayPage;
     let commonPage;
@@ -28,15 +27,18 @@ test.describe("Regression_DSG_PDP_024_BOPIS_ATC", () => {
     test('DSG ATC BOPIS - Desktop', {tag: ['@rewrite']}, async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/mongoose-adult-switchback-comp-mountain-bike-24mona29swtchbckcprf/24mona29swtchbckcprf');
         await commonPage.addRewriteFlagToUrl();
-        await productDisplayPage.availableProductColor.first().click();
+        //Select product options
+        await productDisplayPage.availableProductColorRewrite.first().click();
         await productDisplayPage.availableBikeFrameSize.first().click();
         await productDisplayPage.availableWheelSize.first().click();
+        //Select the nearest store with availability to my zip code
         await productDisplayPage.freeStorePickupButton.click();
         await productDisplayPage.changeStoreButton.click();
         await commonPage.assertCheckboxIsChecked(productDisplayPage.storesWithAvailabilityCheckbox);
         await commonPage.fillTextField(productDisplayPage.zipCodeTextField,"15108");
         await productDisplayPage.storesNearMe.first().click();
-        await productDisplayPage.addToCartButton.click();
+        //Add to cart and check the product is in the cart
+        await productDisplayPage.addToCartButtonRewrite.click();
         await productDisplayPage.goToCartButton.click();
         await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
     });
