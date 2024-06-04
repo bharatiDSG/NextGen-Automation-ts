@@ -1,7 +1,7 @@
 name: PDP DSG Preview rewrite feature Playwright Tests
 on:
   push:
-    branches: [ pdp_rewrite_action ]
+    branches: [ actions/rewrite ]
 permissions:
   contents: read
   actions: write
