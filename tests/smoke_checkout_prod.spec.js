@@ -85,7 +85,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
         await expect(orderConfirmationPage.orderNumberText).toBeVisible()
         const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
         const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage.replace("Order# ", "").trim()
-        console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
+        // console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
         console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
 
         //cancel the order

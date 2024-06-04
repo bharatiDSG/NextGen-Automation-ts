@@ -29,5 +29,6 @@ export class OrderConfirmationPage {
         });
         //console.log(newIssue);
         expect(newIssue.ok()).toBeTruthy();
+        console.log("Order Cancelled: " + orderNumber)
     }
 }
