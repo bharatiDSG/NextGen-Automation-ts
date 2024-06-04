@@ -2,9 +2,7 @@ name: PDP DSG Preview rewrite feature Playwright Tests
 on:
   schedule:
     - cron: '0 */4 * * *'
-permissions:
-  contents: read
-  actions: write
+  workflow_dispatch:
 
 jobs:
   playwright:
@@ -35,4 +33,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 10
+          retention-days: 2
