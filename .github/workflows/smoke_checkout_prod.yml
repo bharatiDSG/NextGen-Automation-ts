@@ -1,0 +1,51 @@
+name: Smoke Checkout PROD Playwright Tests
+
+on:
+  schedule:
+    - cron: '30 09 * * */1'  # At 09:30 on every day-of-week - https://crontab.guru/#0_03_*_*_*/1
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    name: 'Smoke Checkout PROD Playwright'
+    runs-on: [ self-hosted, azure ]
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      # - uses: actions/setup-node@v4
+        # with:
+          # node-version: 20
+
+      - name: Install Dependencies
+        run: |
+          echo "Install dependencies from lock file"
+          npm ci
+
+          echo "Install Playwright and dependencies"
+          npx playwright install --with-deps
+
+      - name: Smoke Checkout Prod STH Order
+        run: |
+          echo "Run 1: Smoke Checkout Prod - place order Test"
+          npx playwright test -g "1: Smoke Checkout Prod - place order"
+        env:
+            ENV: dsg_prod
+
+      - name: Upload Report on Failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 2`
+
+      # - uses: actions/checkout@master
+      - name: Microsoft Teams Alert Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          job: ${{ toJson(job) }}
+          overwrite: "{title: `** ALERT ** Failure in Smoke Checkout Prod Playwright Test`}"
