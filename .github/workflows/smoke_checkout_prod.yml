@@ -2,7 +2,7 @@ name: Smoke Checkout PROD Playwright Tests
 
 on:
   schedule:
-    - cron: '30 09 * * */1'  # At 03:00 on every day-of-week - https://crontab.guru/#0_03_*_*_*/1
+    - cron: '30 09 * * */1'  # At 09:30 on every day-of-week - https://crontab.guru/#0_03_*_*_*/1
   workflow_dispatch:
 
 jobs:
