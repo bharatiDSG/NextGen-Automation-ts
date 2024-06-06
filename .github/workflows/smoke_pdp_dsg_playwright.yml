@@ -1,8 +1,8 @@
 name: PDP DSG Smoke Prod Playwright Tests
 on:
-  schedule:
-    - cron: '0 12 * * *'
-  workflow_dispatch:
+    push:
+        branches: [ DSG_PDP_Smoke_Job ]
+    workflow_dispatch:
 
 jobs:
   playwright:
