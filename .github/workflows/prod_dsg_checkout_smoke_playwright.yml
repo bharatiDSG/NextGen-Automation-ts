@@ -1,4 +1,4 @@
-name: Smoke Checkout PROD Playwright Tests
+name: PROD DSG Checkout Smoke Playwright Tests
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   playwright:
-    name: 'Smoke Checkout PROD Playwright'
+    name: 'PROD DSG Checkout Smoke Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.43.0-jammy
@@ -26,7 +26,7 @@ jobs:
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
 
-      - name: Smoke Checkout Prod STH Order
+      - name: PROD DSG Checkout Smoke STH Order
         run: |
           echo "Run 1: Smoke Checkout Prod - place order Test"
           npx playwright test -g "1: Smoke Checkout Prod - place order"

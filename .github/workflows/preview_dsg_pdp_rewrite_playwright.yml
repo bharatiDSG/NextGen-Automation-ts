@@ -1,4 +1,4 @@
-name: PDP DSG Preview rewrite feature Playwright Tests
+name: Preview DSG PDP Rewrite feature Playwright Tests
 on:
   schedule:
     - cron: '0 */4 * * *'
@@ -6,7 +6,7 @@ on:
 
 jobs:
   playwright:
-    name: 'PDP DSG Preview rewrite feature Playwright Tests'
+    name: 'Preview DSG PDP Rewrite feature Playwright Tests'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.43.0-jammy
