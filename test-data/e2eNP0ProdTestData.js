@@ -1,5 +1,5 @@
 export const testData_e2e_np0_prod = {
-    searchTerm1: "golf balls",
+    searchTerm1: "callaway golf ball",
     productMatch1: "2024",
     storeSearch: "Robinson",
     email: "testEmail@4imxgawu.mailosaur.net",
