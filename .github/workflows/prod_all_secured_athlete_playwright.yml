@@ -1,13 +1,13 @@
-name: E2E GG NP0 PROD Playwright Tests
+name: PROD All Secured Athlete Playwright Tests
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Run every half hour
+    - cron: '*/4 * * * *'  # Run every 4 minutes
   workflow_dispatch:
 
 jobs:
   playwright:
-    name: 'E2E GG NP0 PROD Playwright'
+    name: 'PROD All Secured Athlete Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.43.0-jammy
@@ -26,12 +26,26 @@ jobs:
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
 
-      - name: E2E NP0 GG STH Place Order
+      - name: DSG - Run Login and Forgot PW tests
         run: |
-          echo "Run E2E NP0 GG STH Place Order Test"
-          npx playwright test -g "2: STH - Guest - CC" 
+          echo "Run login and forgot pw tests on DSG"
+          npx playwright test secured_athlete_prod_tests.spec.js
         env:
-            ENV: gg_np0prod    
+            ENV: dsg_prod    
+          
+      - name: Golf Galaxy - Run Login and Forgot PW tests
+        run: |
+          echo "Run login and forgot pw tests on GG"
+          npx playwright test secured_athlete_prod_tests.spec.js
+        env:
+            ENV: gg_prod
+
+      - name: Public Lands - Run Login and Forgot PW tests
+        run: |
+          echo "Run login and forgot pw tests on PL"
+          npx playwright test secured_athlete_prod_tests.spec.js
+        env:
+            ENV: pl_prod 
 
       - name: Upload Report on Failure      
         uses: actions/upload-artifact@v4
@@ -48,6 +62,6 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in E2E GG NP0 Playwright Test`}"     
+          overwrite: "{title: `** ALERT ** Failure in Secured Athlete Login Scripts`}"     
 
          
