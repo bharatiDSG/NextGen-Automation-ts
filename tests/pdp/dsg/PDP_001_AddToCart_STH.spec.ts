@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+
 import { CartPage } from '../../../page-objects/CartPage.js';
 import { CommonPage } from '../../../page-objects/CommonPage.js'
 import { HomePage } from '../../../page-objects/HomePage.js'
@@ -6,17 +7,17 @@ import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js'
 import { getBaseUrl } from '../../../globalSetup.js'
 
 test.describe("PDP Ship To Home - Add To Cart Tests", () => {
-    let homePage;
-    let PDP;
-    let commonPage;
-    let cartPage;
-
+    let homePage: HomePage;
+    let PDP: ProductDisplayPage;
+    let commonPage: CommonPage;
+    let cartPage: CartPage;
+    
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         PDP = new ProductDisplayPage(page);
         commonPage = new CommonPage(page);
         cartPage = new CartPage(page);
-
+    
         // Go to baseUrl set in .env
         await homePage.goToHomePage(getBaseUrl() + 'homr');
         console.log("URL: " + getBaseUrl());
