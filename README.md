@@ -1,5 +1,6 @@
 # te-playwright-js
-    Playwright test automation framework for ecomm websites
+
+Playwright test automation framework for ecomm websites
 
 ## Install and Setup Steps
 
@@ -11,13 +12,14 @@
 ### Create .env file at the project root:
 
     te-playwright-js/.env
-<img src="image.png" alt="text" width="200"/>
+<img src="images/image.png" alt="text" width="200"/>
 
 
 ### Setting Test Environment
+
 Environment can be set in the command line or .env file.  If no environment is set, it will default to dsg_prod. Environments can be found in te-playwright-js/globalEnvironments.json file.
 
-<img src="image2.png" alt="text" width="200"/>
+<img src="images/image2.png" alt="text" width="200"/>
 
 
 ### Documentation for running tests:
