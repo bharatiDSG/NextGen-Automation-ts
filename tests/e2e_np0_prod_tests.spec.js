@@ -7,7 +7,6 @@ import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
 import { CartPage } from '../page-objects/CartPage.js';
 import { CheckoutPage } from '../page-objects/CheckoutPage.js';
 import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
 import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData.js';
 
 
@@ -33,7 +32,6 @@ test.describe("E2E NP0 Prod", () => {
         const cartPage = new CartPage(page)
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
-        const accountSignInPage = new AccountSignInPage(page)
         const commonPage = new CommonPage(page)
 
         // Search for product
