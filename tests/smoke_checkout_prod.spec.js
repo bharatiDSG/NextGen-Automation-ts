@@ -29,8 +29,12 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     const closePopup = page.locator('#slideoutCloseButton')
     page.once('frameattached', async data => {
       console.log("listening for popup frame once")
-      await closePopup.click({ timeout: 80000 })
-      console.log("popup closed")
+      if (closePopup.isVisible({ timeout: 20000 })) {
+        await closePopup.click({ timeout: 20000 })
+        console.log("popup closed")
+      } else {
+        console.log("no popup displayed")
+      }
     });
   });
 
@@ -39,7 +43,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     await apiContext.dispose();
   });
 
-    test('1: Smoke Checkout Prod - place order', async ({ page }) => {
+  test('1: Smoke Checkout Prod - place order', async ({ page }) => {
     const homePage = new HomePage(page);
     const productDisplayPage = new ProductDisplayPage(page)
     const cartPage = new CartPage(page)
