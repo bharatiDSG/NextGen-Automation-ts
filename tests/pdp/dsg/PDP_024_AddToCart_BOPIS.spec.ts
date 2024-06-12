@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 import { CartPage } from '../../../page-objects/CartPage.js';
-import { CommonPage } from '../../../page-objects/CommonPage.js';
-import { HomePage } from '../../../page-objects/HomePage.js';
+import { CommonPage } from '../../../page-objects/CommonPage.ts';
+import { HomePage } from '../../../page-objects/HomePage.ts';
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
 import { getBaseUrl } from '../../../globalSetup.js';
 
