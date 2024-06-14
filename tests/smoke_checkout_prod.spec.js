@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../page-objects/CartPage.js';
-import { CheckoutPage } from '../page-objects/CheckoutPage.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
+import { CartPage } from '../page-objects/CartPage.ts';
+import { CheckoutPage } from '../page-objects/CheckoutPage.ts';
+import { HomePage } from '../page-objects/HomePage.ts';
+import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.ts';
+import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.ts';
 import { getBaseUrl } from '../globalSetup.js';
 import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData.js';
 

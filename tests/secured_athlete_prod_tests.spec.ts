@@ -1,34 +1,40 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+
+import { AccountSignInPage } from '../page-objects/AccountSignInPage.ts';
+import { CommonPage } from '../page-objects/CommonPage.ts';
+import { HomePage } from '../page-objects/HomePage.ts';
 import { getBaseUrl } from '../globalSetup.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
-import { CommonPage } from '../page-objects/CommonPage.js';
-import { testData_BatGenie } from '../test-data/securedAthleteTestData.js';
+import { testData_DSG_PL_GG } from '../test-data/securedAthleteTestData.js';
 
-
-test.describe("Bat Genie", () => {
+test.describe("Secured Athlete Prod Tests", () => {
     test.beforeEach(async ({ page }) => {
         const homePage = new HomePage(page);
 
-        // Go to baseUrl set in .env
+        // Go to baseUrl set in .env or defaults to dsg_prod
         await homePage.goToHomePage(getBaseUrl());
         console.log("URL: " + getBaseUrl());
-    });
 
+        // Close popup if it displays
+        if (await page.getByLabel('Close button').isVisible()) {
+            await page.getByLabel('Close button').click()
+        }
+
+        // Click the My Account link.
+        await homePage.myAccountLink.click();
+    });
 
     test('1: sign in', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
 
         // Sign In
-        await accountSignInPage.signInBatGenie(testData_BatGenie.email, testData_BatGenie.password)
+        await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password)
     });
-
 
     test('2: reset password and sign in', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
         const commonPage = new CommonPage(page)
-        const resetEmail = testData_BatGenie.resetEmail
-        const emailServerId = testData_BatGenie.emailServerId
+        const resetEmail = testData_DSG_PL_GG.resetEmail
+        const emailServerId = testData_DSG_PL_GG.emailServerId
 
         // Forgot password
         const dateSent = new Date();
@@ -50,6 +56,7 @@ test.describe("Bat Genie", () => {
         await accountSignInPage.backToSignInLink.click();
 
         // Sign In
-        await accountSignInPage.signInBatGenie(resetEmail, newPassword);
+        await accountSignInPage.signIn(resetEmail, newPassword);
     });
+
 });
