@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test'
 
-import { CartPage } from '../../../page-objects/CartPage.ts';
-import { CommonPage } from '../../../page-objects/CommonPage.ts'
-import { HomePage } from '../../../page-objects/HomePage.ts'
-import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts'
-import { getBaseUrl } from '../../../globalSetup.js'
+import { CartPage } from '../../../page-objects/CartPage';
+import { CommonPage } from '../../../page-objects/CommonPage'
+import { HomePage } from '../../../page-objects/HomePage'
+import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage'
+import { getBaseUrl } from '../../../globalSetup'
 
 test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     let homePage: HomePage;

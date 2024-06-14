@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../page-objects/CartPage.js';
-import { CheckoutPage } from '../page-objects/CheckoutPage.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
-import { getBaseUrl } from '../globalSetup.js';
-import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData.js';
+import { CartPage } from '../page-objects/CartPage';
+import { CheckoutPage } from '../page-objects/CheckoutPage';
+import { HomePage } from '../page-objects/HomePage';
+import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage';
+import { ProductDisplayPage } from '../page-objects/ProductDisplayPage';
+import { getBaseUrl } from '../globalSetup.ts';
+import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData';
 
 test.describe("DSG Prod Smoke Checkout Tests", () => {
   // Request context is reused by all tests in the file.
