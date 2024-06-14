@@ -1,22 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.ts';
-import { CartPage } from '../page-objects/CartPage.ts';
-import { CheckoutPage } from '../page-objects/CheckoutPage.ts';
-import { CommonPage } from '../page-objects/CommonPage.ts';
-import { HomePage } from '../page-objects/HomePage.ts';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.ts';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.ts';
-import { ProductListingPage } from '../page-objects/ProductListingPage.ts';
-import { getBaseUrl } from '../globalSetup.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { CommonPage } from '../page-objects/CommonPage.js';
-import { ProductListingPage } from '../page-objects/ProductListingPage.js';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
-import { CartPage } from '../page-objects/CartPage.js';
-import { CheckoutPage } from '../page-objects/CheckoutPage.js';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
-import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData.js';
+import { CartPage } from '../page-objects/CartPage';
+import { CheckoutPage } from '../page-objects/CheckoutPage';
+import { CommonPage } from '../page-objects/CommonPage';
+import { HomePage } from '../page-objects/HomePage';
+import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage';
+import { ProductDisplayPage } from '../page-objects/ProductDisplayPage';
+import { ProductListingPage } from '../page-objects/ProductListingPage';
+import { getBaseUrl } from '../globalSetup';
+import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData';
 
 test.describe("E2E NP0 Prod", () => {
     test.beforeEach(async ({ page }) => {
@@ -28,9 +20,7 @@ test.describe("E2E NP0 Prod", () => {
 
         // Close popup
         //await page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click()
-
     });
-
 
     test('1: BOPIS - Guest - CC', async ({ page }) => {
         const homePage = new HomePage(page);
@@ -66,7 +56,7 @@ test.describe("E2E NP0 Prod", () => {
         await commonPage.sleep(2)
 
         // Validate store pickup is free in cart
-        expect(cartPage.freeStorePickupRadioButtonText).toBeVisible()
+        await expect(cartPage.freeStorePickupRadioButtonText).toBeVisible()
 
         // Get Cart Price Details Object
         const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
@@ -93,7 +83,7 @@ test.describe("E2E NP0 Prod", () => {
         // Add credit card info
         await checkoutPage.enterCreditCardInfo(testData_e2e_np0_prod.creditCardNumber, testData_e2e_np0_prod.expiryDate, testData_e2e_np0_prod.securityCode)
 
-        // // Place order
+        // Place order
         await checkoutPage.placeOrderButton.click()
 
         // Validate order confirmation page and order number
@@ -113,7 +103,6 @@ test.describe("E2E NP0 Prod", () => {
 
         console.log('')
     });
-
 
     test('2: STH - Guest - CC', async ({ page }) => {
         const homePage = new HomePage(page);
@@ -186,5 +175,4 @@ test.describe("E2E NP0 Prod", () => {
 
         console.log('')
     });
-
 });

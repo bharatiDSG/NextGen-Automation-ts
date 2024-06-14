@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../page-objects/CartPage.ts';
-import { CheckoutPage } from '../page-objects/CheckoutPage.ts';
-import { HomePage } from '../page-objects/HomePage.ts';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.ts';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.ts';
+import { CartPage } from '../page-objects/CartPage.js';
+import { CheckoutPage } from '../page-objects/CheckoutPage.js';
+import { HomePage } from '../page-objects/HomePage.js';
+import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
+import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
 import { getBaseUrl } from '../globalSetup.js';
 import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData.js';
 
@@ -29,7 +29,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     const closePopup = page.locator('#slideoutCloseButton')
     page.once('frameattached', async data => {
       console.log("listening for popup frame once")
-      if (closePopup.isVisible({ timeout: 20000 })) {
+      if (await closePopup.isVisible({ timeout: 20000 })) {
         await closePopup.click({ timeout: 20000 })
         console.log("popup closed")
       } else {
@@ -104,13 +104,15 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     await page.waitForTimeout(20000); // waits for 20 seconds
     await expect(orderConfirmationPage.orderNumberText).toBeVisible()
     const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
-    const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage.replace("Order# ", "").trim()
+    const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace("Order# ", "").trim() : null;
     // console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
     console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
 
     //cancel the order
     //documentation - https://playwright.dev/docs/api-testing
-    await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext)
+    if (orderNumberFromConfirmationPageModified) {
+      await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext)
+    }
 
     //verify orderConfirmationPage
     await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()

@@ -1,20 +1,16 @@
-import { APIRequestContext, APIResponse, Locator, Page, expect } from '@playwright/test';
+import { APIRequestContext, Locator, Page, expect } from '@playwright/test';
 
 import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData';
 
 export class OrderConfirmationPage {
     private page: Page;
-    private playwright: any;
-    private reqContext: APIRequestContext;
 
-    readonly orderNumberText: Locator;
-    readonly thankYouForYourOrderHeader: Locator;
-    readonly continueShoppingLink: Locator;
+    public orderNumberText: Locator;
+    public thankYouForYourOrderHeader: Locator;
+    public continueShoppingLink: Locator;
 
-    constructor(page: Page, playwright: any, request: APIRequestContext) {
+    constructor(page: Page) {
         this.page = page;
-        this.playwright = playwright;
-        this.reqContext = request;
 
         this.orderNumberText = page.getByText('Order#');
         this.thankYouForYourOrderHeader = page.getByRole('heading', { name: 'Thank you for your order!' });
@@ -22,11 +18,11 @@ export class OrderConfirmationPage {
     }
 
     async apiProdCancelOrderSolePanel(orderNumber: string, apiContext: APIRequestContext): Promise<void> {
-        const newIssue: APIResponse = await apiContext.put(`/api/v1/orders/${orderNumber}/cancel`, {
+        const newIssue = await apiContext.put(`/api/v1/orders/${orderNumber}/cancel`, {
             data: {
                 "athleteOrderCancelRequest": {
                     "agent": testData_smokeCheckout_prod.usernameOrderAPI,
-                    "cancelDate": new Date().toISOString(), // Using current date timestamp in ISO format
+                    "cancelDate": new Date().toISOString(), // Use current date and time
                     "cancelSource": "CallCenter",
                     "reason": "CANCEL_ATHLETE_REQUEST"
                 },
@@ -36,7 +32,7 @@ export class OrderConfirmationPage {
                 }
             }
         });
-
+        //console.log(newIssue);
         expect(newIssue.ok()).toBeTruthy();
         console.log("Order Cancelled: " + orderNumber);
     }
