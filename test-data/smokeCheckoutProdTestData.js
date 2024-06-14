@@ -6,7 +6,7 @@ export const testData_smokeCheckout_prod = {
     firstname: "Tiger",
     lastName: "King",
     phoneNumber: "72427334008",
-    address: "345 Court St.",
+    address: "345 Court St. Coraopolis",
     address2: "",
     zipCode: "15108",
     creditCardNumber: "4111 1111 1111 1111",

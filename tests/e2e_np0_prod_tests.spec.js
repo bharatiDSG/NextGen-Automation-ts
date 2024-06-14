@@ -9,6 +9,13 @@ import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.ts'
 import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.ts';
 import { ProductListingPage } from '../page-objects/ProductListingPage.ts';
 import { getBaseUrl } from '../globalSetup.js';
+import { HomePage } from '../page-objects/HomePage.js';
+import { CommonPage } from '../page-objects/CommonPage.js';
+import { ProductListingPage } from '../page-objects/ProductListingPage.js';
+import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
+import { CartPage } from '../page-objects/CartPage.js';
+import { CheckoutPage } from '../page-objects/CheckoutPage.js';
+import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
 import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData.js';
 
 test.describe("E2E NP0 Prod", () => {
@@ -32,7 +39,6 @@ test.describe("E2E NP0 Prod", () => {
         const cartPage = new CartPage(page)
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
-        const accountSignInPage = new AccountSignInPage(page)
         const commonPage = new CommonPage(page)
 
         // Search for product

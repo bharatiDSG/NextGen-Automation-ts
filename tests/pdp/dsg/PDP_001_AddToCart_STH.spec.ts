@@ -23,7 +23,7 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
         console.log("URL: " + getBaseUrl());
     });
 
-    test('DSG ATC STH - Desktop', async ({ page }) => {
+    test('DSG ATC STH - Desktop', { tag: ['@smoke'] }, async ({ page }) => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await PDP.addToCartButton.click();
         console.log("Add to Cart button clicked");

@@ -9,93 +9,113 @@ import { getBaseUrl } from '../globalSetup.js';
 import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData.js';
 
 test.describe("DSG Prod Smoke Checkout Tests", () => {
-    // Request context is reused by all tests in the file.
-    let apiContext;
+  // Request context is reused by all tests in the file.
+  let apiContext;
 
-    test.beforeAll(async ({ playwright }) => {
-      apiContext = await playwright.request.newContext({
-        // All requests we send go to this API endpoint.
-        baseURL: 'https://customer-order.dcsg.com'
-      });
+  test.beforeAll(async ({ playwright }) => {
+    apiContext = await playwright.request.newContext({
+      // All requests we send go to this API endpoint.
+      baseURL: 'https://customer-order.dcsg.com'
     });
+  });
 
-    test.afterAll(async ({ }) => {
-      // Dispose all responses.
-      await apiContext.dispose();
+  test.beforeEach(async ({ page, context }) => {
+
+    // grant permission for location
+    await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+    console.log("geolocation granted for: " + getBaseUrl())
+
+    // Close popup(frame) listener
+    const closePopup = page.locator('#slideoutCloseButton')
+    page.once('frameattached', async data => {
+      console.log("listening for popup frame once")
+      if (closePopup.isVisible({ timeout: 20000 })) {
+        await closePopup.click({ timeout: 20000 })
+        console.log("popup closed")
+      } else {
+        console.log("no popup displayed")
+      }
     });
+  });
 
-    test('1: Smoke Checkout Prod - place order', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const productDisplayPage = new ProductDisplayPage(page)
-        const cartPage = new CartPage(page)
-        const checkoutPage = new CheckoutPage(page)
-        const orderConfirmationPage = new OrderConfirmationPage(page)
+  test.afterAll(async ({ }) => {
+    // Dispose all responses.
+    await apiContext.dispose();
+  });
 
-        // Go to baseUrl set in .env or defaults to dsg_prod
-        await homePage.goToHomePage(getBaseUrl());
-        console.log("URL: " + getBaseUrl());
-        // Search for product
-        await homePage.searchForProduct(testData_smokeCheckout_prod.searchTerm1)
+  test('1: Smoke Checkout Prod - place order', async ({ page }) => {
+    const homePage = new HomePage(page);
+    const productDisplayPage = new ProductDisplayPage(page)
+    const cartPage = new CartPage(page)
+    const checkoutPage = new CheckoutPage(page)
+    const orderConfirmationPage = new OrderConfirmationPage(page)
 
-        //Click ship to me fulfillment option
-        await productDisplayPage.shipToMeButton.click();
+    // Go to baseUrl set in .env or defaults to dsg_prod
+    await homePage.goToHomePage(getBaseUrl());
+    console.log("URL: " + getBaseUrl());
 
-        //Select attributes
-        await productDisplayPage.flexAttribute.click();
-        await productDisplayPage.handAttribute.click();
-        await productDisplayPage.shaftAttribute.click();
-        await productDisplayPage.loftAttribute.click();
+    // Search for product
+    await homePage.searchForProduct(testData_smokeCheckout_prod.searchTerm1)
 
-        //add to cart
-        await productDisplayPage.addToCartButton.click();
+    //Click ship to me fulfillment option
+    await productDisplayPage.shipToMeButton.click();
 
-        // Click Go to Cart
-        await productDisplayPage.goToCartButton.click();
+    //Select attributes
+    await productDisplayPage.flexAttribute.click();
+    await productDisplayPage.handAttribute.click();
+    await productDisplayPage.shaftAttribute.click();
+    await productDisplayPage.loftAttribute.click();
 
-        // Get Cart Price Details Object
-        const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
-        console.log({ cartPriceDetailsObject })
+    //add to cart
+    await productDisplayPage.addToCartButton.click();
 
-        // Verify shipping is free in price details using cart details object
-        const estimatedShipping = cartPriceDetailsObject.getEstimatedShipping()
-        console.log({ estimatedShipping })
-        expect(estimatedShipping).toBe('Free')
+    // Click Go to Cart
+    await productDisplayPage.goToCartButton.click();
 
-        // Go to Checkout
-        await cartPage.checkoutButton.click()
+    // Get Cart Price Details Object
+    const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
+    console.log({ cartPriceDetailsObject })
 
-        await expect(checkoutPage.shippingTitleAnchor).toHaveText('Shipping')
-        await expect(checkoutPage.shippingCompletedCheckMark).toBeVisible()
+    // Verify shipping is free in price details using cart details object
+    const estimatedShipping = cartPriceDetailsObject.getEstimatedShipping()
+    console.log({ estimatedShipping })
+    expect(estimatedShipping).toBe('Free')
 
-        // Enter contact info - continue - validate complete checkmark
-        const email = testData_smokeCheckout_prod.email
-        await checkoutPage.enterContactInfo(testData_smokeCheckout_prod.firstname, testData_smokeCheckout_prod.lastName, email, testData_smokeCheckout_prod.phoneNumber)
+    // Go to Checkout
+    await cartPage.checkoutButton.click()
 
-        // Enter Billing Shipping info - validate complete checkmark
-        await checkoutPage.enterBillingShippingInfo(testData_smokeCheckout_prod.address, testData_smokeCheckout_prod.address2, testData_smokeCheckout_prod.zipCode)
+    await expect(checkoutPage.shippingTitleAnchor).toHaveText('Shipping')
+    await expect(checkoutPage.shippingCompletedCheckMark).toBeVisible()
 
-        // Add credit card info
-        await checkoutPage.enterCreditCardInfo(testData_smokeCheckout_prod.creditCardNumber, testData_smokeCheckout_prod.expiryDate, testData_smokeCheckout_prod.securityCode)
+    // Enter contact info - continue - validate complete checkmark
+    const email = testData_smokeCheckout_prod.email
+    await checkoutPage.enterContactInfo(testData_smokeCheckout_prod.firstname, testData_smokeCheckout_prod.lastName, email, testData_smokeCheckout_prod.phoneNumber)
 
-        // Place order
-        await checkoutPage.placeOrderButton.click()
+    // Enter Billing Shipping info - validate complete checkmark
+    await checkoutPage.enterBillingShippingInfo(testData_smokeCheckout_prod.address, testData_smokeCheckout_prod.address2, testData_smokeCheckout_prod.zipCode)
 
-        // Validate order confirmation page and order number
-        await page.waitForTimeout(20000); // waits for 20 seconds
-        await expect(orderConfirmationPage.orderNumberText).toBeVisible()
-        const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
-        const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage.replace("Order# ", "").trim()
-        // console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
-        console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
+    // Add credit card info
+    await checkoutPage.enterCreditCardInfo(testData_smokeCheckout_prod.creditCardNumber, testData_smokeCheckout_prod.expiryDate, testData_smokeCheckout_prod.securityCode)
 
-        //cancel the order
-        //documentation - https://playwright.dev/docs/api-testing
-        await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext)
+    // Place order
+    await checkoutPage.placeOrderButton.click()
 
-        //verify orderConfirmationPage
-        await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()
-        await orderConfirmationPage.continueShoppingLink.click()
+    // Validate order confirmation page and order number
+    await page.waitForTimeout(20000); // waits for 20 seconds
+    await expect(orderConfirmationPage.orderNumberText).toBeVisible()
+    const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
+    const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage.replace("Order# ", "").trim()
+    // console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
+    console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
 
-        await expect(homePage.searchField).toBeVisible()
-    });
+    //cancel the order
+    //documentation - https://playwright.dev/docs/api-testing
+    await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext)
+
+    //verify orderConfirmationPage
+    await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible()
+    await orderConfirmationPage.continueShoppingLink.click()
+
+    await expect(homePage.searchField).toBeVisible()
+  });
 });
