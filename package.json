@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test secured_athlete_prod_tests.spec.js --headed",
-    "batgenie": "playwright test bat_genie_prod_tests.spec.js --headed",
-    "e2e": "playwright test e2e_np0_prod_tests.spec.js --headed"
+    "test": "playwright test secured_athlete_prod_tests.spec.ts --headed",
+    "batgenie": "playwright test bat_genie_prod_tests.spec.ts --headed",
+    "e2e": "playwright test e2e_np0_prod_tests.spec.ts --headed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.43.0",
-    "@types/node": "^20.12.7"
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

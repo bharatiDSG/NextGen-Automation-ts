@@ -1,10 +1,10 @@
-import { test, expect } from '@playwright/test';
-import { getBaseUrl } from '../globalSetup.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
-import { CommonPage } from '../page-objects/CommonPage.js';
-import { testData_BatGenie } from '../test-data/securedAthleteTestData.js';
+import { expect, test } from '@playwright/test';
 
+import { AccountSignInPage } from '../page-objects/AccountSignInPage';
+import { CommonPage } from '../page-objects/CommonPage';
+import { HomePage } from '../page-objects/HomePage';
+import { getBaseUrl } from '../globalSetup';
+import { testData_BatGenie } from '../test-data/securedAthleteTestData';
 
 test.describe("Bat Genie", () => {
     test.beforeEach(async ({ page }) => {

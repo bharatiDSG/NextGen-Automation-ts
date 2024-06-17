@@ -1,15 +1,16 @@
 import { expect, test } from '@playwright/test';
-import { CartPage } from '../../../page-objects/CartPage.js';
-import { CommonPage } from '../../../page-objects/CommonPage.js';
-import { HomePage } from '../../../page-objects/HomePage.js';
-import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.js';
-import { getBaseUrl } from '../../../globalSetup.js';
+
+import { CartPage } from '../../../page-objects/CartPage';
+import { CommonPage } from '../../../page-objects/CommonPage';
+import { HomePage } from '../../../page-objects/HomePage';
+import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage';
+import { getBaseUrl } from '../../../globalSetup';
 
 test.describe("PDP BOPIS - Add To Cart Tests", () => {
-    let homePage;
-    let productDisplayPage;
-    let commonPage;
-    let cartPage;
+    let homePage: HomePage;
+    let productDisplayPage: ProductDisplayPage;
+    let commonPage: CommonPage;
+    let cartPage: CartPage;
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         commonPage = new CommonPage(page);
