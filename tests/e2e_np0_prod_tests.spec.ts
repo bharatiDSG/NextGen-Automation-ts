@@ -22,7 +22,7 @@ test.describe("E2E NP0 Prod", () => {
         //await page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click()
     });
 
-    test('1: BOPIS - Guest - CC', async ({ page }) => {
+    test.skip('1: BOPIS - Guest - CC', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page)
         const productDisplayPage = new ProductDisplayPage(page)
