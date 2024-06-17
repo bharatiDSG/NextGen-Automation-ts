@@ -11,13 +11,13 @@ Playwright test automation framework for ecomm websites
 
 ### Create .env file at the project root:
 
-    te-playwright-js/.env
+    te-playwright-ts/.env
 <img src="images/image.png" alt="text" width="200"/>
 
 
 ### Setting Test Environment
 
-Environment can be set in the command line or .env file.  If no environment is set, it will default to dsg_prod. Environments can be found in te-playwright-js/globalEnvironments.json file.
+Environment can be set in the command line or .env file.  If no environment is set, it will default to dsg_prod. Environments can be found in te-playwright-ts/globalEnvironments.json file.
 
 <img src="images/image2.png" alt="text" width="200"/>
 
