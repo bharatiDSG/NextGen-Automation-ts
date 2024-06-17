@@ -1,6 +1,6 @@
-# te-playwright-js
+# te-playwright-ts
 
-Playwright test automation framework for ecomm websites
+Playwright test automation framework for ecomm websites using typescript
 
 ## Install and Setup Steps
 
