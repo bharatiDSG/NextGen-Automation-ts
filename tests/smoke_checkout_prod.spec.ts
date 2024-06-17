@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { APIRequestContext, expect, test } from '@playwright/test';
 
 import { CartPage } from '../page-objects/CartPage';
 import { CheckoutPage } from '../page-objects/CheckoutPage';
@@ -10,7 +10,7 @@ import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestD
 
 test.describe("DSG Prod Smoke Checkout Tests", () => {
   // Request context is reused by all tests in the file.
-  let apiContext;
+  let apiContext: APIRequestContext;
 
   test.beforeAll(async ({ playwright }) => {
     apiContext = await playwright.request.newContext({
