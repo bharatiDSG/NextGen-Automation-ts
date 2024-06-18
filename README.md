@@ -8,6 +8,8 @@ Playwright test automation framework for ecomm websites using typescript
 
     npm ci
 
+
+
 ### Run a test as a test
 
 Run the following cmd:
@@ -17,10 +19,12 @@ Run the following cmd:
 This will run 2 secured athlete login tests on the dsg prod site since that is the default when no environment is set. Set an environment next.
 
 
+
 ### Create .env file at the project root:
 
     ~/.env
 <img src="images/image.png" alt="text" width="200"/>
+
 
 
 ### Setting Test Environment
@@ -28,6 +32,7 @@ This will run 2 secured athlete login tests on the dsg prod site since that is t
 Environment can be set in the command line or .env file.  Environments can be found in ~/globalEnvironments.json file.
 
 <img src="images/image2.png" alt="text" width="200"/>
+
 
 
 ### Run two more tests
@@ -43,6 +48,8 @@ Run the test one more time after setting the environment in the cmd line:
     ENV=pl_prod npm test
 
 This will run the same tests on the public lands prod site.
+
+
 
 ### Documentation for running other tests:
 
