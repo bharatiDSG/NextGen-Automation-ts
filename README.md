@@ -36,7 +36,7 @@ Set ENV=gg_prod in the .env file like the image above and run the folowing cmd:
 
     npm test
 
-This will run 2 secured athlete login tests on the golf galaxy prod site.
+This will run 2 secured athlete login tests on the golf galaxy prod site this time.
 
 Run the following cmd to run the test one more time after setting the environment in the cmd line:
 
