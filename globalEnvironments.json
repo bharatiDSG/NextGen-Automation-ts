@@ -19,5 +19,8 @@
     },
     "dsg_preview": {
         "baseUrl": "https://preview.dickssportinggoods.com/"
+    },
+    "gg_np0qa": {
+        "baseUrl": "https://golfgalaxy.dksxchange.com/"
     }
 }

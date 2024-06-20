@@ -1,5 +1,6 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { getNextValueFromArray, removeAllMatchingItemsFromArray } from '../lib/functions';
+import { CommonPage } from './CommonPage';
 
 interface PriceDetails {
   getOrderSubtotal: () => string | undefined;
@@ -15,6 +16,11 @@ export class CartPage {
   readonly cartPriceDetails: Locator;
   readonly checkoutButton: Locator;
   readonly cartItemAmount: Locator;
+  readonly cartLabel: Locator;
+  readonly productLabel: Locator;
+  readonly quantityInputText: Locator;
+  readonly paypalIframe: any;
+  readonly paypalCheckoutButton: any;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,6 +29,11 @@ export class CartPage {
     this.cartPriceDetails = page.locator('[analyticeventname="CartAction"]');
     this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
     this.cartItemAmount = page.locator('cart-valid-cart');
+    this.cartLabel = page.locator("xpath=//h3[contains(text(),'Cart')]");
+    this.productLabel = page.locator("//p[contains(@class,'product-name')]");
+    this.quantityInputText = page.locator("xpath=//input[@aria-label='Quantity']")
+    this.paypalIframe= page.frameLocator("xpath=//iframe[@title='PayPal' and contains(@name,'paypal')]")
+    this.paypalCheckoutButton= this.paypalIframe.locator("xpath=//div[@aria-label='PayPal Checkout']")
   }
 
   async getCartPriceDetailsArray(): Promise<string[]> {
@@ -93,4 +104,58 @@ export class CartPage {
 
     return details;
   }
+
+  async updateQuantity(quantity): Promise<void> {
+    /* const cartUpdateEvent = this.page.waitForResponse("https://golfgalaxy.dksxchange.com/api/v1/carts");
+    await this.quantityInputText.fill(quantity);
+    const r = await cartUpdateEvent; */
+
+    /*const tracker = new InFlightRequests(this.page);
+     await Promise.all([
+        this.quantityInputText.fill(quantity),
+        this.page.waitForRequest(request => request.resourceType() === 'xhr'),
+    ]); 
+    await expect.poll(() => tracker.inflightRequests().filter(request => request.resourceType() === 'xhr').length).toBe(0);*/
+    const commonPage= new CommonPage(this.page)
+
+    this.quantityInputText.click();
+    this.quantityInputText.fill(quantity);
+    await this.productLabel.click();
+    await commonPage.sleep(2);
+    await this.page.waitForLoadState("networkidle");
+}
+async checkout() : Promise<void> {
+    const commonPage= new CommonPage(this.page)
+    await this.page.waitForLoadState("load");
+    await this.checkoutButton.scrollIntoViewIfNeeded();
+    await this.checkoutButton.click();
+
+}
+async verifyCheckoutOptions() : Promise<void> {
+    const commonPage= new CommonPage(this.page)
+    await commonPage.waitUntilPageLoads();
+    await this.checkoutButton.scrollIntoViewIfNeeded();
+    await this.page.waitForLoadState("networkidle");
+    commonPage.sleep(3);
+    await commonPage.waitUntilPageLoads();
+    await expect(this.paypalCheckoutButton).toBeVisible();
+
+}
+async verifyPayPalCheckout() : Promise<void>
+{
+    const commonPage= new CommonPage(this.page)
+    const pagePromise = this.page.context().waitForEvent('page');
+    await this.paypalCheckoutButton.click();
+    const newPage = await pagePromise;
+    console.log(await newPage.title());
+    newPage.close();
+
+}
+async doPayPalCheckout() : Promise<void>
+{
+    const pagePromise = this.page.context().waitForEvent('page');
+    await this.paypalCheckoutButton.click();
+    const newPage = await pagePromise;
+    console.log(await newPage.title());
+}
 }
