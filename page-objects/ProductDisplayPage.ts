@@ -20,6 +20,7 @@ export class ProductDisplayPage {
     readonly zipCodeTextField: Locator;
     readonly storesNearMe: Locator;
     readonly selectStoreModalCloseButton: Locator;
+    readonly productQuantityTextFieldRewrite: Locator;
     
     // PDP attributes
     readonly flexAttribute: Locator;
@@ -50,6 +51,7 @@ export class ProductDisplayPage {
         this.zipCodeTextField = page.getByPlaceholder('Enter Zip code');
         this.storesNearMe = page.locator('.store-details-container > .hmf-button');
         this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true });
+        this.productQuantityTextFieldRewrite = page.getByLabel('Quantity');
 
         // PDP attributes
         this.flexAttribute = page.getByRole('button', { name: 'Tour Flex' });
