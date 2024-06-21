@@ -38,6 +38,7 @@ export class ProductDisplayPage {
     readonly selectStoreButons: Locator;
     readonly changeSelectedStoreLink: Locator;
     readonly selectStoreButtons: Locator;
+    readonly goToCartButtonProd: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -45,9 +46,10 @@ export class ProductDisplayPage {
         this.storePickupEnabledButton = page.getByRole('button', { name: 'Free Store Pickup In stock at' });
         this.shipToMeButton = page.getByRole('button', { name: 'Ship' });
         this.storePickupSubText = page.locator('#pdp-in-store-pickup-subtext div');
-        this.addToCartButton = page.locator("xpath=//button[@id='pdp-add-to-cart-button']");
+        this.addToCartButton = page.locator("xpath=//button[@id='pdp-add-to-cart-button']|//button[@id='add-to-cart']");
         this.addToCartButtonRewrite = page.locator('#pdp-add-to-cart-button');
         this.goToCartButton = page.getByRole('link', { name: 'Go To Cart' });
+        this.goToCartButtonProd = page.getByRole('link', { name: 'GO TO CART' });
         this.pleaseSelectColor = page.getByText('Please Select Color');
         this.addedToCartMessage = page.getByText('ADDED TO CART');
         this.continueShoppingButton = page.getByText('Continue Shopping');

@@ -106,16 +106,6 @@ export class CartPage {
   }
 
   async updateQuantity(quantity): Promise<void> {
-    /* const cartUpdateEvent = this.page.waitForResponse("https://golfgalaxy.dksxchange.com/api/v1/carts");
-    await this.quantityInputText.fill(quantity);
-    const r = await cartUpdateEvent; */
-
-    /*const tracker = new InFlightRequests(this.page);
-     await Promise.all([
-        this.quantityInputText.fill(quantity),
-        this.page.waitForRequest(request => request.resourceType() === 'xhr'),
-    ]); 
-    await expect.poll(() => tracker.inflightRequests().filter(request => request.resourceType() === 'xhr').length).toBe(0);*/
     const commonPage= new CommonPage(this.page)
 
     this.quantityInputText.click();
@@ -124,7 +114,7 @@ export class CartPage {
     await commonPage.sleep(2);
     await this.page.waitForLoadState("networkidle");
 }
-async checkout() : Promise<void> {
+async clickCheckoutButton() : Promise<void> {
     const commonPage= new CommonPage(this.page)
     await this.page.waitForLoadState("load");
     await this.checkoutButton.scrollIntoViewIfNeeded();
@@ -143,7 +133,6 @@ async verifyCheckoutOptions() : Promise<void> {
 }
 async verifyPayPalCheckout() : Promise<void>
 {
-    const commonPage= new CommonPage(this.page)
     const pagePromise = this.page.context().waitForEvent('page');
     await this.paypalCheckoutButton.click();
     const newPage = await pagePromise;

@@ -66,7 +66,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
 
         await test.step('Checkout ', async() =>{
-            await cartPage.checkout();
+            await cartPage.clickCheckoutButton();
         });
         
         await test.step('Verify the contact information is not pre populated', async() =>{
@@ -150,7 +150,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
         
         await test.step('Checkout ', async() =>{
-            await cartPage.checkout();
+            await cartPage.clickCheckoutButton();
         });
 
         await test.step('Provide contact details', async() =>{
@@ -209,7 +209,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         
 
         await test.step('Checkout ', async() =>{
-            await cartPage.checkout();
+            await cartPage.clickCheckoutButton();
         });
 
         await test.step('Sign in a Registered User ', async() =>{
@@ -293,7 +293,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
 
         await test.step('Checkout ', async() =>{
-            await cartPage.checkout();
+            await cartPage.clickCheckoutButton();
         });
         
         await test.step('Verify the contact information is not pre populated', async() =>{
@@ -380,7 +380,5 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         
     
     });
-
- 
 
 });
