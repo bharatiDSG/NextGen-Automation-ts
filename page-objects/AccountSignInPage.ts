@@ -2,6 +2,7 @@ import { Locator, Page, expect } from '@playwright/test';
 
 import MailosaurClient from 'mailosaur';
 import { getBaseUrl } from '../globalSetup.js';
+import { CommonPage } from './CommonPage.js';
 
 export class AccountSignInPage {
     private page: Page;
@@ -25,10 +26,12 @@ export class AccountSignInPage {
     private continueWithAppleButton: Locator;
     private continueWithGoogleButton: Locator;
     private passwordError: Locator;
+    private continueButtonModern: Locator;
 
     // Account Page
     private accountUserInfo: Locator;
     private summaryLink: Locator;
+    
 
     constructor(page: Page) {
         this.page = page;
@@ -56,6 +59,7 @@ export class AccountSignInPage {
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
         this.summaryLink = page.getByRole('link', { name: 'Summary' });
+        this.continueButtonModern= page.getByRole('button', { name: 'Continue', exact: true })
     }
 
     async signIn(email: string, password: string): Promise<void> {
@@ -175,5 +179,18 @@ export class AccountSignInPage {
         await this.reEnterNewPasswordField.click();
         await this.reEnterNewPasswordField.fill(newPassword);
         await this.resetPasswordButton.click();
+    }
+
+    async accountSignInModern(username:string, password:string):Promise<void>
+    {
+        const commonPage= new CommonPage(this.page)
+        await commonPage.waitUntilPageLoads();
+        await this.signInEmailField.fill(username)
+        await this.continueButtonModern.click();
+        await commonPage.waitUntilPageLoads();
+        await this.signInPasswordField.fill(password);
+        await this.continueButtonModern.click();
+        await commonPage.waitUntilPageLoads();
+
     }
 }

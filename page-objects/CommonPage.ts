@@ -71,4 +71,24 @@ export class CommonPage {
         console.log('Element centered: ', isCentered);
         return isCentered;
     }
+    async handlePromotionalPopup(): Promise<void>
+    {
+
+        try{
+            const promoFrame= await this.page.frameLocator("xpath=//iframe[@id='attentive_creative']");
+            await this.sleep(3);
+            promoFrame.getByTestId('closeIcon').click();
+            console.log("Promo window closed");
+        }
+        catch(err)
+        {
+            console.log("No promo window found");
+        }
+    }
+
+    async waitUntilPageLoads(): Promise<void>
+    {
+        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState("networkidle");
+    }
 }
