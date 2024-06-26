@@ -5,18 +5,20 @@ import { CommonPage } from '../../../page-objects/CommonPage'
 import { HomePage } from '../../../page-objects/HomePage'
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage'
 import { getBaseUrl } from '../../../globalSetup'
+import {AccountSignInPage} from "../../../page-objects/AccountSignInPage";
 
 test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     let homePage: HomePage;
     let PDP: ProductDisplayPage;
     let commonPage: CommonPage;
-    let AccountSignInPage: accountSignIn;
+    let accountSignIn: AccountSignInPage;
     let cartPage: CartPage;
     
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         PDP = new ProductDisplayPage(page);
         commonPage = new CommonPage(page);
+        accountSignIn = new AccountSignInPage(page)
         cartPage = new CartPage(page);
     
         // Go to baseUrl set in .env
@@ -25,7 +27,12 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     });
 
     test('DSG ATC STH - Desktop', { tag: ['@smoke'] }, async ({ page }) => {
-        await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
+        await page.goto(getBaseUrl() + 'p/nike-sportswear-womens-phoenix-fleece-oversized-crewneck-sweatshirt-22nikwstylflccrwxapt/22nikwstylflccrwxapt');
+
+        await expect(PDP.womensClothingBreadcrumb).toBeVisible();
+        await PDP.womensClothingBreadcrumb.first().click();
+        await commonPage.isTextVisible(PDP.womensWorkoutClothesTitle, 'Women\'s Clothing');
+
         await PDP.addToCartButton.click();
         console.log("Add to Cart button clicked");
 
