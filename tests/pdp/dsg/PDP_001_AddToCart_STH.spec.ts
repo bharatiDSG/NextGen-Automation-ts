@@ -10,6 +10,7 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     let homePage: HomePage;
     let PDP: ProductDisplayPage;
     let commonPage: CommonPage;
+    let AccountSignInPage: accountSignIn;
     let cartPage: CartPage;
     
     test.beforeEach(async ({ page }) => {
