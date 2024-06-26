@@ -20,6 +20,8 @@ export class ProductDisplayPage {
     readonly zipCodeTextField: Locator;
     readonly storesNearMe: Locator;
     readonly selectStoreModalCloseButton: Locator;
+    readonly sameDayDeliveryButton: Locator;
+    readonly changeZipCodeLink: Locator;
     
     // PDP attributes
     readonly flexAttribute: Locator;
@@ -47,9 +49,11 @@ export class ProductDisplayPage {
         this.freeStorePickupButton = page.locator('#pdp-in-store-pickup-button');
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
-        this.zipCodeTextField = page.getByPlaceholder('Enter Zip code');
+        this.zipCodeTextField = page.locator('input[id*="homefield-textinput-"]');
         this.storesNearMe = page.locator('.store-details-container > .hmf-button');
         this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true });
+        this.sameDayDeliveryButton = page.locator('#pdp-same-day-delivery-button');
+        this.changeZipCodeLink = page.locator('#pdp-change-zip-code-link');
 
         // PDP attributes
         this.flexAttribute = page.getByRole('button', { name: 'Tour Flex' });
