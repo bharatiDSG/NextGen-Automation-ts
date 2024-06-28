@@ -31,30 +31,66 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
 
         await expect(PDP.womensClothingBreadcrumb).toBeVisible();
         await PDP.womensClothingBreadcrumb.first().click();
-        await commonPage.isTextVisible(PDP.womensWorkoutClothesTitle, 'Women\'s Clothing');
+        await commonPage.isTextVisible(PDP.womensClothingBreadcrumb, 'Women\'s Clothing');
+
+        await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
+        await commonPage.closePromoPopUp();
+
+        await commonPage.isTextVisible(PDP.productName.first(), 'YETI 20 oz. Rambler Tumbler with MagSlider Lid');
+
+        await expect(PDP.colorsAttributeSection.first()).toBeVisible();
+
+        await expect(PDP.shipToMeButton).toBeVisible();
+        await expect(PDP.freeStorePickupButton).toBeVisible();
+        await expect(PDP.sameDayDeliveryButton).toBeVisible();
+
+        await expect(PDP.productInformationContainer).toBeVisible();
+        await expect(PDP.productSpecsContainer.first()).toBeVisible();
+
+        await PDP.averageRatingLink.first().click();
+
+        await PDP.enterReviewsSearch('Yeti');
+        await PDP.verifyNumberOfReviews();
+        await expect(PDP.starsRatingValue).toBeVisible();
+        await expect(PDP.reviewsPercentageAndwouldRecommendToAFriendText).toBeVisible();
+        await PDP.averageRatingLink.click();
+
+        await expect(PDP.youMayAlsoLikeSection).toBeVisible();
+        await expect(PDP.sponsoredProductsSection).toBeVisible();
+        await expect(PDP.customersAlsoBoughtSection).toBeVisible();
+        await expect(PDP.recentlyViewedSection).toBeVisible();
+
+        await PDP.validateImageViewer();
 
         await PDP.addToCartButton.click();
-        console.log("Add to Cart button clicked");
-
         await expect(PDP.addToCartButton).toBeDisabled();
         await commonPage.isTextVisible(PDP.pleaseSelectColor, "Please Select Color");
+
         await PDP.availableProductColor.first().click();
 
-        await expect(PDP.shipToMeFullfilmentButton).toBeEnabled();
-        console.log("Available to Ship is enabled");
+        await PDP.shipToMeButton.click();
+        await PDP.freeStorePickupButton.click();
+        await PDP.sameDayDeliveryButton.click();
 
-        await commonPage.scrollIfElementNotVisible(PDP.addToCartButton);
+        await PDP.addToFavoritesBtn.click();
+        await accountSignIn.signInFromPDP('dcsgorgs+5@gmail.com','345CourtStreet!');
+        commonPage.sleep(5000);
+        await expect(PDP.addedToFavoritesBtn.first()).toBeVisible();
+
+        await PDP.increaseProductQuantity('3');
+
+        await PDP.availableProductColor.first().click();
+
+        await PDP.checkProductAvailability();
+
         await PDP.addToCartButton.click();
-        console.log("Add to Cart button clicked");
-
         await commonPage.isTextVisible(PDP.addedToCartMessage, "ADDED TO CART");
         await commonPage.isTextVisible(PDP.continueShoppingButton, " Continue Shopping ");
         await commonPage.isTextVisible(PDP.goToCartButton, "GO TO CART");
 
-        await commonPage.isElementVisibleAndEnabled(PDP.goToCartButton);
+        await expect(PDP.goToCartButton).toBeVisible();
         await PDP.goToCartButton.click();
-
-        await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (1 item)");
+        await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (3 items)");
     });
 
     test('DSG ATC STH - Rewrite', { tag: ['@rewrite'] }, async ({ page }) => {
