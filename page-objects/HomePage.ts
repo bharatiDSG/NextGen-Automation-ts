@@ -7,7 +7,7 @@ export class HomePage {
 
     constructor(page: Page) {
         this.page = page;
-        this.searchField = page.locator('[id="searchInput"]').first();
+        this.searchField = page.locator('[id="searchInput"]').nth(1);
         this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
     }
 
