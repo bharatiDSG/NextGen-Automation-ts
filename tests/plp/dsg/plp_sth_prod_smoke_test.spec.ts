@@ -32,7 +32,7 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
       }
     });
 
-    test.only('1: SRLP page, STH order', async ({ page }) => {
+    test('1: SRLP page, STH order', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page)
