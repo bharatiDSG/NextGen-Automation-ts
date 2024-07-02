@@ -24,6 +24,7 @@ export class ProductDisplayPage {
     readonly selectStoreModalCloseButton: Locator;
     readonly productQuantityTextFieldRewrite: Locator;
     readonly womensClothingBreadcrumb: Locator;
+    readonly womensClothingTitle : Locator;
     readonly productName: Locator;
     readonly sameDayDeliveryButton: Locator;
     readonly productInformationContainer: Locator;
@@ -64,12 +65,19 @@ export class ProductDisplayPage {
     readonly addedToFavoritesBtn: Locator;
 
     //PDP Reviews
+    readonly writeaReviewButton: Locator;
     readonly averageRatingLink: Locator;
+    readonly overallRatingStarsButtons: Locator;
+    readonly reviewTitle: Locator;
     readonly reviewsTextField: Locator;
-    readonly closeReviewsPanelBtn: Locator;
+    readonly nicknameInput: Locator;
+    readonly emailInput: Locator;
+    readonly reviewsTermsAndConditionsAgreenmentCheckBox : Locator;
+    readonly postReviewButton: Locator;
     readonly reviewsCountNumber: Locator;
     readonly starsRatingValue: Locator;
     readonly reviewsPercentageAndwouldRecommendToAFriendText: Locator;
+    readonly closeReviewsModalButton: Locator;
 
     //Related Products Sections
     readonly youMayAlsoLikeSection: Locator;
@@ -92,7 +100,7 @@ export class ProductDisplayPage {
         this.continueShoppingButton = page.getByText('Continue Shopping');
         this.goToCartButton = page.getByText('GO TO CART');
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available');
-        this.freeStorePickupButton = page.locator('#pdp-in-store-pickup-button');
+        this.freeStorePickupButton = page.getByLabel(' Free Store Pickup');
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
         this.zipCodeTextField = page.getByPlaceholder('Enter Zip code');
@@ -100,6 +108,7 @@ export class ProductDisplayPage {
         this.selectStoreModalCloseButton = page.getByLabel('Close', { exact: true });
         this.productQuantityTextFieldRewrite = page.getByLabel('Quantity');
         this.womensClothingBreadcrumb = page.locator("//a[@href='/c/womens-workout-clothes']");
+        this.womensClothingTitle = page.getByRole('heading', { name: "Women's Clothing"});
         this.productName = page.locator("//h1[@itemprop='name']");
         this.sameDayDeliveryButton = page.locator('#pdp-same-day-delivery').first();
         this.productInformationContainer = page.locator('#pdp-product-description');
@@ -139,12 +148,20 @@ export class ProductDisplayPage {
         this.addedToFavoritesBtn = page.locator('button', { hasText:'Delete product from favorites'});
 
         //PDP Reviews
+        this.writeaReviewButton = page.getByRole('button', {name: 'Write A Review'})
         this.averageRatingLink = page.locator('//div[@itemprop="ratingValue"]');
-        this.reviewsTextField = page.getByPlaceholder('Search topics and reviews');
-        this.closeReviewsPanelBtn = page.getByRole('button', {name: 'Close'});
-        this.reviewsCountNumber = page.locator('.bv-rating-ratio-count');
-        this.starsRatingValue = page.locator('span.bv-rating-stars-on.bv-rating-stars.bv-width-from-rating-stats-94').first();
-        this.reviewsPercentageAndwouldRecommendToAFriendText = page.locator('.bv-percent-recommend-container');
+        this.overallRatingStarsButtons = page.locator('(//span[contains(@aria-hidden,"true")])[5]');
+        this.reviewTitle = page.getByPlaceholder('Example: Great features! (Maximum of 200 characters.)');
+        this.reviewsTextField = page.getByPlaceholder('Example: I bought this a month ago and am so happy that I did...');
+        this.nicknameInput = page.locator('#bv-text-field-usernickname');
+        this.emailInput = page.getByPlaceholder('Example: youremail@example.com');
+        this.reviewsTermsAndConditionsAgreenmentCheckBox = page.locator('#bv-checkbox-reviews-termsAndConditions');
+        this.postReviewButton = page.getByRole('button', {name:'Post Review'});
+        this.closeReviewsModalButton = page.getByRole('button', {name: 'Close'});
+
+        this.reviewsCountNumber = page.locator('//div[@class="reviews-summary-text hmf-header-s hmf-ml-xxs hmf-pl-s-xxs hmf-pr-s-s"]');
+        this.starsRatingValue = page.locator('(//*[@class="hmf-display-flex hmf-align-items-center"])[1]');
+        this.reviewsPercentageAndwouldRecommendToAFriendText = page.locator('//div[@class="reviews-percentage w-100 text-center hmf-subheader-m ng-star-inserted"]');
 
         //Related Products Sections
         this.youMayAlsoLikeSection = page.getByText('You May Also Like');
@@ -179,11 +196,24 @@ export class ProductDisplayPage {
         return storeName;
     }
 
-    async enterReviewsSearch(search) {
+    async generateRandomNickname() {
+        const randomPart = Math.random().toString(36).substring(2, 8);
+        const prefix = 'user';
+        return `${prefix}_${randomPart}`;
+      }
+    
+    async enterReviewsSearch(reviewsTitle, searchInput, email) {
         const commonPage = new CommonPage(this.page);
-        await commonPage.fillTextField(this.reviewsTextField, search);
-        await this.reviewsTextField.press('Enter');
-        await this.closeReviewsPanelBtn.click();
+        const nickname = this.generateRandomNickname();
+
+        await commonPage.fillTextField(this.reviewTitle, reviewsTitle)
+        await this.overallRatingStarsButtons.click();
+        await commonPage.fillTextField(this.reviewsTextField, searchInput);
+        await commonPage.fillTextField(this.nicknameInput, await nickname);
+        await commonPage.fillTextField(this.emailInput, email);
+        await this.reviewsTermsAndConditionsAgreenmentCheckBox.click();
+        await this.postReviewButton.click();
+        await this.closeReviewsModalButton.click();
     }
 
     async verifyNumberOfReviews() {

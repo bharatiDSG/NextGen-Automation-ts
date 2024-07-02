@@ -93,7 +93,7 @@ export class CommonPage {
     }
 
     async closePromoPopUp() {
-        const maxAttempts = 10;
+        const maxAttempts = 5;
         let attempts = 0;
         let isDisplayed = false;
 
