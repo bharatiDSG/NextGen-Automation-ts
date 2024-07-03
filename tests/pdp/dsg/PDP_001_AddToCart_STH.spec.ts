@@ -77,7 +77,7 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
 
         await PDP.addToFavoritesBtn.click();
         await accountSignIn.signInFromPDP('dcsgorgs+5@gmail.com','345CourtStreet!');
-        await expect(PDP.addedToFavoritesBtn.first()).toBeVisible();
+        await expect(PDP.addedToFavoritesBtn).toBeVisible({timeout: 20000});
 
         await PDP.increaseProductQuantity('3');
         await PDP.availableProductColor.first().click();

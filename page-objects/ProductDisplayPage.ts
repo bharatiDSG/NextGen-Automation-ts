@@ -145,7 +145,7 @@ export class ProductDisplayPage {
 
         //PDP Favorites
         this.addToFavoritesBtn = page.getByRole('button', { name:'Add product to favorites'});
-        this.addedToFavoritesBtn = page.locator('button', { hasText:'Delete product from favorites'});
+        this.addedToFavoritesBtn = page.getByLabel('Delete product from favorites');
 
         //PDP Reviews
         this.writeaReviewButton = page.getByRole('button', {name: 'Write A Review'})
