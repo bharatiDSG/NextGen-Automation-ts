@@ -8,7 +8,8 @@ import { CartPage } from '../page-objects/CartPage.js';
 import { CheckoutPage } from '../page-objects/CheckoutPage.js';
 import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
 import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
-import { testData_e2e_np0_qa } from '../test-data/e2eNP0QaTestData.js';
+//import { testData_e2e_np0_qa } from '../test-data/e2eNP0QaTestData.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
 import { PassThrough } from 'stream';
 
 
@@ -26,7 +27,7 @@ test.describe("E2E NP0 QA", () => {
     });
 
 
-    test('1: Cart product details', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+    test('1: Cart product details', { tag: ['@smoke', '@regression1'] }, async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page)
         const productDisplayPage = new ProductDisplayPage(page)
