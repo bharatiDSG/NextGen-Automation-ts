@@ -17,8 +17,8 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.43.0-jammy
     steps:
-      - name: Cart Repository
-        uses: actions/cart@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
           # - uses: actions/setup-node@v4
           # with:
         # node-version: 20
