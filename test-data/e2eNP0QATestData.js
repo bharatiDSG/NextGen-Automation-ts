@@ -1,5 +1,7 @@
 export const testData_e2e_np0_qa = {
-    searchTerm1: "golf balls",
+    searchTerm1: "Golf Balls",
+    sku:"157101",
+    sku2:"btrx6d2g",
     productMatch1: "2024",
     storeSearch: "Robinson",
     email: "testEmail@4imxgawu.mailosaur.net",
@@ -20,6 +22,8 @@ export const testData_e2e_np0_qa = {
     registeredUserPassword:"Test1234!",
     accountNumberMaster:"5432 7636 1009 9285",
     expDateMaster:"06/29",
-    CVVMaster:"939"
-
+    CVVMaster:"939",
+    searchTerm2: "Golf Pride",
+    productMatch2: "Golf Pride",
+    productMatch3: "Golf Balls"
 }

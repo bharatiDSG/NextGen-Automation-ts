@@ -1,4 +1,4 @@
-import { type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { CommonPage } from './CommonPage';
 
@@ -42,12 +42,20 @@ export class ProductDisplayPage {
     readonly changeSelectedStoreLink: Locator;
     readonly selectStoreButtons: Locator;
     readonly goToCartButtonProd: Locator;
+    readonly productName: Locator;
+    readonly productPrice: Locator;
+    readonly productColor: Locator;
+    readonly productAvailability: Locator;
+    readonly storePickup: Locator;
+    readonly productAvailabilitystorePickup: Locator;
+    readonly selectProductByColor: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
         this.storePickupEnabledButton = page.getByRole('button', { name: 'Free Store Pickup In stock at' });
-        this.shipToMeButton = page.getByRole('button', { name: 'Ship' });
+        this.shipToMeButton = page.getByRole('button', {
+             name: 'Ship' });
         this.storePickupSubText = page.locator('#pdp-in-store-pickup-subtext div');
         this.addToCartButton = page.locator("xpath=//button[@id='pdp-add-to-cart-button']|//button[@id='add-to-cart']");
         this.addToCartButtonRewrite = page.locator('#pdp-add-to-cart-button');
@@ -83,12 +91,22 @@ export class ProductDisplayPage {
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true })
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]')
         this.selectStoreButons = page.getByLabel('select store')
+        this.changeSelectedStoreLink = page.locator('span.hmf-body-m-l');
+        this.productName = page.locator('h1.hmf-header-bold-m');
+        this.productPrice = page.locator('span.product-price');
+        this.productColor = page.locator('span.hmf-text-transform-none:nth-of-type(2)');
+        this.productAvailability = page.locator('span.fulfillment-options-description div>span');
+        this.storePickup = page.locator('div#pdp-in-store-pickup-button');
+        this.selectProductByColor = page.locator('button.pdp-color-swatch-selected');
+        this.productAvailabilitystorePickup = page.locator('div#pdp-in-store-pickup-button span.fulfillment-text>span');
+
     }
 
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
 
         await this.changeSelectedStoreLink.click();
+
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
         await this.selectStoreSearchButton.click();
@@ -106,8 +124,43 @@ export class ProductDisplayPage {
         console.log("storeName: " + storeName);
         console.log("storeIndex: " + indexOfStoreFirstMatch);
 
-        await this.selectStoreButtons.nth(indexOfStoreFirstMatch).click();
+        await this.selectStoreButons.nth(indexOfStoreFirstMatch).click();
 
         return storeName;
     }
+
+    async captureProductDetails(): Promise<{ name: string; price: string}> {
+        await this.page.waitForTimeout(10000); 
+
+        // Use the Playwright API to get text content
+        const name = await this.productName.textContent();
+        const price = await this.productPrice.textContent();
+        
+
+        // Return the trimmed text content
+        return {
+            name: name?.trim() || '',
+            price: price?.trim() || ''
+            
+        };
+    }
+
+    async verifyProductAvailability(expectedStatus: string | number): Promise<void> {
+        // Fetch the text of the input field
+        const availabilityStatus = await this.productAvailability.textContent();
+
+        // Assert the quantity is as expected
+        expect(availabilityStatus?.trim()).toBe(String(expectedStatus));
+    }
+
+    async selectStorePickup(exectedStatus: string): Promise<void> {
+        await this.storePickup.click();
+        // Fetch the text of the input field
+        const avlblStatus = await this.productAvailabilitystorePickup.textContent();
+        // Assert the quantity is as expected
+        expect(avlblStatus?.trim()).toContain(String(exectedStatus));
+    }
+
+
+
 }
