@@ -193,4 +193,25 @@ export class AccountSignInPage {
         await commonPage.waitUntilPageLoads();
 
     }
+
+    async signInFromPDP(email, password) {
+        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**")
+
+        await expect(this.signInPageHeader).toBeVisible();
+        await expect(this.signInEmailField).toBeVisible();
+
+        await expect(this.continueWithAppleButton).toBeVisible();
+        await expect(this.continueWithGoogleButton).toBeVisible();
+
+        await this.signInEmailField.click();
+        await this.signInEmailField.fill(email);
+        await this.signInEmailField.press('Tab');
+
+        await this.signInPasswordField.fill(password);
+        await this.signInPasswordField.press('Tab');
+
+        await this.signInButton.click();
+
+        console.log("Sign In Successful for: " + email)
+    }
 }
