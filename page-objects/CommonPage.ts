@@ -91,4 +91,31 @@ export class CommonPage {
         await this.page.waitForLoadState("load");
         await this.page.waitForLoadState("networkidle");
     }
+
+    async closePromoPopUp() {
+        const maxAttempts = 5;
+        let attempts = 0;
+        let isDisplayed = false;
+
+        while (attempts < maxAttempts && !isDisplayed) {
+            const promoPopupVisible = await this.page.locator('div.dsg-container').isVisible();
+            if (promoPopupVisible) {
+                isDisplayed = true;
+            } else {
+                attempts++;
+                console.log(`Attempt ${attempts}: PROMO pop up not found`);
+                if (attempts < maxAttempts) {
+                    await this.sleep(2);
+                }
+            }
+        }
+
+        if (isDisplayed) {
+            const closePromo = await this.page.locator('#slideoutCloseButton').first();
+            await closePromo.click();
+            console.log('PROMO pop up successfully KILLED');
+        } else {
+            console.log('No PROMO pop up was found after max attempts');
+        }
+    }
 }
