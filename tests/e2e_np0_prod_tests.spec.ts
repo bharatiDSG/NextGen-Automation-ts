@@ -142,7 +142,7 @@ test.describe("E2E NP0 Prod", () => {
         // await test.step('Set store',async()=>{
         // await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
     // });
-        await page.pause()
+
         // Select a product
         await test.step('Select a product',async()=>{
         await productListingPage.selectMatchingProduct(testData_e2e_np0_prod.productMatch1)
@@ -151,7 +151,7 @@ test.describe("E2E NP0 Prod", () => {
         await test.step('Click add to cart',async()=>{
         await commonPage.sleep(2)
         await productDisplayPage.availableProductColorRewrite.first().click()
-        await commonPage.sleep(2)
+        await commonPage.sleep(3)
        // await page.locator('class=pdp-color-swatch-selected').first().click()
         await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
         await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
