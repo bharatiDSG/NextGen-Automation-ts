@@ -15,9 +15,10 @@ test.describe("E2E NP0 Prod", () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
+        await test.step('Navigate to homepage',async()=>{
         await homePage.goToHomePage(getBaseUrl() + "homr");
         console.log("URL: " + getBaseUrl() + "homr");
-
+    });
         // Close popup
         //await page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click()
     });
@@ -32,61 +33,77 @@ test.describe("E2E NP0 Prod", () => {
         const commonPage = new CommonPage(page)
 
         // Search for product
+        await test.step('Search for a product',async()=>{
         await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm1)
-
+    });
         // Set store
+        await test.step('Set store',async()=>{
         const storeName = await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
-
+    });
         // Choose pickup filter
+        await test.step('Choose pickup filter',async()=>{
         await productListingPage.pickupFilterButton.click();
-
+    });
         // Select a product
+        await test.step('Select a product',async()=>{
         await productListingPage.selectMatchingProduct(testData_e2e_np0_prod.productMatch1)
-
+    });
         // Verify store pickup is enabled
+        await test.step('Verify store pickup is enabled',async()=>{
         await expect(productDisplayPage.storePickupEnabledButton).toBeVisible()
         await productDisplayPage.storePickupEnabledButton.click();
-
+    });
         // Verify correct store and add to cart
+        await test.step('Verify correct store and add to cart',async()=>{
         await expect(productDisplayPage.storePickupSubText.filter({ hasText: storeName })).toBeVisible()
         await productDisplayPage.addToCartButtonRewrite.click();
-
+    });
         // Click Go to Cart
+        await test.step('Click Go to Cart',async()=>{
         await productDisplayPage.goToCartButton.click();
         await commonPage.sleep(2)
-
+    });
         // Validate store pickup is free in cart
+        await test.step('Validate store pickup is free in cart',async()=>{
         await expect(cartPage.freeStorePickupRadioButtonText).toBeVisible()
-
+    });
         // Get Cart Price Details Object
+        await test.step('Get Cart price details Object',async()=>{
         const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
         console.log({ cartPriceDetailsObject })
-
+    });
         // Verify store pickup is free in price details using cart details object
+        await test.step('Verify Store pick up is free in price details using cart details object',async()=>{
         const storePickup = cartPriceDetailsObject.getStorePickup()
         console.log({ storePickup })
         expect(storePickup).toBe('Free')
-
+    });
         // Go to Checkout
+        await test.step('Go to Checkout',async()=>{
         await cartPage.checkoutButton.click()
 
         await expect(checkoutPage.shippingTitle).toHaveText('Free Store Pickup')
         await expect(checkoutPage.shippingCompletedCheckMark).toBeVisible()
-
+    });
         // Enter contact info - continue - validate complete checkmark
+        await test.step('Enter contact info - Continue - Validate Complete checkmark',async()=>{
         const email = testData_e2e_np0_prod.email
         await checkoutPage.enterContactInfo(testData_e2e_np0_prod.firstname, testData_e2e_np0_prod.lastName, email, testData_e2e_np0_prod.phoneNumber)
-
+    });
         // Enter Billing Shipping info - validate complete checkmark
+        await test.step('Enter billing shipping info - Validate complete checkmark',async()=>{
         await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
-
+    });
         // Add credit card info
+        await test.step('Add credit card info',async()=>{
         await checkoutPage.enterCreditCardInfo(testData_e2e_np0_prod.creditCardNumber, testData_e2e_np0_prod.expiryDate, testData_e2e_np0_prod.securityCode)
-
+    });
         // Place order
+        await test.step('Place order',async()=>{
         await checkoutPage.placeOrderButton.click()
-
+    });
         // Validate order confirmation page and order number
+        await test.step('Validate Order confirmation page and order number',async()=>{
         await expect(orderConfirmationPage.orderNumberText).toBeVisible()
         const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
         console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
@@ -94,7 +111,7 @@ test.describe("E2E NP0 Prod", () => {
         await orderConfirmationPage.continueShoppingLink.click();
 
         await expect(homePage.searchField).toBeVisible()
-
+    });
         // // bonus: validate email
         // await commonPage.sleep(10)
         // const emailServerId = testData_e2e_np0_prod.mailosaurServerID
@@ -114,50 +131,62 @@ test.describe("E2E NP0 Prod", () => {
         const commonPage = new CommonPage(page)
 
         // Search for product
+        await test.step('Search for product',async()=>{
         await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm1)
-
+    });
         // Set store
+        await test.step('Set store',async()=>{
         await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
-
+    });
         // Select a product
+        await test.step('Select a product',async()=>{
         await productListingPage.selectMatchingProduct(testData_e2e_np0_prod.productMatch1)
-
+    });
         // Click add to cart
+        await test.step('Click add to cart',async()=>{
         await commonPage.sleep(2)
         await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
         await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
         await productDisplayPage.addToCartButtonRewrite.click();
-
+    });
         // Click Go to Cart
+        await test.step('Click Go To Cart',async()=>{
         await productDisplayPage.goToCartButton.click();
         await commonPage.sleep(2)
-
+    });
         // Validate Cart and free shipping
+        await test.step('Validate Cart and free shipping',async()=>{
         const estimatedShipping = await cartPage.getEstimatedShipping()
         console.log({ estimatedShipping })
         expect(estimatedShipping).toBe('Free')
-
+    });
         // Go to Checkout
+        await test.step('Go to Checkout',async()=>{
         await cartPage.checkoutButton.click()
 
         await expect(checkoutPage.shippingTitleAnchor).toHaveText('Shipping')
         await expect(checkoutPage.shippingHeader).toBeVisible()
         await expect(checkoutPage.shippingCompletedCheckMark).toBeVisible()
-
+    });
         // Enter contact info - continue - validate complete checkmark
+        await test.step('Enter contact info - Continue - Validate complete checkmark',async()=>{
         const email = testData_e2e_np0_prod.email
         await checkoutPage.enterContactInfo(testData_e2e_np0_prod.firstname, testData_e2e_np0_prod.lastName, email, testData_e2e_np0_prod.phoneNumber)
-
+    });
         // Enter Billing Shipping info - validate complete checkmark
+        await test.step('Enter Billing Shipping info',async()=>{
         await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
-
+    });
         // Add credit card info
+        await test.step('Add Credit card info',async()=>{
         await checkoutPage.enterCreditCardInfo(testData_e2e_np0_prod.creditCardNumber, testData_e2e_np0_prod.expiryDate, testData_e2e_np0_prod.securityCode)
-
+    });
         // Place order
+        await test.step('Place Order',async()=>{
         await checkoutPage.placeOrderButton.click()
-
+    });
         // Validate order confirmation page and order number
+        await test.step('Validate Order confirmation page and order number',async()=>{
         await expect(orderConfirmationPage.orderNumberText).toBeVisible()
         const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
         console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
@@ -166,7 +195,7 @@ test.describe("E2E NP0 Prod", () => {
         await orderConfirmationPage.continueShoppingLink.click();
 
         await expect(homePage.searchField).toBeVisible()
-
+    });
         // // bonus: validate email
         // await commonPage.sleep(10)
         // const emailServerId = testData_e2e_np0_prod.mailosaurServerID
