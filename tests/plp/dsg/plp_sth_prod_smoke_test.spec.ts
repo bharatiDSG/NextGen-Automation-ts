@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '/Users/DKS0393110/Documents/repos/te-playwright-js/page-objects/CartPage';
-import { CheckoutPage } from '/Users/DKS0393110/Documents/repos/te-playwright-js/page-objects/CheckoutPage';
-import { HomePage } from '/Users/DKS0393110/Documents/repos/te-playwright-js/page-objects/HomePage';
-import { OrderConfirmationPage } from '/Users/DKS0393110/Documents/repos/te-playwright-js/page-objects/OrderConfirmationPage';
-import { ProductDisplayPage } from '/Users/DKS0393110/Documents/repos/te-playwright-js/page-objects/ProductDisplayPage';
-import { ProductListingPage } from './../../../page-objects/ProductListingPage';
-import { getBaseUrl } from '/Users/DKS0393110/Documents/repos/te-playwright-js/globalSetup';
-import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData';
+import { CartPage } from '../../../page-objects/CartPage.ts';
+import { CheckoutPage } from '../../../page-objects/CheckoutPage.ts';
+import { HomePage } from '../../../page-objects/HomePage.ts';
+import { OrderConfirmationPage } from '../../../page-objects/OrderConfirmationPage.ts';
+import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
+import { ProductListingPage } from '../../../page-objects/ProductListingPage.ts';
+import { getBaseUrl } from '../../../globalSetup.ts'
+import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 
 test.describe("PLP/SRLP DSG Smoke Tests", () => {
     test.beforeEach(async ({ page, context }) => {
