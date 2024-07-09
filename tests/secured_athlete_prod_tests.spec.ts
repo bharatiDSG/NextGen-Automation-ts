@@ -39,9 +39,10 @@ test.describe("Secured Athlete Prod Tests", () => {
         const commonPage = new CommonPage(page)
         const resetEmail = testData_DSG_PL_GG.resetEmail
         const emailServerId = testData_DSG_PL_GG.emailServerId
-        let dateSent;
-        let resetLink;
-        let newPassword;
+
+        let dateSent: Date;
+        let resetLink: string;
+        let newPassword: string;
 
         // Forgot password
         await test.step('Click Forgot password',async()=>{
@@ -55,7 +56,7 @@ test.describe("Secured Athlete Prod Tests", () => {
     });
         // Change password
         await test.step('Change Password',async()=>{
-        const newPassword = dateSent.toISOString();
+        newPassword = dateSent.toISOString();
         console.log("Email: " + resetEmail);
         console.log("New pw: " + newPassword);
         await page.goto(resetLink);
