@@ -31,6 +31,8 @@ test.describe("E2E NP0 Prod", () => {
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
         const commonPage = new CommonPage(page)
+        let storeName;
+        let cartPriceDetailsObject;
 
         // Search for product
         await test.step('Search for a product',async()=>{
@@ -38,7 +40,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Set store
         await test.step('Set store',async()=>{
-        const storeName = await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
+        storeName = await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
     });
         // Choose pickup filter
         await test.step('Choose pickup filter',async()=>{
@@ -69,7 +71,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Get Cart Price Details Object
         await test.step('Get Cart price details Object',async()=>{
-        const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
+        cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
         console.log({ cartPriceDetailsObject })
     });
         // Verify store pickup is free in price details using cart details object

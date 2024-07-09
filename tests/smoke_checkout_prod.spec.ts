@@ -49,6 +49,8 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     const cartPage = new CartPage(page)
     const checkoutPage = new CheckoutPage(page)
     const orderConfirmationPage = new OrderConfirmationPage(page)
+    let cartPriceDetailsObject;
+    let orderNumberFromConfirmationPageModified;
 
     // Go to baseUrl set in .env or defaults to dsg_prod
     await test.step('Go to baseUrl set in .env or defaults to dsg_prod', async() =>{
@@ -86,7 +88,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
 
     // Get Cart Price Details Object
     await test.step('Get Cart Price Details Object',async()=>{
-    const cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
+    cartPriceDetailsObject = await cartPage.getCartPriceDetailsObject()
     console.log({ cartPriceDetailsObject })
   });
 
@@ -127,7 +129,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
     await page.waitForTimeout(20000); // waits for 20 seconds
     await expect(orderConfirmationPage.orderNumberText).toBeVisible()
     const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent()
-    const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace("Order# ", "").trim() : null;
+    orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace("Order# ", "").trim() : null;
     // console.log("orderNumberFromOrderConf: " + orderNumberFromConfirmationPage)
     console.log("orderNumberFromOrderConfModified: " + orderNumberFromConfirmationPageModified)
   });
