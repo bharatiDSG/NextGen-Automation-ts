@@ -27,7 +27,6 @@ export class ProductDisplayPage {
     readonly productQuantityTextFieldRewrite: Locator;
     readonly womensClothingBreadcrumb: Locator;
     readonly womensClothingTitle : Locator;
-    readonly productName: Locator;
     readonly productInformationContainer: Locator;
     readonly productSpecsContainer: Locator;
     readonly quantityInput: Locator;
@@ -120,7 +119,6 @@ export class ProductDisplayPage {
         this.productQuantityTextFieldRewrite = page.getByLabel('Quantity');
         this.womensClothingBreadcrumb = page.locator("//a[@href='/c/womens-workout-clothes']");
         this.womensClothingTitle = page.getByRole('heading', { name: "Women's Clothing"});
-        this.productName = page.locator("//h1[@itemprop='name']");
         this.sameDayDeliveryButton = page.locator('#pdp-same-day-delivery').first();
         this.productInformationContainer = page.locator('#pdp-product-description');
         this.productSpecsContainer = page.locator('#pdp-tech-specs');
