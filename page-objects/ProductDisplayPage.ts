@@ -28,7 +28,6 @@ export class ProductDisplayPage {
     readonly womensClothingBreadcrumb: Locator;
     readonly womensClothingTitle : Locator;
     readonly productName: Locator;
-    readonly sameDayDeliveryButton: Locator;
     readonly productInformationContainer: Locator;
     readonly productSpecsContainer: Locator;
     readonly quantityInput: Locator;

@@ -31,8 +31,9 @@ test.describe("E2E NP0 Prod", () => {
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
         const commonPage = new CommonPage(page)
-        let storeName;
-        let cartPriceDetailsObject;
+        let storeName: string;
+        let cartPriceDetailsObject: any;
+
 
         // Search for product
         await test.step('Search for a product',async()=>{
@@ -137,9 +138,11 @@ test.describe("E2E NP0 Prod", () => {
         await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm1)
     });
         // Set store
-        await test.step('Set store',async()=>{
-        await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
-    });
+        //  Set store is changing in np0_prod env - commenting this for now
+        // await test.step('Set store',async()=>{
+        // await productListingPage.setStoreFromPLP(testData_e2e_np0_prod.storeSearch)
+    // });
+        await page.pause()
         // Select a product
         await test.step('Select a product',async()=>{
         await productListingPage.selectMatchingProduct(testData_e2e_np0_prod.productMatch1)
@@ -147,6 +150,9 @@ test.describe("E2E NP0 Prod", () => {
         // Click add to cart
         await test.step('Click add to cart',async()=>{
         await commonPage.sleep(2)
+        await productDisplayPage.availableProductColorRewrite.first().click()
+        await commonPage.sleep(2)
+       // await page.locator('class=pdp-color-swatch-selected').first().click()
         await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
         await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
         await productDisplayPage.addToCartButtonRewrite.click();
