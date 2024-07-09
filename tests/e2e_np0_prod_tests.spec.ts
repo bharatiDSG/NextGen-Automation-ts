@@ -34,6 +34,7 @@ test.describe("E2E NP0 Prod", () => {
         let storeName: string;
         let cartPriceDetailsObject: any;
 
+
         // Search for product
         await test.step('Search for a product',async()=>{
         await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm1)

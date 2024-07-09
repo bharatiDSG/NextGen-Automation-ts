@@ -33,21 +33,24 @@ test.describe("Bat Genie", () => {
         const commonPage = new CommonPage(page)
         const resetEmail = testData_BatGenie.resetEmail
         const emailServerId = testData_BatGenie.emailServerId
+        let dateSent;
+        let resetLink;
+        let newPassword;
 
         // Forgot password
         await test.step('Forgot Password',async()=>{
-        const dateSent = new Date();
+        dateSent = new Date();
         await accountSignInPage.forgotPassword(resetEmail);
         await commonPage.sleep(5);
     });
 
         // get password reset link
         await test.step('Get password reset link',async()=>{
-        const resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
+        resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
     });
         // Change password
         await test.step('Change password',async()=>{
-        const newPassword = dateSent.toISOString();
+        newPassword = dateSent.toISOString();
         console.log("Email: " + resetEmail);
         console.log("New pw: " + newPassword);
         await page.goto(resetLink);

@@ -39,6 +39,7 @@ test.describe("Secured Athlete Prod Tests", () => {
         const commonPage = new CommonPage(page)
         const resetEmail = testData_DSG_PL_GG.resetEmail
         const emailServerId = testData_DSG_PL_GG.emailServerId
+
         let dateSent: Date;
         let resetLink: string;
         let newPassword: string;
