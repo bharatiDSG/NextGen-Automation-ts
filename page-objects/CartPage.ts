@@ -192,17 +192,17 @@ async verifyProductDetails(expectedDetails: { name: any; price: any }):Promise<v
 }
 
 
-async verifyProductQuantity(expectedQuantity:string):Promise<void> {
+async verifyProductQuantity(lineItem:number,expectedQuantity:string):Promise<void> {
   // Fetch the value attribute of the input field
-  const quantityValue = await this.cartProductQuantity.inputValue();
+  const quantityValue = await this.cartProductQuantity.nth(lineItem-1).inputValue();
   // Assert the quantity is as expected
   expect(quantityValue.trim()).toBe(String(expectedQuantity));
 }
 
 
-async updateProductQuantity(expectedQuantity:string):Promise<void> {
+async updateProductQuantity(lineItem:number,expectedQuantity:string):Promise<void> {
   // Update the value attribute of the input field
-  await this.cartProductQuantity.first().fill(expectedQuantity);
+  await this.cartProductQuantity.nth(lineItem-1).fill(expectedQuantity);
   // Assert the quantity is as expected
   await this.cartProductName.first().click();
 }

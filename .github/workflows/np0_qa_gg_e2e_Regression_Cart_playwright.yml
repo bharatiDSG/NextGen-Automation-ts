@@ -1,13 +1,8 @@
 name: E2E GG NP0 QA Regression Cart playwright Tests
 
-#on:
-#  schedule:
-#    - cron: '*/30 * * * *'  # Run every half hour
-#  workflow_dispatch:
-
 on:
-  push:
-      branches: [ "TA-963" ]
+  schedule:
+    - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
 jobs:
