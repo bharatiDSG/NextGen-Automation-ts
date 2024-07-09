@@ -39,20 +39,23 @@ test.describe("Secured Athlete Prod Tests", () => {
         const commonPage = new CommonPage(page)
         const resetEmail = testData_DSG_PL_GG.resetEmail
         const emailServerId = testData_DSG_PL_GG.emailServerId
+        let dateSent: Date;
+        let resetLink: string;
+        let newPassword: string;
 
         // Forgot password
         await test.step('Click Forgot password',async()=>{
-        const dateSent = new Date();
+        dateSent = new Date();
         await accountSignInPage.forgotPassword(resetEmail);
         await commonPage.sleep(5);
     });
         // get password reset link
         await test.step('Get password reset link',async()=>{
-        const resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
+        resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
     });
         // Change password
         await test.step('Change Password',async()=>{
-        const newPassword = dateSent.toISOString();
+        newPassword = dateSent.toISOString();
         console.log("Email: " + resetEmail);
         console.log("New pw: " + newPassword);
         await page.goto(resetLink);
