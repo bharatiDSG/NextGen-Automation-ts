@@ -107,7 +107,7 @@ export class ProductDisplayPage {
              name: 'Ship' });
         this.storePickupSubText = page.locator('#pdp-in-store-pickup-subtext div');
         this.addToCartButton = page.locator("xpath=//button[@id='pdp-add-to-cart-button']|//button[@id='add-to-cart']");
-        this.addToCartButtonRewrite = page.locator('#add-to-cart');
+        this.addToCartButtonRewrite = page.locator('#pdp-add-to-cart-button');
         this.goToCartButton = page.getByRole('link', { name: 'Go To Cart' });
         this.goToCartButtonProd = page.getByRole('link', { name: 'GO TO CART' });
         this.pleaseSelectColor = page.getByText('Please Select Color');
@@ -115,7 +115,7 @@ export class ProductDisplayPage {
         this.continueShoppingButton = page.getByText('Continue Shopping');
         this.goToCartButton = page.getByText('GO TO CART');
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available');
-        this.freeStorePickupButton = page.getByLabel(' Free Store Pickup');
+        this.freeStorePickupButton = page.getByLabel('Free Store Pickup');
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
         this.zipCodeTextField = page.locator('input[id*="homefield-textinput-"]');
@@ -148,7 +148,7 @@ export class ProductDisplayPage {
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true })
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]')
         this.selectStoreButons = page.getByLabel('select store')
-        this.changeSelectedStoreLink = page.locator('span.hmf-body-m-l');
+        this.changeSelectedStoreLink = page.locator('button span.link');
         this.productName = page.locator('h1.hmf-header-bold-m');
         this.productPrice = page.locator('span.product-price');
         this.productColor = page.locator('span.hmf-text-transform-none:nth-of-type(2)');
@@ -168,6 +168,7 @@ export class ProductDisplayPage {
         this.leftArrowBtn = page.locator('.lg-prev.lg-icon');
         this.zoomInBtn = page.locator('#lg-zoom-in.lg-icon');
         this.zoomOutBtn = page.locator('#lg-zoom-out.lg-icon');
+        this.selectStoreButtons= page.locator("button[aria-label='select store']");
 
         //PDP Favorites
         this.addToFavoritesBtn = page.getByRole('button', { name:'Add product to favorites'});
@@ -199,7 +200,7 @@ export class ProductDisplayPage {
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
 
-        await this.changeSelectedStoreLink.click();
+        await this.changeSelectedStoreLink.nth(1).click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
         await this.selectStoreSearchButton.click();

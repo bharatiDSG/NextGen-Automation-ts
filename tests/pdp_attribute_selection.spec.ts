@@ -51,9 +51,8 @@ test.describe("E2E NP0 Prod", () => {
         await test.step('Click add to cart',async()=>{
         await commonPage.sleep(2)
     
-        await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
-        await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
-        await productDisplayPage.addToCartButtonRewrite.click();
+        
+        await productDisplayPage.addToCartButton.click();
     });
 
         // Click Go to Cart
@@ -64,7 +63,7 @@ test.describe("E2E NP0 Prod", () => {
         
     });
 
-    test.only('2: PDP attribute selection through API_BOPIS', async ({ page }) => {
+    test('2: PDP attribute selection through API_BOPIS', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page)
         const productDisplayPage = new ProductDisplayPage(page)
@@ -88,18 +87,24 @@ test.describe("E2E NP0 Prod", () => {
    
      await productDisplayPage.selectBOPISAttributes(page);
 
+     await commonPage.sleep(5);
+
       // Verify store pickup is enabled
       await test.step('Verify store pickup is enabled',async()=>{
         await productDisplayPage.freeStorePickupButton.click();
     });
 
+    await commonPage.sleep(5);
+
+     await productDisplayPage.setStoreFromPDP(testData_e2e_np0_prod.zipCode,testData_e2e_np0_prod.storeSearch)
+
+
         // Click add to cart
         await test.step('Click add to cart',async()=>{
         await commonPage.sleep(2)
     
-        await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
-        await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
-        await productDisplayPage.addToCartButtonRewrite.click();
+        
+        await productDisplayPage.addToCartButton.click();
     });
 
         // Click Go to Cart
