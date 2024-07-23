@@ -70,7 +70,8 @@ export class ProductDisplayPage {
     //PDP Favorites
     readonly addToFavoritesBtn: Locator;
     readonly addedToFavoritesBtn: Locator;
-
+    readonly favoritesDefaultListCheckBox: Locator;
+    readonly saveFavoritesButton: Locator;
     //PDP Reviews
     readonly writeaReviewButton: Locator;
     readonly averageRatingLink: Locator;
@@ -142,7 +143,7 @@ export class ProductDisplayPage {
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]')
         this.selectStoreButons = page.getByLabel('select store')
         this.changeSelectedStoreLink = page.locator('span.hmf-body-m-l');
-        this.productName = page.locator('h1.hmf-header-bold-m');
+        this.productName = page.locator('div.hmf-header-bold-m');
         this.productPrice = page.locator('span.product-price');
         this.productColor = page.locator('span.hmf-text-transform-none:nth-of-type(2)');
         this.productAvailability = page.locator('span.fulfillment-options-description div>span');
@@ -165,6 +166,8 @@ export class ProductDisplayPage {
         //PDP Favorites
         this.addToFavoritesBtn = page.getByRole('button', { name:'Add product to favorites'});
         this.addedToFavoritesBtn = page.getByLabel('Delete product from favorites');
+        this.favoritesDefaultListCheckBox  = page.locator('span.homefield-checkbox-span');
+        this.saveFavoritesButton = page.getByRole('button', {name: 'Save'});
 
         //PDP Reviews
         this.writeaReviewButton = page.getByRole('button', {name: 'Write A Review'})
@@ -318,11 +321,11 @@ export class ProductDisplayPage {
         console.log('Image Viewer actions work as expected');
     }
 
-    async increaseProductQuantity(quantity) {
-        await expect(this.quantityInput).toBeVisible();
-        await this.quantityInput.click();
-        await this.quantityInput.clear();
-        await this.quantityInput.fill(quantity);
+    async increaseProductQuantity(quantityInput: Locator, quantity) {
+        await expect(quantityInput).toBeVisible();
+        await quantityInput.click();
+        await quantityInput.clear();
+        await quantityInput.fill(quantity);
     }
 
     async checkProductAvailability() {

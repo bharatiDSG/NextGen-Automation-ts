@@ -28,7 +28,7 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
     });
     });
 
-    test('DSG ATC STH - Desktop', { tag: ['@smoke'] }, async ({ page }) => {
+    test('DSG ATC STH - Desktop - Smoke test', { tag: ['@smoke'] }, async ({ page }) => {
         await test.step('Navigate to yeti tumbler page',async()=>{
         await page.goto(getBaseUrl() + 'p/nike-sportswear-womens-phoenix-fleece-oversized-crewneck-sweatshirt-22nikwstylflccrwxapt/22nikwstylflccrwxapt');
 
@@ -86,11 +86,18 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
 
         await PDP.addToFavoritesBtn.click();
         await accountSignIn.signInFromPDP('dcsgorgs+5@gmail.com','345CourtStreet!');
-        await expect(PDP.addedToFavoritesBtn).toBeVisible({timeout: 20000});
 
-        await PDP.increaseProductQuantity('3');
+        if (!await PDP.addedToFavoritesBtn.isVisible()) {
+            await PDP.addToFavoritesBtn.click();
+            await PDP.favoritesDefaultListCheckBox.click();
+            await PDP.saveFavoritesButton.click();
+    } else {
+        await expect(PDP.addedToFavoritesBtn).toBeVisible({timeout: 20000});
+    }
+
+        await PDP.increaseProductQuantity(PDP.quantityInput, '3');
         await PDP.availableProductColor.first().click();
-        await test.step('',async()=>{});        
+        await test.step('Check product availability based on selected options',async()=>{});        
         await PDP.checkProductAvailability();
     });
         await test.step('Add to cart',async()=>{
@@ -105,7 +112,8 @@ test.describe("PDP Ship To Home - Add To Cart Tests", () => {
         await expect(PDP.goToCartButton).toBeVisible();
         await PDP.goToCartButton.click();
     });
-        await test.step('Verify Cart title and item count',async()=>{        await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (3 items)");
+        await test.step('Verify Cart title and item count',async()=>{        
+            await commonPage.isTextVisible(cartPage.cartItemAmount, "Cart (3 items)");
     });
     });
 
