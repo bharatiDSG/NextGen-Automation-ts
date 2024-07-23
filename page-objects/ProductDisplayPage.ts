@@ -1,6 +1,13 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { CommonPage } from './CommonPage';
+import axios from 'axios';
+import { getBaseUrl } from '../globalSetup';
+import * as dotenv from 'dotenv';
+import config from '../globalEnvironments.json';
+dotenv.config();
+
+
 
 export class ProductDisplayPage {
     private page: Page;
@@ -109,7 +116,7 @@ export class ProductDisplayPage {
         this.continueShoppingButton = page.getByText('Continue Shopping');
         this.goToCartButton = page.getByText('GO TO CART');
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available');
-        this.freeStorePickupButton = page.getByLabel(' Free Store Pickup');
+        this.freeStorePickupButton = page.getByLabel('Free Store Pickup');
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
         this.zipCodeTextField = page.locator('input[id*="homefield-textinput-"]');
@@ -142,8 +149,8 @@ export class ProductDisplayPage {
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true })
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]')
         this.selectStoreButons = page.getByLabel('select store')
-        this.changeSelectedStoreLink = page.locator('span.hmf-body-m-l');
-        this.productName = page.locator('div.hmf-header-bold-m');
+        this.changeSelectedStoreLink = page.locator('button span.link');
+        this.productName = page.locator('h1.hmf-header-bold-m');
         this.productPrice = page.locator('span.product-price');
         this.productColor = page.locator('span.hmf-text-transform-none:nth-of-type(2)');
         this.productAvailability = page.locator('span.fulfillment-options-description div>span');
@@ -162,6 +169,7 @@ export class ProductDisplayPage {
         this.leftArrowBtn = page.locator('.lg-prev.lg-icon');
         this.zoomInBtn = page.locator('#lg-zoom-in.lg-icon');
         this.zoomOutBtn = page.locator('#lg-zoom-out.lg-icon');
+        this.selectStoreButtons= page.locator("button[aria-label='select store']");
 
         //PDP Favorites
         this.addToFavoritesBtn = page.getByRole('button', { name:'Add product to favorites'});
@@ -195,7 +203,7 @@ export class ProductDisplayPage {
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
 
-        await this.changeSelectedStoreLink.click();
+        await this.changeSelectedStoreLink.nth(1).click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
         await this.selectStoreSearchButton.click();
@@ -342,4 +350,279 @@ export class ProductDisplayPage {
             }
         }
     }
+    
+    private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
+    private skusWithAvailability: Set<string> = new Set<string>();
+
+    async verifyAttributesArePresentOrNotForShipToMe():Promise<boolean>
+      {
+        let hostUrl = getBaseUrl();
+        let apiURL: string | null = null;
+        if (hostUrl.includes('gg')) {
+          apiURL = config['app_gg_api'].baseUrl as string;
+        } else if (hostUrl.includes('dsg')) {
+          apiURL = config['app_dsg_api'].baseUrl as string;;
+        } else if (hostUrl.includes('pl')) {
+          apiURL = config['app_pl_api'].baseUrl as string;;
+        } else {
+          console.info('Host did not contain appropriate name');
+          return false;
+        }
+        console.log('The api Url is: '+apiURL);
+         const currentUrl = (await this.page).url();
+        const productID = currentUrl.split('/')[4];
+        const finalAPIURL = `${apiURL}${productID}`;
+        console.log('The final Url is: '+finalAPIURL);
+        const res = await axios.get(finalAPIURL);
+        const attArray = await res.data.productsData[0].style.definingAttributes;
+        if (attArray.length > 0) {
+          await this.getSKUsWithAttributes(res.data);
+          console.log('Attributes present');
+          return true;
+        } else {
+          console.log('No Attributes present');
+          return false;
+        }
+        
+      }
+
+      async verifyAttributesArePresentOrNotForBOPIS(zipCode:string , storeSearch:string): Promise<boolean> {
+        let hostUrl = getBaseUrl();
+        let apiURL: string | null = null;
+        if (hostUrl.includes('gg')) {
+          apiURL = config['app_gg_api'].baseUrl as string;
+        } else if (hostUrl.includes('dsg')) {
+          apiURL = config['app_dsg_api'].baseUrl as string;;
+        } else if (hostUrl.includes('pl')) {
+          apiURL = config['app_pl_api'].baseUrl as string;;
+        } else {
+          console.info('Host did not contain appropriate name');
+          return false;
+        }
+        console.log('The api Url is: '+apiURL);
+        const currentUrl = this.page.url();
+        const productID = currentUrl.split('/')[4];
+        const finalAPIURL = `${apiURL}${productID}`;
+    
+        const res = await axios.get(finalAPIURL);
+    
+        const attArray = res.data.productsData[0].style.definingAttributes;
+        console.log(attArray);
+        if (attArray.length > 0) {
+          await this.getSKUsWithAttributes(res.data);
+          await this.getSKUsWithQuantity(zipCode, storeSearch);
+          return true;
+        } else {
+          console.log('No Attributes present');
+          return false;
+        }
+      }
+
+      async getSKUsWithQuantity(zipcode: string, storeName: string | null): Promise<void> {
+        const skus = Array.from(this.skusWithAttributes.keys());
+        const skuWithCommaSeparated = skus.join(',');
+    
+        const address = `addr=${zipcode}&`;
+        const radius = `radius=100&`;
+        const uom = `uom=imperial&`;
+        const lob = `lob=gg,dsg&`;
+        const skusForAPICall = `sku=${skuWithCommaSeparated}&`;
+        const res = `res=locatorsearch`;
+    
+        let hostUrl = getBaseUrl();
+        let apiURL: string | null = null;
+    
+        if (!storeName) {
+          storeName = 'robinson';
+        }
+    
+        if (hostUrl.includes('gg')) {
+          apiURL = config['app_gg_dks_avail_api'].baseUrl as string;
+        } else if (hostUrl.includes('dsg') || hostUrl.includes('pl')) {
+          apiURL = config['app_dsg_avail_api'].baseUrl as string;
+        } else {
+          console.info('Host did not contain appropriate name');
+          return;
+        }
+    
+        const finalAPIURL = `${apiURL}${address}${radius}${uom}${lob}${skusForAPICall}${res}`;
+
+        console.log('The final quantity Url is: '+finalAPIURL);
+    
+        const response = await axios.get(finalAPIURL);
+        const quantityResponse = response.data;
+    
+        const skusArray = quantityResponse.data.results;
+        const s = new Map<string, string>();
+    
+        for (const store of skusArray) {
+          if (store.store.name.toUpperCase() === storeName.toUpperCase()) {
+            for (const skuItem of store.skus) {
+              const sku = skuItem.sku;
+              const quantity = skuItem.qty.isa;
+              s.set(sku, quantity);
+            }
+            break;
+          }
+        }
+    
+        const skusWithQuantity = Array.from(s.entries())
+          .filter(([_, value]) => value !== '0')
+          .map(([key, _]) => key);
+    
+        this.skusWithAvailability = new Set(skusWithQuantity);
+      }
+      
+       
+    async  getSKUsWithAttributes(res: any): Promise<void> {
+        this.skusWithAttributes.clear();
+        const jsonObj = res;
+        const skusArray = jsonObj.productsData[0].skus;
+        for (let i = 0; i < skusArray.length; i++) {
+          console.log(skusArray[i].shipQty);
+          if (skusArray[i].shipQty > 0) {
+            const a: string[] = [];
+            const definingAttr = skusArray[i].definingAttributes;
+            const price = `price - ${skusArray[i].prices.offerPrice}`;
+            a.push(price);
+            for (let j = 0; j < definingAttr.length; j++) {
+              const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+              a.push(attr);
+            }
+            this.skusWithAttributes.set(skusArray[i].partNumber, a);
+          }
+        }
 }
+
+async selectShipToMeAttributes(page: Page, ): Promise<void> {
+    const commonPage = new CommonPage(this.page);
+    console.log(this.skusWithAttributes);
+    if (this.skusWithAttributes.size > 0) {
+      const keysAsArray = Array.from(this.skusWithAttributes.keys());
+      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+      const attr = this.skusWithAttributes.get(randomSku);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0]) {
+            case 'Color':
+              console.info('Selecting attribute is: ' + attributeSet[0]);
+              const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+              console.log(randomColorXpath);
+              await commonPage.sleep(5);
+              const colorPdp = page.locator(randomColorXpath);
+              await colorPdp.click();
+              break;
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+              console.info('Selecting attribute is: ' + attributeSet[0]);
+              const randomXpath = `//button//span[text()='${attributeSet[1]}']`;
+              await commonPage.sleep(5);
+              const paramPdp = page.locator(randomXpath);
+              await paramPdp.click();
+              break;
+            case 'Length':
+              console.info('Selecting attribute is: ' + attributeSet[0]);
+              const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+              page.locator(randomLengthXpath).click();;
+              break;
+          }
+        }
+      }
+    } else {
+      throw new Error('This product is not eligible for Ship To Me');
+    }
+
+    }
+
+    
+    async selectBOPISAttributes(page: Page): Promise<void> {
+    
+      const commonPage = new CommonPage(this.page);
+      console.log("The skus with availability size is:  "+this.skusWithAvailability.size);
+      if (this.skusWithAvailability.size > 0) {
+        console.log("The skus with attributes: " + JSON.stringify(Array.from(this.skusWithAttributes.entries())));
+        console.log("The skus with availabilities: " + JSON.stringify(Array.from(this.skusWithAvailability)));
+        const skusArray = Array.from(this.skusWithAvailability);
+        const randomItem = Math.floor(Math.random() * skusArray.length);
+        const randomSKU = skusArray[randomItem];
+        const attr = this.skusWithAttributes.get(randomSKU);
+        console.log("The random SKU is: "+attr)
+        if (attr) {
+          for (const at of attr) {
+            const attributeSet = at.split(' - ');
+            console.log(attributeSet[0]);
+            console.log(attributeSet[1]);
+            switch (attributeSet[0].trim()) {
+              case 'Color':
+                const randomColorXpath = `//img[@alt='${attributeSet[1].trim()}']/ancestor::button`;
+                console.log("The color xpath is: "+randomColorXpath)
+                await commonPage.sleep(5);
+                const paramPdp2 = page.locator(randomColorXpath);
+                await paramPdp2.click();
+                break;
+              case 'Size':
+              case 'Shoe Size':
+              case 'Shoe Width':
+              case 'Flex':
+              case 'Hand':
+              case 'Shaft':
+                const randomShaftXpath = `//button//span[text()="${attributeSet[1].trim()}"]`;
+                console.log("The size xpath is: "+randomShaftXpath)
+                await commonPage.sleep(5);
+                const paramPdp1 = page.locator(randomShaftXpath);
+                await paramPdp1.click();
+                break;
+              case 'Loft':
+              case 'Wedge Bounce':
+              case 'Wedge Grind/Sole':
+              case 'Frame Size':
+              case 'Wheel Size':
+              case 'Drivetrain Manufacturer':
+              case 'Sock Size':
+              case 'Capacity':
+              case 'Grip':
+                const randomXpath = `//button//span[text()='${attributeSet[1].trim()}']`;
+                await commonPage.sleep(5);
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.click();
+                break;
+            }
+          }
+        }
+      } else {
+        throw new Error('This product is not eligible for BOPIS');
+      }
+    }
+  }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+

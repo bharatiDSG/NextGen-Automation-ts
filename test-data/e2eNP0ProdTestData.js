@@ -12,5 +12,7 @@ export const testData_e2e_np0_prod = {
     creditCardNumber: "3700 0000 0100 018",
     expiryDate: "03/30",
     securityCode: "7373",
-    mailosaurServerID: "4imxgawu"
+    mailosaurServerID: "4imxgawu",
+    searchTerm2: "Golf Polo",
+    productMatch2: "Golf Polo",
 }

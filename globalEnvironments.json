@@ -22,5 +22,23 @@
     },
     "gg_np0qa": {
         "baseUrl": "https://golfgalaxy.dksxchange.com/"
+    },
+    "app_dsg_api": {
+        "baseUrl": "https://api-search.dickssportinggoods.com/catalog-productdetails/v4/byURL/15108?inventory=true&active=true&skus=true&url="
+    },
+    "app_gg_api": {
+        "baseUrl": "https://api-search.golfgalaxy.com/catalog-productdetails/v4/byURL/10701?inventory=true&active=true&skus=true&url="
+    },
+    "app_pl_api": {
+        "baseUrl": "https://api-search.publiclands.com/catalog-productdetails/v4/byURL/16066?inventory=true&active=true&skus=true&url="
+    },
+    "app_mj_api": {
+        "baseUrl": "https://api-search.moosejaw.com/catalog-productdetails/v4/byURL/16066?inventory=true&active=true&skus=true&url="
+    },
+    "app_dsg_avail_api": {
+        "baseUrl": "https://availability.dickssportinggoods.com/ws/v3/omni/stores?"
+    },
+    "app_gg_dks_avail_api": {
+        "baseUrl": "https://availability.dksxchange.com/ws/v3/omni/stores?"
     }
 }

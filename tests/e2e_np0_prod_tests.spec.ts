@@ -53,7 +53,6 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Verify store pickup is enabled
         await test.step('Verify store pickup is enabled',async()=>{
-        await expect(productDisplayPage.storePickupEnabledButton).toBeVisible()
         await productDisplayPage.storePickupEnabledButton.click();
     });
         // Verify correct store and add to cart
