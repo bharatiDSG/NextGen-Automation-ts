@@ -184,7 +184,7 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         });
     });
 
-    test.only('2: PLP page, BOPIS order', async ({ page }) => {
+    test('2: PLP page, BOPIS order', async ({ page }) => {
       const homePage = new HomePage(page);
       const productListingPage = new ProductListingPage(page);
 
