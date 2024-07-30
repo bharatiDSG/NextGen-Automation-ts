@@ -358,9 +358,9 @@ export class ProductDisplayPage {
       {
         let hostUrl = getBaseUrl();
         let apiURL: string | null = null;
-        if (hostUrl.includes('gg')) {
+        if (hostUrl.includes('golfgalaxy')) {
           apiURL = config['app_gg_api'].baseUrl as string;
-        } else if (hostUrl.includes('dsg')) {
+        } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
           apiURL = config['app_dsg_api'].baseUrl as string;;
         } else if (hostUrl.includes('pl')) {
           apiURL = config['app_pl_api'].baseUrl as string;;
@@ -373,7 +373,7 @@ export class ProductDisplayPage {
         const productID = currentUrl.split('/')[4];
         const finalAPIURL = `${apiURL}${productID}`;
         console.log('The final Url is: '+finalAPIURL);
-        const res = await axios.get(finalAPIURL);
+        const res = await axios.get(finalAPIURL,{timeout:25000});
         const attArray = await res.data.productsData[0].style.definingAttributes;
         if (attArray.length > 0) {
           await this.getSKUsWithAttributes(res.data);
