@@ -4,6 +4,13 @@ Playwright test automation framework for ecomm websites using typescript
 
 ## Install and Setup Steps
 
+### If Node and/or Git are not installed, follow the steps below:
+
+Node - If using a mac, install from Self Service  
+Git - If using a mac, install Homebrew from Self Service and run the following cmd:
+
+    brew install git
+
 ### After cloning the repo, use the following command to install dependencies:
 
     npm ci
