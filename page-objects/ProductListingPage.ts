@@ -180,4 +180,13 @@ export class ProductListingPage {
         await this.zipDeliveryInputField.fill(zip)
         await this.zipDeliveryUpdateButton.click()
     }
+
+    async selectAProduct() {
+        await this.productNames.last().waitFor();
+        const productNames = await this.productNames.allInnerTexts();
+        console.log("product count: " + productNames.length);
+        await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
+
+
+    }    
 }
