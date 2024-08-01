@@ -202,12 +202,12 @@ export class ProductDisplayPage {
 
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
-
+        commonPage.sleep(5);
         await this.changeSelectedStoreLink.nth(1).click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
         await this.selectStoreSearchButton.click();
-        await commonPage.sleep(1);
+        await commonPage.sleep(5);
 
         await this.selectStoreNames.last().waitFor();
         const storeNames = await this.selectStoreNames.allInnerTexts();
@@ -358,9 +358,9 @@ export class ProductDisplayPage {
       {
         let hostUrl = getBaseUrl();
         let apiURL: string | null = null;
-        if (hostUrl.includes('gg')) {
+        if (hostUrl.includes('golfgalaxy')) {
           apiURL = config['app_gg_api'].baseUrl as string;
-        } else if (hostUrl.includes('dsg')) {
+        } else if (hostUrl.includes('dickssportinggoods')) {
           apiURL = config['app_dsg_api'].baseUrl as string;;
         } else if (hostUrl.includes('pl')) {
           apiURL = config['app_pl_api'].baseUrl as string;;
@@ -389,9 +389,9 @@ export class ProductDisplayPage {
       async verifyAttributesArePresentOrNotForBOPIS(zipCode:string , storeSearch:string): Promise<boolean> {
         let hostUrl = getBaseUrl();
         let apiURL: string | null = null;
-        if (hostUrl.includes('gg')) {
+        if (hostUrl.includes('golfgalaxy')) {
           apiURL = config['app_gg_api'].baseUrl as string;
-        } else if (hostUrl.includes('dsg')) {
+        } else if (hostUrl.includes('dickssportinggoods')) {
           apiURL = config['app_dsg_api'].baseUrl as string;;
         } else if (hostUrl.includes('pl')) {
           apiURL = config['app_pl_api'].baseUrl as string;;
@@ -436,9 +436,9 @@ export class ProductDisplayPage {
           storeName = 'robinson';
         }
     
-        if (hostUrl.includes('gg')) {
+        if (hostUrl.includes('golfgalaxy')) {
           apiURL = config['app_gg_dks_avail_api'].baseUrl as string;
-        } else if (hostUrl.includes('dsg') || hostUrl.includes('pl')) {
+        } else if (hostUrl.includes('dickssportinggoods') || hostUrl.includes('pl')) {
           apiURL = config['app_dsg_avail_api'].baseUrl as string;
         } else {
           console.info('Host did not contain appropriate name');

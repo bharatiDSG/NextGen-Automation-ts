@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-
+import { expect, test } from '@playwright/test';
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 
@@ -52,6 +52,21 @@ export class ProductListingPage {
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
     readonly quickviewViewCartButton: Locator;
+    readonly favorites: Locator;
+    readonly favoritesToastMsg: Locator;
+    readonly myAccount: Locator;
+    readonly myAccountListSection: Locator;
+    readonly myAccountListSectionFavorite: Locator;
+    readonly myAccountListSectionFavoriteProductName: Locator;
+    readonly myAccountListSectionFavoriteProductPrice: Locator;
+    readonly myAccountCloseListPopPu:Locator;
+    readonly myAccountListSelectionFavoriteItemMesg:Locator
+
+
+
+
+    
+   
 
     constructor(page: Page) {
         this.page = page;
@@ -67,6 +82,20 @@ export class ProductListingPage {
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
         this.zipDeliveryInputField = page.getByTitle(new RegExp('.*homefield-textinput.*'));
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
+
+        
+        //Favorites
+        this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
+        this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
+        this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
+        this.myAccount = page.locator('p.account-main-text');
+        this.myAccountListSection = page.locator('ul.hmf-pl-0.hmf-mb-s li:nth-of-type(4) a');
+        this.myAccountListSectionFavorite = page.locator('p.list-card-title');
+        this.myAccountListSectionFavoriteProductName = page.locator('a.product-title-link');
+        this.myAccountListSectionFavoriteProductPrice = page.locator('div.price-text');
+        this.myAccountCloseListPopPu = page.locator("div[aria-label='Close']")
+        this.myAccountListSelectionFavoriteItemMesg = page.locator("span.hmf-subheader-l");
+
 
         // shipping filters
         this.pickupFilterButton = page.getByRole('button', { name: 'Pickup filter' });
@@ -171,4 +200,44 @@ export class ProductListingPage {
         await this.zipDeliveryInputField.fill(zip)
         await this.zipDeliveryUpdateButton.click()
     }
+
+    async verifyFavoritesPresentInMyAccounts(itemVal: string){
+         const commonPage = new CommonPage(this.page);
+         const plpProductStyle =  this.page.locator("div.dsg-react-product-card:nth-of-type(" + itemVal + ")  div.rs-fswatch li");
+         await plpProductStyle.nth(1).click();
+         const index = +itemVal
+         const eleFvrt = this.favorites.nth(index);
+         await expect(eleFvrt).toBeVisible();
+         await expect(eleFvrt).toHaveAttribute('aria-label', /Remove/);
+         const indexUpdated = index +1;
+         const namePlp =  await this.page.locator('div.dsg-react-product-card:nth-of-type('+ indexUpdated +')  .rs_product_description').textContent();
+         console.log("Product name in PLP page is: "+namePlp)
+         const pricePlp =  await this.page.locator('div.dsg-react-product-card:nth-of-type('+ indexUpdated +')  p.offer-price').textContent();
+         console.log("Product price in PLP page is: "+pricePlp)
+         await this.myAccount.click();
+         await this.myAccountListSection.click();
+         await this.myAccountCloseListPopPu.click();
+         await this.myAccountListSectionFavorite.click();
+        const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
+        console.log("The message is: "+itemTxt)
+        expect(itemTxt?.trim()).not.toContain(String("0 items")); 
+        const myAccountItemName = await this.myAccountListSectionFavoriteProductName.nth(0).textContent();
+        const myAccountItemPrice = await this.myAccountListSectionFavoriteProductPrice.nth(0).textContent();
+        console.log("Product name in my account favorite page is: "+myAccountItemName)
+        console.log("Product price in my account favorite page is: "+myAccountItemPrice)
+        expect(myAccountItemName?.trim()).toContain(String(namePlp)); 
+        expect(myAccountItemPrice?.trim()).toContain(String(pricePlp)); 
+    }
+
+    async verifyFavoritesNotPresentInMyAccounts(){
+        const commonPage = new CommonPage(this.page);
+        await this.myAccount.click();
+        await this.myAccountListSection.click();
+        await this.myAccountCloseListPopPu.click();
+        await this.myAccountListSectionFavorite.click();
+        const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
+        console.log("The message is: "+itemTxt)
+        expect(itemTxt?.trim()).toContain(String("0 items")); 
+    }
+
 }
