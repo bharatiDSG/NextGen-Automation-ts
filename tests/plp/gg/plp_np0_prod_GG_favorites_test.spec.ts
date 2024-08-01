@@ -81,7 +81,6 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
             await commonPage.sleep(5)
             await productListingPage.favorites.nth(1).click();
             await expect(productListingPage.favoritesToastMsg).toBeVisible();
-            await expect(productListingPage.favoritesToastMsg).toBeVisible();
             const toastText = await productListingPage.favoritesToastMsg.textContent();
             try{
                 expect(toastText?.trim()).toContain(String("Added")); 
