@@ -202,7 +202,7 @@ export class ProductDisplayPage {
 
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
-        commonPage.sleep(5);
+        await commonPage.sleep(5);
         await this.changeSelectedStoreLink.nth(1).click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
