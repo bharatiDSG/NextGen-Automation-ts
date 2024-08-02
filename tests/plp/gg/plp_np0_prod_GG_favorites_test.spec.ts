@@ -49,7 +49,7 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
         });
 
         await test.step('And we see product card descriptions contain "polo"', async () => {
-            await page.waitForTimeout(6000); // waits for 6 seconds
+            await page.waitForTimeout(20000); 
             if(await productListingPage.productNamesAngular.first().isVisible()){
                 const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
                 console.log('Product name - '+loweredProductName);
@@ -79,6 +79,8 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
        
             await productListingPage.favorites.nth(1).click();
             await commonPage.sleep(5)
+            await productListingPage.unselectAllFavorites();
+            await commonPage.sleep(10)
             await productListingPage.favorites.nth(1).click();
             await expect(productListingPage.favoritesToastMsg).toBeVisible();
             const toastText = await productListingPage.favoritesToastMsg.textContent();

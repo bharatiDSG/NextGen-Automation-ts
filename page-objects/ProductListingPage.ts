@@ -240,4 +240,23 @@ export class ProductListingPage {
         expect(itemTxt?.trim()).toContain(String("0 items")); 
     }
 
+    async unselectAllFavorites() {
+        const commonPage = new CommonPage(this.page);
+        await commonPage.sleep(10);
+        const fvrtSelected =  this.page.locator('div.dsg-react-product-card button.plp-add-favorite-button[aria-label *="Remove"]');
+        const count = await fvrtSelected.count();
+        console.log("Total favorites selected is: "+count);
+        if (count === 0) {
+          console.log('No faction required');
+        } else {
+          for (let i = 0; i < count; i++) {
+            await commonPage.sleep(10);
+            const favoriteSlctedSngl =  fvrtSelected.nth(0);
+            console.log("Unselected "+i+" time");
+            await favoriteSlctedSngl.click(); 
+          }
+        }
+      }
+    
+
 }
