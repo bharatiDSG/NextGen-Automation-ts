@@ -77,11 +77,9 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
           });
 
           await test.step('Verify favorite functionality', async () => {
-            await commonPage.handlePromotionalPopup();
             await productListingPage.favorites.nth(1).click();
-            await commonPage.sleep(5)
+            await commonPage.sleep(10)
             // await productListingPage.unselectAllFavorites();
-            // await commonPage.sleep(10)
             await productListingPage.favorites.nth(1).click();
             await expect(productListingPage.favoritesToastMsg).toBeVisible();
             const toastText = await productListingPage.favoritesToastMsg.textContent();
