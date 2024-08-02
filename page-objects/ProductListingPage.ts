@@ -247,7 +247,7 @@ export class ProductListingPage {
         const count = await fvrtSelected.count();
         console.log("Total favorites selected is: "+count);
         if (count === 0) {
-          console.log('No faction required');
+          console.log('No action required');
         } else {
           for (let i = 0; i < count; i++) {
             await commonPage.sleep(10);
