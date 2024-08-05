@@ -11,7 +11,8 @@ export class ProductListingPage {
     readonly selectStoreSearchButton: Locator;
     readonly selectStoreNames: Locator;
     readonly selectStoreButtons: Locator;
-    readonly pickupFilterButton: Locator;
+    readonly pickupFilterButtonReact: Locator;
+    readonly pickupFilterButtonAngular: Locator;
     readonly shipFilterButtonReact: Locator;
     readonly shipFilterButtonAngular: Locator;
     readonly saleAccordionFilterButtonReact: Locator;
@@ -48,6 +49,7 @@ export class ProductListingPage {
     readonly quickviewOpenATCButtonReact: Locator;
     readonly quickviewOpenATCButtonAngular: Locator;
     readonly quickviewColorAttribute: Locator;
+    readonly quickviewColorAttribute2: Locator;
     readonly quickviewSizeAttribute: Locator;
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
@@ -65,13 +67,15 @@ export class ProductListingPage {
 
 
 
-    
-   
+
+
+    readonly breadCrumbLinkReact: Locator;
+    readonly breadCrumbLinkAngular: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        // Select Store
+        // Select Store and delivery zip
         this.changeSelectedStoreLink = page.getByLabel('Change selected store from');
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true });
@@ -80,10 +84,10 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
-        this.zipDeliveryInputField = page.getByTitle(new RegExp('.*homefield-textinput.*'));
+        this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
-        
+
         //Favorites
         this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
         this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
@@ -98,7 +102,8 @@ export class ProductListingPage {
 
 
         // shipping filters
-        this.pickupFilterButton = page.getByRole('button', { name: 'Pickup filter' });
+        this.pickupFilterButtonReact = page.getByRole('button', { name: 'Pickup filter' });
+        this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
         this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.filterChipsReact = page.locator('[class="filter-chip"]');
@@ -124,11 +129,13 @@ export class ProductListingPage {
         this.productPriceReact = page.locator('[class="rs_product_price"]');
         this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
-        // pagination
+        // pagination and breadcrumbs
         this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
         this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
         this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
         this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
+        this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
+        this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', {hasText: 'Men\'s Shirts & Tops'});
 
         // sorting options
         this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
@@ -142,6 +149,7 @@ export class ProductListingPage {
         this.quickviewOpenATCButtonReact = page.locator('[class="dsg-quickview-button-icon"]');
         this.quickviewOpenATCButtonAngular = page.locator('[id="add-to-cart-button"]');
         this.quickviewColorAttribute = page.getByTitle('Black/Steel');
+        this.quickviewColorAttribute2 = page.getByTitle('Black');
         this.quickviewSizeAttribute = page.getByTestId('quickViewModalL');
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
@@ -195,7 +203,8 @@ export class ProductListingPage {
 
     async setDeliveryZipPLP(zip: string){
         await this.page.waitForTimeout(4000); // waits for 4 seconds
-        await this.zipDeliveryLocationButton.click()
+        await this.zipDeliveryLocationButton.first().click()
+        await this.page.waitForTimeout(4000); // waits for 4 seconds
         await this.zipDeliveryInputField.click()
         await this.zipDeliveryInputField.fill(zip)
         await this.zipDeliveryUpdateButton.click()
@@ -220,13 +229,13 @@ export class ProductListingPage {
          await this.myAccountListSectionFavorite.click();
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
-        expect(itemTxt?.trim()).not.toContain(String("0 items")); 
+        expect(itemTxt?.trim()).not.toContain(String("0 items"));
         const myAccountItemName = await this.myAccountListSectionFavoriteProductName.nth(0).textContent();
         const myAccountItemPrice = await this.myAccountListSectionFavoriteProductPrice.nth(0).textContent();
         console.log("Product name in my account favorite page is: "+myAccountItemName)
         console.log("Product price in my account favorite page is: "+myAccountItemPrice)
-        expect(myAccountItemName?.trim()).toContain(String(namePlp)); 
-        expect(myAccountItemPrice?.trim()).toContain(String(pricePlp)); 
+        expect(myAccountItemName?.trim()).toContain(String(namePlp));
+        expect(myAccountItemPrice?.trim()).toContain(String(pricePlp));
     }
 
     async verifyFavoritesNotPresentInMyAccounts(){
@@ -237,7 +246,7 @@ export class ProductListingPage {
         await this.myAccountListSectionFavorite.click();
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
-        expect(itemTxt?.trim()).toContain(String("0 items")); 
+        expect(itemTxt?.trim()).toContain(String("0 items"));
     }
 
     async unselectAllFavorites() {
@@ -253,10 +262,19 @@ export class ProductListingPage {
             await commonPage.sleep(10);
             const favoriteSlctedSngl =  fvrtSelected.nth(0);
             console.log("Unselected "+i+" time");
-            await favoriteSlctedSngl.click(); 
+            await favoriteSlctedSngl.click();
           }
         }
       }
-    
 
+
+
+    async selectAProduct() {
+        await this.productNames.last().waitFor();
+        const productNames = await this.productNames.allInnerTexts();
+        console.log("product count: " + productNames.length);
+        await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
+
+
+    }
 }
