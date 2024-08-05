@@ -1,7 +1,7 @@
 export const testData_e2e_np0_qa = {
     searchTerm1: "Golf Balls",
     sku:"157101",
-    sku2:"btrx6d2g",
+    sku2:"188101",
     productMatch1: "2024",
     storeSearch: "Robinson",
     email: "testEmail@4imxgawu.mailosaur.net",
