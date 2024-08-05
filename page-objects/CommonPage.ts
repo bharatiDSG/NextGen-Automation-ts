@@ -75,9 +75,9 @@ export class CommonPage {
     {
 
         try{
-            const promoFrame= await this.page.frameLocator("xpath=//iframe[@id='attentive_creative']");
+            const promoFrame=  this.page.frameLocator("xpath=//iframe[@id='attentive_creative']");
             await this.sleep(3);
-            promoFrame.getByTestId('closeIcon').click();
+            await promoFrame.getByTestId('closeIcon').click();
             console.log("Promo window closed");
         }
         catch(err)
