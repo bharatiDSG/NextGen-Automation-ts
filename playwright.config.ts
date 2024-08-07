@@ -22,7 +22,10 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 4 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+  ['html'], // You can combine multiple reporters
+  ['playwright-ctrf-json-reporter', {}]
+],
   /* Wait timeout time */
   expect: {
     timeout: 10 * 1000,
