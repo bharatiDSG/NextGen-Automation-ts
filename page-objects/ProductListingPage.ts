@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-
+import { expect, test } from '@playwright/test';
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 
@@ -11,7 +11,8 @@ export class ProductListingPage {
     readonly selectStoreSearchButton: Locator;
     readonly selectStoreNames: Locator;
     readonly selectStoreButtons: Locator;
-    readonly pickupFilterButton: Locator;
+    readonly pickupFilterButtonReact: Locator;
+    readonly pickupFilterButtonAngular: Locator;
     readonly shipFilterButtonReact: Locator;
     readonly shipFilterButtonAngular: Locator;
     readonly saleAccordionFilterButtonReact: Locator;
@@ -48,17 +49,36 @@ export class ProductListingPage {
     readonly quickviewOpenATCButtonReact: Locator;
     readonly quickviewOpenATCButtonAngular: Locator;
     readonly quickviewColorAttribute: Locator;
+    readonly quickviewColorAttribute2: Locator;
     readonly quickviewSizeAttribute: Locator;
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
     readonly quickviewViewCartButton: Locator;
     readonly sameDayDeliveryFilter: Locator;
+    readonly favorites: Locator;
+    readonly favoritesToastMsg: Locator;
+    readonly myAccount: Locator;
+    readonly myAccountListSection: Locator;
+    readonly myAccountListSectionFavorite: Locator;
+    readonly myAccountListSectionFavoriteProductName: Locator;
+    readonly myAccountListSectionFavoriteProductPrice: Locator;
+    readonly myAccountCloseListPopPu:Locator;
+    readonly myAccountListSelectionFavoriteItemMesg:Locator
+
+
+
+
+
+
+    readonly breadCrumbLinkReact: Locator;
+    readonly breadCrumbLinkAngular: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        // Select Store
-        this.changeSelectedStoreLink = page.locator('.header-my-store')
+        
+        // Select Store and delivery zip
+        this.changeSelectedStoreLink = page.getByLabel('Change selected store from');
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true });
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]');
@@ -66,11 +86,29 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
+
         this.zipDeliveryInputField = page.locator("//input[@type='number']")
+
+        this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
+
+        //Favorites
+        this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
+        this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
+        this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
+        this.myAccount = page.locator('p.account-main-text');
+        this.myAccountListSection = page.locator('ul.hmf-pl-0.hmf-mb-s li:nth-of-type(4) a');
+        this.myAccountListSectionFavorite = page.locator('p.list-card-title');
+        this.myAccountListSectionFavoriteProductName = page.locator('a.product-title-link');
+        this.myAccountListSectionFavoriteProductPrice = page.locator('div.price-text');
+        this.myAccountCloseListPopPu = page.locator("div[aria-label='Close']")
+        this.myAccountListSelectionFavoriteItemMesg = page.locator("span.hmf-subheader-l");
+
+
         // shipping filters
-        this.pickupFilterButton = page.getByRole('button', { name: 'Pickup filter' });
+        this.pickupFilterButtonReact = page.getByRole('button', { name: 'Pickup filter' });
+        this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
         this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.sameDayDeliveryFilter= page.getByRole('button', { name: 'Same Day Delivery filter' });
@@ -97,11 +135,13 @@ export class ProductListingPage {
         this.productPriceReact = page.locator('[class="rs_product_price"]');
         this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
-        // pagination
+        // pagination and breadcrumbs
         this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
         this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
         this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
         this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
+        this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
+        this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', {hasText: 'Men\'s Shirts & Tops'});
 
         // sorting options
         this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
@@ -115,6 +155,7 @@ export class ProductListingPage {
         this.quickviewOpenATCButtonReact = page.locator('[class="dsg-quickview-button-icon"]');
         this.quickviewOpenATCButtonAngular = page.locator('[id="add-to-cart-button"]');
         this.quickviewColorAttribute = page.getByTitle('Black/Steel');
+        this.quickviewColorAttribute2 = page.getByTitle('Black');
         this.quickviewSizeAttribute = page.getByTestId('quickViewModalL');
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
@@ -174,6 +215,65 @@ export class ProductListingPage {
         await this.zipDeliveryUpdateButton.click()
     }
 
+    async verifyFavoritesPresentInMyAccounts(itemVal: string){
+         const commonPage = new CommonPage(this.page);
+         const plpProductStyle =  this.page.locator("div.dsg-react-product-card:nth-of-type(" + itemVal + ")  div.rs-fswatch li");
+         await plpProductStyle.nth(1).click();
+         const index = +itemVal
+         const eleFvrt = this.favorites.nth(index);
+         await expect(eleFvrt).toBeVisible();
+         await expect(eleFvrt).toHaveAttribute('aria-label', /Remove/);
+         const indexUpdated = index +1;
+         const namePlp =  await this.page.locator('div.dsg-react-product-card:nth-of-type('+ indexUpdated +')  .rs_product_description').textContent();
+         console.log("Product name in PLP page is: "+namePlp)
+         const pricePlp =  await this.page.locator('div.dsg-react-product-card:nth-of-type('+ indexUpdated +')  p.offer-price').textContent();
+         console.log("Product price in PLP page is: "+pricePlp)
+         await this.myAccount.click();
+         await this.myAccountListSection.click();
+         await this.myAccountCloseListPopPu.click();
+         await this.myAccountListSectionFavorite.click();
+        const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
+        console.log("The message is: "+itemTxt)
+        expect(itemTxt?.trim()).not.toContain(String("0 items"));
+        const myAccountItemName = await this.myAccountListSectionFavoriteProductName.nth(0).textContent();
+        const myAccountItemPrice = await this.myAccountListSectionFavoriteProductPrice.nth(0).textContent();
+        console.log("Product name in my account favorite page is: "+myAccountItemName)
+        console.log("Product price in my account favorite page is: "+myAccountItemPrice)
+        expect(myAccountItemName?.trim()).toContain(String(namePlp));
+        expect(myAccountItemPrice?.trim()).toContain(String(pricePlp));
+    }
+
+    async verifyFavoritesNotPresentInMyAccounts(){
+        const commonPage = new CommonPage(this.page);
+        await this.myAccount.click();
+        await this.myAccountListSection.click();
+        await this.myAccountCloseListPopPu.click();
+        await this.myAccountListSectionFavorite.click();
+        const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
+        console.log("The message is: "+itemTxt)
+        expect(itemTxt?.trim()).toContain(String("0 items"));
+    }
+
+    async unselectAllFavorites() {
+        const commonPage = new CommonPage(this.page);
+        await commonPage.sleep(10);
+        const fvrtSelected =  this.page.locator('div.dsg-react-product-card button.plp-add-favorite-button[aria-label *="Remove"]');
+        const count = await fvrtSelected.count();
+        console.log("Total favorites selected is: "+count);
+        if (count === 0) {
+          console.log('No action required');
+        } else {
+          for (let i = 0; i < count; i++) {
+            await commonPage.sleep(10);
+            const favoriteSlctedSngl =  fvrtSelected.nth(0);
+            console.log("Unselected "+i+" time");
+            await favoriteSlctedSngl.click();
+          }
+        }
+      }
+
+
+
     async selectAProduct() {
         await this.productNames.last().waitFor();
         const productNames = await this.productNames.allInnerTexts();
@@ -181,5 +281,5 @@ export class ProductListingPage {
         await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
 
 
-    }    
+    }
 }

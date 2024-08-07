@@ -1,5 +1,5 @@
 export const testData_smokePLP_prod = {
-    searchTerm1: "mens polo",
+    searchTerm1: "golf polo",
     productMatch1: "polo",
     storeSearch: "Robinson",
     email: "AutomationTestingDSG@gmail.com",
@@ -13,5 +13,7 @@ export const testData_smokePLP_prod = {
     expiryDate: "03/30",
     securityCode: "737",
     usernameOrderAPI: "sean.clawson@dcsg.com",
-    passwordOrderAPI: "July@2021"
+    passwordOrderAPI: "July@2021",
+    registeredUser:"AutomationTestingDSG@gmail.com",
+    registeredUserPassword:"Test1234!"
 }
