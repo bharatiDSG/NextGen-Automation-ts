@@ -4,7 +4,8 @@ import { CommonPage } from './CommonPage';
 import { assert, error } from 'console';
 
 export class CheckoutPage {
-    
+
+
     private page: Page;
     readonly shippingTitle: Locator;
     readonly shippingTitleAnchor: Locator;
@@ -42,7 +43,7 @@ export class CheckoutPage {
     readonly paypalRadioButton: Locator;
     readonly payWithPayPalLabel: Locator;
     readonly affirmRadioButton: Locator;
-    readonly afterPayRadioButton:Locator;
+    readonly afterPayRadioButton: Locator;
     readonly afterpayCheckoutButton: Locator;
     readonly creditCardRadioButton: Locator;
     readonly appliedGiftCardMessage: any;
@@ -66,7 +67,7 @@ export class CheckoutPage {
     readonly shippingAddress: Locator;
     readonly shippingAddressLine2: Locator;
     readonly shippingZipcode: Locator;
-    readonly miniCartIcon:Locator;
+    readonly miniCartIcon: Locator;
     readonly billingFirstName: Locator;
     readonly billingLastName: Locator;
     readonly billingAddress: Locator;
@@ -75,7 +76,34 @@ export class CheckoutPage {
     readonly editBillingShippingInfo: Locator;
     readonly expeditedShippingRadioBtn: Locator;
     readonly expressShippingRadioBtn: Locator;
-    
+    readonly orderTotal: Locator;
+    readonly storePickUpCharge: Locator;
+    readonly individualProductPrice: Locator;
+    readonly individualProductQuantity: Locator;
+    estDeliveryDates: any;
+    individualProductName: Locator;
+    storeDetails: Locator;
+    freeStorePickup: Locator;
+    storename: Locator;
+    changeContactInfo: Locator;
+    changeBillingShippingInfo: Locator;
+    dsgLogo: Locator;
+    textMeOrderUpdates: Locator;
+    addPickupPersonLink: Locator;
+    pickupFirstname: Locator;
+    pickupLastname: Locator;
+    pickupEmail: Locator;
+    pickUpContinue: Locator;
+    giftReceipientEmail: Locator;
+    giftReceipientFirstName: Locator;
+    giftReceipientDescription: Locator;
+    sameDayDeliveryTip: Locator;
+    sameDayDevlieryTipAmount: Locator;
+    tipAmount: Locator;
+    otherTipLink: Locator;
+    tipAmountInput: Locator;
+    applyTipAmount: Locator;
+
 
     constructor(page: Page) {
         this.page = page;
@@ -87,94 +115,125 @@ export class CheckoutPage {
         this.placeOrderButton = page.getByRole('button', { name: 'Place Order' });
         this.checkoutContinueButton = page.getByRole('button', { name: 'Continue' });
         this.standardFreeShippingRadioButton = page.getByLabel('Standard Shipping – FREE');
-        
+
         this.contactInfoFirstName = page.locator('[id="contact-first-name"]');
         this.contactInfoLastName = page.locator('[id="contact-last-name"]');
         this.contactInfoEmail = page.locator('[id="contact-email"]');
         this.contactInfoPhoneNumber = page.locator('[id="contact-phone"]');
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
+        this.changeContactInfo= page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
-        this.sameShippingAndBillingCheckbox= page.locator('//chk-billing-shipping-checkbox');
-        this.shippingBillingFirstName= page.getByRole('textbox', { name: 'First Name' })
-        this.shippingBillingLastName= page.getByRole('textbox', { name: 'Last Name' })
+        this.sameShippingAndBillingCheckbox = page.locator('//chk-billing-shipping-checkbox');
+        this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' })
+        this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' })
         this.billingShippingAddress = page.locator('[id="address"]');
         this.billingShippingAddress2 = page.locator('[id="address2"]');
         this.billingShippingZipcode = page.locator('[id="zipcode"]');
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByLabel('completed').getByRole('img');
-        
+        this.changeBillingShippingInfo= page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
+
+
         this.creditCardNumberField = page.frameLocator('iframe[title="Iframe for card number"] >> visible=true').locator('input[id="encryptedCardNumber"]');
         this.creditCardExpiryDateField = page.frameLocator('iframe[title="Iframe for expiry date"] >> visible=true').locator('input[id="encryptedExpiryDate"]');
         this.creditCardSecurityCodeField = page.frameLocator('iframe[title="Iframe for security code"] >> visible=true').locator('input[id="encryptedSecurityCode"]');
-        
-        this.giftCardLink=page.getByRole('button', { name: 'Add Gift Card' })
-        this.promoCodeLink= page.getByRole('button', { name: 'Apply Promo Code' })
-        this.giftCardNumber= page.getByLabel('Gift Card Code')
-        this.giftCardPin= page.getByLabel('Pin', { exact: true })
+
+        this.giftCardLink = page.getByRole('button', { name: 'Add Gift Card' })
+        this.promoCodeLink = page.getByRole('button', { name: 'Apply Promo Code' })
+        this.giftCardNumber = page.getByLabel('Gift Card Code')
+        this.giftCardPin = page.getByLabel('Pin', { exact: true })
         this.applyGiftCard = page.getByRole('button', { name: 'Apply Gift Card' })
-        this.closeGiftCard= page.getByRole('button', { name: 'CLOSE' })
-        this.promoCodeInput=page.getByLabel('Promo Codes')
-        this.applyPromoCodeBtn=page.locator('#paymentPageContainer button').filter({ hasText: /^Apply Promo Code$/ })
-        this.promoAppliedMessage= page.locator("xpath=//div[(@class='promo-code-applied') and (contains(text(),'successfully applied.'))]")
-        this.closePromoCodeBtn= page.locator("xpath=//div[text()='Apply Promo Code']/following-sibling::button//i[contains(@class,'mdi-close')]")
+        this.closeGiftCard = page.getByRole('button', { name: 'CLOSE' })
+        this.promoCodeInput = page.getByLabel('Promo Codes')
+        this.applyPromoCodeBtn = page.locator('#paymentPageContainer button').filter({ hasText: /^Apply Promo Code$/ })
+        this.promoAppliedMessage = page.locator("xpath=//div[(@class='promo-code-applied') and (contains(text(),'successfully applied.'))]")
+        this.closePromoCodeBtn = page.locator("xpath=//div[text()='Apply Promo Code']/following-sibling::button//i[contains(@class,'mdi-close')]")
 
-        this.signInButton= page.getByRole('link', { name: 'Sign In' })
-        this.paypalRadioButton= page.locator('#paypalLabel')
-        this.affirmRadioButton= page.locator("xpath=//img[contains(@src,'affirmLogo')]")
-        this.afterPayRadioButton= page.locator("xpath=//img[contains(@src,'afterpayLogo')]")
-        this.creditCardRadioButton= page.locator("xpath=//label[text()='Credit/Debit Card']")
-        this.paypalIframe= page.frameLocator("xpath=//iframe[@title='PayPal' and contains(@name,'paypal')]")
-        this.paypalCheckoutButton= this.paypalIframe.locator("xpath=//div[@aria-label='PayPal Checkout']")
+        this.signInButton = page.getByRole('link', { name: 'Sign In' })
+        this.paypalRadioButton = page.locator('#paypalLabel')
+        this.affirmRadioButton = page.locator("xpath=//img[contains(@src,'affirmLogo')]")
+        this.afterPayRadioButton = page.locator("xpath=//img[contains(@src,'afterpayLogo')]")
+        this.creditCardRadioButton = page.locator("xpath=//label[text()='Credit/Debit Card']")
+        this.paypalIframe = page.frameLocator("xpath=//iframe[@title='PayPal' and contains(@name,'paypal')]")
+        this.paypalCheckoutButton = this.paypalIframe.locator("xpath=//div[@aria-label='PayPal Checkout']")
 
-        this.affirmCheckoutButton= page.locator("xpath=//a[@id='affirmButton']")
-        this.afterpayCheckoutButton= page.locator("xpath=//afterpay-button[@id='afterpayButton']")
-        this.appliedGiftCardMessage=page.getByText('See Order Totals Section for applied Gift Cards.', { exact: true })
-        this.giftCardErrroMessage=page.getByText('There is no remaining balance on this card', { exact: true })
-        this.removeGClink=page.getByRole('button', { name: 'Remove' })
-        this.appliedGCMessage=page.getByText('Applied Gift Card', { exact: true })
+        this.affirmCheckoutButton = page.locator("xpath=//a[@id='affirmButton']")
+        this.afterpayCheckoutButton = page.locator("xpath=//afterpay-button[@id='afterpayButton']")
+        this.appliedGiftCardMessage = page.getByText('See Order Totals Section for applied Gift Cards.', { exact: true })
+        this.giftCardErrroMessage = page.getByText('There is no remaining balance on this card', { exact: true })
+        this.removeGClink = page.getByRole('button', { name: 'Remove' })
+        this.appliedGCMessage = page.getByText('Applied Gift Card', { exact: true })
 
-        this.orderSubTotal= page.locator("//p[contains(text(),'Order Subtotal')]//following-sibling::p")
-        this.estimatedShipping= page.locator("//p[contains(text(),'Estimated Shipping')]//following-sibling::p")
-        this.shippingPromotion= page.locator("//p[contains(text(),'Shipping Credit') and contains(@class,'promotion')]//following-sibling::p")
-        this.estimatedTax= page.locator("//p[contains(text(),'Estimated Tax')]//following-sibling::p")
-        this.changeBillingShippingAddress=page.locator('#billing-form-card').getByRole('button', { name: 'Change' })
+        this.orderSubTotal = page.locator("//p[contains(text(),'Order Subtotal')]//following-sibling::p")
+        this.estimatedShipping = page.locator("//p[contains(text(),'Estimated Shipping')]//following-sibling::p")
+        this.shippingPromotion = page.locator("//p[contains(text(),'Shipping Credit') and contains(@class,'promotion')]//following-sibling::p")
+        this.estimatedTax = page.locator("//p[contains(text(),'Estimated Tax')]//following-sibling::p")
+        this.changeBillingShippingAddress = page.locator('#billing-form-card').getByRole('button', { name: 'Change' })
+        this.orderTotal = page.locator("//p[contains(text(),'Estimated Order Total')]//following-sibling::p")
+        this.storePickUpCharge = page.locator("//p[contains(text(),'Store Pickup')]//following-sibling::p")
+        this.individualProductPrice=page.locator("//p[@class='product-price']")
+        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p")
+        this.tipAmount = page.locator("//p[contains(text(),'Tip')]//following-sibling::p")
 
-        this.largeItemShippingDetails=page.getByRole('link', { name: 'Large Item Shipping Details' })
-        this.largeItemShippingMethods=page.getByText('Large Item Shipping Methods:')
-        this.creditCardErrormessage=page.locator("//div[@class='credit-card-form-errors' and @style='']")
+        this.largeItemShippingDetails = page.getByRole('link', { name: 'Large Item Shipping Details' })
+        this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:')
+        this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']")
 
-        this.shippingFirstName= page.locator('#shipping-form-card #shipFirstName')
-        this.shippingLastName= page.locator('#shipping-form-card #shipLastName')
-        this.shippingAddress= page.locator('#shipping-form-card #address')
-        this.shippingAddressLine2= page.locator('#shipping-form-card #address2')
-        this.shippingZipcode= page.locator('#shipping-form-card #zipcode')
+        this.shippingFirstName = page.locator('#shipping-form-card #shipFirstName')
+        this.shippingLastName = page.locator('#shipping-form-card #shipLastName')
+        this.shippingAddress = page.locator('#shipping-form-card #address')
+        this.shippingAddressLine2 = page.locator('#shipping-form-card #address2')
+        this.shippingZipcode = page.locator('#shipping-form-card #zipcode')
 
-        this.billingFirstName= page.locator('#billing-form-card #shipFirstName')
-        this.billingLastName= page.locator('#billing-form-card #shipLastName')
-        this.billingAddress= page.locator('#billing-form-card #address')
-        this.billingAddressLine2= page.locator('#billing-form-card #address2')
-        this.billingZipcode= page.locator('#billing-form-card #zipcode')
-        this.editBillingShippingInfo= page.getByRole('button', { name: 'Edit', exact: true });
-    
-        
-        this.miniCartIcon= page.locator("//homefield-icon[@id='mini-cart-icon']")
+        this.billingFirstName = page.locator('#billing-form-card #shipFirstName')
+        this.billingLastName = page.locator('#billing-form-card #shipLastName')
+        this.billingAddress = page.locator('#billing-form-card #address')
+        this.billingAddressLine2 = page.locator('#billing-form-card #address2')
+        this.billingZipcode = page.locator('#billing-form-card #zipcode')
+        this.editBillingShippingInfo = page.getByRole('button', { name: 'Edit', exact: true });
 
-        this.expeditedShippingRadioBtn= page.getByLabel('Expedited Shipping – $')
-        this.expressShippingRadioBtn=page.getByLabel('Express Shipping – $')
 
-        this.commonPage= new CommonPage(page);
-        
+        this.miniCartIcon = page.locator("//homefield-icon[@id='mini-cart-icon']")
+
+        this.expeditedShippingRadioBtn = page.getByLabel('Expedited Shipping – $')
+        this.expressShippingRadioBtn = page.getByLabel('Express Shipping – $')
+
+        this.estDeliveryDates= page.locator("//span[contains(text(),' Est. Delivery: ')]");
+        this.individualProductName=page.locator("//p[contains(@class,'product-name')]/span");
+        this.storeDetails= page.locator("//chk-store-details");
+        this.storename= page.locator("//chk-store-details/div/div");
+        this.freeStorePickup=page.getByText('Free Store Pickup');
+        this.dsgLogo=page.getByRole('link', { name: 'DICK\'S Sporting Goods' });
+
+        this.textMeOrderUpdates=page.getByText('Text me order updates');
+        this.addPickupPersonLink=page.locator("//span[@actiontype='AddAdditionalPickupPersonClick']")
+        this.pickupFirstname= page.locator('#proxy-first-name');
+        this.pickupLastname= page.locator('#proxy-last-name');
+        this.pickupEmail= page.locator('#proxy-email');
+        this.pickUpContinue=page.getByRole('button', { name: 'Continue' }).first();
+
+        this.giftReceipientEmail= page.getByLabel('gift recipient', { exact: true })
+        this.giftReceipientFirstName= page.getByLabel('gift recipient name')
+        this.giftReceipientDescription= page.getByLabel('Gift Message (optional)')
+        this.sameDayDeliveryTip=page.locator("//h2[contains(text(),'Same Day Delivery Tip')]");
+
+        this.sameDayDevlieryTipAmount= page.locator("//button[@aria-pressed='true']/span");
+        this.otherTipLink= page.getByLabel('Custom tip selection')
+        this.tipAmountInput=page.getByPlaceholder('Enter tip amount')
+        this.applyTipAmount= page.getByRole('button', { name: 'Apply', exact: true })
+
+        this.commonPage = new CommonPage(page);
+
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
-        if(await this.contactInfoFirstName.isVisible())
-        {
-        await this.contactInfoFirstName.click();
-        await this.contactInfoFirstName.fill(firstName);
-        await this.contactInfoFirstName.press('Tab');
-        await this.contactInfoLastName.fill(lastName);
-        await this.contactInfoLastName.press('Tab');
+        if (await this.contactInfoFirstName.isVisible()) {
+            await this.contactInfoFirstName.click();
+            await this.contactInfoFirstName.fill(firstName);
+            await this.contactInfoFirstName.press('Tab');
+            await this.contactInfoLastName.fill(lastName);
+            await this.contactInfoLastName.press('Tab');
         }
-        await this.contactInfoEmail.click();          
+        await this.contactInfoEmail.click();
         await this.contactInfoEmail.fill(email);
         await this.contactInfoEmail.press('Tab');
         await this.contactInfoPhoneNumber.fill(phoneNumber);
@@ -183,20 +242,32 @@ export class CheckoutPage {
 
         await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
     }
+    async enterContactInfoWithOutContinue(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
+        if (await this.contactInfoFirstName.isVisible()) {
+            await this.contactInfoFirstName.click();
+            await this.contactInfoFirstName.fill(firstName);
+            await this.contactInfoFirstName.press('Tab');
+            await this.contactInfoLastName.fill(lastName);
+            await this.contactInfoLastName.press('Tab');
+        }
+        await this.contactInfoEmail.click();
+        await this.contactInfoEmail.fill(email);
+        await this.contactInfoEmail.press('Tab');
+        await this.contactInfoPhoneNumber.fill(phoneNumber);
 
-    async enterBillingShippingInfo(firstName:string, lastName:string, address: string, address2: string, zipCode: string): Promise<void> {
-        if(await this.editBillingShippingInfo.isVisible())
-        {
+    }
+
+    async enterBillingShippingInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
             await this.page.waitForLoadState("domcontentloaded");
         }
-        if(await this.shippingBillingFirstName.isVisible())
-        {
-        await this.shippingBillingFirstName.click();
-        await this.shippingBillingFirstName.fill(firstName);
-        await this.shippingBillingFirstName.press('Tab');
-        await this.shippingBillingLastName.fill(lastName);
-        await this.shippingBillingLastName.press('Tab');
+        if (await this.shippingBillingFirstName.isVisible()) {
+            await this.shippingBillingFirstName.click();
+            await this.shippingBillingFirstName.fill(firstName);
+            await this.shippingBillingFirstName.press('Tab');
+            await this.shippingBillingLastName.fill(lastName);
+            await this.shippingBillingLastName.press('Tab');
         }
         await this.billingShippingAddress.click();
         await this.billingShippingAddress.fill(address);
@@ -210,10 +281,31 @@ export class CheckoutPage {
 
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
-    async enterShippingInfo(firstName:string, lastname:string, address: string, address2: string, zipCode: string): Promise<void> {
-        
-        if(await this.shippingFirstName.isVisible())
-            {
+    async enterBillingShippingInfoForSameDayDelivery(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
+        if (await this.shippingBillingFirstName.isVisible()) {
+            await this.shippingBillingFirstName.click();
+            await this.shippingBillingFirstName.fill(firstName);
+            await this.shippingBillingFirstName.press('Tab');
+            await this.shippingBillingLastName.fill(lastName);
+            await this.shippingBillingLastName.press('Tab');
+        }
+        await this.billingShippingAddress.click();
+        await this.billingShippingAddress.fill(address);
+        await this.billingShippingAddress.press('Tab');
+        await this.billingShippingAddress2.fill(address2);
+        await this.billingShippingAddress2.press('Tab');
+
+        await this.checkoutContinueButton.click();
+
+        await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
+    }
+    async enterShippingInfo(firstName: string, lastname: string, address: string, address2: string, zipCode: string): Promise<void> {
+
+        if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.click();
             await this.shippingFirstName.fill(firstName);
@@ -226,8 +318,8 @@ export class CheckoutPage {
             await this.shippingAddressLine2.press('Tab');
             await this.shippingZipcode.fill(zipCode);
             await this.shippingZipcode.press('Tab');
-            }
-            else{
+        }
+        else {
             await this.billingFirstName.click();
             await this.billingFirstName.fill(firstName);
             await this.billingFirstName.press('Tab');
@@ -239,17 +331,16 @@ export class CheckoutPage {
             await this.billingAddressLine2.press('Tab');
             await this.billingZipcode.fill(zipCode);
             await this.billingZipcode.press('Tab');
-            }
+        }
         await this.checkoutContinueButton.click();
 
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
-    async enterBillingShippingWithInValidInfo(address: string, address2: string, zipCode: string, errorMessage:string): Promise<void> {
-        if(await this.editBillingShippingInfo.isVisible())
-            {
-                await this.editBillingShippingInfo.click();
-                await this.page.waitForLoadState("domcontentloaded");
-            }
+    async enterBillingShippingWithInValidInfo(address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
         await this.billingShippingAddress.click();
         await this.billingShippingAddress.fill(address);
         await this.billingShippingAddress.press('Tab');
@@ -259,39 +350,38 @@ export class CheckoutPage {
         await this.billingShippingZipcode.press('Tab');
         await this.checkoutContinueButton.click();
 
-        await expect(this.page.locator("//*[text()='"+errorMessage+"']")).toBeVisible();
+        await expect(this.page.locator("//*[text()='" + errorMessage + "']")).toBeVisible();
     }
-    async enterShippingWithInvalidInfo(firstName:string,lastName:string,address: string, address2: string, zipCode: string, errorMessage:string): Promise<void> {
-        if(await this.shippingFirstName.isVisible())
-        {
-        await this.shippingFirstName.click();
-        await this.shippingFirstName.fill(firstName);
-        await this.shippingFirstName.press('Tab');
-        await this.shippingLastName.fill(lastName);
-        await this.shippingLastName.press('Tab');
-        await this.shippingAddress.fill(address);
-        await this.shippingAddress.press('Tab');
-        await this.shippingAddressLine2.fill(address2);
-        await this.shippingAddressLine2.press('Tab');
-        await this.shippingZipcode.fill(zipCode);
-        await this.shippingZipcode.press('Tab');
+    async enterShippingWithInvalidInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+        if (await this.shippingFirstName.isVisible()) {
+            await this.shippingFirstName.click();
+            await this.shippingFirstName.fill(firstName);
+            await this.shippingFirstName.press('Tab');
+            await this.shippingLastName.fill(lastName);
+            await this.shippingLastName.press('Tab');
+            await this.shippingAddress.fill(address);
+            await this.shippingAddress.press('Tab');
+            await this.shippingAddressLine2.fill(address2);
+            await this.shippingAddressLine2.press('Tab');
+            await this.shippingZipcode.fill(zipCode);
+            await this.shippingZipcode.press('Tab');
         }
-        else{
-        await this.billingFirstName.click();
-        await this.billingFirstName.fill(firstName);
-        await this.billingFirstName.press('Tab');
-        await this.billingLastName.fill(lastName);
-        await this.billingLastName.press('Tab');
-        await this.billingAddress.fill(address);
-        await this.billingAddress.press('Tab');
-        await this.billingAddressLine2.fill(address2);
-        await this.billingAddressLine2.press('Tab');
-        await this.billingZipcode.fill(zipCode);
-        await this.billingZipcode.press('Tab');
+        else {
+            await this.billingFirstName.click();
+            await this.billingFirstName.fill(firstName);
+            await this.billingFirstName.press('Tab');
+            await this.billingLastName.fill(lastName);
+            await this.billingLastName.press('Tab');
+            await this.billingAddress.fill(address);
+            await this.billingAddress.press('Tab');
+            await this.billingAddressLine2.fill(address2);
+            await this.billingAddressLine2.press('Tab');
+            await this.billingZipcode.fill(zipCode);
+            await this.billingZipcode.press('Tab');
         }
         await this.checkoutContinueButton.click();
 
-        await expect(this.page.locator("//*[text()='"+errorMessage+"']")).toBeVisible();
+        await expect(this.page.locator("//*[text()='" + errorMessage + "']")).toBeVisible();
     }
 
     async enterCreditCardInfo(creditCardNumber: string, expiryDate: string, securityCode: string): Promise<void> {
@@ -304,22 +394,19 @@ export class CheckoutPage {
         await this.creditCardSecurityCodeField.fill(securityCode);
         await this.creditCardSecurityCodeField.press('Tab');
     }
-    async continueWithContactInformation():Promise<void>
-    {
+    async continueWithContactInformation(): Promise<void> {
         await expect(this.contactInfoFirstName).toBeVisible();
         await this.checkoutContinueButton.click();
         await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible()
     }
-    async verifyContactInfoIsEmpty():Promise<void>
-    {
+    async verifyContactInfoIsEmpty(): Promise<void> {
         await expect(this.contactInfoFirstName).toHaveText("")
         await expect(this.contactInfoLastName).toHaveText("")
         await expect(this.contactInfoEmail).toHaveText("")
         await expect(this.contactInfoPhoneNumber).toHaveText("")
     }
 
-    async verifyContactInfoIsNotEmpty():Promise<void>
-    {
+    async verifyContactInfoIsNotEmpty(): Promise<void> {
         await expect(this.contactInfoFirstName).toBeVisible();
         await expect(this.contactInfoFirstName).toHaveText("");
         await expect(this.contactInfoLastName).not.toHaveText("")
@@ -327,8 +414,7 @@ export class CheckoutPage {
         await expect(this.contactInfoPhoneNumber).not.toHaveText("")
     }
 
-    async verifyGiftCardFunctionality(giftCardNumber:string, giftCardPin:string):Promise<void>
-    {
+    async verifyGiftCardFunctionality(giftCardNumber: string, giftCardPin: string): Promise<void> {
         await this.page.waitForLoadState("load");
         //await this.page.waitForLoadState("networkidle");
         await this.giftCardLink.click();
@@ -343,8 +429,7 @@ export class CheckoutPage {
         await this.removeGClink.click();
 
     }
-    async verifyInvalidGiftCardFunctionality(giftCardNumber:string, giftCardPin:string):Promise<void>
-    {
+    async verifyInvalidGiftCardFunctionality(giftCardNumber: string, giftCardPin: string): Promise<void> {
         await this.page.waitForLoadState("load");
         //await this.page.waitForLoadState("networkidle");
         await this.giftCardLink.click();
@@ -359,9 +444,8 @@ export class CheckoutPage {
 
     }
 
-    async verifyPromoCodeFunctionality(promocode:string):Promise<void>
-    {
-        const commonPage= new CommonPage(this.page);
+    async verifyPromoCodeFunctionality(promocode: string): Promise<void> {
+        const commonPage = new CommonPage(this.page);
         await this.page.waitForLoadState("load");
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
@@ -373,9 +457,8 @@ export class CheckoutPage {
         await this.closePromoCodeBtn.click();
         await commonPage.sleep(3);
     }
-    async verifyInvalidPromoCodeFunctionality(promocode:string):Promise<void>
-    {
-        const commonPage= new CommonPage(this.page);
+    async verifyInvalidPromoCodeFunctionality(promocode: string): Promise<void> {
+        const commonPage = new CommonPage(this.page);
         await this.page.waitForLoadState("load");
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
@@ -383,13 +466,12 @@ export class CheckoutPage {
         await this.promoCodeInput.fill(promocode);
         await expect(this.applyPromoCodeBtn).toBeVisible();
         await this.applyPromoCodeBtn.click();
-        await expect(this.page.locator("//div[(contains(text(),'Promo code "+promocode +" does not match an active promotion.'))]")).toBeVisible();
+        await expect(this.page.locator("//div[(contains(text(),'Promo code " + promocode + " does not match an active promotion.'))]")).toBeVisible();
         await this.closePromoCodeBtn.click();
         await commonPage.sleep(3);
     }
-    async verifyInvalidPromoCodeWithErrorMessageFunctionality(promocode:string, errorMessage:string):Promise<void>
-    {
-        const commonPage= new CommonPage(this.page);
+    async verifyInvalidPromoCodeFunctionalityForSignedInUser(promocode: string): Promise<void> {
+        const commonPage = new CommonPage(this.page);
         await this.page.waitForLoadState("load");
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
@@ -397,20 +479,32 @@ export class CheckoutPage {
         await this.promoCodeInput.fill(promocode);
         await expect(this.applyPromoCodeBtn).toBeVisible();
         await this.applyPromoCodeBtn.click();
-        await expect(this.page.locator("//div[contains(@class,'rewards-sign-in-error') and (contains(string(),'"+errorMessage+"'))]")).toBeVisible();
+        await expect(this.page.locator("//div[(contains(text(),'Promo code " + promocode + " is not valid.'))]")).toBeVisible();
+        //await expect(this.page.locator("//div[(contains(text(),'Get a $10 Reward When You Earn 300 Points!))]")).toBeVisible();
+        await this.closePromoCodeBtn.click();
+        await commonPage.sleep(3);
+    }
+    async verifyInvalidPromoCodeWithErrorMessageFunctionality(promocode: string, errorMessage: string): Promise<void> {
+        const commonPage = new CommonPage(this.page);
+        await this.page.waitForLoadState("load");
+        //await this.page.waitForLoadState("networkidle");
+        await this.promoCodeLink.click();
+        //await commonPage.waitUntilPageLoads();
+        await this.promoCodeInput.fill(promocode);
+        await expect(this.applyPromoCodeBtn).toBeVisible();
+        await this.applyPromoCodeBtn.click();
+        await expect(this.page.locator("//div[contains(@class,'rewards-sign-in-error') and (contains(string(),'" + errorMessage + "'))]")).toBeVisible();
         await this.closePromoCodeBtn.click();
         await commonPage.sleep(3);
     }
 
-    async signInAsRegisteredUser(username:string, password:string):Promise<void>
-    {
-        const accountSignInPage= new AccountSignInPage(this.page);
+    async signInAsRegisteredUser(username: string, password: string): Promise<void> {
+        const accountSignInPage = new AccountSignInPage(this.page);
         await this.signInButton.click();
         await accountSignInPage.accountSignInModern(username, password);
 
     }
-    async verifyPayPalCheckout() : Promise<void>
-    {   
+    async verifyPayPalCheckout(): Promise<void> {
         const pagePromise = this.page.context().waitForEvent('page');
         await this.paypalCheckoutButton.click();
         const newPage = await pagePromise;
@@ -420,8 +514,7 @@ export class CheckoutPage {
         newPage.close();
 
     }
-    async verifyAffirmCheckout():Promise<void>
-    {
+    async verifyAffirmCheckout(): Promise<void> {
         const pagePromise = this.page.context().waitForEvent('page');
         await this.affirmCheckoutButton.click();
         const newPage = await pagePromise;
@@ -431,8 +524,7 @@ export class CheckoutPage {
         newPage.close();
 
     }
-    async verifyAfterPayCheckout():Promise<void>
-    {
+    async verifyAfterPayCheckout(): Promise<void> {
         const pagePromise = this.page.context().waitForEvent('page');
         await this.afterpayCheckoutButton.click();
         const newPage = await pagePromise;
@@ -442,130 +534,501 @@ export class CheckoutPage {
         newPage.close();
 
     }
-    async selectAPaymentOption(paymentOption:string):Promise<void>
-    {
-        if(paymentOption=="Paypal")
-            {
-                await this.paypalRadioButton.click();
-            }
-            else if(paymentOption=="Creditcard")
-                {
-                    await this.creditCardRadioButton.click();
-                }
-                else if(paymentOption=="Affirm")
-                    {
-                        await this.affirmRadioButton.click();
-                    }
-                    else if(paymentOption=="AfterPay")
-                        {
-                            await this.afterPayRadioButton.click();
-                        }
-                        else if(paymentOption=="ApplePay")
-                            {
+    async selectAPaymentOption(paymentOption: string): Promise<void> {
+        if (paymentOption == "Paypal") {
+            await this.paypalRadioButton.click();
+        }
+        else if (paymentOption == "Creditcard") {
+            await this.creditCardRadioButton.click();
+        }
+        else if (paymentOption == "Affirm") {
+            await this.affirmRadioButton.click();
+        }
+        else if (paymentOption == "AfterPay") {
+            await this.afterPayRadioButton.click();
+        }
+        else if (paymentOption == "ApplePay") {
 
-                            }
-                        else{
-                            console.log("Given payment option is not present in the Checkout page")
-                        }
+        }
+        else {
+            console.log("Given payment option is not present in the Checkout page")
+        }
     }
-    async verifyEstimatedTax(taxNumber:number)
-    {
-        let subTotal=await this.getOrderSubTotal();
-        let estimatedShipping= await this.getEstimatedShipping();
-        let orderTotal=subTotal+estimatedShipping
+    async verifyEstimatedTax(taxNumber: number) {
+        let subTotal = await this.getOrderSubTotal();
+        let estimatedShipping = await this.getEstimatedShipping();
+        let orderTotal = subTotal + estimatedShipping
         console.log(orderTotal);
-        let expectedTax:number = orderTotal*taxNumber
-        let actualTax= await this.getEstimatedTax();
+        let expectedTax: number = orderTotal * taxNumber
+        let actualTax = await this.getEstimatedTax();
         expect(actualTax.toFixed(2)).toEqual(expectedTax.toFixed(2));
 
     }
-    async getOrderSubTotal():Promise<number>
-    {
-        let subTotal:any= await this.orderSubTotal.innerText();
-        console.log(Number.parseFloat(subTotal.toString().replace('$','')))
-        return Number.parseFloat(subTotal.toString().replace('$',''));
-        
+    async getOrderSubTotal(): Promise<number> {
+        let subTotal: any = await this.orderSubTotal.innerText();
+        console.log(Number.parseFloat(subTotal.toString().replace('$', '')))
+        return Number.parseFloat(subTotal.toString().replace('$', ''));
+
     }
-    async getEstimatedShipping():Promise<number>
-    {
-        if((await this.estimatedShipping.innerText()).includes("Free"))
-        {
+    async verifyOrderTotal() {
+        let subTotal = await this.getOrderSubTotal();
+        let estimatedShipping = await this.getEstimatedShipping();
+        let orderTotal = subTotal + estimatedShipping
+        expect((await this.getOrderTotal()).toString()).toEqual(orderTotal.toString())
+
+    }
+    async getOrderTotal(): Promise<number> {
+        let orderTotal: any = await this.orderTotal.innerText();
+        console.log(Number.parseFloat(orderTotal.toString().replace('$', '')))
+        return Number.parseFloat(orderTotal.toString().replace('$', ''));
+
+    }
+    async getEstimatedShipping(): Promise<number> {
+        if ((await this.estimatedShipping.innerText()).includes("Free")) {
             return 0.00;
         }
-        else{
-        let estimatedShippingCharges:any= await this.estimatedShipping.innerText();
-        let estShipping= Number.parseFloat(estimatedShippingCharges.toString().replace('$',''));
-        if(await this.shippingPromotion.isVisible())
-        {
-            let shippingPromotion:any= await this.shippingPromotion.innerText();
-            let numericShippingPromotion= Number.parseFloat(shippingPromotion.toString().replace('-$',''))
-            estShipping= estShipping-numericShippingPromotion;
+        else {
+            let estimatedShippingCharges: any = await this.estimatedShipping.innerText();
+            let estShipping = Number.parseFloat(estimatedShippingCharges.toString().replace('$', ''));
+            if (await this.shippingPromotion.isVisible()) {
+                let shippingPromotion: any = await this.shippingPromotion.innerText();
+                let numericShippingPromotion = Number.parseFloat(shippingPromotion.toString().replace('-$', ''))
+                estShipping = estShipping - numericShippingPromotion;
+            }
+            console.log(estShipping)
+            return estShipping;
         }
-        console.log(estShipping)
-        return estShipping;
     }
+    async getEstimatedTax(): Promise<number> {
+        let estimatedTaxCharges: any = await this.estimatedTax.innerText();
+        console.log(Number.parseFloat(estimatedTaxCharges.toString().replace('$', '')))
+        return Number.parseFloat(estimatedTaxCharges.toString().replace('$', ''));
     }
-    async getEstimatedTax():Promise<number>
-    {
-        let estimatedTaxCharges:any= await this.estimatedTax.innerText();
-        console.log(Number.parseFloat(estimatedTaxCharges.toString().replace('$','')))
-        return Number.parseFloat(estimatedTaxCharges.toString().replace('$',''));
-    }
-    async clickEditBillingShippingInfo(): Promise<void>
-    {
+    async clickEditBillingShippingInfo(): Promise<void> {
         await this.changeBillingShippingAddress.click();
     }
-    async clickLargeItemShippingDetailsLink()
-    {
+    async clickLargeItemShippingDetailsLink() {
         await this.largeItemShippingDetails.click();
         await this.page.waitForLoadState("load");
 
     }
-    async verifyLargeItemShippingDetails(expectedString:string)
-    {
+    async verifyLargeItemShippingDetails(expectedString: string) {
         expect(await this.largeItemShippingMethods.innerText()).toContain(expectedString);
     }
-    async validateErrorMessage(expectedErrorMessage:string)
-    {
+    async validateErrorMessage(expectedErrorMessage: string) {
         expect(await this.creditCardErrormessage.innerText()).toContain(expectedErrorMessage);
     }
-    async unCheckSameShippingAndBillingAddress()
-    {
+    async unCheckSameShippingAndBillingAddress() {
         await this.sameShippingAndBillingCheckbox.click();
     }
-    async goBackToCart()
-    {
+    async goBackToCart() {
         await this.miniCartIcon.click();
     }
-    async changeShippingMethodAndVerifyShippingCharges(shippingMethod:string, shippingCharges:string)
-    {
+    async changeShippingMethodAndVerifyShippingCharges(shippingMethod: string, shippingCharges: string) {
         await this.changeShippingMethod(shippingMethod);
         await this.page.waitForLoadState('domcontentloaded')
         expect((await this.getEstimatedShipping()).toString()).toEqual(shippingCharges);
 
     }
-    async changeShippingMethod(shippingMethod:string)
-    {
-        if(shippingMethod.includes('Expedite'))
-        {
+    async changeShippingMethod(shippingMethod: string) {
+        if (shippingMethod.includes('Expedite')) {
             await this.expeditedShippingRadioBtn.click();
             await this.shippingTitleAnchor.click();
             await this.page.waitForTimeout(2000)
             await this.page.waitForLoadState('domcontentloaded')
-            
+
         }
-        else if(shippingMethod.includes('Express'))
-        {
+        else if (shippingMethod.includes('Express')) {
             await this.expressShippingRadioBtn.click();
             await this.shippingTitleAnchor.click();
             await this.page.waitForTimeout(2000)
             await this.page.waitForLoadState('domcontentloaded')
         }
-        else
-        {
+        else {
 
         }
+
+    }
+    async validateUserAndBillingDetails(details: string[]) {
+        for (let index = 0; index < details.length; index++) {
+            const element = details[index];
+            console.log(element);
+            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']"))).toBeVisible();
+        }
+
+    }
+
+    async firstNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
+        for (let index = 0; index < listOfFirstNames.length; index++) {
+            let firstName = listOfFirstNames[index];
+            console.log(firstName);
+            if (await this.contactInfoFirstName.isVisible()) {
+                await this.contactInfoFirstName.click();
+                await this.contactInfoFirstName.fill(firstName);
+                await this.contactInfoFirstName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).toBeVisible();
+            }
+            else {
+                await this.contactInfoEmail.click();
+                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.press('Tab');
+                await this.contactInfoPhoneNumber.fill("7242733400");
+
+                await this.checkoutContinueButton.click();
+                await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+                await this.shippingBillingFirstName.click();
+                await this.shippingBillingFirstName.fill(firstName);
+                await this.shippingBillingFirstName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).toBeVisible();
+
+            }
+        }
+
+    }
+    async firstNameValidationsWithValidNames(listOfFirstNames: string[]) {
+        for (let index = 0; index < listOfFirstNames.length; index++) {
+            let firstName = listOfFirstNames[index];
+            console.log(firstName);
+            if (await this.contactInfoFirstName.isVisible()) {
+                await this.contactInfoFirstName.click();
+                await this.contactInfoFirstName.fill(firstName);
+                await this.contactInfoFirstName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).not.toBeVisible();
+            }
+            else {
+                await this.contactInfoEmail.click();
+                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.press('Tab');
+                await this.contactInfoPhoneNumber.fill("7242733400");
+
+                await this.checkoutContinueButton.click();
+                await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+                await this.shippingBillingFirstName.click();
+                await this.shippingBillingFirstName.fill(firstName);
+                await this.shippingBillingFirstName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).not.toBeVisible();
+
+            }
+        }
+
+    }
+
+    async lastNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
+        for (let index = 0; index < listOfFirstNames.length; index++) {
+            let firstName = listOfFirstNames[index];
+            console.log(firstName);
+            if (await this.contactInfoFirstName.isVisible()) {
+                await this.contactInfoLastName.click();
+                await this.contactInfoLastName.fill(firstName);
+                await this.contactInfoLastName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).toBeVisible();
+            }
+            else {
+                await this.contactInfoEmail.click();
+                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.press('Tab');
+                await this.contactInfoPhoneNumber.fill("7242733400");
+
+                await this.checkoutContinueButton.click();
+                await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+                await this.shippingBillingLastName.click();
+                await this.shippingBillingLastName.fill(firstName);
+                await this.shippingBillingLastName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).toBeVisible();
+
+            }
+        }
+
+    }
+    async lastNameValidationsWithValidNames(listOfFirstNames: string[]) {
+        for (let index = 0; index < listOfFirstNames.length; index++) {
+            let firstName = listOfFirstNames[index];
+            console.log(firstName);
+            if (await this.contactInfoFirstName.isVisible()) {
+                await this.contactInfoLastName.click();
+                await this.contactInfoLastName.fill(firstName);
+                await this.contactInfoLastName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).not.toBeVisible();
+            }
+            else {
+                await this.contactInfoEmail.click();
+                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.press('Tab');
+                await this.contactInfoPhoneNumber.fill("7242733400");
+
+                await this.checkoutContinueButton.click();
+                await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+                await this.shippingBillingLastName.click();
+                await this.shippingBillingLastName.fill(firstName);
+                await this.shippingBillingLastName.press('Tab');
+                await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).not.toBeVisible();
+
+            }
+        }
+
+    }
+
+    async emailFieldValidationsWithInvalidDetails(listOfEmails: string[]) {
+        for (let index = 0; index < listOfEmails.length; index++) {
+            let email = listOfEmails[index];
+            console.log(email);
+            await this.contactInfoEmail.click();
+            await this.contactInfoEmail.fill(email);
+            await this.contactInfoEmail.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter a valid email address.')]")).toBeVisible();
+
+        }
+
+    }
+    async emailFieldValidationsWithValidDetails(listOfEmails: string[]) {
+        for (let index = 0; index < listOfEmails.length; index++) {
+            let email = listOfEmails[index];
+            console.log(email);
+            await this.contactInfoEmail.click();
+            await this.contactInfoEmail.fill(email);
+            await this.contactInfoEmail.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter a valid email address.')]")).not.toBeVisible();
+
+        }
+
+    }
+    async phoneNumberFieldValidationsWithInvalidDetails(listOfPhoneNumbers: string[]) {
+        for (let index = 0; index < listOfPhoneNumbers.length; index++) {
+            let phoneNumber = listOfPhoneNumbers[index];
+            console.log(phoneNumber);
+            await this.contactInfoPhoneNumber.click();
+            await this.contactInfoPhoneNumber.fill(phoneNumber);
+            await this.contactInfoPhoneNumber.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter a 10 digit phone number.')]")).toBeVisible();
+
+        }
+
+    }
+    async phoneNumberFieldValidationsWithValidDetails(listOfPhoneNumbers: string[]) {
+        for (let index = 0; index < listOfPhoneNumbers.length; index++) {
+            let phoneNumber = listOfPhoneNumbers[index];
+            console.log(phoneNumber);
+            await this.contactInfoPhoneNumber.click();
+            await this.contactInfoPhoneNumber.fill(phoneNumber);
+            await this.contactInfoPhoneNumber.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter a 10 digit phone number.')]")).not.toBeVisible();
+
+        }
+
+    }
+    async zipcodeFieldValidationsWithInvalidDetails(listOfZipCodes: string[]) {
+        for (let index = 0; index < listOfZipCodes.length; index++) {
+            let zipcode = listOfZipCodes[index];
+            console.log(zipcode);
+            await this.billingShippingZipcode.click();
+            await this.billingShippingZipcode.fill(zipcode);
+            await this.billingShippingZipcode.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter your billing zip code.')]").or(this.page.locator("//*[contains(text(),'Please enter your shipping zip code.')]"))).toBeVisible();
+
+        }
+
+    }
+    async zipcodeFieldValidationsWithValidDetails(listOfZipCodes: string[]) {
+        for (let index = 0; index < listOfZipCodes.length; index++) {
+            let zipcode = listOfZipCodes[index];
+            console.log(zipcode);
+            await this.billingShippingZipcode.click();
+            await this.billingShippingZipcode.fill(zipcode);
+            await this.billingShippingZipcode.press('Tab');
+            await expect(this.page.locator("//*[contains(text(),'Please enter your billing zip code.')]").or(this.page.locator("//*[contains(text(),'Please enter your shipping zip code.')]"))).not.toBeVisible();
+
+
+        }
+
+    }
+
+    async verifyStorePickUpIsFree()
+    {
+        let estimatedTaxCharges: any = await this.storePickUpCharge.innerText();
+        expect(estimatedTaxCharges).toEqual('Free')
+    }
+
+    async validateOrderSubtotal()
+    {
+        let calculatedOrderSubTotal=await this.calculateOrderSubTotal();
+        let actualOrderSubTotalOnScreen= await this.getOrderSubTotal();
+        expect(calculatedOrderSubTotal).toEqual(actualOrderSubTotalOnScreen);
+    }
+    async calculateOrderSubTotal() : Promise<number>
+    {
+        let orderSubTotal:number=0;
+        let productPrices: Array<String> = await this.individualProductPrice.allInnerTexts();
+        let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
+        console.log(productPrices);
+        console.log(productQuantities);
+        for (let index = 0; index < productPrices.length; index++) {
+            let price=productPrices.at(index)?.replace('$','').split(' ')[0]!;
+            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            orderSubTotal= orderSubTotal+(Number.parseFloat(price)*Number.parseInt(quantity))
+            
+        }
+        console.log(orderSubTotal);
+        return orderSubTotal;
+    }
+    async verifyEstDeliveryDate(expectedCount:Number)
+    {
+        await expect(this.estDeliveryDates.first()).toBeVisible();
+        let estimatedDeliveryDates: Array<String> = await this.estDeliveryDates.allInnerTexts();
+        expect(estimatedDeliveryDates.length).toEqual(expectedCount);
+        console.log(estimatedDeliveryDates);
+    }
+
+    async verifyOversizedItem(expectedProduct: string)
+    {
+        let found:boolean=false;
+        await expect(this.individualProductName.first()).toBeVisible();
+        let productNames: Array<String>= await this.individualProductName.allInnerTexts();
+        console.log(productNames)
+        for (let index = 0; index < productNames.length; index++) {
+            if(productNames.at(index)?.includes(expectedProduct))
+            {
+                found=true;
+                break;
+            }
+            
+        }
+        expect(found).toEqual(true);
+    }
+
+    async verifyProductInfo(expectedProduct: string)
+    {
+        let found:boolean=false;
+        await expect(this.individualProductName.first()).toBeVisible();
+        let productNames: Array<String>= await this.individualProductName.allInnerTexts();
+        console.log(productNames)
+        for (let index = 0; index < productNames.length; index++) {
+            if(productNames.at(index)?.includes(expectedProduct))
+            {
+                found=true;
+                break;
+            }
+            
+        }
+        expect(found).toEqual(true);
+    }
+    async checkBOPISStoreDetails()
+    {
+        await expect(this.storeDetails).toBeVisible();
+    }
+    async checkBOPISStoreNameInDetails(expectedStoreName:string)
+    {
+        await expect(this.storename).toBeVisible();
+        console.log(await this.storename.innerText())
+        expect((await this.storeDetails.innerText()).includes(expectedStoreName)).toEqual(true);
+    }
+
+    async verifyFreeStorePickup()
+    {
+        await expect(this.freeStorePickup).toBeVisible();
+    }
+    async verifySingleProductQuantity(expectedQuantity:number)
+    {
+        let found:boolean=false
+        let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
+        console.log(productQuantities);
+        for (let index = 0; index < productQuantities.length; index++) {
+            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            if(Number.parseInt(quantity)==expectedQuantity)
+            {
+                found=true;
+                break;
+            }
+            
+        }
+        expect(found).toEqual(true);
         
     }
+    async clickChangeContactInformation()
+    {
+        await expect(this.changeContactInfo).toBeVisible();
+        await this.changeContactInfo.click();
+
+    }
+    async clickChangeBillingShippingformation()
+    {
+        await expect(this.changeBillingShippingInfo).toBeVisible();
+        await this.changeBillingShippingInfo.click();
+
+    }
+    async verifyProductNamesWithCartPage(expectedProductNames:String[])
+    {
+        await expect(this.individualProductName.first()).toBeVisible();
+        let productNames: Array<String>= await this.individualProductName.allInnerTexts();  
+        expect(productNames.sort()).toEqual(expectedProductNames.sort())
+
+    }
+    async clickDSGLogo()
+    {
+        await this.dsgLogo.click();
+    }
+
+    async checkTextMeOrderUpdates()
+    {
+        await expect(this.textMeOrderUpdates).toBeVisible();
+        await this.textMeOrderUpdates.click();
+    }
+    async clickAddPickUpPerson()
+    {
+        await expect(this.addPickupPersonLink).toBeVisible();
+        await this.addPickupPersonLink.click();
+    }
+
+    async providePickUPPersonDetails(firstname:string, lastname:string, email:string)
+    {
+        await expect(this.pickupFirstname).toBeVisible();
+        await this.pickupFirstname.fill(firstname);
+        await this.pickupLastname.fill(lastname);
+        await this.pickupEmail.fill(email);
+        await this.pickUpContinue.click();
+
+    }
+    async clickContinueOnContactInfo()
+    {
+        await expect(this.checkoutContinueButton).toBeVisible();
+        await this.checkoutContinueButton.click();
+        await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+    }
+    async enterGiftReceipientDetails(email:string, firstname:string, desc:string)
+    {
+        await expect(this.giftReceipientEmail).toBeVisible();
+        await this.giftReceipientEmail.fill(email);
+        await this.giftReceipientFirstName.fill(firstname);
+        await this.giftReceipientDescription.fill(desc);
+
+    }
+    async verifySameDayDevlieryTipIsVisibleOrNot()
+    {
+        await expect(this.sameDayDeliveryTip).toBeVisible();
+    }
+
+    async getSameDayDeliveryTipAmount(): Promise<string>
+    {
+        await expect(this.sameDayDevlieryTipAmount).toBeVisible();
+        return this.sameDayDevlieryTipAmount.innerText();
+    }
+    async selectTipAmount(tipAmount:string)
+    {
+        await expect(this.sameDayDevlieryTipAmount).toBeVisible();
+        await this.page.locator("//button/span[text()='"+tipAmount+"']").click();
+    }
+    async getTipAmountOrderTotal(): Promise<string> {
+        let tipAMount: any = await this.tipAmount.innerText();
+        return tipAMount;
+
+    }
+    async selectOtherTipAmount(tipAmount:string)
+    {
+        await expect(this.otherTipLink).toBeVisible();
+        await this.otherTipLink.click();
+        await expect(this.tipAmountInput).toBeVisible();
+        await this.tipAmountInput.fill(tipAmount);
+        await this.applyTipAmount.click();
+    }
+
 
 }
