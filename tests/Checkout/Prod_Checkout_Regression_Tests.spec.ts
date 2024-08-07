@@ -2089,11 +2089,11 @@ test.describe("Prod Checkout tests", () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButton.first().isVisible()) {
-                await productListingPage.pickupFilterButton.first().click();
+            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
+                await productListingPage.pickupFilterButtonReact.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             } else {
-                await productListingPage.pickupFilterButton.click();
+                await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
         });
@@ -2245,11 +2245,11 @@ test.describe("Prod Checkout tests", () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButton.first().isVisible()) {
-                await productListingPage.pickupFilterButton.first().click();
+            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
+                await productListingPage.pickupFilterButtonReact.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             } else {
-                await productListingPage.pickupFilterButton.click();
+                await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
         });
@@ -3692,11 +3692,11 @@ test.describe("Prod Checkout tests", () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButton.first().isVisible()) {
-                await productListingPage.pickupFilterButton.first().click();
+            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
+                await productListingPage.pickupFilterButtonReact.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             } else {
-                await productListingPage.pickupFilterButton.click();
+                await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
         });
