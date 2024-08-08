@@ -23,17 +23,18 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 4 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  /* added MS team report only for CI runs*/
+  /* added MS team report only for CI runs with dynamic parameters*/
   reporter: process.env.CI ? [
     ['html'],
     [
       'playwright-msteams-reporter',
       <MsTeamsReporterOptions>{
-        webhookUrl: "https://dcsgcloud.webhook.office.com/webhookb2/2eccc887-3a34-4f4b-a9f8-29523b573aed@e04b15c8-7a1e-4390-9b5b-28c7c205a233/IncomingWebhook/a2535dba73a748929551cef654500fc8/de0eb5f8-658d-4b21-9ee6-615f12ce18a8",
-        webhookType: "msteams", // or "msteams"
+        webhookUrl: `${process.env.WEB_HOOKS_URL}`,
+        webhookType: "powerautomate", // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
-        title:`${process.env.GITHUB_WORKFLOW}`,
-        mentionOnFailure: "mahesh.chowdarymancharla@dcsg.com",
+        title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_ID}`,
+        notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS,
+        mentionOnFailure: `${process.env.MENTIONS}`,
         mentionOnFailureText: "{mentions} check those failed tests!"
       }
     ]
