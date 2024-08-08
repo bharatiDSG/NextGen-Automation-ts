@@ -23,7 +23,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 4 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  /* added MS team report only for CI runs*/
+  /* added MS team report only for CI runs with dynamic parameters*/
   reporter: process.env.CI ? [
     ['html'],
     [
