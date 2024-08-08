@@ -424,7 +424,6 @@ export class CheckoutPage {
         await this.giftCardPin.fill(giftCardPin);
         await expect(this.applyGiftCard).toBeVisible();
         await this.applyGiftCard.click();
-        await this.page.pause()
         await expect(this.appliedGiftCardMessage).toBeVisible();
         await this.closeGiftCard.click();
         await expect(this.appliedGCMessage).toBeVisible();
