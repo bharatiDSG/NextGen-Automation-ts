@@ -24,7 +24,7 @@ export default defineConfig({
   workers: process.env.CI ? 4 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   /* added MS team report */
-  reporter: [
+  reporter: process.env.CI ? [
     ['html'],
     [
       'playwright-msteams-reporter',
@@ -37,7 +37,7 @@ export default defineConfig({
         mentionOnFailureText: "{mentions} check those failed tests!"
       }
     ]
-  ],
+  ]: 'html',
   /* Wait timeout time */
   expect: {
     timeout: 10 * 1000,
