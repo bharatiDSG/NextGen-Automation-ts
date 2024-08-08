@@ -30,7 +30,7 @@ export default defineConfig({
       'playwright-msteams-reporter',
       <MsTeamsReporterOptions>{
         webhookUrl: `${process.env.WEB_HOOKS_URL}`,
-        webhookType: "msteams", // or "msteams"
+        webhookType: "powerautomate", // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
         title:`${process.env.GITHUB_WORKFLOW}`,
         notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS,
