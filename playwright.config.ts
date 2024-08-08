@@ -29,11 +29,12 @@ export default defineConfig({
     [
       'playwright-msteams-reporter',
       <MsTeamsReporterOptions>{
-        webhookUrl: "https://dcsgcloud.webhook.office.com/webhookb2/2eccc887-3a34-4f4b-a9f8-29523b573aed@e04b15c8-7a1e-4390-9b5b-28c7c205a233/IncomingWebhook/a2535dba73a748929551cef654500fc8/de0eb5f8-658d-4b21-9ee6-615f12ce18a8",
+        webhookUrl: `${process.env.WEB_HOOKS_URL}`,
         webhookType: "msteams", // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
         title:`${process.env.GITHUB_WORKFLOW}`,
-        mentionOnFailure: "mahesh.chowdarymancharla@dcsg.com",
+        notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS,
+        mentionOnFailure: `${process.env.MENTIONS}`,
         mentionOnFailureText: "{mentions} check those failed tests!"
       }
     ]
