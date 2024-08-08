@@ -32,7 +32,7 @@ export default defineConfig({
         webhookUrl: `${process.env.WEB_HOOKS_URL}`,
         webhookType: "powerautomate", // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
-        title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_ID}`,
+        title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_NUMBER}`,
         notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS,
         mentionOnFailure: `${process.env.MENTIONS}`,
         mentionOnFailureText: "{mentions} check those failed tests!"
