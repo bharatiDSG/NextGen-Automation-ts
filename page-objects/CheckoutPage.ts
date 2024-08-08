@@ -226,6 +226,7 @@ export class CheckoutPage {
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
         if (await this.contactInfoFirstName.isVisible()) {
             await this.contactInfoFirstName.click();
             await this.contactInfoFirstName.fill(firstName);
