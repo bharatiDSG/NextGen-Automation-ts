@@ -45,7 +45,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Choose pickup filter
         await test.step('Choose pickup filter',async()=>{
-        await productListingPage.pickupFilterButton.click();
+        await productListingPage.pickupFilterButtonReact.click();
     });
         // Select a product
         await test.step('Select a product',async()=>{
@@ -94,7 +94,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Enter billing shipping info - Validate complete checkmark',async()=>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
     });
         // Add credit card info
         await test.step('Add credit card info',async()=>{
@@ -182,7 +182,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Enter Billing Shipping info',async()=>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
     });
         // Add credit card info
         await test.step('Add Credit card info',async()=>{
