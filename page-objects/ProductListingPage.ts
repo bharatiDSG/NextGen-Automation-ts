@@ -54,6 +54,7 @@ export class ProductListingPage {
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
     readonly quickviewViewCartButton: Locator;
+    readonly sameDayDeliveryFilter: Locator;
     readonly favorites: Locator;
     readonly favoritesToastMsg: Locator;
     readonly myAccount: Locator;
@@ -75,6 +76,7 @@ export class ProductListingPage {
     constructor(page: Page) {
         this.page = page;
 
+        
         // Select Store and delivery zip
         this.changeSelectedStoreLink = page.getByLabel('Change selected store from');
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
@@ -84,6 +86,9 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
+
+        this.zipDeliveryInputField = page.locator("//input[@type='number']")
+
         this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
@@ -106,6 +111,7 @@ export class ProductListingPage {
         this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
         this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
+        this.sameDayDeliveryFilter= page.getByRole('button', { name: 'Same Day Delivery filter' });
         this.filterChipsReact = page.locator('[class="filter-chip"]');
         this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
@@ -120,7 +126,7 @@ export class ProductListingPage {
         this.saleFilterValueAngular = page.locator('[class="checkbox-container]', {hasText: 'Sale'} );
 
         // product attributes
-        this.productNames = page.locator('[class="rs_product_description d-block"]');
+        this.productNames = page.locator('//a[@class="rs_product_description d-block"]');
         this.productNamesAngular = page.locator('[class="product-title-link hmf-subheader-m hmf-header-m-xs hmf-mb-xxs hmf-mb-m-0"]');
         this.productPromotionsReact = page.locator('[class="rs-promotions"]');
         this.productPromotionsAngular = page.locator('[class="hmf-mb-xxs promo-message"]');
@@ -159,7 +165,7 @@ export class ProductListingPage {
 
     async setStoreFromPLP(store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
-
+        await this.changeSelectedStoreLink.isVisible();
         await this.changeSelectedStoreLink.click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill('15108');
@@ -204,9 +210,8 @@ export class ProductListingPage {
     async setDeliveryZipPLP(zip: string){
         await this.page.waitForTimeout(4000); // waits for 4 seconds
         await this.zipDeliveryLocationButton.first().click()
-        await this.page.waitForTimeout(4000); // waits for 4 seconds
-        await this.zipDeliveryInputField.click()
-        await this.zipDeliveryInputField.fill(zip)
+        await this.zipDeliveryInputField.first().click()
+        await this.zipDeliveryInputField.first().fill(zip)
         await this.zipDeliveryUpdateButton.click()
     }
 

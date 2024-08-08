@@ -10,7 +10,7 @@ jobs:
     name: 'Prod Checkout Regression Playwright Tests'
     runs-on: [ self-hosted, azure ]
     container:
-      image: mcr.microsoft.com/playwright:v1.43.0-jammy
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -46,7 +46,10 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in E2E checkout GG NP0 Playwright Test`}"     
-     #View report
+          overwrite: "{title: `** ALERT ** Failure in E2E checkout GG NP0 Playwright Test`}"   
+      
+      #View report
       - name: Publish Test Summary Results
         run: npx github-actions-ctrf ctrf/ctrf-report.json
+
+        
