@@ -5,3 +5,5 @@ node_modules/
 /playwright/.cache/
 /.idea/
 .env
+/ctrf/
+.DS_Store

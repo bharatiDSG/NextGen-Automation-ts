@@ -114,7 +114,7 @@ test.describe("DSG Prod Smoke Checkout Tests", () => {
   });
     // Enter Billing Shipping info - validate complete checkmark
     await test.step('Enter Billing Shipping info and Validate Complete checkmark',async()=>{
-    await checkoutPage.enterBillingShippingInfo(testData_smokeCheckout_prod.address, testData_smokeCheckout_prod.address2, testData_smokeCheckout_prod.zipCode)
+    await checkoutPage.enterBillingShippingInfo("", "", testData_smokeCheckout_prod.address, testData_smokeCheckout_prod.address2, testData_smokeCheckout_prod.zipCode)
   });
     // Add credit card info
     await test.step('Add Credit card info',async()=>{

@@ -81,7 +81,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Update Billing and Shipping address', async() =>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
         });
         // Add credit card info
         await test.step('Update payment details with Tiger Card', async() =>{
@@ -160,7 +160,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
             });
             
         await test.step('Update Billing and Shipping address', async() =>{
-            await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
+            await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
             });
         
         await test.step('Verify Gift Card', async() =>{
@@ -228,7 +228,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Update Billing and Shipping address', async() =>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
         });
         // Add credit card info
         await test.step('Update payment details with Tiger Card', async() =>{
@@ -308,7 +308,7 @@ test.describe("NP0 QA Smoke Checkout Tests", () => {
         });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Update Billing and Shipping address', async() =>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_qa.address, testData_e2e_np0_qa.address2, testData_e2e_np0_qa.zipCode)
         });
 
         await test.step('Add Gift card', async() =>{
