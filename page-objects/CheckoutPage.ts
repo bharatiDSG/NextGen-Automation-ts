@@ -226,6 +226,7 @@ export class CheckoutPage {
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
         if (await this.contactInfoFirstName.isVisible()) {
             await this.contactInfoFirstName.click();
             await this.contactInfoFirstName.fill(firstName);
@@ -423,6 +424,7 @@ export class CheckoutPage {
         await this.giftCardPin.fill(giftCardPin);
         await expect(this.applyGiftCard).toBeVisible();
         await this.applyGiftCard.click();
+        await this.page.pause()
         await expect(this.appliedGiftCardMessage).toBeVisible();
         await this.closeGiftCard.click();
         await expect(this.appliedGCMessage).toBeVisible();
