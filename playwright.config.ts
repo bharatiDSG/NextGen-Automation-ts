@@ -26,6 +26,7 @@ export default defineConfig({
   /* added MS team report only for CI runs with dynamic parameters*/
   reporter: process.env.CI ? [
     ['html'],
+    ['playwright-ctrf-json-reporter', {}],
     [
       'playwright-msteams-reporter',
       <MsTeamsReporterOptions>{
@@ -38,7 +39,7 @@ export default defineConfig({
         mentionOnFailureText: "{mentions} check those failed tests!"
       }
     ]
-  ]: 'html',
+  ]: [['html']],
   /* Wait timeout time */
   expect: {
     timeout: 10 * 1000,

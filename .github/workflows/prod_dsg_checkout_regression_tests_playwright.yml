@@ -56,7 +56,8 @@ jobs:
           overwrite: "{title: `** ALERT ** Failure in E2E checkout GG NP0 Playwright Test`}"   
       
       #View report
-      - name: Publish Test Summary Results
-        run: npx github-actions-ctrf ctrf/ctrf-report.json
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
 
         
