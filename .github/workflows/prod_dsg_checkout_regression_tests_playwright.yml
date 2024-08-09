@@ -34,7 +34,7 @@ jobs:
       - name: Prod Checkout Regression Tests 
         run: |
           echo "Prod Checkout Regression Tests"
-          npx playwright test -g "34. Order modification change Contact info Guest" 
+          npx playwright test tests/Checkout/Prod_Checkout_Regression_Tests.spec.ts 
         env:
             ENV: dsg_prod    
 
