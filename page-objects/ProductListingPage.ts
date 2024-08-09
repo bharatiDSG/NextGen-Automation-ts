@@ -63,14 +63,15 @@ export class ProductListingPage {
     readonly myAccountListSectionFavoriteProductPrice: Locator;
     readonly myAccountCloseListPopPu:Locator;
     readonly myAccountListSelectionFavoriteItemMesg:Locator
-
-
-
-
-
-
-    readonly breadCrumbLinkReact: Locator;
-    readonly breadCrumbLinkAngular: Locator;
+    readonly myAccountRemoveFavorites:Locator
+    readonly quickViewCloseButton:Locator
+    readonly quickViewColorStocked:Locator
+    readonly quickViewSizeStocked:Locator
+    readonly quickViewColorGroup:Locator
+    readonly quickViewSizeGroup:Locator
+    readonly quickViewFavorites:Locator
+    readonly breadCrumbLinkReact:Locator;
+    readonly breadCrumbLinkAngular:Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -99,6 +100,7 @@ export class ProductListingPage {
         this.myAccountListSectionFavoriteProductPrice = page.locator('div.price-text');
         this.myAccountCloseListPopPu = page.locator("div[aria-label='Close']")
         this.myAccountListSelectionFavoriteItemMesg = page.locator("span.hmf-subheader-l");
+        this.myAccountRemoveFavorites = page.locator("div[aria-label*='Remove']")
 
 
         // shipping filters
@@ -154,6 +156,12 @@ export class ProductListingPage {
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
         this.quickviewViewCartButton = page.getByLabel('View Cart');
+        this.quickViewColorStocked = page.locator("div[class*='false false quickview-swatch']");
+        this.quickViewSizeStocked = page.locator("div.qv-size div[class*='value false false']");
+        this.quickViewColorGroup = page.locator("p#ColorGroup-Color");
+        this.quickViewSizeGroup = page.locator("p#AttributeGroup-Size");
+        this.quickViewFavorites = page.locator("button.favorite-button svg");
+        this.quickViewCloseButton = page.locator("div.close");
 
     }
 
@@ -227,26 +235,38 @@ export class ProductListingPage {
          await this.myAccountListSection.click();
          await this.myAccountCloseListPopPu.click();
          await this.myAccountListSectionFavorite.click();
+
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
         expect(itemTxt?.trim()).not.toContain(String("0 items"));
         const myAccountItemName = await this.myAccountListSectionFavoriteProductName.nth(0).textContent();
         const myAccountItemPrice = await this.myAccountListSectionFavoriteProductPrice.nth(0).textContent();
+
         console.log("Product name in my account favorite page is: "+myAccountItemName)
         console.log("Product price in my account favorite page is: "+myAccountItemPrice)
         expect(myAccountItemName?.trim()).toContain(String(namePlp));
         expect(myAccountItemPrice?.trim()).toContain(String(pricePlp));
+        console.log("Validation successfull");
     }
 
-    async verifyFavoritesNotPresentInMyAccounts(){
+    async removeAllFavoritesInMyAccounts(){
         const commonPage = new CommonPage(this.page);
         await this.myAccount.click();
         await this.myAccountListSection.click();
         await this.myAccountCloseListPopPu.click();
         await this.myAccountListSectionFavorite.click();
+        await commonPage.sleep(5);
+        const count = await this.myAccountRemoveFavorites.count();
+        console.log("Total favorites to be removed from my account page are: "+count)
+        for (let i = 0; i < count; i++) {
+          const fvrtRemoveIcon =   this.myAccountRemoveFavorites.nth(0);
+          await fvrtRemoveIcon.click();
+          await commonPage.sleep(10);
+        } 
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
         expect(itemTxt?.trim()).toContain(String("0 items"));
+        console.log("All favorites removed from MyAccount List");
     }
 
     async unselectAllFavorites() {
@@ -259,10 +279,14 @@ export class ProductListingPage {
           console.log('No action required');
         } else {
           for (let i = 0; i < count; i++) {
-            await commonPage.sleep(10);
             const favoriteSlctedSngl =  fvrtSelected.nth(0);
             console.log("Unselected "+i+" time");
             await favoriteSlctedSngl.click();
+            await expect( this.favoritesToastMsg).toBeVisible();
+            const toastText = await this.favoritesToastMsg.textContent();
+            expect(toastText?.trim()).toContain(String("Removed")); 
+            console.log("Favorites removed successfully");
+            await commonPage.sleep(10);
           }
         }
       }

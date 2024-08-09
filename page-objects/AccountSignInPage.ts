@@ -27,6 +27,7 @@ export class AccountSignInPage {
     private continueWithGoogleButton: Locator;
     private passwordError: Locator;
     private continueButtonModern: Locator;
+    private continueWithoutPasskey: Locator;
 
     // Account Page
     private accountUserInfo: Locator;
@@ -55,6 +56,9 @@ export class AccountSignInPage {
         this.continueWithAppleButton = page.getByRole('button', { name: 'Continue with Apple' });
         this.continueWithGoogleButton = page.getByRole('button', { name: 'Continue with Google' });
         this.passwordError = page.locator('[id="error-element-password"]');
+        this.continueWithGoogleButton = page.getByRole('button', { name: 'Continue with Google' });
+        this.continueWithoutPasskey = page.getByRole('button', { name: 'Continue without passkeys' });
+
 
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
@@ -191,6 +195,7 @@ export class AccountSignInPage {
         await this.signInPasswordField.fill(password);
         await this.continueButtonModern.click();
         await commonPage.waitUntilPageLoads();
+        await this.continueWithoutPasskey.click();
 
     }
 
