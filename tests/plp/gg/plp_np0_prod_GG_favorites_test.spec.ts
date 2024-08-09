@@ -38,6 +38,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
         
         await test.step('Given we are on "gg" page', async () => {
+          console.log("Validating PLP favorites for non signed In user");
           await homePage.goToHomePage(getBaseUrl());
           console.log("URL: " + getBaseUrl());
         });
@@ -89,6 +90,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
       const myAccount = new AccountSignInPage(page);
 
       await test.step('Given we are on "gg" page', async () => {
+        console.log("Validating PLP favorites for E-Code level_Add and Remove");
         await homePage.goToHomePage(getBaseUrl());
         console.log("URL: " + getBaseUrl());
       });
@@ -167,6 +169,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
           const myAccount = new AccountSignInPage(page);
     
           await test.step('Given we are on "gg" page', async () => {
+            console.log("Validating PLP favorites for Single SKU_Add and Remove");
             await homePage.goToHomePage(getBaseUrl());
             console.log("URL: " + getBaseUrl());
           });
