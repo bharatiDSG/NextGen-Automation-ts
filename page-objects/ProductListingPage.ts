@@ -246,7 +246,6 @@ export class ProductListingPage {
         console.log("Product price in my account favorite page is: "+myAccountItemPrice)
         expect(myAccountItemName?.trim()).toContain(String(namePlp));
         expect(myAccountItemPrice?.trim()).toContain(String(pricePlp));
-        console.log("Validation successfull");
     }
 
     async removeAllFavoritesInMyAccounts(){

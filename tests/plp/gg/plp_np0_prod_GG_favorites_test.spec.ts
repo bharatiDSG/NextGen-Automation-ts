@@ -140,13 +140,15 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
           await productListingPage.favorites.nth(1).click();
           await commonPage.sleep(10)
           await productListingPage.unselectAllFavorites();
-          await commonPage.sleep(10);
+          await commonPage.sleep(7);
           await productListingPage.favorites.nth(1).click();
+          await commonPage.sleep(2);
           await expect(productListingPage.favoritesToastMsg).toBeVisible();
           const toastText = await productListingPage.favoritesToastMsg.textContent();
           expect(toastText?.trim()).toContain(String("Added")); 
           console.log("Favorites added successfully");
           await productListingPage.verifyFavoritesPresentInMyAccounts("1");
+          console.log("Validation successful");
 
         });
         
@@ -217,8 +219,9 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
             await commonPage.sleep(10)
             await productListingPage.unselectAllFavorites();
             
-            await commonPage.sleep(10);
+            await commonPage.sleep(7);
             await productListingPage.favorites.nth(2).click();
+            await commonPage.sleep(2);
             await expect(productListingPage.favoritesToastMsg).toBeVisible();
             const toastText = await productListingPage.favoritesToastMsg.textContent();
             expect(toastText?.trim()).toContain(String("Added")); 
