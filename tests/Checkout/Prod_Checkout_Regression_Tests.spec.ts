@@ -39,18 +39,37 @@ test.describe("Prod Checkout tests", () => {
 
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page)
+        const productListingPage= new ProductListingPage(page)
         const cartPage = new CartPage(page)
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
         const PDP = new ProductDisplayPage(page)
 
 
-        await test.step('Search with product SKU number', async () => {
-            await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
-            await PDP.availableProductColor.first().click();
+        await test.step('When we search for "nike dri fit socks" keyword in the search box', async () => {
+            await homePage.searchForProduct("nike dri fit socks")
+        });
+
+        await test.step('And we apply the "Ship" shipping option filter', async () => {
+            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
+                await productListingPage.shipFilterButtonAngular.first().click();
+                expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
+            } else {
+                await productListingPage.shipFilterButtonReact.click();
+                expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
+            }
+        });
+        await test.step('Select a product', async () => {
+            await productListingPage.selectAProduct();
+        })
+        await test.step('select attributes', async () => {
+            await page.waitForLoadState("load");
+            await productDisplayPage.verifyAttributesArePresentOrNotForShipToMe();
+            await productDisplayPage.selectShipToMeAttributes(page);
         });
 
         await test.step('Select ShipToMe fulfillment option', async () => {
+            await page.waitForLoadState("load");
             await expect(productDisplayPage.shipToMeFullfilmentButton).toBeVisible()
             await productDisplayPage.shipToMeFullfilmentButton.click();
         });
@@ -2523,7 +2542,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test Tester","automation@dcsg.com", "(724) 273-3400","345 Court St"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St"))
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -3581,14 +3600,14 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","3345 court st", "", "15108")
+            await checkoutPage.enterShippingInfo("Test","Tester","345 court st", "", "15108")
         });
 
         await test.step('Click on change Billing SHipping info link', async () => {
             await checkoutPage.clickChangeBillingShippingformation();
         });
         await test.step('Provide Billing details', async () => {
-            await checkoutPage.enterBillingShippingInfo("Test", "TESTERONE","23 Legion Way", "", "15214-2833")
+            await checkoutPage.enterBillingShippingInfo("Test", "TESTERONE","23 Legion Way Pittsburgh", "", "15214-2833")
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -3753,6 +3772,7 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.providePickUPPersonDetails("Test1","Tester1","automationdcsg@dcsg.com");
         });
         await test.step('Verify the address', async () => {
+            await page.waitForLoadState('networkidle')
             await checkoutPage.validateUserAndBillingDetails(new Array("Test1 Tester1","automationdcsg@dcsg.com"))
         });
     
@@ -3842,18 +3862,29 @@ test.describe("Prod Checkout tests", () => {
             await homePage.searchForProduct("kickball")
         });
 
-        await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
+        await test.step('And we set zip code to "15108"', async () => {
+            await page.waitForLoadState("networkidle");
+            await productListingPage.setDeliveryZipPLP("15108")
+          });
+
+
+        await test.step('And we apply the "Pick up" shipping option filter', async () => {
+            await page.waitForTimeout(3000)
+            if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
+                await productListingPage.sameDayDeliveryFilter.first().click();
+                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
             } else {
-                await productListingPage.shipFilterButtonReact.click();
-                expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
+                await productListingPage.sameDayDeliveryFilter.click();
+                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
             }
         });
         await test.step('Select a product', async () => {
+            
+            await page.waitForLoadState("networkidle")
+            await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
-        })
+        });
+
         await test.step('select attributes', async () => {
             await page.waitForLoadState("load");
             await productDisplayPage.verifyAttributesArePresentOrNotForShipToMe();

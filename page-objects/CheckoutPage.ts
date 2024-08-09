@@ -103,6 +103,7 @@ export class CheckoutPage {
     otherTipLink: Locator;
     tipAmountInput: Locator;
     applyTipAmount: Locator;
+    billingShippingLabel: Locator;
 
 
     constructor(page: Page) {
@@ -131,7 +132,7 @@ export class CheckoutPage {
         this.billingShippingZipcode = page.locator('[id="zipcode"]');
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByLabel('completed').getByRole('img');
         this.changeBillingShippingInfo= page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
-
+        this.billingShippingLabel= page.locator("//h2[contains(text(),'Address')]")
 
         this.creditCardNumberField = page.frameLocator('iframe[title="Iframe for card number"] >> visible=true').locator('input[id="encryptedCardNumber"]');
         this.creditCardExpiryDateField = page.frameLocator('iframe[title="Iframe for expiry date"] >> visible=true').locator('input[id="encryptedExpiryDate"]');
@@ -270,13 +271,13 @@ export class CheckoutPage {
             await this.shippingBillingLastName.fill(lastName);
             await this.shippingBillingLastName.press('Tab');
         }
-        await this.billingShippingAddress.click();
-        await this.billingShippingAddress.fill(address);
-        await this.billingShippingAddress.press('Tab');
-        await this.billingShippingAddress2.fill(address2);
-        await this.billingShippingAddress2.press('Tab');
-        await this.billingShippingZipcode.fill(zipCode);
-        await this.billingShippingZipcode.press('Tab');
+        await this.billingShippingAddress.first().click();
+        await this.billingShippingAddress.first().fill(address);
+        await this.billingShippingAddress.first().press('Tab');
+        await this.billingShippingAddress2.first().fill(address2);
+        await this.billingShippingAddress2.first().press('Tab');
+        await this.billingShippingZipcode.first().fill(zipCode);
+        await this.billingShippingZipcode.first().press('Tab');
 
         await this.checkoutContinueButton.click();
 
@@ -654,7 +655,7 @@ export class CheckoutPage {
         for (let index = 0; index < details.length; index++) {
             const element = details[index];
             console.log(element);
-            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']"))).toBeVisible();
+            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).toBeVisible();
         }
 
     }

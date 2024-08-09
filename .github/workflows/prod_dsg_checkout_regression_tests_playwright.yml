@@ -59,5 +59,9 @@ jobs:
       - name: Publish CTRF Detailed Test Summary Results
         run: npx github-actions-ctrf tests ctrf/ctrf-report.json
         if: always()
+      # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()
 
         

@@ -78,7 +78,7 @@ export class ProductListingPage {
 
         
         // Select Store and delivery zip
-        this.changeSelectedStoreLink = page.getByLabel('Change selected store from');
+        this.changeSelectedStoreLink = page.getByLabel('Change selected store from').or(this.page.locator('.header-my-store'));
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true });
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]');
