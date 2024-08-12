@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 
@@ -54,6 +55,17 @@ export class ProductListingPage {
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
     readonly quickviewViewCartButton: Locator;
+    readonly quickviewViewProductName: Locator;
+    readonly quickviewViewImageCarouselNextButton: Locator;
+    readonly quickviewViewImageCarouselPreviousButton: Locator;
+    readonly quickviewViewImage: Locator;
+    readonly quickviewViewShippingFulfillment: Locator;
+    readonly quickviewViewStoreFulfillment: Locator;
+    readonly quickviewViewSameDayDeliveryFulfillment: Locator;
+    readonly quickviewViewChangeStoreLink: Locator;
+    readonly quickviewViewChangeStoreInputField: Locator;
+    readonly quickviewViewChangeStoreSearchButton: Locator;
+    readonly quickviewViewChangeStoreSelectStoreButton: Locator;
     readonly sameDayDeliveryFilter: Locator;
     readonly favorites: Locator;
     readonly favoritesToastMsg: Locator;
@@ -76,7 +88,7 @@ export class ProductListingPage {
     constructor(page: Page) {
         this.page = page;
 
-        
+
         // Select Store and delivery zip
         this.changeSelectedStoreLink = page.getByLabel('Change selected store from').or(this.page.locator('.header-my-store'));
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
@@ -160,6 +172,17 @@ export class ProductListingPage {
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
         this.quickviewViewCartButton = page.getByLabel('View Cart');
+        this.quickviewViewProductName = page.locator('[id="ProductTitle-title"]');
+        this.quickviewViewImageCarouselNextButton = page.locator('[class="slick-arrow slick-next"]');
+        this.quickviewViewImageCarouselPreviousButton = page.locator('[class="slick-arrow slick-prev"]');
+        this.quickviewViewImage = page.locator('//div[@data-testid="quickViewModalimageViewer"]//div[@class="slick-list"]//div[@class="slick-slide"]');
+        this.quickviewViewShippingFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-ship"]');
+        this.quickviewViewStoreFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-store"]');
+        this.quickviewViewSameDayDeliveryFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-sdd"]');
+        this.quickviewViewChangeStoreLink = page.locator('[type="button"]', {hasText: 'Change Store'} );
+        this.quickviewViewChangeStoreInputField = page.locator('//input[@type="text"]');
+        this.quickviewViewChangeStoreSearchButton = page.getByLabel('SEARCH');
+        this.quickviewViewChangeStoreSelectStoreButton = page.getByLabel('select store');
 
     }
 

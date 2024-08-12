@@ -15,4 +15,6 @@ export const testData_e2e_np0_prod = {
     mailosaurServerID: "4imxgawu",
     searchTerm2: "Golf Polo",
     productMatch2: "Golf Polo",
+    searchTerm3: "custom",
+    searchTerm4: "personalized"
 }
