@@ -5,7 +5,7 @@ on:
     - cron: '30 09 * * */1'  # At 09:30 on every day-of-week - https://crontab.guru/#0_03_*_*_*/1
   workflow_dispatch:
 env:
-  MENTIONS: sean.clawson@dcsg.com
+  MENTIONS: sean.clawson@dcsg.com,punya.narra@dcsg.com
   WEB_HOOKS_URL: https://prod-190.westus.logic.azure.com:443/workflows/1101ef5f567542bdb2eb85bc992c1298/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=f7slGQG3iqjN6h2AiNVnIeEAv6tCcTeWkHo-x3-lZRM
   NOTIFY_ON_SUCCESS: ${{true}}
 jobs:
