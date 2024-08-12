@@ -338,10 +338,17 @@ export class CheckoutPage {
 
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
-    async enterBillingShippingWithInValidInfo(address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+    async enterBillingShippingWithInValidInfo(firstName:string, lastName:string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
             await this.page.waitForLoadState("domcontentloaded");
+        }
+        if (await this.shippingBillingFirstName.isVisible()) {
+            await this.shippingBillingFirstName.click();
+            await this.shippingBillingFirstName.fill(firstName);
+            await this.shippingBillingFirstName.press('Tab');
+            await this.shippingBillingLastName.fill(lastName);
+            await this.shippingBillingLastName.press('Tab');
         }
         await this.billingShippingAddress.click();
         await this.billingShippingAddress.fill(address);

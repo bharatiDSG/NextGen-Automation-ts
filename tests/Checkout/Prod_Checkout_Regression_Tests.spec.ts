@@ -1058,7 +1058,7 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingWithInValidInfo("345 Court St", "", "90005","The address provided could not be verified. Please review.")
+            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","345 Court St", "", "90005","The address provided could not be verified. Please review.")
         });
 
         await test.step('Update Billing and Shipping address', async () => {
@@ -1195,7 +1195,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingWithInValidInfo("202 Eastview Mall", "", "30005","The address provided could not be verified. Please review.")
+            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","202 Eastview Mall", "", "30005","The address provided could not be verified. Please review.")
         });
 
     });
@@ -1257,7 +1257,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingWithInValidInfo("202 Eastview Mall", "", "30005","The address provided could not be verified. Please review.")
+            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","202 Eastview Mall", "", "30005","The address provided could not be verified. Please review.")
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -1401,7 +1401,7 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingWithInValidInfo("1 Court St", "", "15108","The address provided could not be verified. Please review.")
+            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","1 Court St", "", "15108","The address provided could not be verified. Please review.")
         });
 
         await test.step('Update Shipping address', async () => {
