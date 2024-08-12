@@ -116,7 +116,7 @@ export class ProductDisplayPage {
         this.continueShoppingButton = page.getByText('Continue Shopping');
         this.goToCartButton = page.getByText('GO TO CART');
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available');
-        this.freeStorePickupButton = page.getByLabel('Free Store Pickup');
+        this.freeStorePickupButton = page.getByLabel('Free Store Pickup').or(page.getByRole('button', { name: 'Free Store Pickup In stock at' }));
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
         this.zipCodeTextField = page.locator('input[id*="homefield-textinput-"]');

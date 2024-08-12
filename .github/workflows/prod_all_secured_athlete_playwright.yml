@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  MENTIONS: jacob.jarosz@dcsg.com
+  MENTIONS: jacob.jarosz@dcsg.com,punya.narra@dcsg.com
   WEB_HOOKS_URL: https://prod-190.westus.logic.azure.com:443/workflows/1101ef5f567542bdb2eb85bc992c1298/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=f7slGQG3iqjN6h2AiNVnIeEAv6tCcTeWkHo-x3-lZRM
   NOTIFY_ON_SUCCESS: false
 
