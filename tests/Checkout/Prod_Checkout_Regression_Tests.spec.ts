@@ -226,7 +226,7 @@ test.describe("Prod Checkout tests", () => {
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.clickEditBillingShippingInfo();
             await page.waitForLoadState("load")
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Corao", "", "15108")
         });
 
         await test.step('validate that est tax is equal to ".000" multiplied by the order total', async () => {
@@ -599,10 +599,10 @@ test.describe("Prod Checkout tests", () => {
         // // Place order
         await test.step('Place Order', async () => {
             await checkoutPage.placeOrderButton.click()
-            await page.waitForLoadState("load");
+            await page.waitForLoadState("networkidle");
         });
         await test.step('Validate credit card validation message', async () => {
-            await checkoutPage.placeOrderButton.click()
+            //await checkoutPage.placeOrderButton.click()
             await checkoutPage.validateErrorMessage("Enter a valid CVV")
         });
       
@@ -4033,14 +4033,14 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.selectTipAmount("$0")
         });  
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForLoadState('networkidle')
+            await page.waitForTimeout(3000)
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$0.00");
         });   
         await test.step('Select Tip Amount', async () => {
             await checkoutPage.selectTipAmount("$10")
         });  
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForLoadState('networkidle')
+            await page.waitForTimeout(3000)
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$10.00");
         });   
 
@@ -4048,7 +4048,7 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.selectOtherTipAmount("7")
         }); 
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000)
+            await page.waitForTimeout(5000)
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$7.00");
         }); 
          
