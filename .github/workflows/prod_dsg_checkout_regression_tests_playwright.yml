@@ -2,7 +2,7 @@ name: Prod Checkout Regression playwright Tests
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Run every half hour
+    - cron: '* */2 * * *'  # Run every two hours
   workflow_dispatch:
   
 env:
