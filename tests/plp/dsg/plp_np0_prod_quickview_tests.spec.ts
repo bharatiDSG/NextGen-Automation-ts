@@ -289,7 +289,7 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         });
   });
 
-    test.only('7: Select different fulfillment options - Same Day Delivery', async ({ page }) => {
+    test('7: Select different fulfillment options - Same Day Delivery', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
