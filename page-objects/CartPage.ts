@@ -41,6 +41,14 @@ export class CartPage {
   readonly noRewardText: any;
   readonly cartSaveLaterLink: any;
   readonly deleteIcon:Locator;
+  individualProductName: Locator;
+  readonly individualProductQuantity: Locator;
+  giftOption: Locator;
+  shipToZipCode: Locator;
+  zipCodeInput: Locator;
+  updateZipCodeButton: Locator;
+  sameDayDeliveryRadioButton: Locator;
+  confirmAndCheckoutBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -72,8 +80,15 @@ export class CartPage {
     this.emptyCartButtonSinIn = page.locator('button#empty-cart-sign-in-button');
     this.noRewardText = page.locator('p.no-reward-text');
     this.cartSaveLaterLink = page.locator('a.save-for-later-link');
-    this.deleteIcon=page.locator('//img[@class="delete-icon"]')
-
+    this.deleteIcon=page.locator('//img[@class="delete-icon"]');
+    this.individualProductName=page.locator("//p[contains(@class,'product-name')]");
+    this.giftOption=page.locator("//homefield-checkbox");
+    this.shipToZipCode=page.locator("//a[contains(@class,'zip-code')]");
+    this.zipCodeInput= page.locator("//input[@type='number']")
+    this.updateZipCodeButton=page.getByTestId('button')
+    this.sameDayDeliveryRadioButton= page.locator("//p[contains(text(),'Same Day Delivery')]")
+    this.confirmAndCheckoutBtn=page.getByRole('button', { name: 'Confirm and Checkout' })
+    
   }
 
   async getCartPriceDetailsArray(): Promise<string[]> {
@@ -248,12 +263,58 @@ export class CartPage {
       await this.page.locator("(//img[@class='delete-icon'])[1]").click();
       await this.page.waitForLoadState("domcontentloaded");
   }
-  }
+  
+}
+async deleteNoOfCartItems(noOfProductsToBeDeleted:number)
+  {
+    await this.checkoutButton.waitFor();
+    const listOfDeleteItems= await this.page.$$("//img[@class='delete-icon']");
+    for (let index = 0; index < noOfProductsToBeDeleted; index++) {
+      await this.page.locator("(//img[@class='delete-icon'])[1]").click();
+      await this.page.waitForLoadState("domcontentloaded");
+      
+    }
+  
+}
+async getProductNames():Promise<String[]>
+    {
+        await expect(this.individualProductName.first()).toBeVisible();
+        let productNames: Array<String>= await this.individualProductName.allInnerTexts();
+        console.log(productNames)
+        return productNames;
+    }
+
+    async selectGiftOption()
+    {
+      await expect(this.giftOption).toBeVisible();
+      await this.giftOption.click();
+    }
+    async clickChangeDeliveryZipCode()
+    {
+      await expect(this.shipToZipCode.first()).toBeVisible();
+      await this.shipToZipCode.first().click();
+    }
+    async updateDeliveryZipcode(zipcode:string)
+    {
+      await expect(this.zipCodeInput.first()).toBeVisible();
+      await this.zipCodeInput.first().clear();
+      await this.zipCodeInput.first().fill(zipcode);
+      await this.updateZipCodeButton.click();
+    }
+    async selectSameDayDeliveryRadioButton()
+    {
+      await expect(this.sameDayDeliveryRadioButton).toBeVisible();
+      await this.sameDayDeliveryRadioButton.click();
+    }
+    async sameDayDeliveryCheckout()
+    {
+      await expect(this.checkoutButton).toBeVisible();
+      await this.checkoutButton.click();
+      await expect(this.confirmAndCheckoutBtn).toBeVisible();
+      await this.confirmAndCheckoutBtn.click();
+    }
 
 
-
-
-
-
+  
 
 }

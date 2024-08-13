@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 
@@ -54,6 +55,18 @@ export class ProductListingPage {
     readonly quickviewModalATCButton: Locator;
     readonly quickviewKeepShoppingButton: Locator;
     readonly quickviewViewCartButton: Locator;
+    readonly quickviewViewProductName: Locator;
+    readonly quickviewViewImageCarouselNextButton: Locator;
+    readonly quickviewViewImageCarouselPreviousButton: Locator;
+    readonly quickviewViewImage: Locator;
+    readonly quickviewViewShippingFulfillment: Locator;
+    readonly quickviewViewStoreFulfillment: Locator;
+    readonly quickviewViewSameDayDeliveryFulfillment: Locator;
+    readonly quickviewViewChangeStoreLink: Locator;
+    readonly quickviewViewChangeStoreInputField: Locator;
+    readonly quickviewViewChangeStoreSearchButton: Locator;
+    readonly quickviewViewChangeStoreSelectStoreButton: Locator;
+    readonly sameDayDeliveryFilter: Locator;
     readonly favorites: Locator;
     readonly favoritesToastMsg: Locator;
     readonly myAccount: Locator;
@@ -76,8 +89,9 @@ export class ProductListingPage {
     constructor(page: Page) {
         this.page = page;
 
+
         // Select Store and delivery zip
-        this.changeSelectedStoreLink = page.getByLabel('Change selected store from');
+        this.changeSelectedStoreLink = page.getByLabel('Change selected store from').or(this.page.locator('.header-my-store'));
         this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true });
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]');
@@ -85,6 +99,9 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
+
+        this.zipDeliveryInputField = page.locator("//input[@type='number']")
+
         this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
@@ -108,6 +125,7 @@ export class ProductListingPage {
         this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
         this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
         this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
+        this.sameDayDeliveryFilter= page.getByRole('button', { name: 'Same Day Delivery filter' });
         this.filterChipsReact = page.locator('[class="filter-chip"]');
         this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
@@ -122,7 +140,7 @@ export class ProductListingPage {
         this.saleFilterValueAngular = page.locator('[class="checkbox-container]', {hasText: 'Sale'} );
 
         // product attributes
-        this.productNames = page.locator('[class="rs_product_description d-block"]');
+        this.productNames = page.locator('//a[@class="rs_product_description d-block"]');
         this.productNamesAngular = page.locator('[class="product-title-link hmf-subheader-m hmf-header-m-xs hmf-mb-xxs hmf-mb-m-0"]');
         this.productPromotionsReact = page.locator('[class="rs-promotions"]');
         this.productPromotionsAngular = page.locator('[class="hmf-mb-xxs promo-message"]');
@@ -156,6 +174,17 @@ export class ProductListingPage {
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
         this.quickviewViewCartButton = page.getByLabel('View Cart');
+        this.quickviewViewProductName = page.locator('[id="ProductTitle-title"]');
+        this.quickviewViewImageCarouselNextButton = page.locator('[class="slick-arrow slick-next"]');
+        this.quickviewViewImageCarouselPreviousButton = page.locator('[class="slick-arrow slick-prev"]');
+        this.quickviewViewImage = page.locator('//div[@data-testid="quickViewModalimageViewer"]//div[@class="slick-list"]//div[@class="slick-slide"]');
+        this.quickviewViewShippingFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-ship"]');
+        this.quickviewViewStoreFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-store"]');
+        this.quickviewViewSameDayDeliveryFulfillment = page.locator('[aria-describedby="FulfillmentMessaging-sdd"]');
+        this.quickviewViewChangeStoreLink = page.locator('[type="button"]', {hasText: 'Change Store'} );
+        this.quickviewViewChangeStoreInputField = page.locator('//input[@type="text"]');
+        this.quickviewViewChangeStoreSearchButton = page.getByLabel('SEARCH');
+        this.quickviewViewChangeStoreSelectStoreButton = page.getByLabel('select store');
         this.quickViewColorStocked = page.locator("div[class*='false false quickview-swatch']");
         this.quickViewSizeStocked = page.locator("div.qv-size div[class*='value false false']");
         this.quickViewColorGroup = page.locator("p#ColorGroup-Color");
@@ -167,7 +196,7 @@ export class ProductListingPage {
 
     async setStoreFromPLP(store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
-
+        await this.changeSelectedStoreLink.isVisible();
         await this.changeSelectedStoreLink.click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill('15108');
@@ -212,9 +241,8 @@ export class ProductListingPage {
     async setDeliveryZipPLP(zip: string){
         await this.page.waitForTimeout(4000); // waits for 4 seconds
         await this.zipDeliveryLocationButton.first().click()
-        await this.page.waitForTimeout(4000); // waits for 4 seconds
-        await this.zipDeliveryInputField.click()
-        await this.zipDeliveryInputField.fill(zip)
+        await this.zipDeliveryInputField.first().click()
+        await this.zipDeliveryInputField.first().fill(zip)
         await this.zipDeliveryUpdateButton.click()
     }
 
@@ -262,7 +290,7 @@ export class ProductListingPage {
           const fvrtRemoveIcon =   this.myAccountRemoveFavorites.nth(0);
           await fvrtRemoveIcon.click();
           await commonPage.sleep(10);
-        } 
+        }
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
         expect(itemTxt?.trim()).toContain(String("0 items"));
@@ -284,7 +312,7 @@ export class ProductListingPage {
             await favoriteSlctedSngl.click();
             await expect( this.favoritesToastMsg).toBeVisible();
             const toastText = await this.favoritesToastMsg.textContent();
-            expect(toastText?.trim()).toContain(String("Removed")); 
+            expect(toastText?.trim()).toContain(String("Removed"));
             console.log("Favorites removed successfully");
             await commonPage.sleep(10);
           }

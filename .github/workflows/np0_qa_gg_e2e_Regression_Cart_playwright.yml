@@ -15,7 +15,7 @@ jobs:
     name: 'E2E CART Regression GG NP0 QA Playwright'
     runs-on: [ self-hosted, azure ]
     container:
-      image: mcr.microsoft.com/playwright:v1.43.0-jammy
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

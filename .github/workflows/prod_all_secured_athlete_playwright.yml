@@ -5,12 +5,17 @@ on:
     - cron: '*/4 * * * *'  # Run every 4 minutes
   workflow_dispatch:
 
+env:
+  MENTIONS: jacob.jarosz@dcsg.com,punya.narra@dcsg.com
+  WEB_HOOKS_URL: https://prod-190.westus.logic.azure.com:443/workflows/1101ef5f567542bdb2eb85bc992c1298/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=f7slGQG3iqjN6h2AiNVnIeEAv6tCcTeWkHo-x3-lZRM
+  NOTIFY_ON_SUCCESS: false
+
 jobs:
   playwright:
     name: 'PROD All Secured Athlete Playwright'
     runs-on: [ self-hosted, azure ]
     container:
-      image: mcr.microsoft.com/playwright:v1.43.0-jammy
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -62,6 +67,19 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in Secured Athlete Login Scripts`}"     
+          overwrite: "{title: `** ALERT ** Failure in Secured Athlete Login Scripts`}"
+
+      #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+    # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()
+
+      # - name: Push Results to Prometheus
+        # run: |
+          # curl -X POST -H "Content-Type: application/json" -d @ctrf/ctrf-report.json http://ubtu-cs-q-6085.dcsg.com/api/v1/import
 
          

@@ -1,5 +1,5 @@
-// @ts-check
 import { defineConfig, devices } from '@playwright/test';
+import { MsTeamsReporterOptions } from 'playwright-msteams-reporter';
 
 /**
  * Read environment variables from file.
@@ -18,13 +18,27 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  //retries: process.env.CI ? 2 : 0,
-  retries: 1,
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 2 : undefined,
-  //workers: 1,
+  workers: process.env.CI ? 4 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  /* added MS team report only for CI runs with dynamic parameters*/
+  reporter: process.env.CI ? [
+    ['html'],
+    ['playwright-ctrf-json-reporter', {}],
+    [
+      'playwright-msteams-reporter',
+      <MsTeamsReporterOptions>{
+        webhookUrl: `${process.env.WEB_HOOKS_URL}`,
+        webhookType: "powerautomate", // or "msteams"
+        linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+        title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_NUMBER}`,
+        notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS === 'true',
+        mentionOnFailure: `${process.env.MENTIONS}`,
+        mentionOnFailureText: "{mentions} check those failed tests!"
+      }
+    ]
+  ]: [['html']],
   /* Wait timeout time */
   expect: {
     timeout: 10 * 1000,

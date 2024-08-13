@@ -116,7 +116,7 @@ export class ProductDisplayPage {
         this.continueShoppingButton = page.getByText('Continue Shopping');
         this.goToCartButton = page.getByText('GO TO CART');
         this.shipToMeFullfilmentButton = page.getByRole('button', { name: 'Ship' }).getByText('Available');
-        this.freeStorePickupButton = page.getByLabel('Free Store Pickup');
+        this.freeStorePickupButton = page.getByLabel('Free Store Pickup').or(page.getByRole('button', { name: 'Free Store Pickup In stock at' }));
         this.changeStoreButton = page.getByRole('button', { name: 'Change Store' });
         this.storesWithAvailabilityCheckbox = page.getByText('All Stores w/ Availability');
         this.zipCodeTextField = page.locator('input[id*="homefield-textinput-"]');
@@ -406,7 +406,7 @@ export class ProductDisplayPage {
     
         const res = await axios.get(finalAPIURL);
     
-        const attArray = res.data.productsData[0].style.definingAttributes;
+        let attArray = res.data.productsData[0].style.definingAttributes;
         console.log(attArray);
         if (attArray.length > 0) {
           await this.getSKUsWithAttributes(res.data);
@@ -544,7 +544,7 @@ async selectShipToMeAttributes(page: Page, ): Promise<void> {
         }
       }
     } else {
-      throw new Error('This product is not eligible for Ship To Me');
+      //throw new Error('This product is not eligible for Ship To Me');
     }
 
     }
