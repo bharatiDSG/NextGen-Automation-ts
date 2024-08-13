@@ -67,6 +67,19 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in Secured Athlete Login Scripts`}"     
+          overwrite: "{title: `** ALERT ** Failure in Secured Athlete Login Scripts`}"
+
+      #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+    # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()
+
+      # - name: Push Results to Prometheus
+        # run: |
+          # curl -X POST -H "Content-Type: application/json" -d @ctrf/ctrf-report.json http://ubtu-cs-q-6085.dcsg.com/api/v1/import
 
          
