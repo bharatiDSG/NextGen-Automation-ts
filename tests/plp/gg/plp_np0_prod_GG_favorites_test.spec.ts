@@ -88,7 +88,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
       const orderConfirmationPage = new OrderConfirmationPage(page)
       const commonPage = new CommonPage(page);
       const myAccount = new AccountSignInPage(page);
-      const index =1;
+      const index =0;
 
       await test.step('Given we are on "gg" page', async () => {
         console.log("Validating PLP favorites for E-Code level_Add and Remove");
@@ -166,7 +166,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
           const orderConfirmationPage = new OrderConfirmationPage(page)
           const commonPage = new CommonPage(page);
           const myAccount = new AccountSignInPage(page);
-          const index =2;
+          const index =1;
     
           await test.step('Given we are on "gg" page', async () => {
             console.log("Validating PLP favorites for Single SKU_Add and Remove");
@@ -303,7 +303,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
   });
 
-  test('PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
+  test.only('PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
 
     const homePage = new HomePage(page);
     const productListingPage = new ProductListingPage(page);
@@ -365,13 +365,15 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
       await test.step('Verify favorite functionality', async () => {
         await productListingPage.favorites.nth(index).click();
         await commonPage.sleep(5);
+        await productListingPage.unselectAllFavorites();
+        await commonPage.sleep(5);
         await productListingPage.favorites.nth(index).click();
-        await commonPage.sleep(2);
         await expect(productListingPage.favoritesToastMsg).toBeVisible();
         console.log("Favorites added successfully for the selected product");
-        await commonPage.sleep(7);
+        await commonPage.sleep(5);
+        await page.reload();
         await productListingPage.favorites.nth(index).click();
-        await commonPage.sleep(7);
+        await commonPage.sleep(5);
         await expect(productListingPage.favoritesToastMsg).toBeVisible();
         console.log("Favorites removed successfully for the selected product");
         await commonPage.sleep(5);
@@ -379,7 +381,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
         console.log("Quickview portal opened");
         await productListingPage.quickViewFavorites.click();
         await expect(productListingPage.favoritesToastMsg).toBeVisible();
-        await commonPage.sleep(7);
+        await commonPage.sleep(5);
         await productListingPage.quickViewFavorites.click();
         await expect(productListingPage.favoritesToastMsg).toBeVisible();
         console.log("Validation successful");
