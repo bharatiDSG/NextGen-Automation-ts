@@ -1,6 +1,8 @@
 export const testData_smokePLP_prod = {
     searchTerm1: "golf polo",
     productMatch1: "polo",
+    searchTerm2: "spray",
+    productMatch2: "spray",
     storeSearch: "Robinson",
     email: "AutomationTestingDSG@gmail.com",
     firstname: "Tiger",

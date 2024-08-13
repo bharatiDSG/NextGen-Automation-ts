@@ -156,7 +156,7 @@ export class ProductListingPage {
         this.quickviewModalATCButton = page.getByLabel('Add To Cart');
         this.quickviewKeepShoppingButton = page.getByLabel('Keep Shopping');
         this.quickviewViewCartButton = page.getByLabel('View Cart');
-        this.quickViewColorStocked = page.locator("div[class*='false false quickview-swatch']");
+        this.quickViewColorStocked = page.locator("div[id*='false']");
         this.quickViewSizeStocked = page.locator("div.qv-size div[class*='value false false']");
         this.quickViewColorGroup = page.locator("p#ColorGroup-Color");
         this.quickViewSizeGroup = page.locator("p#AttributeGroup-Size");
@@ -260,7 +260,7 @@ export class ProductListingPage {
         for (let i = 0; i < count; i++) {
           const fvrtRemoveIcon =   this.myAccountRemoveFavorites.nth(0);
           await fvrtRemoveIcon.click();
-          await commonPage.sleep(10);
+          await commonPage.sleep(5);
         } 
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
@@ -270,7 +270,7 @@ export class ProductListingPage {
 
     async unselectAllFavorites() {
         const commonPage = new CommonPage(this.page);
-        await commonPage.sleep(10);
+        await commonPage.sleep(5);
         const fvrtSelected =  this.page.locator('div.dsg-react-product-card button.plp-add-favorite-button[aria-label *="Remove"]');
         const count = await fvrtSelected.count();
         console.log("Total favorites selected is: "+count);
@@ -285,7 +285,7 @@ export class ProductListingPage {
             const toastText = await this.favoritesToastMsg.textContent();
             expect(toastText?.trim()).toContain(String("Removed")); 
             console.log("Favorites removed successfully");
-            await commonPage.sleep(10);
+            await commonPage.sleep(5);
           }
         }
       }
