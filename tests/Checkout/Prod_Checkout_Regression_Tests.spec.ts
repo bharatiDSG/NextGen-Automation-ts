@@ -26,7 +26,7 @@ test.describe("Prod Checkout tests", () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
-        await homePage.goToHomePage(getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl()+'?TagForceLane=33');
         console.log("URL: " + getBaseUrl());
 
     });
