@@ -1651,7 +1651,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis",))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St",))
         });
 
 
@@ -1758,7 +1758,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis",))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St",))
         });
 
 
@@ -2542,7 +2542,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St"))
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -2690,7 +2690,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test Tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis","328 NE Northgate Way"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("Test Tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -2995,7 +2995,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St"))
         });
 
         await test.step('Click on change Billing SHipping info link', async () => {
@@ -3010,7 +3010,7 @@ test.describe("Prod Checkout tests", () => {
         });
         
         await test.step('Verify the address details', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("345 Court St Coraopolis","202 Eastview Mall"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("345 Court St","202 Eastview Mall"))
         });
 
     });
@@ -3075,7 +3075,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("345 Court St Coraopolis"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("345 Court St"))
         });
 
         await test.step('Click on Change Contact info link', async () => {
@@ -4076,12 +4076,14 @@ test.describe("Prod Checkout tests", () => {
 
     await test.step('Get Access Toekn',async()=>{
         accessToken= await page.evaluate('window.accessToken')
+        const cookies=await page.context().cookies()
+        console.log(cookies)
         console.log(accessToken)
 
     });
 
     await test.step('Delete Cart',async()=>{
-        cartPage.deleteCartUsingAPI(accessToken)
+        await cartPage.deleteCartUsingAPI(accessToken)
 
     });
 

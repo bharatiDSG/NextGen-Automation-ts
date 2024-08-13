@@ -306,7 +306,10 @@ export class CheckoutPage {
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
     async enterShippingInfo(firstName: string, lastname: string, address: string, address2: string, zipCode: string): Promise<void> {
-
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.click();
@@ -322,11 +325,14 @@ export class CheckoutPage {
             await this.shippingZipcode.press('Tab');
         }
         else {
+            if(await this.billingFirstName.isVisible())
+            {
             await this.billingFirstName.click();
             await this.billingFirstName.fill(firstName);
             await this.billingFirstName.press('Tab');
             await this.billingLastName.fill(lastname);
             await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
@@ -629,6 +635,7 @@ export class CheckoutPage {
     }
     async unCheckSameShippingAndBillingAddress() {
         await this.sameShippingAndBillingCheckbox.click();
+        await this.page.waitForTimeout(2000)
     }
     async goBackToCart() {
         await this.miniCartIcon.click();
