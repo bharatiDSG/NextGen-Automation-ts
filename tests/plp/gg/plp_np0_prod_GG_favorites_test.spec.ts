@@ -88,7 +88,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
       const orderConfirmationPage = new OrderConfirmationPage(page)
       const commonPage = new CommonPage(page);
       const myAccount = new AccountSignInPage(page);
-      const index =0;
+      const index =1;
 
       await test.step('Given we are on "gg" page', async () => {
         console.log("Validating PLP favorites for E-Code level_Add and Remove");
@@ -166,7 +166,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
           const orderConfirmationPage = new OrderConfirmationPage(page)
           const commonPage = new CommonPage(page);
           const myAccount = new AccountSignInPage(page);
-          const index =1;
+          const index =2;
     
           await test.step('Given we are on "gg" page', async () => {
             console.log("Validating PLP favorites for Single SKU_Add and Remove");
