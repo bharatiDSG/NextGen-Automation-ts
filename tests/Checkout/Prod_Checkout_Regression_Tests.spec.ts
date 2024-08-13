@@ -8,9 +8,9 @@ import { CartPage } from '../../page-objects/CartPage.ts';
 import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
 import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
 import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
-import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
-import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
-import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QAtestData.js';
+import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdtestData.js';
+import { testData_Prod_Checkout } from '../../test-data/ProdCheckouttestData.js';
 
 
 test.describe("Prod Checkout tests", () => {
@@ -1133,7 +1133,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","345 Court St Coraopolis", "", "15108")
+            await checkoutPage.enterShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
     });
@@ -1812,7 +1812,7 @@ test.describe("Prod Checkout tests", () => {
 
         await test.step('Verify Validations with Invalid details', async () => {
             await page.waitForLoadState("networkidle");
-            await checkoutPage.firstNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","Test (test1)"));
+            await checkoutPage.firstNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","test (test1)"));
         });
 
         await test.step('Verify Validations with Valid details', async () => {
@@ -1869,7 +1869,7 @@ test.describe("Prod Checkout tests", () => {
 
         await test.step('Verify Validations with Invalid details', async () => {
             await page.waitForLoadState("networkidle");
-            await checkoutPage.lastNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","Test (test1)"));
+            await checkoutPage.lastNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","test (test1)"));
         });
 
         await test.step('Verify Validations with Valid details', async () => {
@@ -2435,7 +2435,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","328 NE Northgate Way", "", "98125")
+            await checkoutPage.enterShippingInfo("test","tester","328 NE Northgate Way", "", "98125")
         });
 
 
@@ -3600,14 +3600,14 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","345 Court St Coraopolis", "", "15108")
+            await checkoutPage.enterShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Click on change Billing SHipping info link', async () => {
             await checkoutPage.clickChangeBillingShippingformation();
         });
         await test.step('Provide Billing details', async () => {
-            await checkoutPage.enterBillingShippingInfo("Test", "TESTERONE","23 Legion Way Pittsburgh", "", "15214-2833")
+            await checkoutPage.enterBillingShippingInfo("test", "TESTERONE","23 Legion Way Pittsburgh", "", "15214-2833")
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -3769,11 +3769,11 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.clickAddPickUpPerson();
         });
         await test.step('provide details', async () => {
-            await checkoutPage.providePickUPPersonDetails("Test1","Tester1","automationdcsg@dcsg.com");
+            await checkoutPage.providePickUPPersonDetails("test1","tester1","automationdcsg@dcsg.com");
         });
         await test.step('Verify the address', async () => {
             await page.waitForLoadState('networkidle')
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test1 Tester1","automationdcsg@dcsg.com"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester1","automationdcsg@dcsg.com"))
         });
     
     });
