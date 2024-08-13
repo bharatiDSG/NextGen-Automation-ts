@@ -662,7 +662,7 @@ export class CheckoutPage {
         for (let index = 0; index < details.length; index++) {
             const element = details[index];
             console.log(element);
-            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).toBeVisible();
+            await expect((this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
         }
 
     }
