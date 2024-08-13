@@ -2440,7 +2440,7 @@ test.describe("Prod Checkout tests", () => {
 
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St Coraopolis","328 NE Northgate Way"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
         });
 
 
@@ -2686,11 +2686,11 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","328 NE Northgate Way", "", "98125")
+            await checkoutPage.enterShippingInfo("test","tester","328 NE Northgate Way", "", "98125")
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test Tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
         });
 
         await test.step('Click on Cart icon', async () => {
