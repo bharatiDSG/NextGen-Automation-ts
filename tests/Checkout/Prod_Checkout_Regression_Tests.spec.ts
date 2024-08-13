@@ -8,8 +8,8 @@ import { CartPage } from '../../page-objects/CartPage.ts';
 import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
 import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
 import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
-import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QAtestData.js';
-import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdtestData.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
+import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
 import { testData_Prod_Checkout } from '../../test-data/ProdCheckouttestData.js';
 
 
