@@ -4054,4 +4054,38 @@ test.describe("Prod Checkout tests", () => {
          
 
     });
+
+    test('47. Delete Cart for Signed In User', async ({ page }, testInfo) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+        const productDisplayPage = new ProductDisplayPage(page);
+        const cartPage = new CartPage(page);
+        const checkoutPage = new CheckoutPage(page);
+
+        const accountSignInPage = new AccountSignInPage(page);
+        let accessToken;
+
+        await test.step('Click my account link',async()=>{
+            await homePage.myAccountLink.click();
+        });
+
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not',async()=>{
+        await accountSignInPage.signIn(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword)
+
+    });
+
+    await test.step('Get Access Toekn',async()=>{
+        accessToken= await page.evaluate('window.accessToken')
+        console.log(accessToken)
+
+    });
+
+    await test.step('Delete Cart',async()=>{
+        cartPage.deleteCartUsingAPI(accessToken)
+
+    });
+
+
+});
+
 });
