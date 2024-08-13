@@ -11,6 +11,26 @@ import { getBaseUrl } from '../globalSetup';
 import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData';
 
 test.describe("E2E NP0 Prod", () => {
+
+    test.beforeEach(async ({ page, context }) => {
+
+        // grant permission for location
+        await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+        console.log("geolocation granted for: " + getBaseUrl())
+    
+        // Close popup(frame) listener
+        const closePopup = page.locator('#slideoutCloseButton')
+        page.once('frameattached', async data => {
+          console.log("listening for popup frame once")
+          if (await closePopup.isVisible({ timeout: 20000 })) {
+            await closePopup.click({ timeout: 20000 })
+            console.log("popup closed")
+          } else {
+            console.log("no popup displayed")
+          }
+        });
+      });
+
     test.beforeEach(async ({ page }) => {
         const homePage = new HomePage(page);
 
@@ -45,7 +65,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Choose pickup filter
         await test.step('Choose pickup filter',async()=>{
-        await productListingPage.pickupFilterButton.click();
+        await productListingPage.pickupFilterButtonReact.click();
     });
         // Select a product
         await test.step('Select a product',async()=>{
@@ -94,7 +114,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Enter billing shipping info - Validate complete checkmark',async()=>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
     });
         // Add credit card info
         await test.step('Add credit card info',async()=>{
@@ -130,7 +150,7 @@ test.describe("E2E NP0 Prod", () => {
         const cartPage = new CartPage(page)
         const checkoutPage = new CheckoutPage(page)
         const orderConfirmationPage = new OrderConfirmationPage(page)
-        const commonPage = new CommonPage(page)
+        // const commonPage = new CommonPage(page)
 
         // Search for product
         await test.step('Search for product',async()=>{
@@ -148,9 +168,9 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Click add to cart
         await test.step('Click add to cart',async()=>{
-        await commonPage.sleep(2)
+        await page.waitForLoadState('networkidle')
         await productDisplayPage.availableProductColorRewrite.first().click()
-        await commonPage.sleep(3)
+        await page.waitForLoadState('networkidle')
        // await page.locator('class=pdp-color-swatch-selected').first().click()
         await productDisplayPage.addToCartButtonRewrite.scrollIntoViewIfNeeded()
         await expect(productDisplayPage.addToCartButtonRewrite).toBeVisible()
@@ -159,7 +179,7 @@ test.describe("E2E NP0 Prod", () => {
         // Click Go to Cart
         await test.step('Click Go To Cart',async()=>{
         await productDisplayPage.goToCartButton.click();
-        await commonPage.sleep(2)
+        await page.waitForLoadState('networkidle')
     });
         // Validate Cart and free shipping
         await test.step('Validate Cart and free shipping',async()=>{
@@ -182,7 +202,7 @@ test.describe("E2E NP0 Prod", () => {
     });
         // Enter Billing Shipping info - validate complete checkmark
         await test.step('Enter Billing Shipping info',async()=>{
-        await checkoutPage.enterBillingShippingInfo(testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
+        await checkoutPage.enterBillingShippingInfo("", "", testData_e2e_np0_prod.address, testData_e2e_np0_prod.address2, testData_e2e_np0_prod.zipCode)
     });
         // Add credit card info
         await test.step('Add Credit card info',async()=>{
