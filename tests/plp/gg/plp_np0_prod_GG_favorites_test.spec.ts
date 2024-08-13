@@ -303,7 +303,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
   });
 
-  test.only('PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
+  test('PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
 
     const homePage = new HomePage(page);
     const productListingPage = new ProductListingPage(page);
