@@ -80,7 +80,6 @@ jobs:
 
       - name: Push Results to Prometheus
         run: |
-          curl -X POST -H "Content-Type: application/json" -d @ctrf/ctrf-report.json
-          http://ubtu-cs-q-6085.dcsg.com:9090/api/v1/import
+          curl -X POST -H "Content-Type: application/json" -d @ctrf/ctrf-report.json http://ubtu-cs-q-6085.dcsg.com:9090/api/v1/import
 
          
