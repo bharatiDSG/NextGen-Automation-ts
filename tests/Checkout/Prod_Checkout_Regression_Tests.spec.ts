@@ -10,7 +10,7 @@ import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.
 import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
 import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
 import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
-import { testData_Prod_Checkout } from '../../test-data/ProdCheckouttestData.js';
+import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.js';
 
 
 test.describe("Prod Checkout tests", () => {
