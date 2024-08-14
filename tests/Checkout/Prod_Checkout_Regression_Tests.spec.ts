@@ -46,8 +46,8 @@ test.describe("Prod Checkout tests", () => {
         const PDP = new ProductDisplayPage(page)
 
 
-        await test.step('When we search for "nike dri fit socks" keyword in the search box', async () => {
-            await homePage.searchForProduct("nike dri fit socks")
+        await test.step('When we search for "nike shoes" keyword in the search box', async () => {
+            await homePage.searchForProduct("nike shoes")
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
@@ -3946,8 +3946,8 @@ test.describe("Prod Checkout tests", () => {
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
 
-        await test.step('When we search for "kickball" keyword in the search box', async () => {
-            await homePage.searchForProduct("kickball")
+        await test.step('When we search for "basketball" keyword in the search box', async () => {
+            await homePage.searchForProduct("Basketball")
         });
 
         await test.step('And we set zip code to "15108"', async () => {
@@ -4036,13 +4036,13 @@ test.describe("Prod Checkout tests", () => {
             await page.waitForTimeout(3000)
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$0.00");
         });   
-        // await test.step('Select Tip Amount', async () => {
-        //     await checkoutPage.selectTipAmount("$10")
-        // });  
-        // await test.step('Verify Same day delivery Tip amount', async () => {
-        //     await page.waitForTimeout(3000)
-        //     expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$10.00");
-        // });   
+        await test.step('Select Tip Amount', async () => {
+            await checkoutPage.selectTipAmount("$10")
+        });  
+        await test.step('Verify Same day delivery Tip amount', async () => {
+            await page.waitForTimeout(3000)
+            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$10.00");
+        });   
 
         await test.step('Select other tip Amout', async () => {
             await checkoutPage.selectOtherTipAmount("7")

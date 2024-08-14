@@ -381,6 +381,7 @@ export class ProductDisplayPage {
           return true;
         } else {
           console.log('No Attributes present');
+          this.skusWithAttributes.clear();
           return false;
         }
         
