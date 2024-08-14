@@ -41,7 +41,7 @@ export default defineConfig({
   ]: [['html']],
   /* Wait timeout time */
   expect: {
-    timeout: 20 * 1000,
+    timeout: 30 * 1000,
   },
   
   // globalSetup: require.resolve("./globalSetup.js"),

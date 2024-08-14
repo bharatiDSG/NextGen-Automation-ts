@@ -3968,7 +3968,7 @@ test.describe("Prod Checkout tests", () => {
         });
         await test.step('Select a product', async () => {
             
-            await page.waitForLoadState("networkidle")
+            await page.waitForLoadState("domcontentloaded")
             await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
