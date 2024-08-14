@@ -172,7 +172,7 @@ export class CheckoutPage {
         this.orderTotal = page.locator("//p[contains(text(),'Estimated Order Total')]//following-sibling::p")
         this.storePickUpCharge = page.locator("//p[contains(text(),'Store Pickup')]//following-sibling::p")
         this.individualProductPrice=page.locator("//p[@class='product-price']")
-        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p")
+        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p[contains(@class,'d-flex')]")
         this.tipAmount = page.locator("//p[contains(text(),'Tip')]//following-sibling::p")
 
         this.largeItemShippingDetails = page.getByRole('link', { name: 'Large Item Shipping Details' })
@@ -880,6 +880,7 @@ export class CheckoutPage {
         for (let index = 0; index < productPrices.length; index++) {
             let price=productPrices.at(index)?.replace('$','').split(' ')[0]!;
             let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            console.log('Price: '+ price +'\n'+'Quantity: '+quantity+'\n')
             orderSubTotal= orderSubTotal+(Number.parseFloat(price)*Number.parseInt(quantity))
             
         }
