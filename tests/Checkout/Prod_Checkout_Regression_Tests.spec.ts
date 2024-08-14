@@ -2538,7 +2538,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
