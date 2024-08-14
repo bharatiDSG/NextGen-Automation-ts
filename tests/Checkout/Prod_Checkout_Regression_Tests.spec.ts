@@ -2488,8 +2488,8 @@ test.describe("Prod Checkout tests", () => {
 
         });
 
-        await test.step('When we search for "calia socks" keyword in the search box', async () => {
-            await homePage.searchForProduct("calia socks")
+        await test.step('When we search for "Nike socks" keyword in the search box', async () => {
+            await homePage.searchForProduct("Nike socks")
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
