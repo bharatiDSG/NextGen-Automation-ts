@@ -949,7 +949,7 @@ export class CheckoutPage {
         let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
         console.log(productQuantities);
         for (let index = 0; index < productQuantities.length; index++) {
-            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','').trim()!;
             if(Number.parseInt(quantity)==expectedQuantity)
             {
                 found=true;
