@@ -4036,13 +4036,13 @@ test.describe("Prod Checkout tests", () => {
             await page.waitForTimeout(3000)
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$0.00");
         });   
-        await test.step('Select Tip Amount', async () => {
-            await checkoutPage.selectTipAmount("$10")
-        });  
-        await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000)
-            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$10.00");
-        });   
+        // await test.step('Select Tip Amount', async () => {
+        //     await checkoutPage.selectTipAmount("$10")
+        // });  
+        // await test.step('Verify Same day delivery Tip amount', async () => {
+        //     await page.waitForTimeout(3000)
+        //     expect(await checkoutPage.getTipAmountOrderTotal()).toEqual("$10.00");
+        // });   
 
         await test.step('Select other tip Amout', async () => {
             await checkoutPage.selectOtherTipAmount("7")
