@@ -382,11 +382,14 @@ export class CheckoutPage {
             await this.shippingZipcode.press('Tab');
         }
         else {
+            if(await this.billingFirstName.isVisible())
+            {
             await this.billingFirstName.click();
             await this.billingFirstName.fill(firstName);
             await this.billingFirstName.press('Tab');
             await this.billingLastName.fill(lastName);
             await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
