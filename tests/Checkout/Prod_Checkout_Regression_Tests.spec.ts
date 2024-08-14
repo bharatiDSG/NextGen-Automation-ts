@@ -3946,8 +3946,8 @@ test.describe("Prod Checkout tests", () => {
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
 
-        await test.step('When we search for "basketball" keyword in the search box', async () => {
-            await homePage.searchForProduct("Basketball")
+        await test.step('When we search for "Table Tennis" keyword in the search box', async () => {
+            await homePage.searchForProduct("Table Tennis")
         });
 
         await test.step('And we set zip code to "15108"', async () => {
