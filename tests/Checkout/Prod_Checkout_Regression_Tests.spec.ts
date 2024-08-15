@@ -26,7 +26,7 @@ test.describe("Prod Checkout tests", () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
-        await homePage.goToHomePage(getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl()+'?TagForceLane=62');
         console.log("URL: " + getBaseUrl());
 
     });
@@ -46,8 +46,8 @@ test.describe("Prod Checkout tests", () => {
         const PDP = new ProductDisplayPage(page)
 
 
-        await test.step('When we search for "nike dri fit socks" keyword in the search box', async () => {
-            await homePage.searchForProduct("nike dri fit socks")
+        await test.step('When we search for "nike shoes" keyword in the search box', async () => {
+            await homePage.searchForProduct("nike shoes")
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
@@ -226,7 +226,7 @@ test.describe("Prod Checkout tests", () => {
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.clickEditBillingShippingInfo();
             await page.waitForLoadState("load")
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Corao", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('validate that est tax is equal to ".000" multiplied by the order total', async () => {
@@ -305,7 +305,7 @@ test.describe("Prod Checkout tests", () => {
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.clickEditBillingShippingInfo();
             await page.waitForLoadState("load")
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('validate that est tax is equal to ".000" multiplied by the order total', async () => {
@@ -431,7 +431,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update payment details with Invalid Details', async () => {
@@ -510,7 +510,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update payment details with Invalid Details', async () => {
@@ -589,7 +589,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update payment details with Invalid Details', async () => {
@@ -668,7 +668,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Promo Code', async () => {
@@ -738,7 +738,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Gift Card and remove it', async () => {
@@ -806,7 +806,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('verify paypal checkout', async () => {
@@ -874,7 +874,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Invalid Gift Card', async () => {
@@ -990,7 +990,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Promo Code', async () => {
@@ -1058,11 +1058,11 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","345 Court St", "", "90005","The address provided could not be verified. Please review.")
+            await checkoutPage.enterBillingShippingWithInValidInfo("test","tester","345 Court St Coraopolis", "", "90005","The address provided could not be verified. Please review.")
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
     });
@@ -1125,7 +1125,7 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update Shipping address with invalid details', async () => {
@@ -1133,7 +1133,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","345 Court St", "", "15108")
+            await checkoutPage.enterShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
     });
@@ -1405,7 +1405,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -1475,7 +1475,7 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court Street", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolisreet", "", "15108")
         });
 
         await test.step('Update Shipping address', async () => {
@@ -1647,7 +1647,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
@@ -1754,7 +1754,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
@@ -1812,7 +1812,7 @@ test.describe("Prod Checkout tests", () => {
 
         await test.step('Verify Validations with Invalid details', async () => {
             await page.waitForLoadState("networkidle");
-            await checkoutPage.firstNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","Test (test1)"));
+            await checkoutPage.firstNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","test (test1)"));
         });
 
         await test.step('Verify Validations with Valid details', async () => {
@@ -1869,7 +1869,7 @@ test.describe("Prod Checkout tests", () => {
 
         await test.step('Verify Validations with Invalid details', async () => {
             await page.waitForLoadState("networkidle");
-            await checkoutPage.lastNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","Test (test1)"));
+            await checkoutPage.lastNameValidationsWithInvalidNames(new Array("t","234234234","test.","test!","te$t","test (test1)"));
         });
 
         await test.step('Verify Validations with Valid details', async () => {
@@ -2431,11 +2431,11 @@ test.describe("Prod Checkout tests", () => {
 
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","328 NE Northgate Way", "", "98125")
+            await checkoutPage.enterShippingInfo("test","tester","328 NE Northgate Way", "", "98125")
         });
 
 
@@ -2488,8 +2488,8 @@ test.describe("Prod Checkout tests", () => {
 
         });
 
-        await test.step('When we search for "calia socks" keyword in the search box', async () => {
-            await homePage.searchForProduct("calia socks")
+        await test.step('When we search for "Nike socks" keyword in the search box', async () => {
+            await homePage.searchForProduct("Nike socks")
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
@@ -2538,7 +2538,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
@@ -2682,15 +2682,15 @@ test.describe("Prod Checkout tests", () => {
        
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","328 NE Northgate Way", "", "98125")
+            await checkoutPage.enterShippingInfo("test","tester","328 NE Northgate Way", "", "98125")
         });
 
         await test.step('Verify the address', async () => {
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test Tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test tester","automation@dcsg.com", "(724) 273-3400","345 Court St","328 NE Northgate Way"))
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -2913,7 +2913,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Click on Change Contact info link', async () => {
@@ -2991,7 +2991,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
@@ -3003,7 +3003,7 @@ test.describe("Prod Checkout tests", () => {
         });
         await test.step('Provide Billing details', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 court st", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
         await test.step('Update Shipping address', async () => {
             await checkoutPage.enterShippingInfo("test","tester","202 Eastview Mall", "", "14564")
@@ -3071,7 +3071,7 @@ test.describe("Prod Checkout tests", () => {
         });
        
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify the address', async () => {
@@ -3347,7 +3347,7 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.enterContactInfo("test", "tester", "automation@dcsg.com", "7242733400")
         });
         await test.step('Update Billing address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test", "tester","345 Court St Coraopolis", "", "15108")
         });
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPage);
@@ -3600,14 +3600,14 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("Test","Tester","345 court st", "", "15108")
+            await checkoutPage.enterShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Click on change Billing SHipping info link', async () => {
             await checkoutPage.clickChangeBillingShippingformation();
         });
         await test.step('Provide Billing details', async () => {
-            await checkoutPage.enterBillingShippingInfo("Test", "TESTERONE","23 Legion Way Pittsburgh", "", "15214-2833")
+            await checkoutPage.enterBillingShippingInfo("test", "TESTERONE","23 Legion Way Pittsburgh", "", "15214-2833")
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -3681,7 +3681,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Promo Code', async () => {
@@ -3769,11 +3769,11 @@ test.describe("Prod Checkout tests", () => {
             await checkoutPage.clickAddPickUpPerson();
         });
         await test.step('provide details', async () => {
-            await checkoutPage.providePickUPPersonDetails("Test1","Tester1","automationdcsg@dcsg.com");
+            await checkoutPage.providePickUPPersonDetails("test1","tester1","automationdcsg@dcsg.com");
         });
         await test.step('Verify the address', async () => {
             await page.waitForLoadState('networkidle')
-            await checkoutPage.validateUserAndBillingDetails(new Array("Test1 Tester1","automationdcsg@dcsg.com"))
+            await checkoutPage.validateUserAndBillingDetails(new Array("test1 tester1","automationdcsg@dcsg.com"))
         });
     
     });
@@ -3839,11 +3839,11 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfo("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterShippingInfo("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterShippingInfo("test1","tester","345 Court St Coraopolis", "", "15108")
         });
         await test.step('Provide Gift receipients name and details', async () => {
             await checkoutPage.enterGiftReceipientDetails("jane.doe20222222@gmail.com","Jane","Happy birthday jane!!! Love, Me")
@@ -3931,7 +3931,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Same day delivery Tip is visible', async () => {
@@ -3946,8 +3946,8 @@ test.describe("Prod Checkout tests", () => {
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
 
-        await test.step('When we search for "kickball" keyword in the search box', async () => {
-            await homePage.searchForProduct("kickball")
+        await test.step('When we search for "Table Tennis" keyword in the search box', async () => {
+            await homePage.searchForProduct("Table Tennis")
         });
 
         await test.step('And we set zip code to "15108"', async () => {
@@ -3968,7 +3968,7 @@ test.describe("Prod Checkout tests", () => {
         });
         await test.step('Select a product', async () => {
             
-            await page.waitForLoadState("networkidle")
+            await page.waitForLoadState("domcontentloaded")
             await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
@@ -4019,7 +4019,7 @@ test.describe("Prod Checkout tests", () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery("test1","tester","345 Court St", "", "15108")
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery("test1","tester","345 Court St Coraopolis", "", "15108")
         });
 
         await test.step('Verify Same day delivery Tip is visible', async () => {
@@ -4054,4 +4054,40 @@ test.describe("Prod Checkout tests", () => {
          
 
     });
+
+    test('47. Delete Cart for Signed In User', async ({ page }, testInfo) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+        const productDisplayPage = new ProductDisplayPage(page);
+        const cartPage = new CartPage(page);
+        const checkoutPage = new CheckoutPage(page);
+
+        const accountSignInPage = new AccountSignInPage(page);
+        let accessToken;
+
+        await test.step('Click my account link',async()=>{
+            await homePage.myAccountLink.click();
+        });
+
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not',async()=>{
+        await accountSignInPage.signIn(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword)
+
+    });
+
+    await test.step('Get Access Toekn',async()=>{
+        accessToken= await page.evaluate('window.accessToken')
+        const cookies=await page.context().cookies()
+        console.log(cookies)
+        console.log(accessToken)
+
+    });
+
+    await test.step('Delete Cart',async()=>{
+        await cartPage.deleteCartUsingAPI(accessToken)
+
+    });
+
+
+});
+
 });

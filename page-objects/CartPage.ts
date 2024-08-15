@@ -2,6 +2,9 @@ import { Locator, Page, expect } from '@playwright/test';
 import { getNextValueFromArray, removeAllMatchingItemsFromArray } from '../lib/functions';
 import { CommonPage } from './CommonPage';
 import { AccountSignInPage } from './AccountSignInPage';
+import axios from 'axios';
+import { getBaseUrl } from '../globalSetup';
+import { error } from 'console';
 
 interface PriceDetails {
   getOrderSubtotal: () => string | undefined;
@@ -230,6 +233,7 @@ export class CartPage {
   }
 
   async verifyPaypalModal(strText: string): Promise<void> {
+    try{
 
     const frameLocator = await this.paypalIframe.locator('div.paypal-button')
     const [multiPage] = await Promise.all([
@@ -244,9 +248,12 @@ export class CartPage {
     const label = popupPage.locator('h1#headerText');
     const labelTxt = await label.innerText();
     expect(labelTxt.trim()).toEqual(strText);
-  } catch(error: string) {
+  }
+  catch(error) {
     console.error('Failed to verify PayPal modal:', error);
   }
+}
+
 
   async signInAsRegisteredUser(userName:string,  password:string)
   {
@@ -257,14 +264,16 @@ export class CartPage {
 
   async deleteCartItems()
   {
-    await this.checkoutButton.waitFor();
-    const listOfDeleteItems= await this.page.$$("//img[@class='delete-icon']");
-    for await (const itemlist of listOfDeleteItems) {
-      await this.page.locator("(//img[@class='delete-icon'])[1]").click();
+    // await this.checkoutButton.waitFor();
+    // const listOfDeleteItems= await this.page.$$("//img[@class='delete-icon']");
+    // for await (const itemlist of listOfDeleteItems) {
+    //   await this.page.locator("(//img[@class='delete-icon'])[1]").click();
       await this.page.waitForLoadState("domcontentloaded");
+      let accessToken:string= await this.page.evaluate('window.accessToken')
+      await this.deleteCartUsingAPI(accessToken)
+
   }
   
-}
 async deleteNoOfCartItems(noOfProductsToBeDeleted:number)
   {
     await this.checkoutButton.waitFor();
@@ -314,7 +323,29 @@ async getProductNames():Promise<String[]>
       await this.confirmAndCheckoutBtn.click();
     }
 
-
-  
+    async deleteCartUsingAPI(token:string):Promise<void>
+    {
+      let finalAPIURL= getBaseUrl()+'api/v1/carts'
+    
+      const headers = { 
+        'Authorization': `${token}`,
+        'Cookie':'AdditionalLanes=69,54,41,8,83,65; CHECKOUTSESSION=D54E9C786303ABABB38512935BEC5A1E; DCSG_NGX_CART_COUNT=0; DSG_CartQTY=0; NNC=1; akaalb_CHK_ALB=~op=CHK_API_ALB:CHK_Azure_API|~rv=38~m=CHK_Azure_API:0|~os=b834769be1dd4d72381443d311536027~id=336232a1a7b726846ce16d304ca4b2d5; akaalb_DSG_CART_ALB=~op=DSG_CART_ALB_API:DSG_CART_Azure_API|~rv=8~m=DSG_CART_Azure_API:0|~os=b834769be1dd4d72381443d311536027~id=6cf8657cd99cd5800ed15031b2857982; akaas_AS_EXP_DSG=2147483647~rv=76~id=8b6c58523bee8c43f28eb6950e66390c; cartCount=0; dih=desktop; dsg_perf_analysis=NB-0; swimlane_as_exp_dsg=76; whereabouts=20146'
+    };
+    try{
+      const res = await axios.delete(finalAPIURL,
+        {
+          headers: headers,
+          timeout: 25000
+        }
+          );
+        console.log(res.status)
+      }
+      catch(error)
+      {
+        console.error(error.message)
+        console.log(error.message)
+      }
+      console.log("test")
+    }
 
 }

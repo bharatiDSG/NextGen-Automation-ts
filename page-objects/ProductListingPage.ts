@@ -185,7 +185,7 @@ export class ProductListingPage {
         this.quickviewViewChangeStoreInputField = page.locator('//input[@type="text"]');
         this.quickviewViewChangeStoreSearchButton = page.getByLabel('SEARCH');
         this.quickviewViewChangeStoreSelectStoreButton = page.getByLabel('select store');
-        this.quickViewColorStocked = page.locator("div[class*='false false quickview-swatch']");
+        this.quickViewColorStocked = page.locator("div[id*='false']");
         this.quickViewSizeStocked = page.locator("div.qv-size div[class*='value false false']");
         this.quickViewColorGroup = page.locator("p#ColorGroup-Color");
         this.quickViewSizeGroup = page.locator("p#AttributeGroup-Size");
@@ -274,7 +274,6 @@ export class ProductListingPage {
         console.log("Product price in my account favorite page is: "+myAccountItemPrice)
         expect(myAccountItemName?.trim()).toContain(String(namePlp));
         expect(myAccountItemPrice?.trim()).toContain(String(pricePlp));
-        console.log("Validation successfull");
     }
 
     async removeAllFavoritesInMyAccounts(){
@@ -289,7 +288,7 @@ export class ProductListingPage {
         for (let i = 0; i < count; i++) {
           const fvrtRemoveIcon =   this.myAccountRemoveFavorites.nth(0);
           await fvrtRemoveIcon.click();
-          await commonPage.sleep(10);
+          await commonPage.sleep(5);
         }
         const itemTxt = await this.myAccountListSelectionFavoriteItemMesg.nth(0).textContent();
         console.log("The message is: "+itemTxt)
@@ -314,7 +313,7 @@ export class ProductListingPage {
             const toastText = await this.favoritesToastMsg.textContent();
             expect(toastText?.trim()).toContain(String("Removed"));
             console.log("Favorites removed successfully");
-            await commonPage.sleep(10);
+            await commonPage.sleep(5);
           }
         }
       }

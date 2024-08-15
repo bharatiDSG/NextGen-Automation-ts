@@ -381,6 +381,7 @@ export class ProductDisplayPage {
           return true;
         } else {
           console.log('No Attributes present');
+          this.skusWithAttributes.clear();
           return false;
         }
         
@@ -605,7 +606,7 @@ async selectShipToMeAttributes(page: Page, ): Promise<void> {
           }
         }
       } else {
-        throw new Error('This product is not eligible for BOPIS');
+        //throw new Error('This product is not eligible for BOPIS');
       }
     }
   }
