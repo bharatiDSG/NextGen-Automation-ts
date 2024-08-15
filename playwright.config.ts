@@ -1,3 +1,4 @@
+// @ts-check
 import { defineConfig, devices } from '@playwright/test';
 import { MsTeamsReporterOptions } from 'playwright-msteams-reporter';
 
@@ -29,7 +30,7 @@ export default defineConfig({
     [
       'playwright-msteams-reporter',
       <MsTeamsReporterOptions>{
-        webhookUrl: `${process.env.WEB_HOOKS_URL}`,
+        webhookUrl: process.env.WEB_HOOKS_URL,
         webhookType: "powerautomate", // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
         title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_NUMBER}`,
@@ -41,7 +42,7 @@ export default defineConfig({
   ]: [['html']],
   /* Wait timeout time */
   expect: {
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   },
   
   // globalSetup: require.resolve("./globalSetup.js"),

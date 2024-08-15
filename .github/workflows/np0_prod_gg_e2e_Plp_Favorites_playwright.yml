@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
+
 #on:
 #  push:
 #    branches: [ "TA-999" ]

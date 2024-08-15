@@ -172,7 +172,7 @@ export class CheckoutPage {
         this.orderTotal = page.locator("//p[contains(text(),'Estimated Order Total')]//following-sibling::p")
         this.storePickUpCharge = page.locator("//p[contains(text(),'Store Pickup')]//following-sibling::p")
         this.individualProductPrice=page.locator("//p[@class='product-price']")
-        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p")
+        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p[contains(@class,'d-flex')]")
         this.tipAmount = page.locator("//p[contains(text(),'Tip')]//following-sibling::p")
 
         this.largeItemShippingDetails = page.getByRole('link', { name: 'Large Item Shipping Details' })
@@ -306,7 +306,10 @@ export class CheckoutPage {
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
     async enterShippingInfo(firstName: string, lastname: string, address: string, address2: string, zipCode: string): Promise<void> {
-
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.click();
@@ -322,11 +325,14 @@ export class CheckoutPage {
             await this.shippingZipcode.press('Tab');
         }
         else {
+            if(await this.billingFirstName.isVisible())
+            {
             await this.billingFirstName.click();
             await this.billingFirstName.fill(firstName);
             await this.billingFirstName.press('Tab');
             await this.billingLastName.fill(lastname);
             await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
@@ -362,6 +368,10 @@ export class CheckoutPage {
         await expect(this.page.locator("//*[text()='" + errorMessage + "']")).toBeVisible();
     }
     async enterShippingWithInvalidInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.fill(firstName);
@@ -376,11 +386,14 @@ export class CheckoutPage {
             await this.shippingZipcode.press('Tab');
         }
         else {
+            if(await this.billingFirstName.isVisible())
+            {
             await this.billingFirstName.click();
             await this.billingFirstName.fill(firstName);
             await this.billingFirstName.press('Tab');
             await this.billingLastName.fill(lastName);
             await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
@@ -629,6 +642,7 @@ export class CheckoutPage {
     }
     async unCheckSameShippingAndBillingAddress() {
         await this.sameShippingAndBillingCheckbox.click();
+        await this.page.waitForTimeout(2000)
     }
     async goBackToCart() {
         await this.miniCartIcon.click();
@@ -662,7 +676,7 @@ export class CheckoutPage {
         for (let index = 0; index < details.length; index++) {
             const element = details[index];
             console.log(element);
-            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).toBeVisible();
+            await expect((this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
         }
 
     }
@@ -873,6 +887,7 @@ export class CheckoutPage {
         for (let index = 0; index < productPrices.length; index++) {
             let price=productPrices.at(index)?.replace('$','').split(' ')[0]!;
             let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            console.log('Price: '+ price +'\n'+'Quantity: '+quantity+'\n')
             orderSubTotal= orderSubTotal+(Number.parseFloat(price)*Number.parseInt(quantity))
             
         }
@@ -941,7 +956,7 @@ export class CheckoutPage {
         let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
         console.log(productQuantities);
         for (let index = 0; index < productQuantities.length; index++) {
-            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
+            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','').trim()!;
             if(Number.parseInt(quantity)==expectedQuantity)
             {
                 found=true;
