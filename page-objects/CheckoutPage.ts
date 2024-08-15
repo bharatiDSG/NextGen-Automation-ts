@@ -368,6 +368,10 @@ export class CheckoutPage {
         await expect(this.page.locator("//*[text()='" + errorMessage + "']")).toBeVisible();
     }
     async enterShippingWithInvalidInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState("domcontentloaded");
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.fill(firstName);
