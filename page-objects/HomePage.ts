@@ -20,4 +20,21 @@ export class HomePage {
         await this.searchField.fill(searchInput);
         await this.searchField.press('Enter');
     }
+
+    async searchForProductWithSlowTyping(searchInput: string): Promise<void> {
+        await this.page.waitForLoadState("domcontentloaded");
+        await this.searchField.scrollIntoViewIfNeeded()
+        await this.searchField.click();
+        await this.searchField.clear()
+        await this.page.keyboard.type(searchInput, { delay: 100 })
+        await this.page.keyboard.press('Enter');
+    }
+
+    async searchForProductWithSlowTypingNoEnter(searchInput: string): Promise<void> {
+        await this.page.waitForLoadState("domcontentloaded");
+        await this.searchField.scrollIntoViewIfNeeded()
+        await this.searchField.click();
+        await this.searchField.clear()
+        await this.page.keyboard.type(searchInput, { delay: 100 })
+    }
 }

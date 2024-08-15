@@ -75,13 +75,11 @@ export class ProductListingPage {
     readonly myAccountListSectionFavoriteProductName: Locator;
     readonly myAccountListSectionFavoriteProductPrice: Locator;
     readonly myAccountCloseListPopPu:Locator;
-    readonly myAccountListSelectionFavoriteItemMesg:Locator
-
-
-
-
-
-
+    readonly myAccountListSelectionFavoriteItemMesg:Locator;
+    readonly breadcrumbSearchTerm: Locator;
+    readonly searchCountTitle: Locator;
+    readonly alternateSearchTitle: Locator;
+    readonly saytSuggestedKeywords: Locator;
     readonly breadCrumbLinkReact: Locator;
     readonly breadCrumbLinkAngular: Locator;
 
@@ -98,9 +96,7 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
-
         this.zipDeliveryInputField = page.locator("//input[@type='number']")
-
         this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
@@ -183,6 +179,14 @@ export class ProductListingPage {
         this.quickviewViewChangeStoreInputField = page.locator('//input[@type="text"]');
         this.quickviewViewChangeStoreSearchButton = page.getByLabel('SEARCH');
         this.quickviewViewChangeStoreSelectStoreButton = page.getByLabel('select store');
+
+        // Search
+        this.searchCountTitle = page.getByTestId('pageTitle');
+        this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
+        this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
+        this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
+
+
 
     }
 
@@ -294,8 +298,6 @@ export class ProductListingPage {
           }
         }
       }
-
-
 
     async selectAProduct() {
         await this.productNames.last().waitFor();
