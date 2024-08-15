@@ -5,6 +5,11 @@ on:
     - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
+#on:
+#  push:
+#    branches: [ "TA-748" ]
+#  workflow_dispatch:
+
 jobs:
   playwright:
     name: 'E2E CART Regression GG NP0 QA Playwright'
@@ -47,3 +52,12 @@ jobs:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
           overwrite: "{title: `** ALERT ** Failure in E2E CART GG NP0 Playwright  Regression Test`}"
+
+      #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+      # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()

@@ -298,7 +298,7 @@ export class ProductListingPage {
 
     async unselectAllFavorites() {
         const commonPage = new CommonPage(this.page);
-        await commonPage.sleep(5);
+        await commonPage.sleep(10);
         const fvrtSelected =  this.page.locator('div.dsg-react-product-card button.plp-add-favorite-button[aria-label *="Remove"]');
         const count = await fvrtSelected.count();
         console.log("Total favorites selected is: "+count);

@@ -5,10 +5,6 @@ on:
     - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
-#on:
-#  push:
-#    branches: [ "TA-999" ]
-#  workflow_dispatch:
 
 jobs:
   playwright:
@@ -52,3 +48,14 @@ jobs:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
           overwrite: "{title: `** ALERT ** Failure in PLP Favorites GG PROD Playwright Test`}"
+
+      #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+      # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()
+
+
