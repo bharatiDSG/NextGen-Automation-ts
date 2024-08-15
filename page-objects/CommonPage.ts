@@ -71,6 +71,7 @@ export class CommonPage {
         console.log('Element centered: ', isCentered);
         return isCentered;
     }
+
     async handlePromotionalPopup(): Promise<void>
     {
 
@@ -117,5 +118,15 @@ export class CommonPage {
         } else {
             console.log('No PROMO pop up was found after max attempts');
         }
+    }
+
+    async handleIframePopupSignUpViaTextForOffers() {
+        await this.page.addLocatorHandler(
+            this.page.frameLocator('iframe[title="Sign Up via Text for Offers"]').locator('#content'),
+            async () => {
+                this.page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click()
+                console.log("Popup frame closed - Sign Up via Text for Offers")
+            }
+        );
     }
 }
