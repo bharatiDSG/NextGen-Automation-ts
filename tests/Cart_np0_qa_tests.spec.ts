@@ -158,10 +158,9 @@ test.describe("E2E NP0 QA", () => {
 
         // Set store
         await test.step('Set zip code and select Store', async () => {
-
+            await commonPage.handlePromotionalPopup();
             await productDisplayPage.selectStorePickup('Select product options');
             await page.waitForLoadState("networkidle");
-            await commonPage.handlePromotionalPopup();
             const storeName = await productDisplayPage.setStoreFromPDP(testData_e2e_np0_qa.zipCode, "Robinson")
             await productDisplayPage.selectProductByColor.click();
         });

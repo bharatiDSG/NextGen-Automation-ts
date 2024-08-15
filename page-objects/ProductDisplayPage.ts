@@ -149,7 +149,7 @@ export class ProductDisplayPage {
         this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true })
         this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]')
         this.selectStoreButons = page.getByLabel('select store')
-        this.changeSelectedStoreLink = page.locator('button span.link');
+        this.changeSelectedStoreLink = page.locator('button#pdp-change-store-link');
         this.productName = page.locator('h1.hmf-header-bold-m');
         this.productPrice = page.locator('span.product-price');
         this.productColor = page.locator('span.hmf-text-transform-none:nth-of-type(2)');
