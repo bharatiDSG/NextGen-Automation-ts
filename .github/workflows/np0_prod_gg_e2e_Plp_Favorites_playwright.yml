@@ -48,3 +48,8 @@ jobs:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
           overwrite: "{title: `** ALERT ** Failure in PLP Favorites GG PROD Playwright Test`}"
+
+      #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf ctrf/ctrf-report.json
+        if: always()
