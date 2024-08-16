@@ -85,13 +85,10 @@ export class ProductListingPage {
     readonly quickViewFavorites:Locator
     readonly breadCrumbLinkReact:Locator;
     readonly breadCrumbLinkAngular:Locator;
-    readonly myAccountListSelectionFavoriteItemMesg:Locator;
     readonly breadcrumbSearchTerm: Locator;
     readonly searchCountTitle: Locator;
     readonly alternateSearchTitle: Locator;
     readonly saytSuggestedKeywords: Locator;
-    readonly breadCrumbLinkReact: Locator;
-    readonly breadCrumbLinkAngular: Locator;
 
     constructor(page: Page) {
         this.page = page;

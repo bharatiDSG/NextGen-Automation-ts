@@ -22,6 +22,8 @@ export class HomePage {
     }
 
     async searchForProduct(searchInput: string): Promise<void> {
+        await this.page.waitForLoadState("domcontentloaded");
+        await this.searchField.scrollIntoViewIfNeeded()
         await this.searchField.click();
         await this.searchField.fill(searchInput);
         await this.searchField.press('Enter');
