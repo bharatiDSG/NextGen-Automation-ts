@@ -1,0 +1,53 @@
+name: NP0_PROD GG Search Playwright Tests
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Run every half hour
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    name: 'NP0_PROD GG Search Playwright'
+    runs-on: [ self-hosted, azure ]
+    container:
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      # - uses: actions/setup-node@v4
+        # with:
+          # node-version: 20
+
+      - name: Install Dependencies
+        run: |
+          echo "Install dependencies from lock file"
+          npm ci
+
+          echo "Install Playwright and dependencies"
+          npx playwright install --with-deps
+
+      - name: NP0_PROD GG Search Tests
+        run: |
+          echo "Run E2E NP0 GG Search Tests"
+          npx playwright test search_gg_np0_prod_tests.spec.ts
+        env:
+            ENV: gg_np0prod    
+
+      - name: Upload Report      
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 2`
+
+      # - uses: actions/checkout@master
+      - name: Microsoft Teams Alert Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          job: ${{ toJson(job) }}
+          overwrite: "{title: `** ALERT ** Failure in Search GG NP0 Playwright Test`}"     
+
+         

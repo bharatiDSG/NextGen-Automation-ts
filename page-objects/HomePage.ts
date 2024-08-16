@@ -4,11 +4,17 @@ export class HomePage {
     private page: Page;
     readonly searchField: Locator;
     readonly myAccountLink: Locator;
+    readonly navigateToHomePageLink: Locator;
+    readonly trendingSearchesText: Locator;
+    readonly trendingSearchesLinks: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.searchField = page.locator('[id="searchInput"]').nth(1);
         this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
+        this.navigateToHomePageLink = page.getByRole('link', { name: 'Navigate to homepage' });
+        this.trendingSearchesText = page.getByText('Trending Searches');
+        this.trendingSearchesLinks = page.locator('[class="button-navigation"]');
     }
 
     async goToHomePage(url: string): Promise<void> {
