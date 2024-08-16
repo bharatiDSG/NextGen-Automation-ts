@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../page-objects/CartPage';
-import { CheckoutPage } from '../page-objects/CheckoutPage';
-import { CommonPage } from '../page-objects/CommonPage';
-import { HomePage } from '../page-objects/HomePage';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage';
-import { ProductListingPage } from '../page-objects/ProductListingPage';
-import { getBaseUrl } from '../globalSetup';
-import { testData_e2e_np0_prod } from '../test-data/e2eNP0ProdTestData';
+import { CartPage } from '../../page-objects/CartPage';
+import { CheckoutPage } from '../../page-objects/CheckoutPage';
+import { CommonPage } from '../../page-objects/CommonPage';
+import { HomePage } from '../../page-objects/HomePage';
+import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage';
+import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage';
+import { ProductListingPage } from '../../page-objects/ProductListingPage';
+import { getBaseUrl } from '../../globalSetup';
+import { testData_e2e_np0_prod } from '../../test-data/e2eNP0ProdTestData';
 
 test.describe("E2E NP0 Prod", () => {
     test.beforeEach(async ({ page }) => {
