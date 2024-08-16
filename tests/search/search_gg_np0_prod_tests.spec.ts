@@ -38,7 +38,7 @@ test.describe("Search Tests - GG NP0 Prod", () => {
         const searchTerms: string[] = ["push cart", "grip", "scotty cameron"]//, "golf shoes", "range finder", "putter grip", "golf shoe"]
         console.log({ searchTerms })
 
-        for (var searchTerm of searchTerms) {
+        for (let searchTerm of searchTerms) {
 
             await test.step('Search for a product: ' + searchTerm, async () => {
                 await homePage.searchForProductWithSlowTyping(searchTerm);
@@ -70,7 +70,7 @@ test.describe("Search Tests - GG NP0 Prod", () => {
         const searchTerms: string[] = ["push cart", "grip", "golf shoe"]//, "rangefinder", "putter grip", "scotty cameron"]
         console.log({ searchTerms })
 
-        for (var searchTerm of searchTerms) {
+        for (let searchTerm of searchTerms) {
 
             await test.step('Search for a product: ' + searchTerm, async () => {
                 await homePage.searchForProductWithSlowTypingNoEnter(searchTerm);
@@ -178,7 +178,7 @@ test.describe("Search Tests - GG NP0 Prod", () => {
             });
 
             await test.step('Validate 3 trending searches links', async () => {
-                let trendingSearches: string[] = await homePage.trendingSearchesLinks.allInnerTexts()
+                const trendingSearches: string[] = await homePage.trendingSearchesLinks.allInnerTexts()
                 console.log({ trendingSearches })
 
                 // loop through trending searches to validate plp page after navigation
