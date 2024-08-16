@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
-import { getBaseUrl } from '../globalSetup.js';
-import { HomePage } from '../page-objects/HomePage.js';
-import { CommonPage } from '../page-objects/CommonPage.js';
-import { ProductListingPage } from '../page-objects/ProductListingPage.js';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage.js';
-import { CartPage } from '../page-objects/CartPage.js';
-import { CheckoutPage } from '../page-objects/CheckoutPage.js';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage.js';
-import { AccountSignInPage } from '../page-objects/AccountSignInPage.js';
-import { testData_e2e_np0_qa } from '../test-data/e2eNP0QATestData.ts';
+import { getBaseUrl } from '../../globalSetup.js';
+import { HomePage } from '../../page-objects/HomePage.js';
+import { CommonPage } from '../../page-objects/CommonPage.js';
+import { ProductListingPage } from '../../page-objects/ProductListingPage.js';
+import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage.js';
+import { CartPage } from '../../page-objects/CartPage.js';
+import { CheckoutPage } from '../../page-objects/CheckoutPage.js';
+import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.js';
+import { AccountSignInPage } from '../../page-objects/AccountSignInPage.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 import { PassThrough } from 'stream';
 
 
