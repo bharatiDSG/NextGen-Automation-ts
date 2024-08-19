@@ -22,7 +22,7 @@ export class CartPage {
   readonly cartLabel: Locator;
   readonly productLabel: Locator;
   readonly quantityInputText: Locator;
-  readonly paypalIframe: any;
+  readonly paypalIframe: Locator;
   readonly paypalCheckoutButton: any;
   readonly cartProductQuantity: any;
   readonly cartProductName: any;
