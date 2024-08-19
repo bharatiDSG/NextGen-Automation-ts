@@ -4,9 +4,8 @@ import { CommonPage } from './CommonPage';
 import { AccountSignInPage } from './AccountSignInPage';
 import axios from 'axios';
 import { getBaseUrl } from '../globalSetup';
-import { error } from 'console';
 
-interface PriceDetails {
+export interface PriceDetails {
   getOrderSubtotal: () => string | undefined;
   getEstimatedShipping: () => string | undefined;
   getStorePickup: () => string | undefined;
