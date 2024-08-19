@@ -36,7 +36,7 @@ jobs:
           echo "Prod Checkout Regression Tests"
           npx playwright test tests/Checkout/Prod_Checkout_Regression_Tests.spec.ts
         env:
-            ENV: dsg_prod    
+            ENV: dsg_preview    
 
       - name: Upload Report     
         uses: actions/upload-artifact@v4
