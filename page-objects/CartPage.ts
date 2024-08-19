@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { FrameLocator, Locator, Page, expect } from '@playwright/test';
 import { getNextValueFromArray, removeAllMatchingItemsFromArray } from '../lib/functions';
 import { CommonPage } from './CommonPage';
 import { AccountSignInPage } from './AccountSignInPage';
@@ -22,7 +22,7 @@ export class CartPage {
   readonly cartLabel: Locator;
   readonly productLabel: Locator;
   readonly quantityInputText: Locator;
-  readonly paypalIframe: Locator;
+  readonly paypalIframe: FrameLocator;
   readonly paypalCheckoutButton: Locator;
   readonly cartProductQuantity: any;
   readonly cartProductName: any;
