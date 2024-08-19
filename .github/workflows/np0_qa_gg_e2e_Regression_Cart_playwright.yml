@@ -32,7 +32,7 @@ jobs:
       - name: E2E CART Regression NP0 GG
         run: |
           echo "Run E2E CART Regression tests"
-          npx playwright test tests/Cart_np0_qa_tests.spec.ts --grep "regression"
+          npx playwright test tests/cart/Cart_np0_qa_tests.spec.ts --grep "regression"
         env:
           ENV: gg_np0qa
 
