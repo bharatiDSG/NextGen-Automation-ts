@@ -11,7 +11,7 @@ import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.
 import { CommonPage } from '../../../page-objects/CommonPage.ts';
 import { AccountSignInPage } from '../../../page-objects/AccountSignInPage.ts';
 
-test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
+test.describe("PLP/SRLP GG Favorites Tests", () => {
 
     test.beforeEach(async ({ page }) => {
         const homePage = new HomePage(page);
@@ -25,7 +25,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
     });
 
-    test('PLP Favorites_Non SignedIn user', async ({ page }) => {
+    test('01. PLP Favorites_Non SignedIn user', async ({ page }) => {
 
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
@@ -71,14 +71,14 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
           await test.step('Sign In', async () => {
             console.log("User gets the SignIn window");
-            await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser,testData_smokePLP_prod.registeredUserPassword);            
+            await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser1,testData_smokePLP_prod.registeredUserPassword);            
             console.log("Validation successful");
         });
     });
 
 
 
-    test('PLP Favorites_E-code level_Add and Remove favorites', async ({ page }) => {
+    test('02. PLP Favorites_E-code level_Add and Remove favorites', async ({ page }) => {
 
       const homePage = new HomePage(page);
       const productListingPage = new ProductListingPage(page);
@@ -125,7 +125,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
         await test.step('Sign In', async () => {
           console.log("User gets the SignIn window");
-          await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser,testData_smokePLP_prod.registeredUserPassword);            
+          await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser1,testData_smokePLP_prod.registeredUserPassword);            
           console.log("SignIN successful");
           
     
@@ -156,7 +156,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
       });
 
 
-    test('PLP Favorites_Single/Multiple SKU validation', async ({ page }) => {
+    test.only('03. PLP Favorites_Single/Multiple SKU validation', async ({ page }) => {
 
           const homePage = new HomePage(page);
           const productListingPage = new ProductListingPage(page);
@@ -203,7 +203,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
     
             await test.step('Sign In', async () => {
               console.log("User gets the SignIn window");
-              await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser,testData_smokePLP_prod.registeredUserPassword);            
+              await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser2,testData_smokePLP_prod.registeredUserPassword);            
               console.log("SignIN successful");
               
         
@@ -303,7 +303,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
   });
 
-  test('PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
+  test('04. PLP Favorites_No_Attribute_product_Add and Remove favorites', async ({ page }) => {
 
     const homePage = new HomePage(page);
     const productListingPage = new ProductListingPage(page);
@@ -350,7 +350,7 @@ test.describe.serial("PLP/SRLP GG Favorites Tests", () => {
 
       await test.step('Sign In', async () => {
         console.log("User gets the SignIn window");
-        await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser,testData_smokePLP_prod.registeredUserPassword);            
+        await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser3,testData_smokePLP_prod.registeredUserPassword);            
         console.log("SignIN successful");
        
         
