@@ -122,7 +122,7 @@ export class ProductListingPage {
         this.myAccountListSectionFavoriteProductPrice = page.locator('div.price-text');
         this.myAccountCloseListPopPu = page.locator("div[aria-label='Close']")
         this.myAccountListSelectionFavoriteItemMesg = page.locator("span.hmf-subheader-l");
-        this.myAccountRemoveFavorites = page.locator("div[aria-label*='Remove']")
+        this.myAccountRemoveFavorites = page.locator("[class*='filled']")
 
 
         // shipping filters
