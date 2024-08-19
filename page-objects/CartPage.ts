@@ -24,7 +24,7 @@ export class CartPage {
   readonly quantityInputText: Locator;
   readonly paypalIframe: FrameLocator;
   readonly paypalCheckoutButton: Locator;
-  readonly cartProductQuantity: any;
+  readonly cartProductQuantity: Locator;
   readonly cartProductName: any;
   readonly cartProductPrice: any;
   readonly cartDetailsArrow: any;
