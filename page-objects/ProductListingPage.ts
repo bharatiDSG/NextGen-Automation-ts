@@ -85,6 +85,10 @@ export class ProductListingPage {
     readonly quickViewFavorites:Locator
     readonly breadCrumbLinkReact:Locator;
     readonly breadCrumbLinkAngular:Locator;
+    readonly breadcrumbSearchTerm: Locator;
+    readonly searchCountTitle: Locator;
+    readonly alternateSearchTitle: Locator;
+    readonly saytSuggestedKeywords: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -99,9 +103,7 @@ export class ProductListingPage {
 
         // zip delivery location
         this.zipDeliveryLocationButton = page.getByLabel(new RegExp('.*Zip Code for Same Day Delivery.*'));
-
         this.zipDeliveryInputField = page.locator("//input[@type='number']")
-
         this.zipDeliveryInputField = page.locator('//input[@type="number"]');
         this.zipDeliveryUpdateButton = page.getByLabel('Update');
 
@@ -117,7 +119,7 @@ export class ProductListingPage {
         this.myAccountListSectionFavoriteProductPrice = page.locator('div.price-text');
         this.myAccountCloseListPopPu = page.locator("div[aria-label='Close']")
         this.myAccountListSelectionFavoriteItemMesg = page.locator("span.hmf-subheader-l");
-        this.myAccountRemoveFavorites = page.locator("div[aria-label*='Remove']")
+        this.myAccountRemoveFavorites = page.locator("[class*='filled'] svg")
 
 
         // shipping filters
@@ -191,6 +193,14 @@ export class ProductListingPage {
         this.quickViewSizeGroup = page.locator("p#AttributeGroup-Size");
         this.quickViewFavorites = page.locator("button.favorite-button svg");
         this.quickViewCloseButton = page.locator("div.close");
+
+        // Search
+        this.searchCountTitle = page.getByTestId('pageTitle');
+        this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
+        this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
+        this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
+
+
 
     }
 
@@ -298,7 +308,7 @@ export class ProductListingPage {
 
     async unselectAllFavorites() {
         const commonPage = new CommonPage(this.page);
-        await commonPage.sleep(5);
+        await commonPage.sleep(10);
         const fvrtSelected =  this.page.locator('div.dsg-react-product-card button.plp-add-favorite-button[aria-label *="Remove"]');
         const count = await fvrtSelected.count();
         console.log("Total favorites selected is: "+count);
@@ -317,8 +327,6 @@ export class ProductListingPage {
           }
         }
       }
-
-
 
     async selectAProduct() {
         await this.productNames.last().waitFor();

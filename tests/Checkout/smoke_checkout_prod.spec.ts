@@ -1,12 +1,12 @@
 import { APIRequestContext, expect, test } from '@playwright/test';
 
-import { CartPage } from '../page-objects/CartPage';
-import { CheckoutPage } from '../page-objects/CheckoutPage';
-import { HomePage } from '../page-objects/HomePage';
-import { OrderConfirmationPage } from '../page-objects/OrderConfirmationPage';
-import { ProductDisplayPage } from '../page-objects/ProductDisplayPage';
-import { getBaseUrl } from '../globalSetup.ts';
-import { testData_smokeCheckout_prod } from '../test-data/smokeCheckoutProdTestData';
+import { CartPage } from '../../page-objects/CartPage.ts';
+import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
+import { HomePage } from '../../page-objects/HomePage.ts';
+import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
+import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage.ts';
+import { getBaseUrl } from '../../globalSetup.ts';
+import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
 
 test.describe("DSG Prod Smoke Checkout Tests", () => {
   // Request context is reused by all tests in the file.

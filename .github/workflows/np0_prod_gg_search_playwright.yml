@@ -1,42 +1,39 @@
-name: E2E GG NP0 QA Regression Cart playwright Tests
+name: NP0_PROD GG Search Playwright Tests
 
 on:
   schedule:
     - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
-#on:
-#  push:
-#    branches: [ "TA-748" ]
-#  workflow_dispatch:
-
 jobs:
   playwright:
-    name: 'E2E CART Regression GG NP0 QA Playwright'
+    name: 'NP0_PROD GG Search Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.46.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-          # - uses: actions/setup-node@v4
-          # with:
-        # node-version: 20
+      # - uses: actions/setup-node@v4
+        # with:
+          # node-version: 20
 
       - name: Install Dependencies
         run: |
           echo "Install dependencies from lock file"
           npm ci
+
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
-      - name: E2E CART Regression NP0 GG
-        run: |
-          echo "Run E2E CART Regression tests"
-          npx playwright test tests/cart/Cart_np0_qa_tests.spec.ts --grep "regression"
-        env:
-          ENV: gg_np0qa
 
-      - name: Upload Report
+      - name: NP0_PROD GG Search Tests
+        run: |
+          echo "Run E2E NP0 GG Search Tests"
+          npx playwright test search_gg_np0_prod_tests.spec.ts
+        env:
+            ENV: gg_np0prod    
+
+      - name: Upload Report      
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -51,13 +48,6 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in E2E CART GG NP0 Playwright  Regression Test`}"
+          overwrite: "{title: `** ALERT ** Failure in Search GG NP0 Playwright Test`}"     
 
-      #View report
-      - name: Publish CTRF Detailed Test Summary Results
-        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
-        if: always()
-      # View only failed summary report with Stack trace
-      - name: Publish CTRF Failed Test Summary Results
-        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
-        if: always()
+         

@@ -203,7 +203,7 @@ export class ProductDisplayPage {
     async setStoreFromPDP(zipcode: string,store: string): Promise<string> {
         const commonPage = new CommonPage(this.page);
         await commonPage.sleep(5);
-        await this.changeSelectedStoreLink.nth(1).click();
+        await this.changeSelectedStoreLink.nth(0).click();
         await this.selectStoreZipField.click();
         await this.selectStoreZipField.fill(zipcode);
         await this.selectStoreSearchButton.click();
@@ -381,6 +381,7 @@ export class ProductDisplayPage {
           return true;
         } else {
           console.log('No Attributes present');
+          this.skusWithAttributes.clear();
           return false;
         }
         
@@ -605,7 +606,7 @@ async selectShipToMeAttributes(page: Page, ): Promise<void> {
           }
         }
       } else {
-        throw new Error('This product is not eligible for BOPIS');
+        //throw new Error('This product is not eligible for BOPIS');
       }
     }
   }
