@@ -156,7 +156,7 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
       });
 
 
-    test.only('03. PLP Favorites_Single/Multiple SKU validation', async ({ page }) => {
+    test('03. PLP Favorites_Single/Multiple SKU validation', async ({ page }) => {
 
           const homePage = new HomePage(page);
           const productListingPage = new ProductListingPage(page);
