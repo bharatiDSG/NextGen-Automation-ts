@@ -3116,7 +3116,7 @@ test.describe("Prod Checkout tests", () => {
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
-        let productNamesFromCartPage:String[];
+        let productNamesFromCartPage: string[];
 
         await test.step('When we search for "hydroflask" keyword in the search box', async () => {
             await homePage.searchForProduct("hydroflask")
@@ -3258,8 +3258,8 @@ test.describe("Prod Checkout tests", () => {
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
-        let productNamesFromCartPage:String[];
-        let productNamesFromCartPageAfterChange:String[];
+        let productNamesFromCartPage: string[];
+        let productNamesFromCartPageAfterChange: string[];
 
         await test.step('When we search for "yeti tumbler" keyword in the search box', async () => {
             await homePage.searchForProduct("yeti tumbler")
@@ -3418,8 +3418,8 @@ test.describe("Prod Checkout tests", () => {
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
-        let productNamesFromCartPage:String[];
-        let productNamesFromCartPageAfterChange:String[];
+        let productNamesFromCartPage: string[];
+        let productNamesFromCartPageAfterChange: string[];
 
         await test.step('When we search for "nike dri-fit headband" keyword in the search box', async () => {
             await homePage.searchForProduct("nike dri-fit headband")
