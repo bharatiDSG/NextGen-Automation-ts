@@ -1,12 +1,11 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { FrameLocator, Locator, Page, expect } from '@playwright/test';
 import { getNextValueFromArray, removeAllMatchingItemsFromArray } from '../lib/functions';
 import { CommonPage } from './CommonPage';
 import { AccountSignInPage } from './AccountSignInPage';
 import axios from 'axios';
 import { getBaseUrl } from '../globalSetup';
-import { error } from 'console';
 
-interface PriceDetails {
+export interface PriceDetails {
   getOrderSubtotal: () => string | undefined;
   getEstimatedShipping: () => string | undefined;
   getStorePickup: () => string | undefined;
@@ -23,13 +22,13 @@ export class CartPage {
   readonly cartLabel: Locator;
   readonly productLabel: Locator;
   readonly quantityInputText: Locator;
-  readonly paypalIframe: any;
-  readonly paypalCheckoutButton: any;
-  readonly cartProductQuantity: any;
-  readonly cartProductName: any;
-  readonly cartProductPrice: any;
-  readonly cartDetailsArrow: any;
-  readonly cartProductColor: any;
+  readonly paypalIframe: FrameLocator;
+  readonly paypalCheckoutButton: Locator;
+  readonly cartProductQuantity: Locator;
+  readonly cartProductName: Locator;
+  readonly cartProductPrice: Locator;
+  readonly cartDetailsArrow: Locator;
+  readonly cartProductColor: Locator;
   readonly cartAlertMessage: any;
   readonly cartConfirmationHeader: any;
   readonly cartGiftCardCheckbox: any;
