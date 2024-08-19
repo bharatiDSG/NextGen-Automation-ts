@@ -15,7 +15,7 @@ export class CommonPage {
 
     async addCookieToBlockMedallia(): Promise<void> {
         await this.page.evaluate(() => {
-            document.cookie = "BlockedTags=Medallia";
+            document.cookie = 'BlockedTags=Medallia';
         });
     }
 
@@ -25,7 +25,7 @@ export class CommonPage {
 
     async addRewriteFlagToUrl(): Promise<void> {
         const currentUrl = this.page.url();
-        console.log("URL actual:", currentUrl);
+        console.log('URL actual:', currentUrl);
         const rewriteFlagUrl = currentUrl + '?flag_useQVProductService=true&flag_useQVProductTemplate=true';
         console.log('Rewrite flag added: ' + rewriteFlagUrl);
         await this.page.goto(rewriteFlagUrl);
@@ -72,25 +72,21 @@ export class CommonPage {
         return isCentered;
     }
 
-    async handlePromotionalPopup(): Promise<void>
-    {
+    async handlePromotionalPopup(): Promise<void> {
 
-        try{
-            const promoFrame=  this.page.frameLocator("xpath=//iframe[@id='attentive_creative']");
+        try {
+            const promoFrame = this.page.frameLocator("xpath=//iframe[@id='attentive_creative']");
             await this.sleep(3);
             await promoFrame.getByTestId('closeIcon').click();
-            console.log("Promo window closed");
-        }
-        catch(err)
-        {
-            console.log("No promo window found");
+            console.log('Promo window closed');
+        } catch (err) { // eslint-disable-line
+            console.log('No promo window found');
         }
     }
 
-    async waitUntilPageLoads(): Promise<void>
-    {
-        await this.page.waitForLoadState("load");
-        await this.page.waitForLoadState("networkidle");
+    async waitUntilPageLoads(): Promise<void> {
+        await this.page.waitForLoadState('load');
+        await this.page.waitForLoadState('networkidle');
     }
 
     async closePromoPopUp() {
@@ -124,8 +120,8 @@ export class CommonPage {
         await this.page.addLocatorHandler(
             this.page.frameLocator('iframe[title="Sign Up via Text for Offers"]').locator('#content'),
             async () => {
-                this.page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click()
-                console.log("Popup frame closed - Sign Up via Text for Offers")
+                this.page.frameLocator('iframe[title="Sign Up via Text for Offers"]').getByTestId('closeIcon').click();
+                console.log('Popup frame closed - Sign Up via Text for Offers');
             }
         );
     }
