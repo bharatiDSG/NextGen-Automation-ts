@@ -27,7 +27,7 @@ export class CartPage {
   readonly cartProductQuantity: Locator;
   readonly cartProductName: Locator;
   readonly cartProductPrice: Locator;
-  readonly cartDetailsArrow: any;
+  readonly cartDetailsArrow: Locator;
   readonly cartProductColor: any;
   readonly cartAlertMessage: any;
   readonly cartConfirmationHeader: any;
