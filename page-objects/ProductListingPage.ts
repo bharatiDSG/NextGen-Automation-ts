@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { expect, test } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
@@ -257,7 +257,6 @@ export class ProductListingPage {
     }
 
     async verifyFavoritesPresentInMyAccounts(itemVal: string){
-         const commonPage = new CommonPage(this.page);
          const plpProductStyle =  this.page.locator("div.dsg-react-product-card:nth-of-type(" + itemVal + ")  div.rs-fswatch li");
          await plpProductStyle.nth(1).click();
          const index = +itemVal
