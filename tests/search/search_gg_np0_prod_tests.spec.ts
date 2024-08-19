@@ -20,10 +20,14 @@ test.describe("Search Tests - GG NP0 Prod", () => {
 
         // Go to baseUrl set in .env or defaults to dsg_prod
         await test.step('Navigate to homepage', async () => {
-            await homePage.goToHomePage(getBaseUrl() + "homr");
-            console.log("URL: " + getBaseUrl() + "homr");
+            if (process.env.ENV != 'gg_prod') {
+                await homePage.goToHomePage(getBaseUrl() + "homr");
+                console.log("URL: " + getBaseUrl() + "homr");
+            } else {
+                await homePage.goToHomePage(getBaseUrl());
+                console.log("URL: " + getBaseUrl());
+            }
         });
-        
     });
 
 
@@ -32,14 +36,16 @@ test.describe("Search Tests - GG NP0 Prod", () => {
         const productListingPage = new ProductListingPage(page)
 
         const searchTerms: string[] = ["push cart", "grip", "scotty cameron"]//, "golf shoes", "range finder", "putter grip", "golf shoe"]
+        console.log({ searchTerms })
 
-        for (var searchTerm of searchTerms) {
+        for (let searchTerm of searchTerms) {
 
             await test.step('Search for a product: ' + searchTerm, async () => {
                 await homePage.searchForProductWithSlowTyping(searchTerm);
             });
 
             await test.step("Validate search results: " + searchTerm, async () => {
+                // validate products display
                 await productListingPage.productNames.last().waitFor();
 
                 // validate search term
@@ -52,9 +58,6 @@ test.describe("Search Tests - GG NP0 Prod", () => {
                 await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.")
                 let title = await productListingPage.searchCountTitle.innerText()
                 console.log("title: " + title)
-
-                // Validate a product?
-                await productListingPage.productNames.last().waitFor();
             });
         };
     });
@@ -65,13 +68,14 @@ test.describe("Search Tests - GG NP0 Prod", () => {
         const productListingPage = new ProductListingPage(page)
 
         const searchTerms: string[] = ["push cart", "grip", "golf shoe"]//, "rangefinder", "putter grip", "scotty cameron"]
+        console.log({ searchTerms })
 
-        for (var searchTerm of searchTerms) {
+        for (let searchTerm of searchTerms) {
 
             await test.step('Search for a product: ' + searchTerm, async () => {
                 await homePage.searchForProductWithSlowTypingNoEnter(searchTerm);
             });
-    
+
             await test.step("Validate suggested search term: " + searchTerm, async () => {
                 await expect(productListingPage.saytSuggestedKeywords.first()).toContainText(searchTerm)
                 let saytText = await productListingPage.saytSuggestedKeywords.first().innerText()
@@ -81,9 +85,12 @@ test.describe("Search Tests - GG NP0 Prod", () => {
             await test.step("Click on first sayt suggestion for: " + searchTerm, async () => {
                 await page.getByRole('button', { name: searchTerm, exact: true }).click()
             });
-           
+
             await test.step("Validate search results: " + searchTerm, async () => {
+                // validate products display
                 await productListingPage.productNames.last().waitFor();
+
+                // validate search term
                 await expect(productListingPage.breadcrumbSearchTerm).toContainText(searchTerm)
                 let text = await productListingPage.breadcrumbSearchTerm.allTextContents()
                 console.log("text: " + text)
@@ -122,7 +129,6 @@ test.describe("Search Tests - GG NP0 Prod", () => {
             await expect(productListingPage.searchCountTitle).toContainText("Please check for any spelling errors or try more general keywords.")
             let title = await productListingPage.searchCountTitle.innerText()
             console.log("title: " + title)
-
         });
     });
 
@@ -151,19 +157,60 @@ test.describe("Search Tests - GG NP0 Prod", () => {
             let title = await productListingPage.searchCountTitle.innerText()
             console.log("title: " + title)
 
-            // validate alternate search title - does not exist in np0_prod but does exist in Prod
-            // await expect(productListingPage.alternateSearchTitle).toContainText(incorrectSearchTerm)
-            // let alternateTitle = await productListingPage.alternateSearchTitle.innerText()
-            // console.log("alternateTitle: " + alternateTitle)
+            // validate alternate search title if env is gg_prod - does not exist in np0_prod but does exist in Prod
+            if (process.env.ENV == 'gg_prod') {
+                await expect(productListingPage.alternateSearchTitle).toContainText(incorrectSearchTerm)
+                let alternateTitle = await productListingPage.alternateSearchTitle.innerText()
+                console.log("alternateTitle: " + alternateTitle)
+            };
         });
     });
 
 
     // Trending search links do not display in np0_prod
-    test.skip('05: Search - Trending Search Links', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const productListingPage = new ProductListingPage(page)
+    if (process.env.ENV == 'gg_prod') {
+        test('05: Search - Trending Search Links', async ({ page }) => {
+            const homePage = new HomePage(page);
+            const productListingPage = new ProductListingPage(page)
 
-        await page.pause()
-    });
+            await test.step('Validate trending searches text on home screen', async () => {
+                await expect(homePage.trendingSearchesText).toBeVisible()
+            });
+
+            await test.step('Validate 3 trending searches links', async () => {
+                const trendingSearches: string[] = await homePage.trendingSearchesLinks.allInnerTexts()
+                console.log({ trendingSearches })
+
+                // loop through trending searches to validate plp page after navigation
+                let count = 0;
+                for (let [index, trendingSearch] of trendingSearches.entries()) {
+                    await test.step('Validate trending searches links: ' + trendingSearch, async () => {
+                        console.log(index + ": " + trendingSearch)
+                        await page.locator('[class="button-navigation"]').nth(index).click()
+                        await productListingPage.productNames.last().waitFor();
+
+                        // Update trending search name for validating the following page
+                        if (trendingSearch.includes('Savings')) {
+                            trendingSearch = "This Week's Deals"
+                        }
+
+                        // validate search count title
+                        await expect(productListingPage.searchCountTitle).toContainText(trendingSearch)
+                        await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.")
+                        let title = await productListingPage.searchCountTitle.innerText()
+                        console.log("title: " + title)
+
+                        // Go back to home page
+                        await homePage.navigateToHomePageLink.click();
+                    });
+
+                    // Testing first 3 trending searches only - break after 3
+                    count++;
+                    if (count > 2) {
+                        break;
+                    }
+                };
+            });
+        });
+    };
 });
