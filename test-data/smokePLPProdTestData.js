@@ -16,6 +16,8 @@ export const testData_smokePLP_prod = {
     securityCode: '737',
     usernameOrderAPI: 'sean.clawson@dcsg.com',
     passwordOrderAPI: 'July@2021',
-    registeredUser:'AutomationTestingDSG@gmail.com',
-    registeredUserPassword:'Test1234!'
+    registeredUser1:'AutomationTestingDSG@gmail.com',
+    registeredUserPassword:'Test1234!',
+    registeredUser2:'automationtestingdsg+favorites1@gmail.com',
+    registeredUser3:'automationtestingdsg+favorites2@gmail.com'
 };

@@ -86,7 +86,7 @@ test.describe('E2E NP0 QA', () => {
 
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart pricing  details');
-            await homePage.searchForProduct(testData_e2e_np0_qa.sku);
+            await homePage.searchForProduct(testData_e2e_np0_qa.sku),
                 await page.waitForLoadState('load');
             await commonPage.waitUntilPageLoads();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
@@ -107,7 +107,7 @@ test.describe('E2E NP0 QA', () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
             console.log('Going to the Cart');
-            console.log('Validation successful');  
+            console.log('Validation successful');
 
         });
 
@@ -135,7 +135,7 @@ test.describe('E2E NP0 QA', () => {
             console.log('Order sub total validated');
 
             await cartPage.updateQuantity('10');
-            console.log('Product quantity updated');  
+            console.log('Product quantity updated');
 
             // Get Cart Price Details Object updated
             const cartPriceDetailsObjectupdated = await cartPage.getCartPriceDetailsObject();
@@ -145,8 +145,8 @@ test.describe('E2E NP0 QA', () => {
             const estimatedShippingFree = cartPriceDetailsObjectupdated.getEstimatedShipping();
             console.log({ estimatedShippingFree });
             expect(estimatedShippingFree).toBe('Free');
-            console.log('Estimateed shipping validated');  
-            console.log('Validation successful');  
+            console.log('Estimateed shipping validated');
+            console.log('Validation successful');
 
         });
 
@@ -181,7 +181,7 @@ test.describe('E2E NP0 QA', () => {
             const storeName = await productDisplayPage.setStoreFromPDP(testData_e2e_np0_qa.zipCode, 'Robinson');
             await productDisplayPage.selectProductByColor.click();
             console.log('Store setup done');
-            
+
 
         });
 
@@ -365,7 +365,7 @@ test.describe('E2E NP0 QA', () => {
             await commonPage.waitUntilPageLoads();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
-            
+
         });
 
 

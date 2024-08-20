@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 
+
 jobs:
   playwright:
     name: 'E2E GG NP0 Prod Plp Favorites playwright Tests'
@@ -57,5 +58,3 @@ jobs:
       - name: Publish CTRF Failed Test Summary Results
         run: npx github-actions-ctrf failed ctrf/ctrf-report.json
         if: always()
-
-
