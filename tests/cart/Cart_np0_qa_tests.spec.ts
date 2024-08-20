@@ -68,7 +68,7 @@ test.describe("E2E NP0 QA", () => {
 
 
         await test.step('Verify the product quantity is 1', async () => {
-            await cartPage.verifyProductQuantity(1,'1');
+            await cartPage.verifyProductQuantity(1, '1');
             console.log("Product quantity verified");
 
         });
@@ -107,7 +107,7 @@ test.describe("E2E NP0 QA", () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
             console.log("Going to the Cart");
-            console.log("Validation successful");  
+            console.log("Validation successful");
 
         });
 
@@ -135,7 +135,7 @@ test.describe("E2E NP0 QA", () => {
             console.log("Order sub total validated");
 
             await cartPage.updateQuantity("10");
-            console.log("Product quantity updated");  
+            console.log("Product quantity updated");
 
             // Get Cart Price Details Object updated
             const cartPriceDetailsObjectupdated = await cartPage.getCartPriceDetailsObject()
@@ -145,8 +145,8 @@ test.describe("E2E NP0 QA", () => {
             const estimatedShippingFree = cartPriceDetailsObjectupdated.getEstimatedShipping()
             console.log({ estimatedShippingFree })
             expect(estimatedShippingFree).toBe('Free')
-            console.log("Estimateed shipping validated");  
-            console.log("Validation successful");  
+            console.log("Estimateed shipping validated");
+            console.log("Validation successful");
 
         });
 
@@ -181,7 +181,7 @@ test.describe("E2E NP0 QA", () => {
             const storeName = await productDisplayPage.setStoreFromPDP(testData_e2e_np0_qa.zipCode, "Robinson")
             await productDisplayPage.selectProductByColor.click();
             console.log("Store setup done");
-            
+
 
         });
 
@@ -239,7 +239,7 @@ test.describe("E2E NP0 QA", () => {
         });
 
         //updating the quantity-1st time
-        await cartPage.updateProductQuantity(1,'10');
+        await cartPage.updateProductQuantity(1, '10');
         await commonPage.sleep(5);
         await cartPage.verifyPShippingMedium('sth');
         console.log("Vquantity updated to 10");
@@ -254,10 +254,10 @@ test.describe("E2E NP0 QA", () => {
         expect(estimatedShippingFree).toBe('Free')
 
         //updating the quantity-2nd time
-        await cartPage.updateProductQuantity(1,'100');
+        await cartPage.updateProductQuantity(1, '100');
         console.log("Vquantity updated to 100");
         await commonPage.sleep(5);
-        await cartPage.verifyProductQuantity(1,'99');
+        await cartPage.verifyProductQuantity(1, '99');
         await commonPage.sleep(5);
         const alertMessage1 = await cartPage.cartAlertMessage.nth(0).innerText()
         expect(alertMessage1.trim()).toContain('unavailable. We have updated the quantity to the maximum available.');
@@ -265,7 +265,7 @@ test.describe("E2E NP0 QA", () => {
 
 
         //updating the quantity-3rd time
-        await cartPage.updateProductQuantity(1,'0');
+        await cartPage.updateProductQuantity(1, '0');
         console.log("Quantity updated to 0");
         await commonPage.sleep(20);
         const alertMessage2 = await cartPage.cartConfirmationHeader.innerText()
@@ -327,21 +327,21 @@ test.describe("E2E NP0 QA", () => {
 
 
         //updating the quantity-1st time
-        await cartPage.updateProductQuantity(1,'10');
+        await cartPage.updateProductQuantity(1, '10');
         await commonPage.sleep(10);
         await cartPage.verifyPShippingMedium('bopis');
 
         //updating the quantity-2nd time
-        await cartPage.updateProductQuantity(1,'100');
+        await cartPage.updateProductQuantity(1, '100');
         await commonPage.sleep(10);
-        await cartPage.verifyProductQuantity(1,'99');
+        await cartPage.verifyProductQuantity(1, '99');
         await cartPage.verifyPShippingMedium('bopis');
         const alertMessage1 = await cartPage.cartAlertMessage.innerText()
         expect(alertMessage1.trim()).toContain('unavailable. We have updated the quantity to the maximum available.');
 
 
         //updating the quantity-3rd time
-        await cartPage.updateProductQuantity(1,'0');
+        await cartPage.updateProductQuantity(1, '0');
         const alertMessage2 = await cartPage.cartConfirmationHeader.innerText()
         expect(alertMessage2.trim()).toContain('Do you want to remove this item from your Cart?')
         console.log("Pricing and quantity successfuly validated");
@@ -365,7 +365,7 @@ test.describe("E2E NP0 QA", () => {
             await commonPage.waitUntilPageLoads();
             await expect(productDisplayPage.addToCartButton).toBeVisible()
             await productDisplayPage.selectProductByColor.click();
-            
+
         });
 
 
@@ -531,7 +531,7 @@ test.describe("E2E NP0 QA", () => {
 
         });
 
-        await cartPage.updateProductQuantity(1,'0');
+        await cartPage.updateProductQuantity(1, '0');
         const alertMessage2 = await cartPage.cartConfirmationHeader.innerText()
         expect(alertMessage2.trim()).toContain('Do you want to remove this item from your Cart?')
 
