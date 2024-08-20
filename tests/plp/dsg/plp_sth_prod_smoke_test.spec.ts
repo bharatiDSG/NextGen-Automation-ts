@@ -6,29 +6,29 @@ import { HomePage } from '../../../page-objects/HomePage.ts';
 import { OrderConfirmationPage } from '../../../page-objects/OrderConfirmationPage.ts';
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
 import { ProductListingPage } from '../../../page-objects/ProductListingPage.ts';
-import { getBaseUrl } from '../../../globalSetup.ts'
+import { getBaseUrl } from '../../../globalSetup.ts';
 import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 
-test.describe("PLP/SRLP DSG Smoke Tests", () => {
+test.describe('PLP/SRLP DSG Smoke Tests', () => {
     test.beforeEach(async ({ page, context }) => {
       const homePage = new HomePage(page);
 
       // Close popup(frame) listener
-      const closePopup = page.locator('#slideoutCloseButton')
+      const closePopup = page.locator('#slideoutCloseButton');
       page.once('frameattached', async data => {
-        console.log("listening for popup frame once")
+        console.log('listening for popup frame once');
         if (await closePopup.isVisible({ timeout: 20000 })) {
-          await closePopup.click({ timeout: 20000 })
-          console.log("popup closed")
+          await closePopup.click({ timeout: 20000 });
+          console.log('popup closed');
         } else {
-          console.log("no popup displayed")
+          console.log('no popup displayed');
         }
       });
 
       //add homr to url if running in preview
       if(getBaseUrl().includes('preview')){
-        await homePage.goToHomePage(getBaseUrl() + "homr");
-        console.log("URL: " + getBaseUrl() + "homr");
+        await homePage.goToHomePage(getBaseUrl() + 'homr');
+        console.log('URL: ' + getBaseUrl() + 'homr');
       }
     });
 
@@ -40,18 +40,18 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         // Given we are on "dsg" page
         await test.step('Given we are on "dsg" page', async () => {
           await homePage.goToHomePage(getBaseUrl());
-          console.log("URL: " + getBaseUrl());
+          console.log('URL: ' + getBaseUrl());
         });
 
         // When we search for "mens polo" keyword in the search box
         await test.step('When we search for "mens polo" keyword in the search box', async () => {
-          await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1)
+          await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1);
         });
 
         // And we set zip code to "15108"
         await test.step('And we set zip code to "15108"', async () => {
-          await productListingPage.setDeliveryZipPLP(testData_smokePLP_prod.zipCode)
-          await expect(productListingPage.zipDeliveryLocationButton.first()).toHaveText(new RegExp('.*'+testData_smokePLP_prod.zipCode+'.*'))
+          await productListingPage.setDeliveryZipPLP(testData_smokePLP_prod.zipCode);
+          await expect(productListingPage.zipDeliveryLocationButton.first()).toHaveText(new RegExp('.*'+testData_smokePLP_prod.zipCode+'.*'));
         });
 
         // And we see product card descriptions contain "polo"
@@ -88,11 +88,11 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
           if(await productListingPage.rightChevronNextButtonAngular.first().isVisible()){
             await productListingPage.rightChevronNextButtonAngular.first().click();
             await page.waitForTimeout(4000); // waits for 4 seconds
-            expect(productListingPage.highlightedPageNumberAngular).toHaveText("2");
+            await expect(productListingPage.highlightedPageNumberAngular).toHaveText('2');
           } else {
             await productListingPage.rightChevronNextButtonReact.first().click();
             await page.waitForTimeout(4000); // waits for 4 seconds
-            expect(productListingPage.highlightedPageNumberReact).toHaveText("2");
+            await expect(productListingPage.highlightedPageNumberReact).toHaveText('2');
           }
         });
 
@@ -100,10 +100,10 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         await test.step('And we apply the "Ship" shipping option filter', async () => {
           if(await productListingPage.shipFilterButtonAngular.first().isVisible()){
             await productListingPage.shipFilterButtonAngular.first().click();
-            expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
+            await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
           } else {
             await productListingPage.shipFilterButtonReact.click();
-            expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
+            await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
           }
         });
 
@@ -113,12 +113,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
             await productListingPage.sizeAccordionFilterButtonAngular.first().click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.sizeFilterValueAngular.first().click();
-            expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('L'));
+            await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('L'));
           } else {
             await productListingPage.sizeAccordionFilterButtonReact.click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.sizeFilterValueReact.first().click();
-            expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('L'));
+            await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('L'));
           }
         });
 
@@ -128,12 +128,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
             await productListingPage.saleAccordionFilterButtonAngular.first().click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.saleFilterValueAngular.click();
-            expect(productListingPage.filterChipsAngular.nth(1)).toContainText(new RegExp('Sale'));
+            await expect(productListingPage.filterChipsAngular.nth(1)).toContainText(new RegExp('Sale'));
           } else {
             await productListingPage.saleAccordionFilterButtonReact.click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.saleFilterValueReact.click();
-            expect(productListingPage.filterChipsReact.nth(1)).toContainText(new RegExp('Sale'));
+            await expect(productListingPage.filterChipsReact.nth(1)).toContainText(new RegExp('Sale'));
           }
         });
 
@@ -143,11 +143,11 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
             await productListingPage.sortOptionsAccordionButtonAngular.click();
             await productListingPage.sortOptionsSelectionAngular.selectOption('Price Low to High');
             // await productListingPage.sortOptionsSelectionAngular.filter({ hasText: 'Price Low to High' }).click();
-            expect(productListingPage.sortSelectedAngular).toContainText('Price Low to High');
+            await expect(productListingPage.sortSelectedAngular).toContainText('Price Low to High');
           } else {
             await productListingPage.sortOptionsAccordionButtonReact.click();
             await productListingPage.sortOptionsSelectionReact.filter({ hasText: 'Price Low to High' }).click();
-            expect(productListingPage.sortSelectedReact).toContainText('Price Low to High');
+            await expect(productListingPage.sortSelectedReact).toContainText('Price Low to High');
           }
         });
 
@@ -175,12 +175,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // And we should see text "Keep Shopping"
         await test.step('And we should see text "Keep Shopping"', async () => {
-          expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+          await expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
         });
 
         // And we should see text "View Cart"
         await test.step('And we should see text "View Cart"', async () => {
-          expect (productListingPage.quickviewViewCartButton).toBeVisible();
+          await expect (productListingPage.quickviewViewCartButton).toBeVisible();
         });
     });
 
@@ -190,23 +190,23 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-          await homePage.goToHomePage(getBaseUrl() + "/f/mens-polo-shirts");
-          console.log("URL: " + getBaseUrl());
+          await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          console.log('URL: ' + getBaseUrl());
         });
 
         // And we see breadcrumb links at the top of the PLP page
         await test.step('And we see breadcrumb links at the top of the PLP page', async () => {
           if(await productListingPage.breadCrumbLinkAngular.isVisible()){
-            expect(productListingPage.breadCrumbLinkAngular).toContainText('Men\'s Shirts & Tops');
+            await expect(productListingPage.breadCrumbLinkAngular).toContainText('Men\'s Shirts & Tops');
           } else {
-            expect(productListingPage.breadCrumbLinkReact).toContainText('Men\'s Shirts & Tops');
+            await expect(productListingPage.breadCrumbLinkReact).toContainText('Men\'s Shirts & Tops');
           }
         });
 
         // And we set zip code to "15108"
         await test.step('And we set zip code to "15108"', async () => {
-          await productListingPage.setDeliveryZipPLP(testData_smokePLP_prod.zipCode)
-          await expect(productListingPage.zipDeliveryLocationButton.first()).toHaveText(new RegExp('.*'+testData_smokePLP_prod.zipCode+'.*'))
+          await productListingPage.setDeliveryZipPLP(testData_smokePLP_prod.zipCode);
+          await expect(productListingPage.zipDeliveryLocationButton.first()).toHaveText(new RegExp('.*'+testData_smokePLP_prod.zipCode+'.*'));
         });
 
         // And we see product card descriptions contain "polo"
@@ -243,11 +243,11 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
           if(await productListingPage.rightChevronNextButtonAngular.first().isVisible()){
             await productListingPage.rightChevronNextButtonAngular.first().click();
             await page.waitForTimeout(4000); // waits for 4 seconds
-            expect(productListingPage.highlightedPageNumberAngular).toHaveText("2");
+            await expect(productListingPage.highlightedPageNumberAngular).toHaveText('2');
           } else {
             await productListingPage.rightChevronNextButtonReact.first().click();
             await page.waitForTimeout(4000); // waits for 4 seconds
-            expect(productListingPage.highlightedPageNumberReact).toHaveText("2");
+            await expect(productListingPage.highlightedPageNumberReact).toHaveText('2');
           }
         });
 
@@ -255,10 +255,10 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         await test.step('And we apply the "Ship" shipping option filter', async () => {
           if(await productListingPage.pickupFilterButtonAngular.first().isVisible()){
             await productListingPage.pickupFilterButtonAngular.first().click();
-            expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup.*'));
+            await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup.*'));
           } else {
             await productListingPage.pickupFilterButtonReact.click();
-            expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Pickup.*'));
+            await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Pickup.*'));
           }
         });
 
@@ -268,12 +268,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
             await productListingPage.sizeAccordionFilterButtonAngular.first().click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.sizeFilterValueAngular.first().click();
-            expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('L'));
+            await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('L'));
           } else {
             await productListingPage.sizeAccordionFilterButtonReact.click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.sizeFilterValueReact.first().click();
-            expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('L'));
+            await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('L'));
           }
         });
 
@@ -283,12 +283,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
             await productListingPage.saleAccordionFilterButtonAngular.first().click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.saleFilterValueAngular.click();
-            expect(productListingPage.filterChipsAngular.nth(1)).toContainText(new RegExp('Sale'));
+            await expect(productListingPage.filterChipsAngular.nth(1)).toContainText(new RegExp('Sale'));
           } else {
             await productListingPage.saleAccordionFilterButtonReact.click();
             await page.waitForTimeout(2000); // waits for 2 seconds
             await productListingPage.saleFilterValueReact.click();
-            expect(productListingPage.filterChipsReact.nth(1)).toContainText(new RegExp('Sale'));
+            await expect(productListingPage.filterChipsReact.nth(1)).toContainText(new RegExp('Sale'));
           }
         });
 
@@ -297,11 +297,11 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
           if(await productListingPage.sortOptionsAccordionButtonAngular.isVisible()){
             await productListingPage.sortOptionsAccordionButtonAngular.click();
             await productListingPage.sortOptionsSelectionAngular.selectOption('Price Low to High');
-            expect(productListingPage.sortSelectedAngular).toContainText('Price Low to High');
+            await expect(productListingPage.sortSelectedAngular).toContainText('Price Low to High');
           } else {
             await productListingPage.sortOptionsAccordionButtonReact.click();
             await productListingPage.sortOptionsSelectionReact.filter({ hasText: 'Price Low to High' }).click();
-            expect(productListingPage.sortSelectedReact).toContainText('Price Low to High');
+            await expect(productListingPage.sortSelectedReact).toContainText('Price Low to High');
           }
         });
 
@@ -329,12 +329,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // And we should see text "Keep Shopping"
         await test.step('And we should see text "Keep Shopping"', async () => {
-          expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+          await expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
         });
 
         // And we should see text "View Cart"
         await test.step('And we should see text "View Cart"', async () => {
-          expect (productListingPage.quickviewViewCartButton).toBeVisible();
+          await expect (productListingPage.quickviewViewCartButton).toBeVisible();
         });
     });
 });
