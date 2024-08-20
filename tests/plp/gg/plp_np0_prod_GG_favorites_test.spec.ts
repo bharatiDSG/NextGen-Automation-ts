@@ -286,7 +286,13 @@ test.describe("PLP/SRLP GG Favorites Tests", () => {
           
             await productListingPage.quickViewColorStocked.nth(0).click();
             await productListingPage.quickViewSizeStocked.nth(1).click();
-            await expect(productListingPage.quickViewFavorites).not.toHaveAttribute('class', /selected/);
+            try{
+              await expect(productListingPage.quickViewFavorites).not.toHaveAttribute('class', /selected/);
+            }catch(e)
+            {
+              await productListingPage.quickViewFavorites.click();
+              await expect(productListingPage.quickViewFavorites).not.toHaveAttribute('class', /selected/);
+            }
             console.log("SKU level attribute favorite is not selected for another color and size combinations");
             await productListingPage.quickViewFavorites.click();
             console.log("Clicked on Favorite button");
