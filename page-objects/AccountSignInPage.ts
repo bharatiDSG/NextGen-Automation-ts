@@ -63,11 +63,11 @@ export class AccountSignInPage {
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
         this.summaryLink = page.getByRole('link', { name: 'Summary' });
-        this.continueButtonModern = page.getByRole('button', { name: 'Continue', exact: true })
+        this.continueButtonModern = page.getByRole('button', { name: 'Continue', exact: true });
     }
 
     async signIn(email: string, password: string): Promise<void> {
-        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**");
+        await this.page.waitForURL('https://sso.dickssportinggoods.com/u/login**');
 
         await expect(this.signInPageHeader).toBeVisible();
         await expect(this.signInEmailField).toBeVisible();
@@ -85,15 +85,15 @@ export class AccountSignInPage {
         await this.signInButton.click();
 
         // Verify account page and links
-        await this.page.waitForURL(getBaseUrl() + "MyAccount/AccountSummary");
+        await this.page.waitForURL(getBaseUrl() + 'MyAccount/AccountSummary');
         await expect(this.accountUserInfo).toBeVisible();
         await expect(this.summaryLink).toBeVisible();
 
-        console.log("Sign In Successful for: " + email);
+        console.log('Sign In Successful for: ' + email);
     }
 
     async signInBatGenie(email: string, password: string): Promise<void> {
-        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**");
+        await this.page.waitForURL('https://sso.dickssportinggoods.com/u/login**');
 
         await expect(this.signInPageHeader).toBeVisible();
         await expect(this.signInEmailField).toBeVisible();
@@ -113,7 +113,7 @@ export class AccountSignInPage {
         // Verify no error since we can't validate bat genie page
         await expect(this.passwordError).not.toBeVisible();
 
-        console.log("Sign In Successful for: " + email);
+        console.log('Sign In Successful for: ' + email);
     }
 
     async forgotPassword(email: string): Promise<void> {
@@ -130,7 +130,7 @@ export class AccountSignInPage {
     }
 
     async extractChangeEmailPasswordLink(emailServerId: string, resetEmail: string, dateSent: Date): Promise<string> {
-        const mailosaur = new MailosaurClient("Yllvkk64VJxnA9L");
+        const mailosaur = new MailosaurClient('Yllvkk64VJxnA9L');
 
         // Connect to Mailosaur, and wait for that email to arrive
         const email = await mailosaur.messages.get(emailServerId, {
@@ -139,24 +139,24 @@ export class AccountSignInPage {
 
         // Validate email is recent and correct subject
         if (email.received && dateSent < email.received) {
-            expect(email.subject).toBe("Reset your password");
+            expect(email.subject).toBe('Reset your password');
 
             // Get the reset link (TODO: use text instead of index in the future)
             if (email.html && email.html.links && email.html.links[5]) {
                 const passwordResetLink = email.html.links[5].href as string;
-                console.log("Reset Link: " + passwordResetLink);
+                console.log('Reset Link: ' + passwordResetLink);
                 return passwordResetLink;
             } else {
-                throw new Error("Email content is missing or invalid.");
+                throw new Error('Email content is missing or invalid.');
             }
         } else {
-            throw new Error("Email not received or received date is invalid.");
+            throw new Error('Email not received or received date is invalid.');
         }
     }
 
 
     async validateOrderConfirmationEmail(emailServerId: string, emailAddress: string): Promise<string> {
-        const mailosaur = new MailosaurClient("Yllvkk64VJxnA9L");
+        const mailosaur = new MailosaurClient('Yllvkk64VJxnA9L');
 
         // Connect to Mailosaur, and wait for that email to arrive
         const email = await mailosaur.messages.get(emailServerId, {
@@ -166,13 +166,13 @@ export class AccountSignInPage {
         // Ensure email.html and email.html.codes are defined
         if (email.html && email.html.codes && email.html.codes[0]) {
             const orderNumber = email.html.codes[0].value as string;
-            console.log("orderNumberFromEmail: " + orderNumber);
+            console.log('orderNumberFromEmail: ' + orderNumber);
 
-            expect(email.subject).toBe("Thank you for your order!");
+            expect(email.subject).toBe('Thank you for your order!');
 
             return orderNumber;
         } else {
-            throw new Error("Order number not found in email.");
+            throw new Error('Order number not found in email.');
         }
     }
 
@@ -186,9 +186,9 @@ export class AccountSignInPage {
     }
 
     async accountSignInModern(username: string, password: string): Promise<void> {
-        const commonPage = new CommonPage(this.page)
+        const commonPage = new CommonPage(this.page);
         await commonPage.waitUntilPageLoads();
-        await this.signInEmailField.fill(username)
+        await this.signInEmailField.fill(username);
         await this.continueButtonModern.click();
         await commonPage.waitUntilPageLoads();
         await this.signInPasswordField.fill(password);
@@ -199,7 +199,7 @@ export class AccountSignInPage {
     }
 
     async signInFromPDP(email, password) {
-        await this.page.waitForURL("https://sso.dickssportinggoods.com/u/login**")
+        await this.page.waitForURL('https://sso.dickssportinggoods.com/u/login**');
 
         await expect(this.signInPageHeader).toBeVisible();
         await expect(this.signInEmailField).toBeVisible();
@@ -216,6 +216,6 @@ export class AccountSignInPage {
 
         await this.signInButton.click();
 
-        console.log("Sign In Successful for: " + email)
+        console.log('Sign In Successful for: ' + email);
     }
 }
