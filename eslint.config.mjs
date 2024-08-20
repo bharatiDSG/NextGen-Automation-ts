@@ -21,6 +21,9 @@ export default tseslint.config(
             // Customize Playwright rules
             "playwright/no-conditional-expect": "off",
             "playwright/no-conditional-in-test": "off",
+            "playwright/no-skipped-test": "off",
+            "playwright/no-networkidle": "off",
+            // "playwright/no-nested-step": "off"
         },
     },
     {
@@ -52,7 +55,7 @@ export default tseslint.config(
                 "only-multiline"
             ],
             "@stylistic/semi": [
-                "error", 
+                "error",
                 "always"
             ],
             "@stylistic/comma-spacing": [

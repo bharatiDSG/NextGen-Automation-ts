@@ -6,30 +6,30 @@ import { HomePage } from '../../../page-objects/HomePage.ts';
 import { OrderConfirmationPage } from '../../../page-objects/OrderConfirmationPage.ts';
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
 import { ProductListingPage } from '../../../page-objects/ProductListingPage.ts';
-import { getBaseUrl } from '../../../globalSetup.ts'
+import { getBaseUrl } from '../../../globalSetup.ts';
 import { testData_e2e_np0_prod } from '../../../test-data/e2eNP0ProdTestData.js';
 import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 
-test.describe("PLP/SRLP DSG Smoke Tests", () => {
+test.describe('PLP/SRLP DSG Smoke Tests', () => {
     test.beforeEach(async ({ page, context }) => {
       const homePage = new HomePage(page);
 
       // Close popup(frame) listener
-      const closePopup = page.locator('#slideoutCloseButton')
+      const closePopup = page.locator('#slideoutCloseButton');
       page.once('frameattached', async data => {
-        console.log("listening for popup frame once")
+        console.log('listening for popup frame once');
         if (await closePopup.isVisible({ timeout: 20000 })) {
-          await closePopup.click({ timeout: 20000 })
-          console.log("popup closed")
+          await closePopup.click({ timeout: 20000 });
+          console.log('popup closed');
         } else {
-          console.log("no popup displayed")
+          console.log('no popup displayed');
         }
       });
 
       //add homr to url if running in preview
       if(getBaseUrl().includes('dks')){
-        await homePage.goToHomePage(getBaseUrl() + "homr");
-        console.log("URL: " + getBaseUrl() + "homr");
+        await homePage.goToHomePage(getBaseUrl() + 'homr');
+        console.log('URL: ' + getBaseUrl() + 'homr');
       }
     });
 
@@ -41,12 +41,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         // Given we are on "dsg" page
         await test.step('Given we are on "dsg" page', async () => {
           await homePage.goToHomePage(getBaseUrl());
-          console.log("URL: " + getBaseUrl());
+          console.log('URL: ' + getBaseUrl());
         });
 
         // When we search for "mens polo" keyword in the search box
         await test.step('When we search for "mens polo" keyword in the search box', async () => {
-            await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1)
+            await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1);
         });
 
         // And we Validate Add to Cart is available on majority of Product Cards
@@ -55,13 +55,13 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
                 // await(productListingPage.quickviewOpenATCButtonAngular.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
-                console.log("ATC button count Angular = " + ATCbuttonCountAngular);
-                expect(ATCbuttonCountAngular).toBeGreaterThanOrEqual(ATCbuttonCountAngular * .8)
+                console.log('ATC button count Angular = ' + ATCbuttonCountAngular);
+                expect(ATCbuttonCountAngular).toBeGreaterThanOrEqual(ATCbuttonCountAngular * .8);
               } else {
                 // await(productListingPage.quickviewOpenATCButtonReact.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountReact = await(productListingPage.quickviewOpenATCButtonReact.count());
-                console.log("ATC button count React = " + ATCbuttonCountReact);
+                console.log('ATC button count React = ' + ATCbuttonCountReact);
                 expect(ATCbuttonCountReact).toBeGreaterThanOrEqual(ATCbuttonCountReact * .8);
               }
         });
@@ -75,12 +75,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         // Given we are on "dsg" page
         await test.step('Given we are on "dsg" page', async () => {
           await homePage.goToHomePage(getBaseUrl());
-          console.log("URL: " + getBaseUrl());
+          console.log('URL: ' + getBaseUrl());
         });
 
         // When we search for "custom" keyword in the search box
         await test.step('When we search for "mens polo" keyword in the search box', async () => {
-            await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm3)
+            await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm3);
         });
 
         // And we Validate Add to Cart is not visible on custom products
@@ -89,13 +89,13 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
                 // await(productListingPage.quickviewOpenATCButtonAngular.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
-                console.log("ATC button count Angular = " + ATCbuttonCountAngular);
+                console.log('ATC button count Angular = ' + ATCbuttonCountAngular);
                 expect(ATCbuttonCountAngular).toBe(0);
               } else {
                 // await(productListingPage.quickviewOpenATCButtonReact.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountReact = await(productListingPage.quickviewOpenATCButtonReact.count());
-                console.log("ATC button count React = " + ATCbuttonCountReact);
+                console.log('ATC button count React = ' + ATCbuttonCountReact);
                 expect(ATCbuttonCountReact).toBe(0);
               }
         });
@@ -109,12 +109,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         // Given we are on "dsg" page
         await test.step('Given we are on "dsg" page', async () => {
           await homePage.goToHomePage(getBaseUrl());
-          console.log("URL: " + getBaseUrl());
+          console.log('URL: ' + getBaseUrl());
         });
 
         // When we search for "custom" keyword in the search box
         await test.step('When we search for "mens polo" keyword in the search box', async () => {
-            await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm4)
+            await homePage.searchForProduct(testData_e2e_np0_prod.searchTerm4);
         });
 
         // And we Validate Add to Cart is not visible on personalized products
@@ -123,13 +123,13 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
                 // await(productListingPage.quickviewOpenATCButtonAngular.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
-                console.log("ATC button count Angular = " + ATCbuttonCountAngular);
+                console.log('ATC button count Angular = ' + ATCbuttonCountAngular);
                 expect(ATCbuttonCountAngular).toBe(0);
               } else {
                 // await(productListingPage.quickviewOpenATCButtonReact.last().isVisible());
                 await page.waitForTimeout(6000); // waits for 6 seconds
                 const ATCbuttonCountReact = await(productListingPage.quickviewOpenATCButtonReact.count());
-                console.log("ATC button count React = " + ATCbuttonCountReact);
+                console.log('ATC button count React = ' + ATCbuttonCountReact);
                 expect(ATCbuttonCountReact).toBe(0);
               }
         });
@@ -141,8 +141,8 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + "/f/mens-polo-shirts");
-        console.log("URL: " + getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+        console.log('URL: ' + getBaseUrl());
         });
 
         // And we open quickview add to cart for the first product in the grid
@@ -165,22 +165,22 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // And we Validate Image Carousel
         await test.step('And we Validate Image Carousel', async () => {
-          var i=0;
+          let i=0;
           for(i;i < 4; i++){
             await productListingPage.quickviewViewImageCarouselNextButton.click();
             await page.waitForTimeout(1000); // waits for .5 seconds
-            expect(productListingPage.quickviewViewImage.first()).toBeVisible();
+            await expect(productListingPage.quickviewViewImage.first()).toBeVisible();
           }
           for(i=0; i < 4; i++){
             await productListingPage.quickviewViewImageCarouselPreviousButton.click();
             await page.waitForTimeout(1000); // waits for .5 seconds
-            expect(productListingPage.quickviewViewImage.first()).toBeVisible();
+            await expect(productListingPage.quickviewViewImage.first()).toBeVisible();
           }
         });
 
         // And we Validate adding to cart a product with no attributes - button should be grayed out
         await test.step('And we Validate adding to cart a product with no attributes', async () => {
-          expect(productListingPage.quickviewModalATCButton.first()).not.toBeEnabled();
+          await expect(productListingPage.quickviewModalATCButton.first()).toBeDisabled();
         });
 
         // And we choose product attributes
@@ -198,8 +198,8 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + "/f/mens-polo-shirts");
-        console.log("URL: " + getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+        console.log('URL: ' + getBaseUrl());
         });
 
         // And we open quickview add to cart for the first product in the grid
@@ -227,12 +227,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // And we should see text "Keep Shopping"
         await test.step('And we should see text "Keep Shopping"', async () => {
-          expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+          await expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
         });
 
         // And we should see text "View Cart"
         await test.step('And we should see text "View Cart"', async () => {
-          expect (productListingPage.quickviewViewCartButton).toBeVisible();
+          await expect (productListingPage.quickviewViewCartButton).toBeVisible();
         });
     });
 
@@ -242,8 +242,8 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + "/f/mens-polo-shirts");
-        console.log("URL: " + getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+        console.log('URL: ' + getBaseUrl());
         });
 
         // And we open quickview add to cart for the first product in the grid
@@ -280,12 +280,12 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // And we should see text "Keep Shopping"
         await test.step('And we should see text "Keep Shopping"', async () => {
-          expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+          await expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
         });
 
         // And we should see text "View Cart"
         await test.step('And we should see text "View Cart"', async () => {
-          expect (productListingPage.quickviewViewCartButton).toBeVisible();
+          await expect (productListingPage.quickviewViewCartButton).toBeVisible();
         });
   });
 
@@ -295,8 +295,8 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + "/f/mens-polo-shirts");
-        console.log("URL: " + getBaseUrl());
+        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+        console.log('URL: ' + getBaseUrl());
         });
 
         // And we open quickview add to cart for the first product in the grid
@@ -312,7 +312,7 @@ test.describe("PLP/SRLP DSG Smoke Tests", () => {
         // Currently same day delivery functionality does not work in np0
         await test.step('And we choose product attributes and fulfillment', async () => {
           await page.waitForTimeout(2000); // waits for 2 seconds
-          expect(productListingPage.quickviewViewSameDayDeliveryFulfillment).toBeVisible();
+          await expect(productListingPage.quickviewViewSameDayDeliveryFulfillment).toBeVisible();
         });
     });
 });
