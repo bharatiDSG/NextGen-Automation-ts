@@ -6,7 +6,7 @@ import { HomePage } from '../../../page-objects/HomePage';
 import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage';
 import { getBaseUrl } from '../../../globalSetup';
 
-test.describe("PDP Single Sku Item Tests", () => {
+test.describe('PDP Single Sku Item Tests', () => {
     let homePage: HomePage;
     let productDisplayPage: ProductDisplayPage;
     let commonPage: CommonPage;
@@ -18,39 +18,39 @@ test.describe("PDP Single Sku Item Tests", () => {
         cartPage = new CartPage(page);
 
         // Go to baseUrl set in .env
-        await test.step('Navigate to Home page',async()=>{
+        await test.step('Navigate to Home page', async() => {
         await homePage.goToHomePage(getBaseUrl() + 'homr');
-        console.log("URL: " + getBaseUrl());
+        console.log('URL: ' + getBaseUrl());
         });
     });
 
     test('DSG ATC Single Sku - Desktop', { tag: ['@rewrite'] }, async ({ page }) => {
-        await test.step('Navigate to mountain bike page',async()=>{
+        await test.step('Navigate to mountain bike page', async() => {
         await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
         await commonPage.addRewriteFlagToUrl();
         });
 
         //Check the ship to me button displays the correct text before selecting product options
-        await test.step('Check the ship to me button displays the correct text before selecting product options',async()=>{
-        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, "Select product options");
+        await test.step('Check the ship to me button displays the correct text before selecting product options', async() => {
+        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Select product options');
         });
 
         //Select product options
-        await test.step('Select product options',async()=>{
+        await test.step('Select product options', async() => {
         await productDisplayPage.availableProductColorRewrite.first().click();
         });
 
         //Check the ship to me button displays the correct text after selecting product options
-        await test.step('Check the ship to me button displays the correct text after selecting product options',async()=>{
-        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, "Available");
+        await test.step('Check the ship to me button displays the correct text after selecting product options', async() => {
+        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Available');
         await productDisplayPage.shipToMeButton.click();
         });
 
         //Add to cart and check the product is in the cart
-        await test.step('Add to cart and check the product is in the cart',async()=>{
+        await test.step('Add to cart and check the product is in the cart', async() => {
         await productDisplayPage.addToCartButtonRewrite.click();
         await productDisplayPage.goToCartButton.click();
-        await commonPage.isTextVisible(cartPage.cartItemAmount, "1 item");
+        await commonPage.isTextVisible(cartPage.cartItemAmount, '1 item');
         });
     });
 });
