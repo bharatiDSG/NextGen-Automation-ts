@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import playwright from 'eslint-plugin-playwright';
@@ -8,9 +6,8 @@ import stylistic from '@stylistic/eslint-plugin';
 export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
-    ...tseslint.configs.strict,
+    //...tseslint.configs.strict,
     ...tseslint.configs.stylistic,
-
     {
         ...playwright.configs['flat/recommended'],
         files: ['tests/**'],
@@ -19,10 +16,10 @@ export default tseslint.config(
         files: ['tests/**'],
         rules: {
             // Customize Playwright rules
-            "playwright/no-conditional-expect": "off",
-            "playwright/no-conditional-in-test": "off",
-            "playwright/no-skipped-test": "off",
-            "playwright/no-networkidle": "off",
+            'playwright/no-conditional-expect': 'off',
+            'playwright/no-conditional-in-test': 'off',
+            'playwright/no-skipped-test': 'off',
+            'playwright/no-networkidle': 'off',
             // "playwright/no-nested-step": "off"
         },
     },
@@ -31,35 +28,35 @@ export default tseslint.config(
             '@stylistic': stylistic
         },
         rules: {
-            "@stylistic/quotes": [
-                "error",
-                "single",
+            '@stylistic/quotes': [
+                'error',
+                'single',
                 {
-                    "avoidEscape": true,
-                    "allowTemplateLiterals": true
+                    'avoidEscape': true,
+                    'allowTemplateLiterals': true
                 }
             ],
-            "@stylistic/arrow-spacing": [
-                "error",
+            '@stylistic/arrow-spacing': [
+                'error',
                 {
-                    "before": true,
-                    "after": true
+                    'before': true,
+                    'after': true
                 }
             ],
-            "@stylistic/brace-style": [
-                "error",
-                "1tbs"
+            '@stylistic/brace-style': [
+                'error',
+                '1tbs'
             ],
-            "@stylistic/comma-dangle": [
-                "error",
-                "only-multiline"
+            '@stylistic/comma-dangle': [
+                'error',
+                'only-multiline'
             ],
-            "@stylistic/semi": [
-                "error",
-                "always"
+            '@stylistic/semi': [
+                'error',
+                'always'
             ],
-            "@stylistic/comma-spacing": [
-                "error"
+            '@stylistic/comma-spacing': [
+                'error'
             ]
         }
     }

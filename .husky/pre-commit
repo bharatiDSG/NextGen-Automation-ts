@@ -1,0 +1,5 @@
+echo 'Please fix any errors or warnings'
+echo 'To ignore eslint for a specific line, add the following: "// eslint-disable-line"'
+echo $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+npx eslint ./$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+git update-index --again

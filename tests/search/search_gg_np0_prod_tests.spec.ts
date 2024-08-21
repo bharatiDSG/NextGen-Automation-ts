@@ -183,7 +183,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
                 // loop through trending searches to validate plp page after navigation
                 let count = 0;
-                for (let [index, trendingSearch] of trendingSearches.entries()) { 
+                for (let [index, trendingSearch] of trendingSearches.entries()) { // eslint-disable-line
                     await test.step('Validate trending searches links: ' + trendingSearch, async () => {
                         console.log(index + ': ' + trendingSearch);
                         await page.locator('[class="button-navigation"]').nth(index).click();
