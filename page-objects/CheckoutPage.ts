@@ -397,7 +397,7 @@ export class CheckoutPage {
     }
 
     async enterCreditCardInfo(creditCardNumber: string, expiryDate: string, securityCode: string): Promise<void> {
-        await this.creditCardNumberField.scrollIntoViewIfNeeded();
+        //await this.creditCardNumberField.scrollIntoViewIfNeeded();
         await this.creditCardNumberField.click();
         await this.creditCardNumberField.fill(creditCardNumber);
         await this.creditCardNumberField.press('Tab');
