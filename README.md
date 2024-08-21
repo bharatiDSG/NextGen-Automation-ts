@@ -60,4 +60,73 @@ This will run the same tests on the public lands prod site.
 
 ### Documentation for running other tests:
 
+    npx playwright test <test-file-path>: Run the specified spec file
+    npx playwright test --grep @tag: Run tests tagged with the specified tag
+    npx playwright test -g '<testName>': run the specified test name
+
+    adding --headed to any commands above will run in headed mode
+
     https://playwright.dev/docs/running-tests
+
+
+
+# Playwright Standards using ESLint
+
+* Always run ‘npm ci’ on the command line to install current dependencies
+* The goal is to resolve all errors and warning from ESLint before creating a PR
+* ESLint is not currently part of commits/pushes/PR’s but will be in the future
+* Link to ESLint for typescript: https://typescript-eslint.io/getting-started
+* Link to ESLint Playwright Plugin: https://github.com/playwright-community/eslint-plugin-playwright
+* Link to ESLint Stylistic Plugin: https://eslint.style/guide/getting-started
+
+## Formatting:
+
+* Use the VSCode built in formatter prior to committing and pushing code
+    * Right click inside the file and choose ‘Format Document’ then Save
+* ESLint will do some formatting for spaces and quotes but not everything
+
+## Linting:
+
+* ESLint has been installed.
+* You can run the linter using the following commands and including the file or directory
+* Examples:
+    * npx eslint ./tests/checkout
+        * This will run against all the files int he checkout directory
+    * npx eslint ./page-objects/CartPage.ts
+        * This will run against CartPage.ts file only
+* Many errors or warnings can be resolved automatically using the linter by using the following commands:
+    * npx eslint ./tests/checkout —fix
+    * npx eslint ./page-objects/CartPage.ts —fix
+
+## Waits:
+
+* No Sleeps - unless absolutely necessary
+* No page.waitForTimeout()
+* Use Locator actions and web assertions that wait automatically
+    * Example which waits for the last product to load in PLP: await productListingPage.productNames.last().waitFor();
+* May also try using:
+    * page.waitForLoadState('domcontentloaded')
+    * page.waitForLoadState('load');
+* Last resort but use sparingly because it slows down tests substantially:
+    * page.waitForLoadState(’networkidle)
+
+## Try/Catch:
+
+* Avoid unless necessary
+* Using an ‘if’ statement would work for the example below
+* These will get picked up by the linter if the error (e) is not used in the catch
+* Skip these with line disable comment
+    * // eslint-disable-line
+
+<img src="images/tryCatch.png" alt="text" width="600"/>
+
+## eslint-disable-line
+
+* If code is being picked up by the linter but it is valid and you do not want it to change, you can add a disable line comment so it will not be picked up
+    * Add ‘// eslint-disable-line’ to the code on the line
+
+In this example, the linter does not like using ‘let’ instead of ‘const’ since index is never reassigned.  However, trendingSearch is reassigned so ‘let’ is necessary.
+
+<img src="images/eslintError.png" alt="text" width="800"/>
+
+<img src="images/eslintDisableLine.png" alt="text" width="800"/>
