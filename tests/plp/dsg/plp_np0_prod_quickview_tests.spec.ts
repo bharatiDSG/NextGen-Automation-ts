@@ -1,10 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../../../page-objects/CartPage.ts';
-import { CheckoutPage } from '../../../page-objects/CheckoutPage.ts';
 import { HomePage } from '../../../page-objects/HomePage.ts';
-import { OrderConfirmationPage } from '../../../page-objects/OrderConfirmationPage.ts';
-import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
 import { ProductListingPage } from '../../../page-objects/ProductListingPage.ts';
 import { getBaseUrl } from '../../../globalSetup.ts'
 import { testData_e2e_np0_prod } from '../../../test-data/e2eNP0ProdTestData.js';

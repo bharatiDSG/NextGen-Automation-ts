@@ -1,15 +1,8 @@
-import * as dotenv from 'dotenv';
-
 import { Locator, Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
-import axios from 'axios';
-import config from '../globalEnvironments.json';
-import { getBaseUrl } from '../globalSetup';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
-
-dotenv.config();
 
 export class ProductListingPage {
     private page: Page;
