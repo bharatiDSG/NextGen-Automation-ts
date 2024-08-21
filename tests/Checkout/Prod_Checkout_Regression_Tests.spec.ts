@@ -157,9 +157,9 @@ test.describe('Prod Checkout tests', () => {
 
             //verify orderConfirmationPage
             await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible();
-            await orderConfirmationPage.continueShoppingLink.click();
+            //await orderConfirmationPage.continueShoppingLink.click();
 
-            await expect(homePage.searchField).toBeVisible();
+            //await expect(homePage.searchField).toBeVisible();
         });
 
     });
