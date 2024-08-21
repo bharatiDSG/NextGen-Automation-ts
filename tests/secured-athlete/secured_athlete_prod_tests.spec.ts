@@ -7,17 +7,20 @@ import { getBaseUrl } from '../../globalSetup';
 import { testData_DSG_PL_GG } from '../../test-data/securedAthleteTestData';
 
 test.describe('Secured Athlete Prod Tests', () => {
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async ({ page, context }) => {
+        const commonPage = new CommonPage(page);
         const homePage = new HomePage(page);
+
+        // grant permission for location
+        await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+        console.log('geolocation granted for: ' + getBaseUrl());
+
+        // handle iframe popup  
+        commonPage.handleIframePopupSignUpViaTextForOffers();
 
         // Go to baseUrl set in .env or defaults to dsg_prod
         await homePage.goToHomePage(getBaseUrl());
         console.log('URL: ' + getBaseUrl());
-
-        // Close popup if it displays
-        if (await page.getByLabel('Close button').isVisible()) {
-            await page.getByLabel('Close button').click();
-        }
 
         // Click the My Account link.
         await test.step('Click my account link', async() => {
