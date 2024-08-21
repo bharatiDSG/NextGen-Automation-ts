@@ -1,12 +1,10 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { FrameLocator, Locator, Page, expect } from '@playwright/test';
 import { AccountSignInPage } from './AccountSignInPage';
 import { CommonPage } from './CommonPage';
-import { assert, error } from 'console';
 
 export class CheckoutPage {
-
-
     private page: Page;
+
     readonly shippingTitle: Locator;
     readonly shippingTitleAnchor: Locator;
     readonly shippingHeader: Locator;
@@ -37,26 +35,25 @@ export class CheckoutPage {
     readonly promoAppliedMessage: Locator;
     readonly closePromoCodeBtn: Locator;
     readonly signInButton: Locator;
-    readonly paypalIframe: any;
-    readonly paypalCheckoutButton: any;
-    readonly affirmCheckoutButton: any;
+    readonly paypalIframe: FrameLocator;
+    readonly paypalCheckoutButton: Locator;
+    readonly affirmCheckoutButton: Locator;
     readonly paypalRadioButton: Locator;
     readonly payWithPayPalLabel: Locator;
     readonly affirmRadioButton: Locator;
     readonly afterPayRadioButton: Locator;
     readonly afterpayCheckoutButton: Locator;
     readonly creditCardRadioButton: Locator;
-    readonly appliedGiftCardMessage: any;
-    readonly giftCardErrroMessage: any;
+    readonly appliedGiftCardMessage: Locator;
+    readonly giftCardErrroMessage: Locator;
     readonly removeGClink: Locator;
-    readonly appliedGCMessage: any;
+    readonly appliedGCMessage: Locator;
     readonly orderSubTotal: Locator;
     readonly estimatedShipping: Locator;
     readonly estimatedTax: Locator;
-    readonly changeBillingShippingAddress: any;
+    readonly changeBillingShippingAddress: Locator;
     readonly shippingPromotion: Locator;
-    readonly largeItemShippingDetails: any;
-    commonPage: CommonPage;
+    readonly largeItemShippingDetails: Locator;
     readonly largeItemShippingMethods: Locator;
     readonly creditCardErrormessage: Locator;
     readonly sameShippingAndBillingCheckbox: Locator;
@@ -80,30 +77,30 @@ export class CheckoutPage {
     readonly storePickUpCharge: Locator;
     readonly individualProductPrice: Locator;
     readonly individualProductQuantity: Locator;
-    estDeliveryDates: any;
-    individualProductName: Locator;
-    storeDetails: Locator;
-    freeStorePickup: Locator;
-    storename: Locator;
-    changeContactInfo: Locator;
-    changeBillingShippingInfo: Locator;
-    dsgLogo: Locator;
-    textMeOrderUpdates: Locator;
-    addPickupPersonLink: Locator;
-    pickupFirstname: Locator;
-    pickupLastname: Locator;
-    pickupEmail: Locator;
-    pickUpContinue: Locator;
-    giftReceipientEmail: Locator;
-    giftReceipientFirstName: Locator;
-    giftReceipientDescription: Locator;
-    sameDayDeliveryTip: Locator;
-    sameDayDevlieryTipAmount: Locator;
-    tipAmount: Locator;
-    otherTipLink: Locator;
-    tipAmountInput: Locator;
-    applyTipAmount: Locator;
-    billingShippingLabel: Locator;
+    readonly estDeliveryDates: Locator;
+    readonly individualProductName: Locator;
+    readonly storeDetails: Locator;
+    readonly freeStorePickup: Locator;
+    readonly storename: Locator;
+    readonly changeContactInfo: Locator;
+    readonly changeBillingShippingInfo: Locator;
+    readonly dsgLogo: Locator;
+    readonly textMeOrderUpdates: Locator;
+    readonly addPickupPersonLink: Locator;
+    readonly pickupFirstname: Locator;
+    readonly pickupLastname: Locator;
+    readonly pickupEmail: Locator;
+    readonly pickUpContinue: Locator;
+    readonly giftReceipientEmail: Locator;
+    readonly giftReceipientFirstName: Locator;
+    readonly giftReceipientDescription: Locator;
+    readonly sameDayDeliveryTip: Locator;
+    readonly sameDayDevlieryTipAmount: Locator;
+    readonly tipAmount: Locator;
+    readonly otherTipLink: Locator;
+    readonly tipAmountInput: Locator;
+    readonly applyTipAmount: Locator;
+    readonly billingShippingLabel: Locator;
 
 
     constructor(page: Page) {
@@ -122,112 +119,109 @@ export class CheckoutPage {
         this.contactInfoEmail = page.locator('[id="contact-email"]');
         this.contactInfoPhoneNumber = page.locator('[id="contact-phone"]');
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
-        this.changeContactInfo= page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
+        this.changeContactInfo = page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
         this.sameShippingAndBillingCheckbox = page.locator('//chk-billing-shipping-checkbox');
-        this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' })
-        this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' })
+        this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' });
+        this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' });
         this.billingShippingAddress = page.locator('[id="address"]');
         this.billingShippingAddress2 = page.locator('[id="address2"]');
         this.billingShippingZipcode = page.locator('[id="zipcode"]');
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByLabel('completed').getByRole('img');
-        this.changeBillingShippingInfo= page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
-        this.billingShippingLabel= page.locator("//h2[contains(text(),'Address')]")
+        this.changeBillingShippingInfo = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
+        this.billingShippingLabel = page.locator("//h2[contains(text(),'Address')]");
 
         this.creditCardNumberField = page.frameLocator('iframe[title="Iframe for card number"] >> visible=true').locator('input[id="encryptedCardNumber"]');
         this.creditCardExpiryDateField = page.frameLocator('iframe[title="Iframe for expiry date"] >> visible=true').locator('input[id="encryptedExpiryDate"]');
         this.creditCardSecurityCodeField = page.frameLocator('iframe[title="Iframe for security code"] >> visible=true').locator('input[id="encryptedSecurityCode"]');
 
-        this.giftCardLink = page.getByRole('button', { name: 'Add Gift Card' })
-        this.promoCodeLink = page.getByRole('button', { name: 'Apply Promo Code' })
-        this.giftCardNumber = page.getByLabel('Gift Card Code')
-        this.giftCardPin = page.getByLabel('Pin', { exact: true })
-        this.applyGiftCard = page.getByRole('button', { name: 'Apply Gift Card' })
-        this.closeGiftCard = page.getByRole('button', { name: 'CLOSE' })
-        this.promoCodeInput = page.getByLabel('Promo Codes')
-        this.applyPromoCodeBtn = page.locator('#paymentPageContainer button').filter({ hasText: /^Apply Promo Code$/ })
-        this.promoAppliedMessage = page.locator("xpath=//div[(@class='promo-code-applied') and (contains(text(),'successfully applied.'))]")
-        this.closePromoCodeBtn = page.locator("xpath=//div[text()='Apply Promo Code']/following-sibling::button//i[contains(@class,'mdi-close')]")
+        this.giftCardLink = page.getByRole('button', { name: 'Add Gift Card' });
+        this.promoCodeLink = page.getByRole('button', { name: 'Apply Promo Code' });
+        this.giftCardNumber = page.getByLabel('Gift Card Code');
+        this.giftCardPin = page.getByLabel('Pin', { exact: true });
+        this.applyGiftCard = page.getByRole('button', { name: 'Apply Gift Card' });
+        this.closeGiftCard = page.getByRole('button', { name: 'CLOSE' });
+        this.promoCodeInput = page.getByLabel('Promo Codes');
+        this.applyPromoCodeBtn = page.locator('#paymentPageContainer button').filter({ hasText: /^Apply Promo Code$/ });
+        this.promoAppliedMessage = page.locator("xpath=//div[(@class='promo-code-applied') and (contains(text(),'successfully applied.'))]");
+        this.closePromoCodeBtn = page.locator("xpath=//div[text()='Apply Promo Code']/following-sibling::button//i[contains(@class,'mdi-close')]");
 
-        this.signInButton = page.getByRole('link', { name: 'Sign In' })
-        this.paypalRadioButton = page.locator('#paypalLabel')
-        this.affirmRadioButton = page.locator("xpath=//img[contains(@src,'affirmLogo')]")
-        this.afterPayRadioButton = page.locator("xpath=//img[contains(@src,'afterpayLogo')]")
-        this.creditCardRadioButton = page.locator("xpath=//label[text()='Credit/Debit Card']")
-        this.paypalIframe = page.frameLocator("xpath=//iframe[@title='PayPal' and contains(@name,'paypal')]")
-        this.paypalCheckoutButton = this.paypalIframe.locator("xpath=//div[@aria-label='PayPal Checkout']")
+        this.signInButton = page.getByRole('link', { name: 'Sign In' });
+        this.paypalRadioButton = page.locator('#paypalLabel');
+        this.affirmRadioButton = page.locator("xpath=//img[contains(@src,'affirmLogo')]");
+        this.afterPayRadioButton = page.locator("xpath=//img[contains(@src,'afterpayLogo')]");
+        this.creditCardRadioButton = page.locator("xpath=//label[text()='Credit/Debit Card']");
+        this.paypalIframe = page.frameLocator("xpath=//iframe[@title='PayPal' and contains(@name,'paypal')]");
+        this.paypalCheckoutButton = this.paypalIframe.locator("xpath=//div[@aria-label='PayPal Checkout']");
 
-        this.affirmCheckoutButton = page.locator("xpath=//a[@id='affirmButton']")
-        this.afterpayCheckoutButton = page.locator("xpath=//afterpay-button[@id='afterpayButton']")
-        this.appliedGiftCardMessage = page.getByText('See Order Totals Section for applied Gift Cards.', { exact: true })
-        this.giftCardErrroMessage = page.getByText('There is no remaining balance on this card', { exact: true })
-        this.removeGClink = page.getByRole('button', { name: 'Remove' })
-        this.appliedGCMessage = page.getByText('Applied Gift Card', { exact: true })
+        this.affirmCheckoutButton = page.locator("xpath=//a[@id='affirmButton']");
+        this.afterpayCheckoutButton = page.locator("xpath=//afterpay-button[@id='afterpayButton']");
+        this.appliedGiftCardMessage = page.getByText('See Order Totals Section for applied Gift Cards.', { exact: true });
+        this.giftCardErrroMessage = page.getByText('There is no remaining balance on this card', { exact: true });
+        this.removeGClink = page.getByRole('button', { name: 'Remove' });
+        this.appliedGCMessage = page.getByText('Applied Gift Card', { exact: true });
 
-        this.orderSubTotal = page.locator("//p[contains(text(),'Order Subtotal')]//following-sibling::p")
-        this.estimatedShipping = page.locator("//p[contains(text(),'Estimated Shipping')]//following-sibling::p")
-        this.shippingPromotion = page.locator("//p[contains(text(),'Shipping Credit') and contains(@class,'promotion')]//following-sibling::p")
-        this.estimatedTax = page.locator("//p[contains(text(),'Estimated Tax')]//following-sibling::p")
-        this.changeBillingShippingAddress = page.locator('#billing-form-card').getByRole('button', { name: 'Change' })
-        this.orderTotal = page.locator("//p[contains(text(),'Estimated Order Total')]//following-sibling::p")
-        this.storePickUpCharge = page.locator("//p[contains(text(),'Store Pickup')]//following-sibling::p")
-        this.individualProductPrice=page.locator("//p[@class='product-price']")
-        this.individualProductQuantity=page.locator("//p[@class='product-price']/../following-sibling::p")
-        this.tipAmount = page.locator("//p[contains(text(),'Tip')]//following-sibling::p")
+        this.orderSubTotal = page.locator("//p[contains(text(),'Order Subtotal')]//following-sibling::p");
+        this.estimatedShipping = page.locator("//p[contains(text(),'Estimated Shipping')]//following-sibling::p");
+        this.shippingPromotion = page.locator("//p[contains(text(),'Shipping Credit') and contains(@class,'promotion')]//following-sibling::p");
+        this.estimatedTax = page.locator("//p[contains(text(),'Estimated Tax')]//following-sibling::p");
+        this.changeBillingShippingAddress = page.locator('#billing-form-card').getByRole('button', { name: 'Change' });
+        this.orderTotal = page.locator("//p[contains(text(),'Estimated Order Total')]//following-sibling::p");
+        this.storePickUpCharge = page.locator("//p[contains(text(),'Store Pickup')]//following-sibling::p");
+        this.individualProductPrice = page.locator("//p[@class='product-price']");
+        this.individualProductQuantity = page.locator("//p[@class='product-price']/../following-sibling::p[contains(@class,'d-flex')]");
+        this.tipAmount = page.locator("//p[contains(text(),'Tip')]//following-sibling::p");
 
-        this.largeItemShippingDetails = page.getByRole('link', { name: 'Large Item Shipping Details' })
-        this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:')
-        this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']")
+        this.largeItemShippingDetails = page.getByRole('link', { name: 'Large Item Shipping Details' });
+        this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:');
+        this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']");
 
-        this.shippingFirstName = page.locator('#shipping-form-card #shipFirstName')
-        this.shippingLastName = page.locator('#shipping-form-card #shipLastName')
-        this.shippingAddress = page.locator('#shipping-form-card #address')
-        this.shippingAddressLine2 = page.locator('#shipping-form-card #address2')
-        this.shippingZipcode = page.locator('#shipping-form-card #zipcode')
+        this.shippingFirstName = page.locator('#shipping-form-card #shipFirstName');
+        this.shippingLastName = page.locator('#shipping-form-card #shipLastName');
+        this.shippingAddress = page.locator('#shipping-form-card #address');
+        this.shippingAddressLine2 = page.locator('#shipping-form-card #address2');
+        this.shippingZipcode = page.locator('#shipping-form-card #zipcode');
 
-        this.billingFirstName = page.locator('#billing-form-card #shipFirstName')
-        this.billingLastName = page.locator('#billing-form-card #shipLastName')
-        this.billingAddress = page.locator('#billing-form-card #address')
-        this.billingAddressLine2 = page.locator('#billing-form-card #address2')
-        this.billingZipcode = page.locator('#billing-form-card #zipcode')
+        this.billingFirstName = page.locator('#billing-form-card #shipFirstName');
+        this.billingLastName = page.locator('#billing-form-card #shipLastName');
+        this.billingAddress = page.locator('#billing-form-card #address');
+        this.billingAddressLine2 = page.locator('#billing-form-card #address2');
+        this.billingZipcode = page.locator('#billing-form-card #zipcode');
         this.editBillingShippingInfo = page.getByRole('button', { name: 'Edit', exact: true });
 
 
-        this.miniCartIcon = page.locator("//homefield-icon[@id='mini-cart-icon']")
+        this.miniCartIcon = page.locator("//homefield-icon[@id='mini-cart-icon']");
 
-        this.expeditedShippingRadioBtn = page.getByLabel('Expedited Shipping – $')
-        this.expressShippingRadioBtn = page.getByLabel('Express Shipping – $')
+        this.expeditedShippingRadioBtn = page.getByLabel('Expedited Shipping – $');
+        this.expressShippingRadioBtn = page.getByLabel('Express Shipping – $');
 
-        this.estDeliveryDates= page.locator("//span[contains(text(),' Est. Delivery: ')]");
-        this.individualProductName=page.locator("//p[contains(@class,'product-name')]/span");
-        this.storeDetails= page.locator("//chk-store-details");
-        this.storename= page.locator("//chk-store-details/div/div");
-        this.freeStorePickup=page.getByText('Free Store Pickup');
-        this.dsgLogo=page.getByRole('link', { name: 'DICK\'S Sporting Goods' });
+        this.estDeliveryDates = page.locator("//span[contains(text(),' Est. Delivery: ')]");
+        this.individualProductName = page.locator("//p[contains(@class,'product-name')]/span");
+        this.storeDetails = page.locator('//chk-store-details');
+        this.storename = page.locator('//chk-store-details/div/div');
+        this.freeStorePickup = page.getByText('Free Store Pickup');
+        this.dsgLogo = page.getByRole('link', { name: 'DICK\'S Sporting Goods' });
 
-        this.textMeOrderUpdates=page.getByText('Text me order updates');
-        this.addPickupPersonLink=page.locator("//span[@actiontype='AddAdditionalPickupPersonClick']")
-        this.pickupFirstname= page.locator('#proxy-first-name');
-        this.pickupLastname= page.locator('#proxy-last-name');
-        this.pickupEmail= page.locator('#proxy-email');
-        this.pickUpContinue=page.getByRole('button', { name: 'Continue' }).first();
+        this.textMeOrderUpdates = page.getByText('Text me order updates');
+        this.addPickupPersonLink = page.locator("//span[@actiontype='AddAdditionalPickupPersonClick']");
+        this.pickupFirstname = page.locator('#proxy-first-name');
+        this.pickupLastname = page.locator('#proxy-last-name');
+        this.pickupEmail = page.locator('#proxy-email');
+        this.pickUpContinue = page.getByRole('button', { name: 'Continue' }).first();
 
-        this.giftReceipientEmail= page.getByLabel('gift recipient', { exact: true })
-        this.giftReceipientFirstName= page.getByLabel('gift recipient name')
-        this.giftReceipientDescription= page.getByLabel('Gift Message (optional)')
-        this.sameDayDeliveryTip=page.locator("//h2[contains(text(),'Same Day Delivery Tip')]");
+        this.giftReceipientEmail = page.getByLabel('gift recipient', { exact: true });
+        this.giftReceipientFirstName = page.getByLabel('gift recipient name');
+        this.giftReceipientDescription = page.getByLabel('Gift Message (optional)');
+        this.sameDayDeliveryTip = page.locator("//h2[contains(text(),'Same Day Delivery Tip')]");
 
-        this.sameDayDevlieryTipAmount= page.locator("//button[@aria-pressed='true']/span");
-        this.otherTipLink= page.getByLabel('Custom tip selection')
-        this.tipAmountInput=page.getByPlaceholder('Enter tip amount')
-        this.applyTipAmount= page.getByRole('button', { name: 'Apply', exact: true })
-
-        this.commonPage = new CommonPage(page);
-
+        this.sameDayDevlieryTipAmount = page.locator("//button[@aria-pressed='true']/span");
+        this.otherTipLink = page.getByLabel('Custom tip selection');
+        this.tipAmountInput = page.getByPlaceholder('Enter tip amount');
+        this.applyTipAmount = page.getByRole('button', { name: 'Apply', exact: true });
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
-        await this.page.waitForLoadState('networkidle')
+        await this.page.waitForLoadState('networkidle');
         if (await this.contactInfoFirstName.isVisible()) {
             await this.contactInfoFirstName.click();
             await this.contactInfoFirstName.fill(firstName);
@@ -262,7 +256,7 @@ export class CheckoutPage {
     async enterBillingShippingInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
-            await this.page.waitForLoadState("domcontentloaded");
+            await this.page.waitForLoadState('domcontentloaded');
         }
         if (await this.shippingBillingFirstName.isVisible()) {
             await this.shippingBillingFirstName.click();
@@ -286,7 +280,7 @@ export class CheckoutPage {
     async enterBillingShippingInfoForSameDayDelivery(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
-            await this.page.waitForLoadState("domcontentloaded");
+            await this.page.waitForLoadState('domcontentloaded');
         }
         if (await this.shippingBillingFirstName.isVisible()) {
             await this.shippingBillingFirstName.click();
@@ -306,7 +300,10 @@ export class CheckoutPage {
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
     async enterShippingInfo(firstName: string, lastname: string, address: string, address2: string, zipCode: string): Promise<void> {
-
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState('domcontentloaded');
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.click();
@@ -320,13 +317,14 @@ export class CheckoutPage {
             await this.shippingAddressLine2.press('Tab');
             await this.shippingZipcode.fill(zipCode);
             await this.shippingZipcode.press('Tab');
-        }
-        else {
-            await this.billingFirstName.click();
-            await this.billingFirstName.fill(firstName);
-            await this.billingFirstName.press('Tab');
-            await this.billingLastName.fill(lastname);
-            await this.billingLastName.press('Tab');
+        } else {
+            if (await this.billingFirstName.isVisible()) {
+                await this.billingFirstName.click();
+                await this.billingFirstName.fill(firstName);
+                await this.billingFirstName.press('Tab');
+                await this.billingLastName.fill(lastname);
+                await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
@@ -338,10 +336,10 @@ export class CheckoutPage {
 
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
     }
-    async enterBillingShippingWithInValidInfo(firstName:string, lastName:string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+    async enterBillingShippingWithInValidInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
-            await this.page.waitForLoadState("domcontentloaded");
+            await this.page.waitForLoadState('domcontentloaded');
         }
         if (await this.shippingBillingFirstName.isVisible()) {
             await this.shippingBillingFirstName.click();
@@ -362,6 +360,10 @@ export class CheckoutPage {
         await expect(this.page.locator("//*[text()='" + errorMessage + "']")).toBeVisible();
     }
     async enterShippingWithInvalidInfo(firstName: string, lastName: string, address: string, address2: string, zipCode: string, errorMessage: string): Promise<void> {
+        if (await this.editBillingShippingInfo.isVisible()) {
+            await this.editBillingShippingInfo.click();
+            await this.page.waitForLoadState('domcontentloaded');
+        }
         if (await this.shippingFirstName.isVisible()) {
             await this.shippingFirstName.click();
             await this.shippingFirstName.fill(firstName);
@@ -374,13 +376,14 @@ export class CheckoutPage {
             await this.shippingAddressLine2.press('Tab');
             await this.shippingZipcode.fill(zipCode);
             await this.shippingZipcode.press('Tab');
-        }
-        else {
-            await this.billingFirstName.click();
-            await this.billingFirstName.fill(firstName);
-            await this.billingFirstName.press('Tab');
-            await this.billingLastName.fill(lastName);
-            await this.billingLastName.press('Tab');
+        } else {
+            if (await this.billingFirstName.isVisible()) {
+                await this.billingFirstName.click();
+                await this.billingFirstName.fill(firstName);
+                await this.billingFirstName.press('Tab');
+                await this.billingLastName.fill(lastName);
+                await this.billingLastName.press('Tab');
+            }
             await this.billingAddress.fill(address);
             await this.billingAddress.press('Tab');
             await this.billingAddressLine2.fill(address2);
@@ -406,25 +409,25 @@ export class CheckoutPage {
     async continueWithContactInformation(): Promise<void> {
         await expect(this.contactInfoFirstName).toBeVisible();
         await this.checkoutContinueButton.click();
-        await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible()
+        await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
     }
     async verifyContactInfoIsEmpty(): Promise<void> {
-        await expect(this.contactInfoFirstName).toHaveText("")
-        await expect(this.contactInfoLastName).toHaveText("")
-        await expect(this.contactInfoEmail).toHaveText("")
-        await expect(this.contactInfoPhoneNumber).toHaveText("")
+        await expect(this.contactInfoFirstName).toHaveText('');
+        await expect(this.contactInfoLastName).toHaveText('');
+        await expect(this.contactInfoEmail).toHaveText('');
+        await expect(this.contactInfoPhoneNumber).toHaveText('');
     }
 
     async verifyContactInfoIsNotEmpty(): Promise<void> {
         await expect(this.contactInfoFirstName).toBeVisible();
-        await expect(this.contactInfoFirstName).toHaveText("");
-        await expect(this.contactInfoLastName).not.toHaveText("")
-        await expect(this.contactInfoEmail).not.toHaveText("")
-        await expect(this.contactInfoPhoneNumber).not.toHaveText("")
+        await expect(this.contactInfoFirstName).toHaveText('');
+        await expect(this.contactInfoLastName).not.toHaveText('');
+        await expect(this.contactInfoEmail).not.toHaveText('');
+        await expect(this.contactInfoPhoneNumber).not.toHaveText('');
     }
 
     async verifyGiftCardFunctionality(giftCardNumber: string, giftCardPin: string): Promise<void> {
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.giftCardLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -439,7 +442,7 @@ export class CheckoutPage {
 
     }
     async verifyInvalidGiftCardFunctionality(giftCardNumber: string, giftCardPin: string): Promise<void> {
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.giftCardLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -455,7 +458,7 @@ export class CheckoutPage {
 
     async verifyPromoCodeFunctionality(promocode: string): Promise<void> {
         const commonPage = new CommonPage(this.page);
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -468,7 +471,7 @@ export class CheckoutPage {
     }
     async verifyInvalidPromoCodeFunctionality(promocode: string): Promise<void> {
         const commonPage = new CommonPage(this.page);
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -481,7 +484,7 @@ export class CheckoutPage {
     }
     async verifyInvalidPromoCodeFunctionalityForSignedInUser(promocode: string): Promise<void> {
         const commonPage = new CommonPage(this.page);
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -495,7 +498,7 @@ export class CheckoutPage {
     }
     async verifyInvalidPromoCodeWithErrorMessageFunctionality(promocode: string, errorMessage: string): Promise<void> {
         const commonPage = new CommonPage(this.page);
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
         //await this.page.waitForLoadState("networkidle");
         await this.promoCodeLink.click();
         //await commonPage.waitUntilPageLoads();
@@ -519,7 +522,7 @@ export class CheckoutPage {
         const newPage = await pagePromise;
         console.log(await newPage.title());
         await expect(newPage.locator("//h1[text()='Pay with PayPal']")).toBeVisible();
-        console.log("Paypal checkout page loaded")
+        console.log('Paypal checkout page loaded');
         newPage.close();
 
     }
@@ -529,7 +532,7 @@ export class CheckoutPage {
         const newPage = await pagePromise;
         console.log(await newPage.title());
         await expect(newPage.locator("//h1[text()='Pay over time with Affirm']")).toBeVisible();
-        console.log("Affirm checkout page loaded")
+        console.log('Affirm checkout page loaded');
         newPage.close();
 
     }
@@ -539,78 +542,72 @@ export class CheckoutPage {
         const newPage = await pagePromise;
         console.log(await newPage.title());
         await expect(newPage.locator("//h2[contains(text(),'get started!')]")).toBeVisible();
-        console.log("Afterpay checkout page loaded")
+        console.log('Afterpay checkout page loaded');
         newPage.close();
 
     }
     async selectAPaymentOption(paymentOption: string): Promise<void> {
-        if (paymentOption == "Paypal") {
+        if (paymentOption == 'Paypal') {
             await this.paypalRadioButton.click();
-        }
-        else if (paymentOption == "Creditcard") {
+        } else if (paymentOption == 'Creditcard') {
             await this.creditCardRadioButton.click();
-        }
-        else if (paymentOption == "Affirm") {
+        } else if (paymentOption == 'Affirm') {
             await this.affirmRadioButton.click();
-        }
-        else if (paymentOption == "AfterPay") {
+        } else if (paymentOption == 'AfterPay') {
             await this.afterPayRadioButton.click();
-        }
-        else if (paymentOption == "ApplePay") {
+        } else if (paymentOption == 'ApplePay') {
 
-        }
-        else {
-            console.log("Given payment option is not present in the Checkout page")
+        } else {
+            console.log('Given payment option is not present in the Checkout page');
         }
     }
     async verifyEstimatedTax(taxNumber: number) {
-        let subTotal = await this.getOrderSubTotal();
-        let estimatedShipping = await this.getEstimatedShipping();
-        let orderTotal = subTotal + estimatedShipping
+        const subTotal = await this.getOrderSubTotal();
+        const estimatedShipping = await this.getEstimatedShipping();
+        const orderTotal = subTotal + estimatedShipping;
         console.log(orderTotal);
-        let expectedTax: number = orderTotal * taxNumber
-        let actualTax = await this.getEstimatedTax();
+        const expectedTax: number = orderTotal * taxNumber;
+        const actualTax = await this.getEstimatedTax();
         expect(actualTax.toFixed(2)).toEqual(expectedTax.toFixed(2));
 
     }
     async getOrderSubTotal(): Promise<number> {
-        let subTotal: any = await this.orderSubTotal.innerText();
-        console.log(Number.parseFloat(subTotal.toString().replace('$', '')))
+        const subTotal: string = await this.orderSubTotal.innerText();
+        console.log(Number.parseFloat(subTotal.toString().replace('$', '')));
         return Number.parseFloat(subTotal.toString().replace('$', ''));
 
     }
     async verifyOrderTotal() {
-        let subTotal = await this.getOrderSubTotal();
-        let estimatedShipping = await this.getEstimatedShipping();
-        let orderTotal = subTotal + estimatedShipping
-        expect((await this.getOrderTotal()).toString()).toEqual(orderTotal.toString())
+        const subTotal = await this.getOrderSubTotal();
+        const estimatedShipping = await this.getEstimatedShipping();
+        const orderTotal = subTotal + estimatedShipping;
+        expect((await this.getOrderTotal()).toString()).toEqual(orderTotal.toString());
 
     }
     async getOrderTotal(): Promise<number> {
-        let orderTotal: any = await this.orderTotal.innerText();
-        console.log(Number.parseFloat(orderTotal.toString().replace('$', '')))
+        const orderTotal: string = await this.orderTotal.innerText();
+        console.log(Number.parseFloat(orderTotal.toString().replace('$', '')));
         return Number.parseFloat(orderTotal.toString().replace('$', ''));
 
     }
     async getEstimatedShipping(): Promise<number> {
-        if ((await this.estimatedShipping.innerText()).includes("Free")) {
+        if ((await this.estimatedShipping.innerText()).includes('Free')) {
             return 0.00;
-        }
-        else {
-            let estimatedShippingCharges: any = await this.estimatedShipping.innerText();
+        } else {
+            const estimatedShippingCharges: string = await this.estimatedShipping.innerText();
             let estShipping = Number.parseFloat(estimatedShippingCharges.toString().replace('$', ''));
             if (await this.shippingPromotion.isVisible()) {
-                let shippingPromotion: any = await this.shippingPromotion.innerText();
-                let numericShippingPromotion = Number.parseFloat(shippingPromotion.toString().replace('-$', ''))
+                const shippingPromotion: string = await this.shippingPromotion.innerText();
+                const numericShippingPromotion = Number.parseFloat(shippingPromotion.toString().replace('-$', ''));
                 estShipping = estShipping - numericShippingPromotion;
             }
-            console.log(estShipping)
+            console.log(estShipping);
             return estShipping;
         }
     }
     async getEstimatedTax(): Promise<number> {
-        let estimatedTaxCharges: any = await this.estimatedTax.innerText();
-        console.log(Number.parseFloat(estimatedTaxCharges.toString().replace('$', '')))
+        const estimatedTaxCharges: string = await this.estimatedTax.innerText();
+        console.log(Number.parseFloat(estimatedTaxCharges.toString().replace('$', '')));
         return Number.parseFloat(estimatedTaxCharges.toString().replace('$', ''));
     }
     async clickEditBillingShippingInfo(): Promise<void> {
@@ -618,7 +615,7 @@ export class CheckoutPage {
     }
     async clickLargeItemShippingDetailsLink() {
         await this.largeItemShippingDetails.click();
-        await this.page.waitForLoadState("load");
+        await this.page.waitForLoadState('load');
 
     }
     async verifyLargeItemShippingDetails(expectedString: string) {
@@ -629,13 +626,14 @@ export class CheckoutPage {
     }
     async unCheckSameShippingAndBillingAddress() {
         await this.sameShippingAndBillingCheckbox.click();
+        await this.page.waitForTimeout(2000);
     }
     async goBackToCart() {
         await this.miniCartIcon.click();
     }
     async changeShippingMethodAndVerifyShippingCharges(shippingMethod: string, shippingCharges: string) {
         await this.changeShippingMethod(shippingMethod);
-        await this.page.waitForLoadState('domcontentloaded')
+        await this.page.waitForLoadState('domcontentloaded');
         expect((await this.getEstimatedShipping()).toString()).toEqual(shippingCharges);
 
     }
@@ -643,45 +641,50 @@ export class CheckoutPage {
         if (shippingMethod.includes('Expedite')) {
             await this.expeditedShippingRadioBtn.click();
             await this.shippingTitleAnchor.click();
-            await this.page.waitForTimeout(2000)
-            await this.page.waitForLoadState('domcontentloaded')
+            await this.page.waitForTimeout(2000);
+            await this.page.waitForLoadState('domcontentloaded');
 
-        }
-        else if (shippingMethod.includes('Express')) {
+        } else if (shippingMethod.includes('Express')) {
             await this.expressShippingRadioBtn.click();
             await this.shippingTitleAnchor.click();
-            await this.page.waitForTimeout(2000)
-            await this.page.waitForLoadState('domcontentloaded')
-        }
-        else {
+            await this.page.waitForTimeout(2000);
+            await this.page.waitForLoadState('domcontentloaded');
+        } else {
 
         }
 
     }
     async validateUserAndBillingDetails(details: string[]) {
-        for (let index = 0; index < details.length; index++) {
-            const element = details[index];
+
+        for (const element of details) {
             console.log(element);
-            await expect(this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).toBeVisible();
+            await expect((this.page.locator("//div[text()='" + element + "']")
+                .or(this.page.locator("//p[text()='" + element + "']"))
+                .or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
         }
+
+        // for (let index = 0; index < details.length; index++) {
+        //     const element = details[index];
+        //     console.log(element);
+        //     await expect((this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
+        // }
 
     }
 
     async firstNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
         for (let index = 0; index < listOfFirstNames.length; index++) {
-            let firstName = listOfFirstNames[index];
+            const firstName = listOfFirstNames[index];
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoFirstName.click();
                 await this.contactInfoFirstName.fill(firstName);
                 await this.contactInfoFirstName.press('Tab');
                 await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).toBeVisible();
-            }
-            else {
+            } else {
                 await this.contactInfoEmail.click();
-                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.fill('automation@dcsg.com');
                 await this.contactInfoEmail.press('Tab');
-                await this.contactInfoPhoneNumber.fill("7242733400");
+                await this.contactInfoPhoneNumber.fill('7242733400');
 
                 await this.checkoutContinueButton.click();
                 await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
@@ -696,19 +699,18 @@ export class CheckoutPage {
     }
     async firstNameValidationsWithValidNames(listOfFirstNames: string[]) {
         for (let index = 0; index < listOfFirstNames.length; index++) {
-            let firstName = listOfFirstNames[index];
+            const firstName = listOfFirstNames[index];
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoFirstName.click();
                 await this.contactInfoFirstName.fill(firstName);
                 await this.contactInfoFirstName.press('Tab');
                 await expect(this.page.locator("//*[contains(text(),'Please enter your first name.')]")).not.toBeVisible();
-            }
-            else {
+            } else {
                 await this.contactInfoEmail.click();
-                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.fill('automation@dcsg.com');
                 await this.contactInfoEmail.press('Tab');
-                await this.contactInfoPhoneNumber.fill("7242733400");
+                await this.contactInfoPhoneNumber.fill('7242733400');
 
                 await this.checkoutContinueButton.click();
                 await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
@@ -724,19 +726,18 @@ export class CheckoutPage {
 
     async lastNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
         for (let index = 0; index < listOfFirstNames.length; index++) {
-            let firstName = listOfFirstNames[index];
+            const firstName = listOfFirstNames[index];
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoLastName.click();
                 await this.contactInfoLastName.fill(firstName);
                 await this.contactInfoLastName.press('Tab');
                 await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).toBeVisible();
-            }
-            else {
+            } else {
                 await this.contactInfoEmail.click();
-                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.fill('automation@dcsg.com');
                 await this.contactInfoEmail.press('Tab');
-                await this.contactInfoPhoneNumber.fill("7242733400");
+                await this.contactInfoPhoneNumber.fill('7242733400');
 
                 await this.checkoutContinueButton.click();
                 await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
@@ -751,19 +752,18 @@ export class CheckoutPage {
     }
     async lastNameValidationsWithValidNames(listOfFirstNames: string[]) {
         for (let index = 0; index < listOfFirstNames.length; index++) {
-            let firstName = listOfFirstNames[index];
+            const firstName = listOfFirstNames[index];
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoLastName.click();
                 await this.contactInfoLastName.fill(firstName);
                 await this.contactInfoLastName.press('Tab');
                 await expect(this.page.locator("//*[contains(text(),'Please enter your last name.')]")).not.toBeVisible();
-            }
-            else {
+            } else {
                 await this.contactInfoEmail.click();
-                await this.contactInfoEmail.fill("automation@dcsg.com");
+                await this.contactInfoEmail.fill('automation@dcsg.com');
                 await this.contactInfoEmail.press('Tab');
-                await this.contactInfoPhoneNumber.fill("7242733400");
+                await this.contactInfoPhoneNumber.fill('7242733400');
 
                 await this.checkoutContinueButton.click();
                 await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
@@ -779,7 +779,7 @@ export class CheckoutPage {
 
     async emailFieldValidationsWithInvalidDetails(listOfEmails: string[]) {
         for (let index = 0; index < listOfEmails.length; index++) {
-            let email = listOfEmails[index];
+            const email = listOfEmails[index];
             console.log(email);
             await this.contactInfoEmail.click();
             await this.contactInfoEmail.fill(email);
@@ -791,7 +791,7 @@ export class CheckoutPage {
     }
     async emailFieldValidationsWithValidDetails(listOfEmails: string[]) {
         for (let index = 0; index < listOfEmails.length; index++) {
-            let email = listOfEmails[index];
+            const email = listOfEmails[index];
             console.log(email);
             await this.contactInfoEmail.click();
             await this.contactInfoEmail.fill(email);
@@ -803,7 +803,7 @@ export class CheckoutPage {
     }
     async phoneNumberFieldValidationsWithInvalidDetails(listOfPhoneNumbers: string[]) {
         for (let index = 0; index < listOfPhoneNumbers.length; index++) {
-            let phoneNumber = listOfPhoneNumbers[index];
+            const phoneNumber = listOfPhoneNumbers[index];
             console.log(phoneNumber);
             await this.contactInfoPhoneNumber.click();
             await this.contactInfoPhoneNumber.fill(phoneNumber);
@@ -815,7 +815,7 @@ export class CheckoutPage {
     }
     async phoneNumberFieldValidationsWithValidDetails(listOfPhoneNumbers: string[]) {
         for (let index = 0; index < listOfPhoneNumbers.length; index++) {
-            let phoneNumber = listOfPhoneNumbers[index];
+            const phoneNumber = listOfPhoneNumbers[index];
             console.log(phoneNumber);
             await this.contactInfoPhoneNumber.click();
             await this.contactInfoPhoneNumber.fill(phoneNumber);
@@ -827,7 +827,7 @@ export class CheckoutPage {
     }
     async zipcodeFieldValidationsWithInvalidDetails(listOfZipCodes: string[]) {
         for (let index = 0; index < listOfZipCodes.length; index++) {
-            let zipcode = listOfZipCodes[index];
+            const zipcode = listOfZipCodes[index];
             console.log(zipcode);
             await this.billingShippingZipcode.click();
             await this.billingShippingZipcode.fill(zipcode);
@@ -839,7 +839,7 @@ export class CheckoutPage {
     }
     async zipcodeFieldValidationsWithValidDetails(listOfZipCodes: string[]) {
         for (let index = 0; index < listOfZipCodes.length; index++) {
-            let zipcode = listOfZipCodes[index];
+            const zipcode = listOfZipCodes[index];
             console.log(zipcode);
             await this.billingShippingZipcode.click();
             await this.billingShippingZipcode.fill(zipcode);
@@ -851,144 +851,126 @@ export class CheckoutPage {
 
     }
 
-    async verifyStorePickUpIsFree()
-    {
-        let estimatedTaxCharges: any = await this.storePickUpCharge.innerText();
-        expect(estimatedTaxCharges).toEqual('Free')
+    async verifyStorePickUpIsFree() {
+        const estimatedTaxCharges: string = await this.storePickUpCharge.innerText();
+        expect(estimatedTaxCharges).toEqual('Free');
     }
 
-    async validateOrderSubtotal()
-    {
-        let calculatedOrderSubTotal=await this.calculateOrderSubTotal();
-        let actualOrderSubTotalOnScreen= await this.getOrderSubTotal();
+    async validateOrderSubtotal() {
+        const calculatedOrderSubTotal = await this.calculateOrderSubTotal();
+        const actualOrderSubTotalOnScreen = await this.getOrderSubTotal();
         expect(calculatedOrderSubTotal).toEqual(actualOrderSubTotalOnScreen);
     }
-    async calculateOrderSubTotal() : Promise<number>
-    {
-        let orderSubTotal:number=0;
-        let productPrices: Array<String> = await this.individualProductPrice.allInnerTexts();
-        let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
+    async calculateOrderSubTotal(): Promise<number> {
+        let orderSubTotal = 0;
+        const productPrices: string[] = await this.individualProductPrice.allInnerTexts();
+        const productQuantities: string[] = await this.individualProductQuantity.allInnerTexts();
         console.log(productPrices);
         console.log(productQuantities);
+
         for (let index = 0; index < productPrices.length; index++) {
-            let price=productPrices.at(index)?.replace('$','').split(' ')[0]!;
-            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
-            orderSubTotal= orderSubTotal+(Number.parseFloat(price)*Number.parseInt(quantity))
-            
+            const price = productPrices.at(index)?.replace('$', '').split(' ')[0]!;
+            const quantity = productQuantities.at(index)?.split('\n')[0].replace('Qty: ', '')!;
+            console.log('Price: ' + price + '\n' + 'Quantity: ' + quantity + '\n');
+            orderSubTotal = orderSubTotal + (Number.parseFloat(price) * Number.parseInt(quantity));
+
         }
         console.log(orderSubTotal);
         return orderSubTotal;
     }
-    async verifyEstDeliveryDate(expectedCount:Number)
-    {
+    async verifyEstDeliveryDate(expectedCount: number) {
         await expect(this.estDeliveryDates.first()).toBeVisible();
-        let estimatedDeliveryDates: Array<String> = await this.estDeliveryDates.allInnerTexts();
+        const estimatedDeliveryDates: string[] = await this.estDeliveryDates.allInnerTexts();
         expect(estimatedDeliveryDates.length).toEqual(expectedCount);
         console.log(estimatedDeliveryDates);
     }
 
-    async verifyOversizedItem(expectedProduct: string)
-    {
-        let found:boolean=false;
+    async verifyOversizedItem(expectedProduct: string) {
+        let found = false;
         await expect(this.individualProductName.first()).toBeVisible();
-        let productNames: Array<String>= await this.individualProductName.allInnerTexts();
-        console.log(productNames)
+        const productNames: string[] = await this.individualProductName.allInnerTexts();
+        console.log(productNames);
         for (let index = 0; index < productNames.length; index++) {
-            if(productNames.at(index)?.includes(expectedProduct))
-            {
-                found=true;
+            if (productNames.at(index)?.includes(expectedProduct)) {
+                found = true;
                 break;
             }
-            
+
         }
         expect(found).toEqual(true);
     }
 
-    async verifyProductInfo(expectedProduct: string)
-    {
-        let found:boolean=false;
+    async verifyProductInfo(expectedProduct: string) {
+        let found = false;
         await expect(this.individualProductName.first()).toBeVisible();
-        let productNames: Array<String>= await this.individualProductName.allInnerTexts();
-        console.log(productNames)
+        const productNames: string[] = await this.individualProductName.allInnerTexts();
+        console.log(productNames);
         for (let index = 0; index < productNames.length; index++) {
-            if(productNames.at(index)?.includes(expectedProduct))
-            {
-                found=true;
+            if (productNames.at(index)?.includes(expectedProduct)) {
+                found = true;
                 break;
             }
-            
+
         }
         expect(found).toEqual(true);
     }
-    async checkBOPISStoreDetails()
-    {
+    async checkBOPISStoreDetails() {
         await expect(this.storeDetails).toBeVisible();
     }
-    async checkBOPISStoreNameInDetails(expectedStoreName:string)
-    {
+    async checkBOPISStoreNameInDetails(expectedStoreName: string) {
         await expect(this.storename).toBeVisible();
-        console.log(await this.storename.innerText())
+        console.log(await this.storename.innerText());
         expect((await this.storeDetails.innerText()).includes(expectedStoreName)).toEqual(true);
     }
 
-    async verifyFreeStorePickup()
-    {
+    async verifyFreeStorePickup() {
         await expect(this.freeStorePickup).toBeVisible();
     }
-    async verifySingleProductQuantity(expectedQuantity:number)
-    {
-        let found:boolean=false
-        let productQuantities:Array<String>=await this.individualProductQuantity.allInnerTexts();
+    async verifySingleProductQuantity(expectedQuantity: number) {
+        let found = false;
+        const productQuantities: string[] = await this.individualProductQuantity.allInnerTexts();
         console.log(productQuantities);
         for (let index = 0; index < productQuantities.length; index++) {
-            let quantity=productQuantities.at(index)?.split('\n')[0].replace('Qty: ','')!;
-            if(Number.parseInt(quantity)==expectedQuantity)
-            {
-                found=true;
+            const quantity = productQuantities.at(index)?.split('\n')[0].replace('Qty: ', '').trim()!;
+            if (Number.parseInt(quantity) == expectedQuantity) {
+                found = true;
                 break;
             }
-            
+
         }
         expect(found).toEqual(true);
-        
+
     }
-    async clickChangeContactInformation()
-    {
+    async clickChangeContactInformation() {
         await expect(this.changeContactInfo).toBeVisible();
         await this.changeContactInfo.click();
 
     }
-    async clickChangeBillingShippingformation()
-    {
+    async clickChangeBillingShippingformation() {
         await expect(this.changeBillingShippingInfo).toBeVisible();
         await this.changeBillingShippingInfo.click();
 
     }
-    async verifyProductNamesWithCartPage(expectedProductNames:String[])
-    {
+    async verifyProductNamesWithCartPage(expectedProductNames: string[]) {
         await expect(this.individualProductName.first()).toBeVisible();
-        let productNames: Array<String>= await this.individualProductName.allInnerTexts();  
-        expect(productNames.sort()).toEqual(expectedProductNames.sort())
+        const productNames: string[] = await this.individualProductName.allInnerTexts();
+        expect(productNames.sort()).toEqual(expectedProductNames.sort());
 
     }
-    async clickDSGLogo()
-    {
+    async clickDSGLogo() {
         await this.dsgLogo.click();
     }
 
-    async checkTextMeOrderUpdates()
-    {
+    async checkTextMeOrderUpdates() {
         await expect(this.textMeOrderUpdates).toBeVisible();
         await this.textMeOrderUpdates.click();
     }
-    async clickAddPickUpPerson()
-    {
+    async clickAddPickUpPerson() {
         await expect(this.addPickupPersonLink).toBeVisible();
         await this.addPickupPersonLink.click();
     }
 
-    async providePickUPPersonDetails(firstname:string, lastname:string, email:string)
-    {
+    async providePickUPPersonDetails(firstname: string, lastname: string, email: string) {
         await expect(this.pickupFirstname).toBeVisible();
         await this.pickupFirstname.fill(firstname);
         await this.pickupLastname.fill(lastname);
@@ -996,42 +978,36 @@ export class CheckoutPage {
         await this.pickUpContinue.click();
 
     }
-    async clickContinueOnContactInfo()
-    {
+    async clickContinueOnContactInfo() {
         await expect(this.checkoutContinueButton).toBeVisible();
         await this.checkoutContinueButton.click();
         await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
     }
-    async enterGiftReceipientDetails(email:string, firstname:string, desc:string)
-    {
+    async enterGiftReceipientDetails(email: string, firstname: string, desc: string) {
         await expect(this.giftReceipientEmail).toBeVisible();
         await this.giftReceipientEmail.fill(email);
         await this.giftReceipientFirstName.fill(firstname);
         await this.giftReceipientDescription.fill(desc);
 
     }
-    async verifySameDayDevlieryTipIsVisibleOrNot()
-    {
+    async verifySameDayDevlieryTipIsVisibleOrNot() {
         await expect(this.sameDayDeliveryTip).toBeVisible();
     }
 
-    async getSameDayDeliveryTipAmount(): Promise<string>
-    {
+    async getSameDayDeliveryTipAmount(): Promise<string> {
         await expect(this.sameDayDevlieryTipAmount).toBeVisible();
         return this.sameDayDevlieryTipAmount.innerText();
     }
-    async selectTipAmount(tipAmount:string)
-    {
+    async selectTipAmount(tipAmount: string) {
         await expect(this.sameDayDevlieryTipAmount).toBeVisible();
-        await this.page.locator("//button/span[text()='"+tipAmount+"']").click();
+        await this.page.locator("//button/span[text()='" + tipAmount + "']").click();
     }
     async getTipAmountOrderTotal(): Promise<string> {
-        let tipAMount: any = await this.tipAmount.innerText();
+        const tipAMount: string = await this.tipAmount.innerText();
         return tipAMount;
 
     }
-    async selectOtherTipAmount(tipAmount:string)
-    {
+    async selectOtherTipAmount(tipAmount: string) {
         await expect(this.otherTipLink).toBeVisible();
         await this.otherTipLink.click();
         await expect(this.tipAmountInput).toBeVisible();

@@ -14,26 +14,26 @@ export class OrderConfirmationPage {
 
         this.orderNumberText = page.getByText('Order#');
         this.thankYouForYourOrderHeader = page.getByRole('heading', { name: 'Thank you for your order!' });
-        this.continueShoppingLink = page.getByRole('link', { name: 'Continue Shopping' });
+        this.continueShoppingLink = page.getByRole('link', { name: 'Continue Shopping' }).or(page.getByLabel('Continue Shopping'));;
     }
 
     async apiProdCancelOrderSolePanel(orderNumber: string, apiContext: APIRequestContext): Promise<void> {
         const newIssue = await apiContext.put(`/api/v1/orders/${orderNumber}/cancel`, {
             data: {
-                "athleteOrderCancelRequest": {
-                    "agent": testData_smokeCheckout_prod.usernameOrderAPI,
-                    "cancelDate": new Date().toISOString(), // Use current date and time
-                    "cancelSource": "CallCenter",
-                    "reason": "CANCEL_ATHLETE_REQUEST"
+                'athleteOrderCancelRequest': {
+                    'agent': testData_smokeCheckout_prod.usernameOrderAPI,
+                    'cancelDate': new Date().toISOString(), // Use current date and time
+                    'cancelSource': 'CallCenter',
+                    'reason': 'CANCEL_ATHLETE_REQUEST'
                 },
-                "orderNumber": orderNumber,
-                "wcsCancelRequest": {
-                    "storeId": "15108"
+                'orderNumber': orderNumber,
+                'wcsCancelRequest': {
+                    'storeId': '15108'
                 }
             }
         });
         //console.log(newIssue);
         expect(newIssue.ok()).toBeTruthy();
-        console.log("Order Cancelled: " + orderNumber);
+        console.log('Order Cancelled: ' + orderNumber);
     }
 }

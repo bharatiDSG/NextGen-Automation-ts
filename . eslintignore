@@ -1,0 +1,21 @@
+# Playwright Specific
+node_modules/
+test-results/
+playwright-report
+summary.json
+/blob-report/
+/playwright/.cache/
+.env
+/ctrf/
+
+# IDE
+.vscode/*
+/.idea/
+
+# System Files
+.DS_Store
+Thumbs.db
+{"mode":"full","isActive":false}
+
+# Docs files
+*_spec3.json
