@@ -40,5 +40,8 @@
     },
     "app_gg_dks_avail_api": {
         "baseUrl": "https://availability.dksxchange.com/ws/v3/omni/stores?"
+    },
+    "dsg_delta": {
+        "baseUrl": "https://delta.dickssportinggoods.com"
     }
 }

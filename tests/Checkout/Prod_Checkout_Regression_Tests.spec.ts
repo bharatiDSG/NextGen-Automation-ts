@@ -144,9 +144,16 @@ test.describe('Prod Checkout tests', () => {
 
             //cancel the order
             //documentation - https://playwright.dev/docs/api-testing
+            if(getBaseUrl().includes('preview')||getBaseUrl().includes('delta'))
+            {
+                console.log('Ignoring the Cancel order')
+            }
+            else
+            {
             if (orderNumberFromConfirmationPageModified) {
                 await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext);
             }
+        }
 
             //verify orderConfirmationPage
             await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible();
@@ -4074,11 +4081,10 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    await test.step('Get Access Toekn', async() => {
-        accessToken= await page.evaluate('window.accessToken');
-        const cookies=await page.context().cookies();
-        console.log(cookies);
-        console.log(accessToken);
+    await test.step('Get Access Toekn',async()=>{
+        accessToken= await page.evaluate('window.accessToken')
+        const cookies=await page.context().cookies()
+        
 
     });
 
