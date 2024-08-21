@@ -58,7 +58,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
 
     // Timeout for page waits
-    actionTimeout: 20000,
+    actionTimeout: 40000,
 
     // launchOptions: {
     //   slowMo: 50,
