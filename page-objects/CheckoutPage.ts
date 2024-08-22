@@ -102,6 +102,7 @@ export class CheckoutPage {
     readonly applyTipAmount: Locator;
     readonly billingShippingLabel: Locator;
     readonly tipChangeLink: Locator;
+    readonly commonProgressSpinner: Locator;
 
 
     constructor(page: Page) {
@@ -219,7 +220,9 @@ export class CheckoutPage {
         this.otherTipLink = page.getByLabel('Custom tip selection');
         this.tipAmountInput = page.getByPlaceholder('Enter tip amount');
         this.applyTipAmount = page.getByRole('button', { name: 'Apply', exact: true });
-        this.tipChangeLink=page.locator('#same-day-card').getByRole('button', { name: 'Change' });
+        this.tipChangeLink = page.locator('#same-day-card').getByRole('button', { name: 'Change' });
+
+        this.commonProgressSpinner= page.locator('//common-loading-overlay/div');
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
@@ -278,6 +281,7 @@ export class CheckoutPage {
         await this.checkoutContinueButton.click();
 
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
+        await expect(this.commonProgressSpinner).toHaveCount(0);
     }
     async enterBillingShippingInfoForSameDayDelivery(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
@@ -979,12 +983,14 @@ export class CheckoutPage {
         await this.pickupLastname.fill(lastname);
         await this.pickupEmail.fill(email);
         await this.pickUpContinue.click();
+        await expect(this.commonProgressSpinner).toHaveCount(0);
 
     }
     async clickContinueOnContactInfo() {
         await expect(this.checkoutContinueButton).toBeVisible();
         await this.checkoutContinueButton.click();
         await expect(this.contactInfoCompletedCheckmarkImg).toBeVisible();
+        await expect(this.commonProgressSpinner).toHaveCount(0);
     }
     async enterGiftReceipientDetails(email: string, firstname: string, desc: string) {
         await expect(this.giftReceipientEmail).toBeVisible();
@@ -1002,13 +1008,15 @@ export class CheckoutPage {
         return this.sameDayDevlieryTipAmount.innerText();
     }
     async selectTipAmount(tipAmount: string) {
-        
-        if(await this.tipChangeLink.isVisible()) {
+
+        if (await this.tipChangeLink.isVisible()) {
             await this.tipChangeLink.click();
         }
         await expect(this.sameDayDevlieryTipAmount).toBeVisible();
         await this.page.locator("//button/span[text()='" + tipAmount + "']").click();
         await this.checkoutContinueButton.click();
+        await expect(this.commonProgressSpinner).toHaveCount(0);
+        await expect(this.creditCardNumberField).toBeVisible();
     }
     async getTipAmountOrderTotal(): Promise<string> {
         const tipAMount: string = await this.tipAmount.innerText();
@@ -1016,15 +1024,14 @@ export class CheckoutPage {
 
     }
     async selectOtherTipAmount(tipAmount: string) {
-        if(await this.tipChangeLink.isVisible()) {
-                await this.tipChangeLink.click();
-            }
+        if (await this.tipChangeLink.isVisible()) {
+            await this.tipChangeLink.click();
+        }
         await expect(this.otherTipLink).toBeVisible();
         await this.otherTipLink.click();
         await expect(this.tipAmountInput).toBeVisible();
         await this.tipAmountInput.fill(tipAmount);
         await this.applyTipAmount.click();
+        await expect(this.commonProgressSpinner).toHaveCount(0);
     }
-
-
 }

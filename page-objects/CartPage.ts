@@ -51,6 +51,7 @@ export class CartPage {
   readonly updateZipCodeButton: Locator;
   readonly sameDayDeliveryRadioButton: Locator;
   readonly confirmAndCheckoutBtn: Locator;
+  readonly cartCommonProgressSpinner: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -90,6 +91,7 @@ export class CartPage {
     this.updateZipCodeButton = page.getByTestId('button');
     this.sameDayDeliveryRadioButton = page.locator("//p[contains(text(),'Same Day Delivery')]");
     this.confirmAndCheckoutBtn = page.getByRole('button', { name: 'Confirm and Checkout' });
+    this.cartCommonProgressSpinner= page.locator('//common-loading-overlay/div');
 
   }
 
@@ -222,6 +224,8 @@ export class CartPage {
     await this.cartProductQuantity.nth(lineItem - 1).fill(expectedQuantity);
     // Assert the quantity is as expected
     await this.cartProductName.first().click();
+    await expect(this.cartCommonProgressSpinner).toHaveCount(0);
+    await this.page.waitForLoadState('networkidle');
   }
 
   async verifyPShippingMedium(status: string): Promise<void> {
@@ -274,11 +278,12 @@ export class CartPage {
     for (let index = 0; index < noOfProductsToBeDeleted; index++) {
       await this.deleteIcon.nth(1).click();
       // await this.page.locator("(//img[@class='delete-icon'])[1]").click();
-      await this.page.waitForLoadState('domcontentloaded');
+      await this.page.waitForLoadState('networkidle');
     }
   }
 
   async getProductNames(): Promise<string[]> {
+    await expect(this.cartCommonProgressSpinner).toHaveCount(0);
     await expect(this.individualProductName.first()).toBeVisible();
     const productNames: string[] = await this.individualProductName.allInnerTexts();
     console.log(productNames);

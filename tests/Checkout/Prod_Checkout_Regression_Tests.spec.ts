@@ -135,7 +135,8 @@ test.describe('Prod Checkout tests', () => {
         // Validate order confirmation page and order number
         await test.step('Validate Order details and Cancel the order', async () => {
             await page.waitForLoadState('load');
-            await page.waitForTimeout(20000); // waits for 5 seconds
+            //Need to wait so that order reaches down stream system, so that we can cancel it
+            await page.waitForTimeout(20000); // eslint-disable-line
             await expect(orderConfirmationPage.orderNumberText).toBeVisible();
             const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent();
             const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace('Order# ', '').trim() : null;
@@ -2118,11 +2119,12 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
 
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
@@ -2154,7 +2156,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Checkout ', async () => {
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await cartPage.clickCheckoutButton();
         });
 
@@ -2171,7 +2173,7 @@ test.describe('Prod Checkout tests', () => {
         });
         await test.step('Validate Order Subtotal ', async () => {
             await page.waitForLoadState('domcontentloaded');
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await checkoutPage.validateOrderSubtotal();
         });
 
@@ -2274,11 +2276,12 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
 
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
@@ -3241,7 +3244,7 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.deleteNoOfCartItems(1);
         });
         await test.step('Remember the Cart items', async () => {
-            await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
             productNamesFromCartPage = await cartPage.getProductNames();
         });
 
@@ -3334,7 +3337,8 @@ test.describe('Prod Checkout tests', () => {
 
         });
         await test.step('Remember the Cart items', async () => {
-            await page.waitForTimeout(4000);
+            //await page.waitForTimeout(4000);
+            //await page.waitForLoadState('networkidle');
             productNamesFromCartPage = await cartPage.getProductNames();
         });
 
@@ -3372,6 +3376,7 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.shipFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3395,7 +3400,8 @@ test.describe('Prod Checkout tests', () => {
 
         });
         await test.step('Remember the Cart items', async () => {
-            await page.waitForTimeout(4000);
+            //await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
             productNamesFromCartPageAfterChange = await cartPage.getProductNames();
         });
 
@@ -3460,7 +3466,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Remember the Cart items', async () => {
-            await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
             productNamesFromCartPage = await cartPage.getProductNames();
         });
 
@@ -3521,7 +3527,8 @@ test.describe('Prod Checkout tests', () => {
 
         });
         await test.step('Remember the Cart items', async () => {
-            await page.waitForTimeout(4000);
+            //await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
             productNamesFromCartPageAfterChange = await cartPage.getProductNames();
         });
 
@@ -3721,16 +3728,16 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
 
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
         await test.step('Select attributes for Bopis', async () => {
-            await page.waitForTimeout(3000);
+            await page.waitForLoadState('networkidle');
             await productDisplayPage.verifyAttributesArePresentOrNotForBOPIS('15108', 'Robinson');
             await productDisplayPage.selectBOPISAttributes(page);
         });
@@ -3768,14 +3775,12 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.clickContinueOnContactInfo();
         });
         await test.step('click add pickup person link', async () => {
-            await page.waitForTimeout(2000);
             await checkoutPage.clickAddPickUpPerson();
         });
         await test.step('provide details', async () => {
             await checkoutPage.providePickUPPersonDetails('test1', 'tester1', 'automationdcsg@dcsg.com');
         });
         await test.step('Verify the address', async () => {
-            await page.waitForLoadState('networkidle');
             await checkoutPage.validateUserAndBillingDetails(['test1 tester1', 'automationdcsg@dcsg.com']);
         });
 
@@ -3872,7 +3877,7 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await page.waitForTimeout(3000);
+            //await page.waitForTimeout(3000);
             if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
                 await productListingPage.sameDayDeliveryFilter.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
@@ -3880,11 +3885,11 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.sameDayDeliveryFilter.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
 
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
@@ -3956,11 +3961,12 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setDeliveryZipPLP('15108');
+            //await page.waitForLoadState('networkidle');
         });
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await page.waitForTimeout(3000);
+            //await page.waitForLoadState('networkidle');
             if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
                 await productListingPage.sameDayDeliveryFilter.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
@@ -3968,12 +3974,13 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.sameDayDeliveryFilter.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
 
-            await page.waitForLoadState('domcontentloaded');
-            await page.waitForTimeout(5000);
-            await productListingPage.selectAProduct();
+            await page.waitForLoadState('load');
+            //await page.waitForTimeout(5000);
+            await productListingPage.selectAProductWithInGivenRange(6);
         });
 
         await test.step('select attributes', async () => {
@@ -4040,14 +4047,14 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.selectTipAmount('$0');
         });
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000);
+            //await page.waitForTimeout(3000);
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$0.00');
         });
         await test.step('Select Tip Amount', async () => {
             await checkoutPage.selectTipAmount('$10');
         });
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000);
+            //await page.waitForTimeout(3000);
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$10.00');
         });
 
@@ -4055,7 +4062,7 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.selectOtherTipAmount('7');
         });
         await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$7.00');
         });
 

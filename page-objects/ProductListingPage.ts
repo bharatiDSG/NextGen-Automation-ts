@@ -89,6 +89,7 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
+  readonly loadingOverlay:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -200,6 +201,8 @@ export class ProductListingPage {
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
 
+    this.loadingOverlay= page.locator('//div[@class="dsg-react-loading-overlay"]')
+
 
 
   }
@@ -254,6 +257,7 @@ export class ProductListingPage {
     await this.zipDeliveryInputField.first().click();
     await this.zipDeliveryInputField.first().fill(zip);
     await this.zipDeliveryUpdateButton.click();
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
   }
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
@@ -332,6 +336,14 @@ export class ProductListingPage {
     const productNames = await this.productNames.allInnerTexts();
     console.log('product count: ' + productNames.length);
     await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
+
+
+  }
+  async selectAProductWithInGivenRange(withInRange:number) {
+    await this.productNames.last().waitFor();
+    const productNames = await this.productNames.allInnerTexts();
+    console.log('product count: ' + productNames.length);
+    await this.productNames.nth(Math.floor(Math.random() * withInRange)).click();
 
 
   }
