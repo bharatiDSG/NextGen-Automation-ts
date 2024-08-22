@@ -8,9 +8,9 @@ import { CartPage } from '../../page-objects/CartPage.ts';
 import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
 import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
 import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
-import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
-import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.js';
+import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.ts';
 
 
 test.describe('Prod Checkout tests', () => {
@@ -3865,8 +3865,8 @@ test.describe('Prod Checkout tests', () => {
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
 
-        await test.step('When we search for "kickball" keyword in the search box', async () => {
-            await homePage.searchForProduct('kickball');
+        await test.step('When we search for "Table Tennis" keyword in the search box', async () => {
+            await homePage.searchForProduct('Table Tennis');
         });
 
         await test.step('And we set zip code to "15108"', async () => {
