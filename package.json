@@ -6,8 +6,7 @@
   "scripts": {
     "test": "playwright test secured_athlete_prod_tests.spec.ts --headed",
     "batgenie": "playwright test bat_genie_prod_tests.spec.ts --headed",
-    "e2e": "playwright test e2e_np0_prod_tests.spec.ts --headed",
-    "prepare": "husky"
+    "e2e": "playwright test e2e_np0_prod_tests.spec.ts --headed"
   },
   "keywords": [],
   "author": "",

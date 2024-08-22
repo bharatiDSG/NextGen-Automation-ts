@@ -20,6 +20,7 @@ export default tseslint.config(
             'playwright/no-conditional-in-test': 'off',
             'playwright/no-skipped-test': 'off',
             'playwright/no-networkidle': 'off',
+            'playwright/expect-expect': 'off',
             // "playwright/no-nested-step": "off"
         },
     },
