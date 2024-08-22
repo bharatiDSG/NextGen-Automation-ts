@@ -14,7 +14,7 @@ export class OrderConfirmationPage {
 
         this.orderNumberText = page.getByText('Order#');
         this.thankYouForYourOrderHeader = page.getByRole('heading', { name: 'Thank you for your order!' });
-        this.continueShoppingLink = page.getByRole('link', { name: 'Continue Shopping' }).or(page.getByLabel('Continue Shopping'));;
+        this.continueShoppingLink = page.getByRole('link', { name: 'Continue Shopping' }).or(page.getByLabel('Continue Shopping'));
     }
 
     async apiProdCancelOrderSolePanel(orderNumber: string, apiContext: APIRequestContext): Promise<void> {

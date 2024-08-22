@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-
+import { test } from '@playwright/test';
 import { CartPage } from '../../../page-objects/CartPage';
 import { CommonPage } from '../../../page-objects/CommonPage';
 import { HomePage } from '../../../page-objects/HomePage';
@@ -11,46 +10,54 @@ test.describe('PDP Single Sku Item Tests', () => {
     let productDisplayPage: ProductDisplayPage;
     let commonPage: CommonPage;
     let cartPage: CartPage;
-    test.beforeEach(async ({ page }) => {
+
+    test.beforeEach(async ({ page, context }) => {
         homePage = new HomePage(page);
         commonPage = new CommonPage(page);
         productDisplayPage = new ProductDisplayPage(page);
         cartPage = new CartPage(page);
 
+        // grant permission for location
+        await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+        console.log('geolocation granted for: ' + getBaseUrl());
+
+        // handle iframe popup  
+        commonPage.handleIframePopupSignUpViaTextForOffers();
+
         // Go to baseUrl set in .env
-        await test.step('Navigate to Home page', async() => {
-        await homePage.goToHomePage(getBaseUrl() + 'homr');
-        console.log('URL: ' + getBaseUrl());
+        await test.step('Navigate to Home page', async () => {
+            await homePage.goToHomePage(getBaseUrl() + 'homr');
+            console.log('URL: ' + getBaseUrl() + 'homr');
         });
     });
 
     test('DSG ATC Single Sku - Desktop', { tag: ['@rewrite'] }, async ({ page }) => {
-        await test.step('Navigate to mountain bike page', async() => {
-        await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
-        await commonPage.addRewriteFlagToUrl();
+        await test.step('Navigate to mountain bike page', async () => {
+            await page.goto(getBaseUrl() + '/p/yeti-20-ozrambler-tumbler-with-magslider-lid-17yetarmblr20wmgsodr/17yetarmblr20wmgsodr');
+            await commonPage.addRewriteFlagToUrl();
         });
 
         //Check the ship to me button displays the correct text before selecting product options
-        await test.step('Check the ship to me button displays the correct text before selecting product options', async() => {
-        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Select product options');
+        await test.step('Check the ship to me button displays the correct text before selecting product options', async () => {
+            await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Select product options');
         });
 
         //Select product options
-        await test.step('Select product options', async() => {
-        await productDisplayPage.availableProductColorRewrite.first().click();
+        await test.step('Select product options', async () => {
+            await productDisplayPage.availableProductColorRewrite.first().click();
         });
 
         //Check the ship to me button displays the correct text after selecting product options
-        await test.step('Check the ship to me button displays the correct text after selecting product options', async() => {
-        await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Available');
-        await productDisplayPage.shipToMeButton.click();
+        await test.step('Check the ship to me button displays the correct text after selecting product options', async () => {
+            await commonPage.isTextVisible(productDisplayPage.shipToMeButton, 'Available');
+            await productDisplayPage.shipToMeButton.click();
         });
 
         //Add to cart and check the product is in the cart
-        await test.step('Add to cart and check the product is in the cart', async() => {
-        await productDisplayPage.addToCartButtonRewrite.click();
-        await productDisplayPage.goToCartButton.click();
-        await commonPage.isTextVisible(cartPage.cartItemAmount, '1 item');
+        await test.step('Add to cart and check the product is in the cart', async () => {
+            await productDisplayPage.addToCartButtonRewrite.click();
+            await productDisplayPage.goToCartButton.click();
+            await commonPage.isTextVisible(cartPage.cartItemAmount, '1 item');
         });
     });
 });
