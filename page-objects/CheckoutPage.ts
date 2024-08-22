@@ -101,6 +101,7 @@ export class CheckoutPage {
     readonly tipAmountInput: Locator;
     readonly applyTipAmount: Locator;
     readonly billingShippingLabel: Locator;
+    readonly tipChangeLink: Locator;
 
 
     constructor(page: Page) {
@@ -218,6 +219,7 @@ export class CheckoutPage {
         this.otherTipLink = page.getByLabel('Custom tip selection');
         this.tipAmountInput = page.getByPlaceholder('Enter tip amount');
         this.applyTipAmount = page.getByRole('button', { name: 'Apply', exact: true });
+        this.tipChangeLink=page.locator('#same-day-card').getByRole('button', { name: 'Change' });
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
@@ -999,8 +1001,13 @@ export class CheckoutPage {
         return this.sameDayDevlieryTipAmount.innerText();
     }
     async selectTipAmount(tipAmount: string) {
+        
+        if(await this.tipChangeLink.isVisible()) {
+            await this.tipChangeLink.click();
+        }
         await expect(this.sameDayDevlieryTipAmount).toBeVisible();
         await this.page.locator("//button/span[text()='" + tipAmount + "']").click();
+        await this.checkoutContinueButton.click();
     }
     async getTipAmountOrderTotal(): Promise<string> {
         const tipAMount: string = await this.tipAmount.innerText();
@@ -1008,6 +1015,9 @@ export class CheckoutPage {
 
     }
     async selectOtherTipAmount(tipAmount: string) {
+        if(await this.tipChangeLink.isVisible()) {
+                await this.tipChangeLink.click();
+            }
         await expect(this.otherTipLink).toBeVisible();
         await this.otherTipLink.click();
         await expect(this.tipAmountInput).toBeVisible();

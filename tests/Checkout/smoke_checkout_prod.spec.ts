@@ -27,7 +27,7 @@ test.describe('DSG Prod Smoke Checkout Tests', () => {
 
     // Close popup(frame) listener
     const closePopup = page.locator('#slideoutCloseButton');
-    page.once('frameattached', async data => {
+    page.once('frameattached', async() => {
       console.log('listening for popup frame once');
       if (await closePopup.isVisible({ timeout: 20000 })) {
         await closePopup.click({ timeout: 20000 });
