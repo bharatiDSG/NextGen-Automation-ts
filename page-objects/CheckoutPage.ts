@@ -934,6 +934,7 @@ export class CheckoutPage {
         console.log(productQuantities);
         for (let index = 0; index < productQuantities.length; index++) {
             const quantity = productQuantities.at(index)?.split('\n')[0].replace('Qty: ', '').trim()!;
+            console.log(quantity)
             if (Number.parseInt(quantity) == expectedQuantity) {
                 found = true;
                 break;
