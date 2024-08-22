@@ -2714,6 +2714,7 @@ test.describe('Prod Checkout tests', () => {
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
+        let productNameInCart;
 
         await test.step('When we search for "nike dri-fit headband" keyword in the search box', async () => {
             await homePage.searchForProduct('nike dri-fit headband');
@@ -2751,6 +2752,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Checkout ', async () => {
+            productNameInCart=await cartPage.getProductNames();
             await cartPage.clickCheckoutButton();
         });
 
@@ -2766,7 +2768,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('validate the product name and Qty', async () => {
-            await checkoutPage.verifyProductInfo('Nike');
+            await checkoutPage.verifyProductInfo(productNameInCart[0]);
             await checkoutPage.verifySingleProductQuantity(1);
 
         });
@@ -2781,7 +2783,7 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.clickCheckoutButton();
         });
         await test.step('validate the product name and Qty', async () => {
-            await checkoutPage.verifyProductInfo('Nike');
+            await checkoutPage.verifyProductInfo(productNameInCart[0]);
             await checkoutPage.verifySingleProductQuantity(3);
 
         });
