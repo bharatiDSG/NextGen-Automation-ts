@@ -91,7 +91,7 @@ export class CartPage {
     this.updateZipCodeButton = page.getByTestId('button');
     this.sameDayDeliveryRadioButton = page.locator("//p[contains(text(),'Same Day Delivery')]");
     this.confirmAndCheckoutBtn = page.getByRole('button', { name: 'Confirm and Checkout' });
-    this.cartCommonProgressSpinner= page.locator('//common-loading-overlay/div');
+    this.cartCommonProgressSpinner = page.locator('//common-loading-overlay/div');
 
   }
 

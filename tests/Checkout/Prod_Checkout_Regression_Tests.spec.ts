@@ -26,7 +26,14 @@ test.describe('Prod Checkout tests', () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
-        await homePage.goToHomePage(getBaseUrl() + '?TagForceLane=62');
+        if (getBaseUrl().includes('preview')) {
+            await homePage.goToHomePage(getBaseUrl() + 'homr?TagForceLane=62');
+        }
+        else {
+            await homePage.goToHomePage(getBaseUrl() + '?TagForceLane=62');
+        }
+
+
         console.log('URL: ' + getBaseUrl());
 
     });
@@ -2107,6 +2114,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setStoreFromPLP('Robinson');
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
             //await expect(productListingPage.zipDeliveryLocationButton).toHaveText(new RegExp('.*15205.*'))
         });
 
@@ -2123,7 +2131,7 @@ test.describe('Prod Checkout tests', () => {
         });
         await test.step('Select a product', async () => {
 
-            await page.waitForLoadState('networkidle');
+            //await page.waitForLoadState('networkidle');
             //await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
@@ -2752,7 +2760,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Checkout ', async () => {
-            productNameInCart=await cartPage.getProductNames();
+            productNameInCart = await cartPage.getProductNames();
             await cartPage.clickCheckoutButton();
         });
 

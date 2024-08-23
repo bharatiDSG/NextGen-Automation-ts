@@ -222,7 +222,7 @@ export class CheckoutPage {
         this.applyTipAmount = page.getByRole('button', { name: 'Apply', exact: true });
         this.tipChangeLink = page.locator('#same-day-card').getByRole('button', { name: 'Change' });
 
-        this.commonProgressSpinner= page.locator('//common-loading-overlay/div');
+        this.commonProgressSpinner = page.locator('//common-loading-overlay/div');
     }
 
     async enterContactInfo(firstName: string, lastName: string, email: string, phoneNumber: string): Promise<void> {
@@ -938,7 +938,7 @@ export class CheckoutPage {
         console.log(productQuantities);
         for (let index = 0; index < productQuantities.length; index++) {
             const quantity = productQuantities.at(index)?.split('\n')[0].replace('Qty: ', '').trim()!;
-            console.log(quantity)
+            console.log('Qunatity: ' + quantity);
             if (Number.parseInt(quantity) == expectedQuantity) {
                 found = true;
                 break;
