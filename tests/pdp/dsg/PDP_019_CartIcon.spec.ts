@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-
+import { test } from '@playwright/test';
 import { CartPage } from '../../../page-objects/CartPage';
 import { CommonPage } from '../../../page-objects/CommonPage';
 import { HomePage } from '../../../page-objects/HomePage';
@@ -11,40 +10,49 @@ test.describe('PDP Cart Icon Tests', () => {
     let productDisplayPage: ProductDisplayPage;
     let commonPage: CommonPage;
     let cartPage: CartPage;
-    test.beforeEach(async ({ page }) => {
+
+    test.beforeEach(async ({ page, context }) => {
         homePage = new HomePage(page);
         commonPage = new CommonPage(page);
         productDisplayPage = new ProductDisplayPage(page);
         cartPage = new CartPage(page);
-        await test.step('Navigate to Home page', async() => {
-        await homePage.goToHomePage(getBaseUrl() + 'homr');
-        console.log('URL: ' + getBaseUrl());
-    });
+
+        // grant permission for location
+        await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+        console.log('geolocation granted for: ' + getBaseUrl());
+
+        // handle iframe popup  
+        commonPage.handleIframePopupSignUpViaTextForOffers();
+
+        await test.step('Navigate to Home page', async () => {
+            await homePage.goToHomePage(getBaseUrl() + 'homr');
+            console.log('URL: ' + getBaseUrl() + 'homr');
+        });
     });
 
     test('DSG Cart Icon - Desktop', { tag: ['@rewrite'] }, async ({ page }) => {
-        await test.step('Navigate to mountain bike page', async() => {
-        await page.goto(getBaseUrl() + '/p/mongoose-adult-switchback-comp-mountain-bike-24mona29swtchbckcprf/24mona29swtchbckcprf');
-        await commonPage.addRewriteFlagToUrl();
+        await test.step('Navigate to mountain bike page', async () => {
+            await page.goto(getBaseUrl() + '/p/mongoose-adult-switchback-comp-mountain-bike-24mona29swtchbckcprf/24mona29swtchbckcprf');
+            await commonPage.addRewriteFlagToUrl();
         });
 
         //Select product options
-        await test.step('Select attributes', async() => {
-        await productDisplayPage.availableProductColorRewrite.first().click();
-        await productDisplayPage.availableBikeFrameSize.first().click();
-        await productDisplayPage.availableWheelSize.first().click();
+        await test.step('Select attributes', async () => {
+            await productDisplayPage.availableProductColorRewrite.first().click();
+            await productDisplayPage.availableBikeFrameSize.first().click();
+            await productDisplayPage.availableWheelSize.first().click();
         });
 
         //Set the product quantity to 4
-        await test.step('Update Quantity to 4', async() => {
-        await commonPage.fillTextField(productDisplayPage.productQuantityTextFieldRewrite, '4');
+        await test.step('Update Quantity to 4', async () => {
+            await commonPage.fillTextField(productDisplayPage.productQuantityTextFieldRewrite, '4');
         });
 
         //Add to cart and check the products are in the cart
-        await test.step('Add to cart and check products are present in Cart', async() => {
-        await productDisplayPage.addToCartButtonRewrite.click();
-        await productDisplayPage.goToCartButton.click();
-        await commonPage.isTextVisible(cartPage.cartItemAmount, '4 items');
+        await test.step('Add to cart and check products are present in Cart', async () => {
+            await productDisplayPage.addToCartButtonRewrite.click();
+            await productDisplayPage.goToCartButton.click();
+            await commonPage.isTextVisible(cartPage.cartItemAmount, '4 items');
         });
     });
 });

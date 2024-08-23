@@ -234,21 +234,30 @@ export class ProductListingPage {
   }
 
   async selectMatchingProduct(product: string): Promise<string> {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
 
+    const productNames = await this.productNames.allInnerTexts();
+    const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
+    //console.log({ productNamesLowerCase });
+    //console.log({productNames})
     console.log('product count: ' + productNames.length);
 
-    const matchValue = product;
-    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNames, matchValue);
-    const productName = productNames[indexOfProductFirstMatch];
+    const matchValueLowerCase = product.toLowerCase();
+    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNamesLowerCase, matchValueLowerCase);
 
-    console.log('productName: ' + productName);
-    console.log('productIndex: ' + indexOfProductFirstMatch);
+    const productMatchName = productNames[indexOfProductFirstMatch];
 
+    console.log('productMatchName: ' + productMatchName);
+    console.log('productMatchIndex: ' + indexOfProductFirstMatch);
+
+    if (productMatchName == undefined) {
+      console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1])
+    }
+  
     await this.productNames.nth(indexOfProductFirstMatch).click();
 
-    return productName;
+    return productMatchName;
   }
 
   async setDeliveryZipPLP(zip: string) {
