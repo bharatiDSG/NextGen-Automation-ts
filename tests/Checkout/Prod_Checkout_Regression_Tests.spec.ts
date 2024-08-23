@@ -28,8 +28,7 @@ test.describe('Prod Checkout tests', () => {
         // Go to baseUrl set in .env or defaults to dsg_prod
         if (getBaseUrl().includes('preview')) {
             await homePage.goToHomePage(getBaseUrl() + 'homr?TagForceLane=62');
-        }
-        else {
+        } else {
             await homePage.goToHomePage(getBaseUrl() + '?TagForceLane=62');
         }
 
@@ -3947,7 +3946,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '', '15108');
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '');
         });
 
         await test.step('Verify Same day delivery Tip is visible', async () => {
@@ -4037,7 +4036,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '', '15108');
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '');
         });
 
         await test.step('Verify Same day delivery Tip is visible', async () => {

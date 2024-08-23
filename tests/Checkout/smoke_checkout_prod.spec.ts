@@ -121,7 +121,7 @@ test.describe('DSG Prod Smoke Checkout Tests', () => {
     });
     // Validate order confirmation page and order number
     await test.step('Validate order confirmation page and order number', async () => {
-      await page.waitForTimeout(20000); // waits for 20 seconds
+      await page.waitForTimeout(20000); // eslint-disable-line
       await expect(orderConfirmationPage.orderNumberText).toBeVisible();
       const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent();
       orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace('Order# ', '').trim() : null;

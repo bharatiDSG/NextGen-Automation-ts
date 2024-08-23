@@ -283,7 +283,7 @@ export class CheckoutPage {
         await expect(this.billingShippingCompletedCheckmarkImg).toBeVisible();
         await expect(this.commonProgressSpinner).toHaveCount(0);
     }
-    async enterBillingShippingInfoForSameDayDelivery(firstName: string, lastName: string, address: string, address2: string, zipCode: string): Promise<void> {
+    async enterBillingShippingInfoForSameDayDelivery(firstName: string, lastName: string, address: string, address2: string): Promise<void> {
         if (await this.editBillingShippingInfo.isVisible()) {
             await this.editBillingShippingInfo.click();
             await this.page.waitForLoadState('domcontentloaded');
@@ -562,7 +562,7 @@ export class CheckoutPage {
         } else if (paymentOption == 'AfterPay') {
             await this.afterPayRadioButton.click();
         } else if (paymentOption == 'ApplePay') {
-
+            console.log('Apple pay is not set up');
         } else {
             console.log('Given payment option is not present in the Checkout page');
         }
@@ -656,7 +656,7 @@ export class CheckoutPage {
             await this.page.waitForTimeout(2000);
             await this.page.waitForLoadState('domcontentloaded');
         } else {
-
+            console.log('Given Shipping method is not matched with existing shipping methods');
         }
 
     }
