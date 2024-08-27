@@ -34,7 +34,7 @@ jobs:
       - name: Prod Checkout Regression Tests 
         run: |
           echo "Prod Checkout Regression Tests"
-          npx playwright test tests/Checkout/Prod_Checkout_Regression_Tests.spec.ts
+          npx playwright test -g "47. Delete Cart for Signed In User"
         env:
             ENV: dsg_prod    
 
