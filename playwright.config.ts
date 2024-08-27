@@ -60,6 +60,8 @@ export default defineConfig({
     // Timeout for page waits
     actionTimeout: 40000,
 
+    video: 'on-first-retry',
+
     // launchOptions: {
     //   slowMo: 50,
     // },
