@@ -43,5 +43,8 @@
     },
     "dsg_delta": {
         "baseUrl": "https://delta.dickssportinggoods.com"
+    },
+    "dsg_np3": {
+        "baseUrl": "https://dks-qa1.dksxchange.com/"
     }
 }
