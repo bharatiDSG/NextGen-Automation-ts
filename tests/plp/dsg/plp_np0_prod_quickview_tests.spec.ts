@@ -1,10 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { CartPage } from '../../../page-objects/CartPage.ts';
-import { CheckoutPage } from '../../../page-objects/CheckoutPage.ts';
 import { HomePage } from '../../../page-objects/HomePage.ts';
-import { OrderConfirmationPage } from '../../../page-objects/OrderConfirmationPage.ts';
-import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage.ts';
 import { ProductListingPage } from '../../../page-objects/ProductListingPage.ts';
 import { getBaseUrl } from '../../../globalSetup.ts';
 import { testData_e2e_np0_prod } from '../../../test-data/e2eNP0ProdTestData.js';
@@ -33,7 +29,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       }
     });
 
-    test('1: Validate Add to Cart is available on majority of Product Cards', async ({ page }) => {
+    test('1: Validate Add to Cart is available on majority of Product Cards',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -67,7 +65,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('2: Validate Add to Cart is not visible on custom products', async ({ page }) => {
+    test('2: Validate Add to Cart is not visible on custom products',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -101,7 +101,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('3: Validate Add to Cart is not visible on personalized products', async ({ page }) => {
+    test('3: Validate Add to Cart is not visible on personalized products',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -135,7 +137,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('4: Validate Quickview - Product name, image carousel', async ({ page }) => {
+    test('4: Validate Quickview - Product name, image carousel',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -192,7 +196,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('5: Select different fulfillment options - Ship', async ({ page }) => {
+    test('5: Select different fulfillment options - Ship',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -202,21 +208,38 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         console.log('URL: ' + getBaseUrl());
         });
 
-        // And we open quickview add to cart for the first product in the grid
-        await test.step('And we open quickview add to cart for the first product in the grid', async () => {
-            if(await productListingPage.quickviewOpenATCButtonAngular.isVisible()){
-                await productListingPage.quickviewOpenATCButtonAngular.first().click();
-            } else {
-                await productListingPage.quickviewOpenATCButtonReact.first().click();
-            }
-        });
+        // And open quickview with api intercept attribute selection for the first product in the grid
+        await test.step('And open quickview with api intercept for attributes', async () => {
+          //will remove the below comments later
+            //   console.log("Before the waitForResponse");
+            //   const responsePromise = page.waitForResponse('**/catalog-productdetails/**');
+            //   if(await productListingPage.quickviewOpenATCButtonAngular.isVisible()){
+            //     await productListingPage.quickviewOpenATCButtonAngular.first().click();
+            // } else {
+            //     await productListingPage.quickviewOpenATCButtonReact.first().click();
+            // }
+            //   console.log("Before the responsePromise");
+            //   const response = await responsePromise;
+            //   console.log("This is the response status - "+response.status());
+            //   const newt = (await response.text()).match("parentPartNumber");
+            //   const newtt = (await response.text()).search("parentPartNumber");
+            //   const pos1 = (await response.text()).indexOf("parentPartNumber");
+            //   const newttt = (await response.text()).substring(pos1,(pos1+40));
+            //   console.log("This is the newt length - " +newt?.length);
+            //   console.log("This is the newt - " +newt);
+            //   console.log("This is the newtt - " +newtt);
+            //   console.log("This is the newttt - " +newttt);
+            //   console.log("Below is json");
+            //   console.log(await response.json());
+            //   const newz = await response.json();
+            //   const newzz = await response.json();
+            //   console.log(newz.productsData[0].style.definingAttributes);
+            //   const jsonString = JSON.stringify(newzz, null, 2);
+            //   console.log(jsonString);
+              // console.log("This is the response text - "+ await response.text());
 
-        // And we choose product attributes and fulfillment
-        await test.step('And we choose product attributes and fulfillment', async () => {
-          await page.waitForTimeout(2000); // waits for 2 seconds
-          await productListingPage.quickviewViewShippingFulfillment.click();
-          await productListingPage.quickviewColorAttribute2.first().click();
-          await productListingPage.quickviewSizeAttribute.click();
+          await productListingPage.verifyAttributesArePresentOrNotForShipToMe();
+          await productListingPage.selectShipToMeAttributes(page);
         });
 
         // And we click add to cart
@@ -236,7 +259,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('6: Select different fulfillment options - Store', async ({ page }) => {
+    test('6: Select different fulfillment options - Store',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -289,7 +314,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
   });
 
-    test('7: Select different fulfillment options - Same Day Delivery', async ({ page }) => {
+    test('7: Select different fulfillment options - Same Day Delivery',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
@@ -314,5 +341,46 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
           await page.waitForTimeout(2000); // waits for 2 seconds
           await expect(productListingPage.quickviewViewSameDayDeliveryFulfillment).toBeVisible();
         });
+    });
+
+    test('8: Quickview Add to Cart - SRLP',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
+      const homePage = new HomePage(page);
+      const productListingPage = new ProductListingPage(page);
+
+      // Go to baseUrl set in .env or defaults to dsg_prod
+      // Given we are on "dsg" page
+      await test.step('Given we are on "dsg" page', async () => {
+        await homePage.goToHomePage(getBaseUrl());
+        console.log("URL: " + getBaseUrl());
+      });
+
+      // When we search for "testData_smokePLP_prod.searchTerm1" keyword in the search box
+      await test.step('When we search for "mens polo" keyword in the search box', async () => {
+        await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1)
+      });
+
+      // And open quickview with api intercept attribute selection for the first product in the grid
+      await test.step('And open quickview with api intercept for attributes', async () => {
+        await productListingPage.verifyAttributesArePresentOrNotForShipToMe();
+        await productListingPage.selectShipToMeAttributes(page);
+      });
+
+      // And we click add to cart
+      await test.step('And we click add to cart', async () => {
+        await productListingPage.quickviewModalATCButton.first().click();
+        await page.waitForTimeout(5000); // waits for 5 seconds
+      });
+
+      // And we should see text "Keep Shopping"
+      await test.step('And we should see text "Keep Shopping"', async () => {
+        expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+      });
+
+      // And we should see text "View Cart"
+      await test.step('And we should see text "View Cart"', async () => {
+        expect (productListingPage.quickviewViewCartButton).toBeVisible();
+      });
     });
 });
