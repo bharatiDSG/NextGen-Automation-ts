@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
+import { all } from 'axios';
 
 export class ProductListingPage {
   private page: Page;
@@ -89,6 +90,10 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
+  readonly sponsoredItemCards: Locator;
+  readonly totalItemCards: Locator;
+  readonly resultPerPage: Locator;
+  readonly pageItems:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -152,17 +157,21 @@ export class ProductListingPage {
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
     // pagination and breadcrumbs
+    this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
+    this.totalItemCards = page.locator('div.dsg-react-product-card');
+    this.resultPerPage = page.locator('a[class*="rs-page-count"]');
     this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
     this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
+    this.pageItems = page.locator('a[class*="rs-page-item"]');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
     this.sortOptionsAccordionButtonAngular = page.getByTitle('Select sort option');
-    this.sortOptionsSelectionReact = page.locator('li');
+    this.sortOptionsSelectionReact = page.locator('li[class*="option"] div.rs-sort-by-value-text');
     this.sortOptionsSelectionAngular = page.locator('option');
     this.sortSelectedReact = page.locator('[class="rs-selected-sort-text"]');
     this.sortSelectedAngular = page.locator('[class="ng-star-inserted"]').locator('[selected="true"]');
@@ -335,4 +344,71 @@ export class ProductListingPage {
 
 
   }
+
+  async getActualPaginationCount() {
+    const totalCount = await this.totalItemCards.count();
+    console.log('Total fpage count is: ' + totalCount);
+    const sponsoredCount = await this.sponsoredItemCards.count();
+    console.log('Total sponsored count is: ' + sponsoredCount);
+    const actualCount = totalCount-sponsoredCount;
+    console.log('Actual count is: ' + actualCount);
+    return actualCount;
+     
+  }
+  async validateRandomPage(pageCount:any,pageNo:any) {
+    await this.pageItems.nth(pageNo).click();
+    console.log('Clicked on any page number');
+    await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+    const pageNumber = await this.highlightedPageNumberReact.textContent();
+    expect(pageNumber?.trim()).toContain(String(pageNo));
+    console.log('Validated the page numver '+pageNo);
+    const randomPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(randomPageCount);
+    console.log('Validated the page count '+pageCount);
+  }
+
+  async validateResultsPerPage(pageNo:any) {
+    let commonPage = new CommonPage(this.page)
+    await this.pageItems.nth(pageNo-1).click();
+    console.log('Clicked on any page number');
+    const count =  await this.resultPerPage.count();
+    console.log("The result per page count is: "+count);
+    for (let i = 0; i < count; i++) {
+     await expect(this.resultPerPage.nth(i)).toBeVisible();
+     await this.resultPerPage.nth(i).click();
+     await commonPage.sleep(10);
+     const allItems =  this.resultPerPage.nth(i);
+     const allItemText = await allItems.textContent();
+     console.log("Result per page text is: "+allItemText);
+     const pageCount = await this.getActualPaginationCount();
+     expect(allItemText?.trim()).toContain(String(pageCount));
+     await expect(allItems).toHaveAttribute('class', /active/);
+     console.log('Results per page is: '+pageCount);
+    }
+   }
+   
+  async selectSortCategory(category:string, pageCount:any) {
+    await this.sortOptionsAccordionButtonReact.click();
+    console.log('Validating sort category: '+category);
+    const count = await this.sortOptionsSelectionReact.count();
+    let commonPage = new CommonPage(this.page);
+    console.log('Total sort options are :'+count);
+    for (let i = 0; i < count; i++) {
+      const options =  this.sortOptionsSelectionReact.nth(i);
+      const option = await options.textContent();
+      if(option===category)
+        {
+          await this.sortOptionsSelectionReact.nth(i).click();
+          await commonPage.sleep(5);
+          console.log('Sort option matched');
+          break;
+        }
+    }
+    const categorySelectedText = await this.sortSelectedReact.textContent();
+    expect(categorySelectedText?.trim()).toContain(String(category));
+    console.log('Sort category '+categorySelectedText+' is successfuly selected');
+    const actualPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(actualPageCount);
+  }   
+  
 }
