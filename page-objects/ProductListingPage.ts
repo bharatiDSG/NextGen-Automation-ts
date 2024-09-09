@@ -410,7 +410,7 @@ export class ProductListingPage {
       }
     }
 
-    async selectShipToMeAttributes(page: Page, ): Promise<void> {
+    async selectShipToMeAttributes(page: Page ): Promise<void> {
       const commonPage = new CommonPage(this.page);
       console.log("Skus with attributes - " + this.skusWithAttributes);
       if (this.skusWithAttributes.size > 0) {
@@ -427,8 +427,8 @@ export class ProductListingPage {
                 console.info('Selecting attribute is: ' + attributeSet[0]);
                 const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
                 console.log(randomColorXpath);
-                await commonPage.sleep(5);
                 const colorPdp = page.locator(randomColorXpath);
+                await colorPdp.first().waitFor();
                 await colorPdp.first().click();
                 break;
               case 'Size':
@@ -447,8 +447,8 @@ export class ProductListingPage {
               case 'Capacity':
                 console.info('Selecting attribute is: ' + attributeSet[0]);
                 const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                await commonPage.sleep(5);
                 const paramPdp = page.locator(randomXpath);
+                await paramPdp.waitFor();
                 await paramPdp.click();
                 break;
               case 'Length':

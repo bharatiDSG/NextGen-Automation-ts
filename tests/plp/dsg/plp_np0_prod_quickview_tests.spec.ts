@@ -370,11 +370,11 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       // And we click add to cart
       await test.step('And we click add to cart', async () => {
         await productListingPage.quickviewModalATCButton.first().click();
-        await page.waitForTimeout(5000); // waits for 5 seconds
       });
 
       // And we should see text "Keep Shopping"
       await test.step('And we should see text "Keep Shopping"', async () => {
+        await productListingPage.quickviewKeepShoppingButton.waitFor()
         expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
       });
 
