@@ -1,16 +1,16 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { getBaseUrl } from '../../globalSetup.ts';
 import { HomePage } from '../../page-objects/HomePage.ts';
-import { CommonPage } from '../../page-objects/CommonPage.ts';
+
 import { ProductListingPage } from '../../page-objects/ProductListingPage.ts';
 import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage.ts';
 import { CartPage } from '../../page-objects/CartPage.ts';
 import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
 import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
 import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
-import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.js';
+import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
-import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.js';
+import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.ts';
 
 
 test.describe('Prod Checkout tests', () => {
@@ -26,7 +26,13 @@ test.describe('Prod Checkout tests', () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env or defaults to dsg_prod
-        await homePage.goToHomePage(getBaseUrl()+'?TagForceLane=62');
+        if (getBaseUrl().includes('preview')) {
+            await homePage.goToHomePage(getBaseUrl() + 'homr?TagForceLane=62');
+        } else {
+            await homePage.goToHomePage(getBaseUrl() + '?TagForceLane=62');
+        }
+
+
         console.log('URL: ' + getBaseUrl());
 
     });
@@ -35,15 +41,14 @@ test.describe('Prod Checkout tests', () => {
         await apiContext.dispose();
     });
 
-    test('1. Verify different checkout options', async ({ page }, testInfo) => {
+    test('1. Verify different checkout options', async ({ page }) => {
 
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
-        const productListingPage= new ProductListingPage(page);
+        const productListingPage = new ProductListingPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
         const orderConfirmationPage = new OrderConfirmationPage(page);
-        const PDP = new ProductDisplayPage(page);
 
 
         await test.step('When we search for "nike shoes" keyword in the search box', async () => {
@@ -136,7 +141,8 @@ test.describe('Prod Checkout tests', () => {
         // Validate order confirmation page and order number
         await test.step('Validate Order details and Cancel the order', async () => {
             await page.waitForLoadState('load');
-            await page.waitForTimeout(20000); // waits for 5 seconds
+            //Need to wait so that order reaches down stream system, so that we can cancel it
+            await page.waitForTimeout(20000); // eslint-disable-line
             await expect(orderConfirmationPage.orderNumberText).toBeVisible();
             const orderNumberFromConfirmationPage = await orderConfirmationPage.orderNumberText.textContent();
             const orderNumberFromConfirmationPageModified = orderNumberFromConfirmationPage ? orderNumberFromConfirmationPage.replace('Order# ', '').trim() : null;
@@ -144,20 +150,24 @@ test.describe('Prod Checkout tests', () => {
 
             //cancel the order
             //documentation - https://playwright.dev/docs/api-testing
-            if (orderNumberFromConfirmationPageModified) {
-                await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext);
+            if (getBaseUrl().includes('preview') || getBaseUrl().includes('delta')) {
+                console.log('Ignoring the Cancel order');
+            } else {
+                if (orderNumberFromConfirmationPageModified) {
+                    await orderConfirmationPage.apiProdCancelOrderSolePanel(orderNumberFromConfirmationPageModified, apiContext);
+                }
             }
 
             //verify orderConfirmationPage
             await expect(orderConfirmationPage.thankYouForYourOrderHeader).toBeVisible();
-            await orderConfirmationPage.continueShoppingLink.click();
+            //await orderConfirmationPage.continueShoppingLink.click();
 
-            await expect(homePage.searchField).toBeVisible();
+            //await expect(homePage.searchField).toBeVisible();
         });
 
     });
 
-    test('2. Tax Soft Lines', async ({ page }, testInfo) => {
+    test('2. Tax Soft Lines', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -209,7 +219,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -236,7 +246,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('3. Tax Hard Lines', async ({ page }, testInfo) => {
+    test('3. Tax Hard Lines', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -288,7 +298,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -315,7 +325,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('4. Oversized validation', async ({ page }, testInfo) => {
+    test('4. Oversized validation', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -338,7 +348,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
         });
-        
+
 
         await test.step('Select ShipToMe fulfillment option', async () => {
             await page.waitForLoadState('load');
@@ -357,23 +367,23 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.clickCheckoutButton();
         });
 
-        await test.step('Shipping is not null', async() => {
-            const shipping=await checkoutPage.getEstimatedShipping();
+        await test.step('Shipping is not null', async () => {
+            const shipping = await checkoutPage.getEstimatedShipping();
             expect(shipping).not.toBeNull();
         });
 
-        await test.step('Click on Large item shipping details', async() => {
+        await test.step('Click on Large item shipping details', async () => {
             await checkoutPage.clickLargeItemShippingDetailsLink();
         });
 
-        await test.step('we should see large item shipping details', async() => {
+        await test.step('we should see large item shipping details', async () => {
             await checkoutPage.verifyLargeItemShippingDetails('Large Item Shipping Methods');
         });
 
     });
 
 
-    test('5. Payment Form Validations CC Number', async ({ page }, testInfo) => {
+    test('5. Payment Form Validations CC Number', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -425,7 +435,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -447,12 +457,12 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.placeOrderButton.click();
             await checkoutPage.validateErrorMessage('Please enter your card number.');
         });
-      
+
 
 
     });
 
-    test('6. Payment Form Validations Exp Date', async ({ page }, testInfo) => {
+    test('6. Payment Form Validations Exp Date', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -504,7 +514,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -526,12 +536,12 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.placeOrderButton.click();
             await checkoutPage.validateErrorMessage('Enter a valid expiration.');
         });
-      
+
 
 
     });
 
-    test('7. Payment Form Validations CVV', async ({ page }, testInfo) => {
+    test('7. Payment Form Validations CVV', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -583,7 +593,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -605,12 +615,12 @@ test.describe('Prod Checkout tests', () => {
             //await checkoutPage.placeOrderButton.click()
             await checkoutPage.validateErrorMessage('Enter a valid CVV');
         });
-      
+
 
 
     });
 
-    test('8. Payments Invalid Promo', async ({ page }, testInfo) => {
+    test('8. Payments Invalid Promo', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -662,7 +672,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -675,12 +685,12 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.verifyInvalidPromoCodeFunctionality('DSGINVALIDPROMO2021');
 
         });
-      
+
 
 
     });
 
-    test('9. Apply GiftCard and Remove it', async ({ page }, testInfo) => {
+    test('9. Apply GiftCard and Remove it', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -732,7 +742,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -748,7 +758,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('10. Payments Paypal', async ({ page }, testInfo) => {
+    test('10. Payments Paypal', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -800,7 +810,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -816,7 +826,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('11. Payments Invalid GC', async ({ page }, testInfo) => {
+    test('11. Payments Invalid GC', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -868,7 +878,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -881,15 +891,15 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.verifyInvalidGiftCardFunctionality('6168432776392640', '07208810');
 
         });
-        
+
         await test.step('Verify Invalid Gift Card', async () => {
             await checkoutPage.verifyInvalidGiftCardFunctionality('6168432436407186', '00021229');
 
         });
-        
+
     });
 
-    test('12. Payments No Reward', async ({ page }, testInfo) => {
+    test('12. Payments No Reward', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -973,7 +983,7 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.updateProductQuantity(1, '3');
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -984,7 +994,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -1000,7 +1010,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('13. Different Shipping and Billing address, Invalid Billing address for Guest', async ({ page }, testInfo) => {
+    test('13. Different Shipping and Billing address, Invalid Billing address for Guest', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1047,7 +1057,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Verify the contact information is not pre populated', async () => {
-            
+
             await checkoutPage.verifyContactInfoIsEmpty();
         });
 
@@ -1055,7 +1065,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing and Shipping address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingWithInValidInfo('test', 'tester', '345 Court St Coraopolis', '', '90005', 'The address provided could not be verified. Please review.');
@@ -1067,7 +1077,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('14. Different Shipping and Billing address, Invalid Shipping address for Guest', async ({ page }, testInfo) => {
+    test('14. Different Shipping and Billing address, Invalid Shipping address for Guest', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1114,7 +1124,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Verify the contact information is not pre populated', async () => {
-            
+
             await checkoutPage.verifyContactInfoIsEmpty();
         });
 
@@ -1122,7 +1132,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolis', '', '15108');
@@ -1138,7 +1148,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('15. Same Shipping and Billing address, Invalid details for Guest', async ({ page }, testInfo) => {
+    test('15. Same Shipping and Billing address, Invalid details for Guest', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1185,7 +1195,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Verify the contact information is not pre populated', async () => {
-            
+
             await checkoutPage.verifyContactInfoIsEmpty();
         });
 
@@ -1193,14 +1203,14 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.enterBillingShippingWithInValidInfo('test', 'tester', '202 Eastview Mall', '', '30005', 'The address provided could not be verified. Please review.');
         });
 
     });
 
-    test('16. Same Shipping and Billing address, Invalid details for Registered User', async ({ page }, testInfo) => {
+    test('16. Same Shipping and Billing address, Invalid details for Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1242,7 +1252,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -1255,7 +1265,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.enterBillingShippingWithInValidInfo('test', 'tester', '202 Eastview Mall', '', '30005', 'The address provided could not be verified. Please review.');
         });
@@ -1269,7 +1279,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('17. Different Shipping and Billing address, valid details for Registered User', async ({ page }, testInfo) => {
+    test('17. Different Shipping and Billing address, valid details for Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1311,7 +1321,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -1324,7 +1334,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '202 Eastview Mall', '', '14564');
@@ -1343,7 +1353,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('18. Different Shipping and Billing address, Invalid Billing details for Registered User', async ({ page }, testInfo) => {
+    test('18. Different Shipping and Billing address, Invalid Billing details for Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1385,7 +1395,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -1398,7 +1408,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingWithInValidInfo('test', 'tester', '1 Court St', '', '15108', 'The address provided could not be verified. Please review.');
@@ -1417,7 +1427,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('19. Different Shipping and Billing address, Invalid shipping details for Registered User', async ({ page }, testInfo) => {
+    test('19. Different Shipping and Billing address, Invalid shipping details for Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1459,7 +1469,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -1472,7 +1482,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolisreet', '', '15108');
@@ -1491,7 +1501,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('20. Change parcel delivery options', async ({ page }, testInfo) => {
+    test('20. Change parcel delivery options', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1538,19 +1548,19 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Change the shipping to Expedited Delivery', async () => {
-            
+
             await checkoutPage.changeShippingMethodAndVerifyShippingCharges('Expedited', '14.99');
         });
 
         await test.step('Change the shipping to Express Delivery', async () => {
-            
+
             await checkoutPage.changeShippingMethodAndVerifyShippingCharges('Express', '24.99');
         });
 
 
     });
 
-    test('21. Info Retention EDD', async ({ page }, testInfo) => {
+    test('21. Info Retention EDD', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1630,7 +1640,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -1641,7 +1651,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test1', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -1657,7 +1667,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('22. Info Retention Guest Same Billing Shipping', async ({ page }, testInfo) => {
+    test('22. Info Retention Guest Same Billing Shipping', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1737,7 +1747,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -1748,7 +1758,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test1', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -1764,7 +1774,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('23. Contact Info Form Validations FirstName', async ({ page }, testInfo) => {
+    test('23. Contact Info Form Validations FirstName', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1821,7 +1831,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('24. Contact Info Form Validations LastName', async ({ page }, testInfo) => {
+    test('24. Contact Info Form Validations LastName', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1878,7 +1888,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('25. Contact Info Form Validations Email Field', async ({ page }, testInfo) => {
+    test('25. Contact Info Form Validations Email Field', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1935,7 +1945,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('26. Contact Info Form Validations Phone Number Field', async ({ page }, testInfo) => {
+    test('26. Contact Info Form Validations Phone Number Field', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -1992,7 +2002,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('27. Form Validations Zip Code Field', async ({ page }, testInfo) => {
+    test('27. Form Validations Zip Code Field', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2054,7 +2064,7 @@ test.describe('Prod Checkout tests', () => {
     });
 
 
-    test('28. Order Summary', async ({ page }, testInfo) => {
+    test('28. Order Summary', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2103,8 +2113,9 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setStoreFromPLP('Robinson');
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
             //await expect(productListingPage.zipDeliveryLocationButton).toHaveText(new RegExp('.*15205.*'))
-          });
+        });
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
@@ -2115,11 +2126,12 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
-            
-            await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
+
+            //await page.waitForLoadState('networkidle');
+            //await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
@@ -2151,32 +2163,32 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Checkout ', async () => {
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await cartPage.clickCheckoutButton();
         });
 
         await test.step('Validate Order total', async () => {
             await page.waitForLoadState('load');
             await checkoutPage.verifyOrderTotal();
-            
+
         });
 
         await test.step('Verify Store pick up is Free', async () => {
-            
+
             await checkoutPage.verifyStorePickUpIsFree();
-            
+
         });
         await test.step('Validate Order Subtotal ', async () => {
             await page.waitForLoadState('domcontentloaded');
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await checkoutPage.validateOrderSubtotal();
         });
 
-        
+
 
     });
 
-    test('29. Mixed fulfillment cart', async ({ page }, testInfo) => {
+    test('29. Mixed fulfillment cart', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2260,7 +2272,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setStoreFromPLP('Robinson');
-          });
+        });
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
@@ -2271,11 +2283,12 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
-            
+
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
+            //await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
@@ -2303,33 +2316,33 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('Validate EDD for parcel item', async () => {
             await checkoutPage.verifyEstDeliveryDate(2);
-            
+
         });
         await test.step('validate product info for the oversized item', async () => {
             await checkoutPage.verifyOversizedItem('Kayak');
-            
+
         });
         await test.step('validate BOPIS product info', async () => {
             await checkoutPage.verifyProductInfo('YETI');
-            
+
         });
 
         await test.step('validate BOPIS Store details visible or not', async () => {
             await checkoutPage.checkBOPISStoreDetails();
-            
+
         });
         await test.step('validate BOPIS Store name is present in the Details', async () => {
             await checkoutPage.checkBOPISStoreNameInDetails('Robinson');
-            
+
         });
         await test.step('verify Free store pickup for BOPIS product', async () => {
             await checkoutPage.verifyFreeStorePickup();
-            
+
         });
-    
+
     });
 
-    test('30. Info Retention Guest Different Billing and Shipping', async ({ page }, testInfo) => {
+    test('30. Info Retention Guest Different Billing and Shipping', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2413,7 +2426,7 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.updateProductQuantity(1, '2');
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -2424,7 +2437,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test1', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -2446,7 +2459,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('31. Info Retention for registered user with Same Billing and Shipping address', async ({ page }, testInfo) => {
+    test('31. Info Retention for registered user with Same Billing and Shipping address', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2523,7 +2536,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -2536,7 +2549,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolis', '', '15108');
         });
@@ -2554,7 +2567,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('32. Info Retention for registered user with Different Billing and Shipping address', async ({ page }, testInfo) => {
+    test('32. Info Retention for registered user with Different Billing and Shipping address', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2666,7 +2679,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -2679,7 +2692,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolis', '', '15108');
@@ -2702,12 +2715,13 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('33. Order modification change product quantity', async ({ page }, testInfo) => {
+    test('33. Order modification change product quantity', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
+        let productNameInCart;
 
         await test.step('When we search for "nike dri-fit headband" keyword in the search box', async () => {
             await homePage.searchForProduct('nike dri-fit headband');
@@ -2743,8 +2757,9 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
+            productNameInCart = await cartPage.getProductNames();
             await cartPage.clickCheckoutButton();
         });
 
@@ -2754,15 +2769,15 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
 
         await test.step('validate the product name and Qty', async () => {
-            await checkoutPage.verifyProductInfo('Nike');
+            await checkoutPage.verifyProductInfo(productNameInCart[0]);
             await checkoutPage.verifySingleProductQuantity(1);
-            
+
         });
 
         await test.step('Click on Cart icon', async () => {
@@ -2775,17 +2790,17 @@ test.describe('Prod Checkout tests', () => {
             await cartPage.clickCheckoutButton();
         });
         await test.step('validate the product name and Qty', async () => {
-            await checkoutPage.verifyProductInfo('Nike');
+            await checkoutPage.verifyProductInfo(productNameInCart[0]);
             await checkoutPage.verifySingleProductQuantity(3);
-            
+
         });
 
-        
+
 
 
     });
 
-    test('34. Order modification change Contact info Guest', async ({ page }, testInfo) => {
+    test('34. Order modification change Contact info Guest', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2826,7 +2841,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -2846,17 +2861,15 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Provide contact details', async () => {
             await checkoutPage.enterContactInfo('Automation', 'tester', 'automation@dcsg.com', '7242733400');
         });
-        
+
         await test.step('Verify the address', async () => {
             await checkoutPage.validateUserAndBillingDetails(['Automation tester', 'automation@dcsg.com', '(724) 273-3400']);
         });
 
-        
-
 
     });
 
-    test('35. Order modification Contact Info change Registered User', async ({ page }, testInfo) => {
+    test('35. Order modification Contact Info change Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2898,7 +2911,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -2911,7 +2924,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolis', '', '15108');
         });
@@ -2922,7 +2935,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Provide contact details', async () => {
             await checkoutPage.enterContactInfo('Automation', 'tester', 'automation@dcsg.com', '7242733400');
         });
-        
+
         await test.step('Verify the address', async () => {
             await checkoutPage.validateUserAndBillingDetails(['Automation tester', 'automation@dcsg.com', '(724) 273-3400']);
         });
@@ -2935,7 +2948,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
     });
-    test('36. Order modification change Address Guest', async ({ page }, testInfo) => {
+    test('36. Order modification change Address Guest', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -2976,7 +2989,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3008,13 +3021,13 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Update Shipping address', async () => {
             await checkoutPage.enterShippingInfo('test', 'tester', '202 Eastview Mall', '', '14564');
         });
-        
+
         await test.step('Verify the address details', async () => {
             await checkoutPage.validateUserAndBillingDetails(['345 Court St', '202 Eastview Mall']);
         });
 
     });
-    test('37. Order modification Address change Registered User', async ({ page }, testInfo) => {
+    test('37. Order modification Address change Registered User', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3056,7 +3069,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -3069,7 +3082,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '345 Court St Coraopolis', '', '15108');
         });
@@ -3096,7 +3109,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Update Shipping address', async () => {
             await checkoutPage.enterShippingInfo('test', 'tester', '202 Eastview Mall', '', '14564');
         });
-        
+
         await test.step('Verify the Shipping address', async () => {
             await checkoutPage.validateUserAndBillingDetails(['290 Baychester Ave', '202 Eastview Mall']);
         });
@@ -3110,7 +3123,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('38. Order modification remove product', async ({ page }, testInfo) => {
+    test('38. Order modification remove product', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3153,8 +3166,8 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('When we search for "calia socks" keyword in the search box', async () => {
-            await homePage.searchForProduct('calia socks');
+        await test.step('When we search for "Nike socks" keyword in the search box', async () => {
+            await homePage.searchForProduct('Nike socks');
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
@@ -3221,7 +3234,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3237,9 +3250,9 @@ test.describe('Prod Checkout tests', () => {
         await test.step('Update product quantity', async () => {
             await cartPage.deleteNoOfCartItems(1);
         });
-        await test.step('Remember the Cart items', async() => {
-            await page.waitForTimeout(4000);
-            productNamesFromCartPage= await cartPage.getProductNames();
+        await test.step('Remember the Cart items', async () => {
+            await page.waitForLoadState('networkidle');
+            productNamesFromCartPage = await cartPage.getProductNames();
         });
 
         await test.step('Checkout ', async () => {
@@ -3247,12 +3260,12 @@ test.describe('Prod Checkout tests', () => {
         });
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPage);
-            
+
         });
 
     });
 
-    test('39. Order modification Add non-restricted product', async ({ page }, testInfo) => {
+    test('39. Order modification Add non-restricted product', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3330,11 +3343,12 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        await test.step('Remember the Cart items', async() => {
-            await page.waitForTimeout(4000);
-            productNamesFromCartPage= await cartPage.getProductNames();
+        await test.step('Remember the Cart items', async () => {
+            //await page.waitForTimeout(4000);
+            //await page.waitForLoadState('networkidle');
+            productNamesFromCartPage = await cartPage.getProductNames();
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3351,9 +3365,9 @@ test.describe('Prod Checkout tests', () => {
         });
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPage);
-            
+
         });
-        await test.step('', async() => {
+        await test.step('', async () => {
             await checkoutPage.clickDSGLogo();
         });
 
@@ -3369,6 +3383,7 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.shipFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3391,11 +3406,12 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        await test.step('Remember the Cart items', async() => {
-            await page.waitForTimeout(4000);
-            productNamesFromCartPageAfterChange= await cartPage.getProductNames();
+        await test.step('Remember the Cart items', async () => {
+            //await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
+            productNamesFromCartPageAfterChange = await cartPage.getProductNames();
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3404,15 +3420,15 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.verifyContactInfoIsEmpty();
         });
-        
+
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPageAfterChange);
-            
+
         });
 
     });
 
-    test('40. Order modification Add restricted product', async ({ page }, testInfo) => {
+    test('40. Order modification Add restricted product', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3456,11 +3472,11 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Remember the Cart items', async() => {
-            await page.waitForTimeout(4000);
-            productNamesFromCartPage= await cartPage.getProductNames();
+        await test.step('Remember the Cart items', async () => {
+            await page.waitForLoadState('networkidle');
+            productNamesFromCartPage = await cartPage.getProductNames();
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3477,9 +3493,9 @@ test.describe('Prod Checkout tests', () => {
         });
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPage);
-            
+
         });
-        await test.step('', async() => {
+        await test.step('', async () => {
             await checkoutPage.clickDSGLogo();
         });
 
@@ -3517,11 +3533,12 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        await test.step('Remember the Cart items', async() => {
-            await page.waitForTimeout(4000);
-            productNamesFromCartPageAfterChange= await cartPage.getProductNames();
+        await test.step('Remember the Cart items', async () => {
+            //await page.waitForTimeout(4000);
+            await page.waitForLoadState('networkidle');
+            productNamesFromCartPageAfterChange = await cartPage.getProductNames();
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3530,15 +3547,15 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.verifyContactInfoIsEmpty();
         });
-        
+
         await test.step('validate the product names', async () => {
             await checkoutPage.verifyProductNamesWithCartPage(productNamesFromCartPageAfterChange);
-            
+
         });
 
     });
 
-    test('41. Changing shipping address  for registered user', async ({ page }, testInfo) => {
+    test('41. Changing shipping address  for registered user', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3580,7 +3597,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
 
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -3593,7 +3610,7 @@ test.describe('Prod Checkout tests', () => {
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
-       
+
         await test.step('Update Billing address', async () => {
             await checkoutPage.unCheckSameShippingAndBillingAddress();
             await checkoutPage.enterBillingShippingInfo('test', 'tester', '202 Eastview Mall', '', '14564');
@@ -3619,7 +3636,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('42. Payments Signed In Reward', async ({ page }, testInfo) => {
+    test('42. Payments Signed In Reward', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3660,7 +3677,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.goToCartButtonProd.click();
 
         });
-        await test.step('Sign in as registered user', async() => {
+        await test.step('Sign in as registered user', async () => {
             await cartPage.signInAsRegisteredUser(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
 
         });
@@ -3675,7 +3692,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Provide contact details', async () => {
-            const email = testData_e2e_np0_qa.email;
+
             await page.waitForLoadState('load');
             await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
         });
@@ -3688,12 +3705,12 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.verifyInvalidPromoCodeFunctionalityForSignedInUser('RWDN2M7G3R2');
 
         });
-      
+
 
 
     });
 
-    test('43. Store pickup section validation', async ({ page }, testInfo) => {
+    test('43. Store pickup section validation', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3707,7 +3724,7 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setStoreFromPLP('Robinson');
-          });
+        });
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
@@ -3718,16 +3735,16 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.pickupFilterButtonReact.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
-            
+
             await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
             await productListingPage.selectAProduct();
         });
 
         await test.step('Select attributes for Bopis', async () => {
-            await page.waitForTimeout(3000);
+            await page.waitForLoadState('networkidle');
             await productDisplayPage.verifyAttributesArePresentOrNotForBOPIS('15108', 'Robinson');
             await productDisplayPage.selectBOPISAttributes(page);
         });
@@ -3765,20 +3782,18 @@ test.describe('Prod Checkout tests', () => {
             await checkoutPage.clickContinueOnContactInfo();
         });
         await test.step('click add pickup person link', async () => {
-            await page.waitForTimeout(2000);
             await checkoutPage.clickAddPickUpPerson();
         });
         await test.step('provide details', async () => {
             await checkoutPage.providePickUPPersonDetails('test1', 'tester1', 'automationdcsg@dcsg.com');
         });
         await test.step('Verify the address', async () => {
-            await page.waitForLoadState('networkidle');
             await checkoutPage.validateUserAndBillingDetails(['test1 tester1', 'automationdcsg@dcsg.com']);
         });
-    
+
     });
 
-    test('44. Gifting Validation', async ({ page }, testInfo) => {
+    test('44. Gifting Validation', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3822,9 +3837,9 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('Select Gift Options', async () => {
             await cartPage.selectGiftOption();
-        
+
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.clickCheckoutButton();
         });
@@ -3851,95 +3866,7 @@ test.describe('Prod Checkout tests', () => {
 
     });
 
-    test('45. Same day Delivery Confirm Zip code', async ({ page }, testInfo) => {
-        const homePage = new HomePage(page);
-        const productListingPage = new ProductListingPage(page);
-        const productDisplayPage = new ProductDisplayPage(page);
-        const cartPage = new CartPage(page);
-        const checkoutPage = new CheckoutPage(page);
-
-        await test.step('When we search for "kickball" keyword in the search box', async () => {
-            await homePage.searchForProduct('kickball');
-        });
-
-        await test.step('And we set zip code to "15108"', async () => {
-            await page.waitForLoadState('networkidle');
-            await productListingPage.setDeliveryZipPLP('15108');
-          });
-
-
-        await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await page.waitForTimeout(3000);
-            if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
-                await productListingPage.sameDayDeliveryFilter.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            } else {
-                await productListingPage.sameDayDeliveryFilter.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            }
-        });
-        await test.step('Select a product', async () => {
-            
-            await page.waitForLoadState('networkidle');
-            await page.waitForTimeout(5000);
-            await productListingPage.selectAProduct();
-        });
-
-        await test.step('select attributes', async () => {
-            await page.waitForLoadState('load');
-            await productDisplayPage.verifyAttributesArePresentOrNotForShipToMe();
-            await productDisplayPage.selectShipToMeAttributes(page);
-        });
-
-        await test.step('Select ShipToMe fulfillment option', async () => {
-            await page.waitForLoadState('load');
-            await expect(productDisplayPage.shipToMeFullfilmentButton).toBeVisible();
-            await productDisplayPage.shipToMeFullfilmentButton.click();
-        });
-
-        await test.step('Add to Cart and Go to Cart', async () => {
-            await productDisplayPage.addToCartButton.click();
-            await page.waitForLoadState('load');
-            await productDisplayPage.goToCartButtonProd.click();
-
-        });
-
-        await test.step('click change delivery zip code', async () => {
-            await cartPage.clickChangeDeliveryZipCode();
-        
-        });
-        await test.step('update delivery zip code', async () => {
-            await cartPage.updateDeliveryZipcode('15108');
-        
-        });
-        await test.step('select Same Day Delivery radio button', async () => {
-            await cartPage.selectSameDayDeliveryRadioButton();
-        
-        });
-        
-        await test.step('Checkout ', async () => {
-            await cartPage.sameDayDeliveryCheckout();
-        });
-
-        await test.step('Verify the contact information is not pre populated', async () => {
-            await page.waitForLoadState('load');
-            await checkoutPage.verifyContactInfoIsEmpty();
-        });
-
-        await test.step('Provide contact details', async () => {
-            await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
-        });
-
-        await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '', '15108');
-        });
-
-        await test.step('Verify Same day delivery Tip is visible', async () => {
-            await checkoutPage.verifySameDayDevlieryTipIsVisibleOrNot();
-        });        
-    });
-
-    test('46. Same day Delivery Confirm Tip', async ({ page }, testInfo) => {
+    test('45. Same day Delivery Confirm Zip code', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
@@ -3953,11 +3880,11 @@ test.describe('Prod Checkout tests', () => {
         await test.step('And we set zip code to "15108"', async () => {
             await page.waitForLoadState('networkidle');
             await productListingPage.setDeliveryZipPLP('15108');
-          });
+        });
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await page.waitForTimeout(3000);
+            //await page.waitForTimeout(3000);
             if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
                 await productListingPage.sameDayDeliveryFilter.first().click();
                 await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
@@ -3965,11 +3892,11 @@ test.describe('Prod Checkout tests', () => {
                 await productListingPage.sameDayDeliveryFilter.click();
                 await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
             }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
-            
-            await page.waitForLoadState('domcontentloaded');
-            await page.waitForTimeout(5000);
+
+            await page.waitForLoadState('networkidle');
             await productListingPage.selectAProduct();
         });
 
@@ -3994,17 +3921,17 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('click change delivery zip code', async () => {
             await cartPage.clickChangeDeliveryZipCode();
-        
+
         });
         await test.step('update delivery zip code', async () => {
             await cartPage.updateDeliveryZipcode('15108');
-        
+
         });
         await test.step('select Same Day Delivery radio button', async () => {
             await cartPage.selectSameDayDeliveryRadioButton();
-        
+
         });
-        
+
         await test.step('Checkout ', async () => {
             await cartPage.sameDayDeliveryCheckout();
         });
@@ -4019,75 +3946,162 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('Update Billing and Shipping address', async () => {
-            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '', '15108');
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '');
         });
 
         await test.step('Verify Same day delivery Tip is visible', async () => {
             await checkoutPage.verifySameDayDevlieryTipIsVisibleOrNot();
-        });     
-        
-        await test.step('Verify Same day delivery Tip amount', async () => {
-            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$5.00');
-        });   
-        await test.step('Select Tip Amount', async () => {
-            await checkoutPage.selectTipAmount('$0');
-        });  
-        await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000);
-            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$0.00');
-        });   
-        await test.step('Select Tip Amount', async () => {
-            await checkoutPage.selectTipAmount('$10');
-        });  
-        await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(3000);
-            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$10.00');
-        });   
-
-        await test.step('Select other tip Amout', async () => {
-            await checkoutPage.selectOtherTipAmount('7');
-        }); 
-        await test.step('Verify Same day delivery Tip amount', async () => {
-            await page.waitForTimeout(5000);
-            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$7.00');
-        }); 
-         
-
+        });
     });
 
-    test('47. Delete Cart for Signed In User', async ({ page }, testInfo) => {
+    test('46. Same day Delivery Confirm Tip', async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const checkoutPage = new CheckoutPage(page);
 
+        await test.step('When we search for "Table Tennis" keyword in the search box', async () => {
+            await homePage.searchForProduct('Table Tennis');
+        });
+
+        await test.step('And we set zip code to "15108"', async () => {
+            await page.waitForLoadState('networkidle');
+            await productListingPage.setDeliveryZipPLP('15108');
+            //await page.waitForLoadState('networkidle');
+        });
+
+
+        await test.step('And we apply the "Pick up" shipping option filter', async () => {
+            //await page.waitForLoadState('networkidle');
+            if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
+                await productListingPage.sameDayDeliveryFilter.first().click();
+                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+            } else {
+                await productListingPage.sameDayDeliveryFilter.click();
+                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+            }
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+        });
+        await test.step('Select a product', async () => {
+
+            await page.waitForLoadState('load');
+            //await page.waitForTimeout(5000);
+            await productListingPage.selectAProductWithInGivenRange(6);
+        });
+
+        await test.step('select attributes', async () => {
+            await page.waitForLoadState('load');
+            await productDisplayPage.verifyAttributesArePresentOrNotForShipToMe();
+            await productDisplayPage.selectShipToMeAttributes(page);
+        });
+
+        await test.step('Select ShipToMe fulfillment option', async () => {
+            await page.waitForLoadState('load');
+            await expect(productDisplayPage.shipToMeFullfilmentButton).toBeVisible();
+            await productDisplayPage.shipToMeFullfilmentButton.click();
+        });
+
+        await test.step('Add to Cart and Go to Cart', async () => {
+            await productDisplayPage.addToCartButton.click();
+            await page.waitForLoadState('load');
+            await productDisplayPage.goToCartButtonProd.click();
+
+        });
+
+        await test.step('click change delivery zip code', async () => {
+            await cartPage.clickChangeDeliveryZipCode();
+
+        });
+        await test.step('update delivery zip code', async () => {
+            await cartPage.updateDeliveryZipcode('15108');
+
+        });
+        await test.step('select Same Day Delivery radio button', async () => {
+            await cartPage.selectSameDayDeliveryRadioButton();
+
+        });
+
+        await test.step('Checkout ', async () => {
+            await cartPage.sameDayDeliveryCheckout();
+        });
+
+        await test.step('Verify the contact information is not pre populated', async () => {
+            await page.waitForLoadState('load');
+            await checkoutPage.verifyContactInfoIsEmpty();
+        });
+
+        await test.step('Provide contact details', async () => {
+            await checkoutPage.enterContactInfo('test', 'tester', 'automation@dcsg.com', '7242733400');
+        });
+
+        await test.step('Update Billing and Shipping address', async () => {
+            await checkoutPage.enterBillingShippingInfoForSameDayDelivery('test1', 'tester', '345 Court St Coraopolis', '');
+        });
+
+        await test.step('Verify Same day delivery Tip is visible', async () => {
+            await checkoutPage.verifySameDayDevlieryTipIsVisibleOrNot();
+        });
+
+        await test.step('Select Tip Amount', async () => {
+            await checkoutPage.selectTipAmount('$5');
+        });
+
+        await test.step('Verify Same day delivery Tip amount', async () => {
+            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$5.00');
+        });
+        await test.step('Select Tip Amount', async () => {
+            await checkoutPage.selectTipAmount('$0');
+        });
+        await test.step('Verify Same day delivery Tip amount', async () => {
+            //await page.waitForTimeout(3000);
+            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$0.00');
+        });
+        await test.step('Select Tip Amount', async () => {
+            await checkoutPage.selectTipAmount('$10');
+        });
+        await test.step('Verify Same day delivery Tip amount', async () => {
+            //await page.waitForTimeout(3000);
+            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$10.00');
+        });
+
+        await test.step('Select other tip Amout', async () => {
+            await checkoutPage.selectOtherTipAmount('7');
+        });
+        await test.step('Verify Same day delivery Tip amount', async () => {
+            //await page.waitForTimeout(5000);
+            expect(await checkoutPage.getTipAmountOrderTotal()).toEqual('$7.00');
+        });
+
+
+    });
+
+    test('47. Delete Cart for Signed In User', async ({ page }) => {
+        const homePage = new HomePage(page);
+        const cartPage = new CartPage(page);
+
         const accountSignInPage = new AccountSignInPage(page);
         let accessToken;
 
-        await test.step('Click my account link', async() => {
+        await test.step('Click my account link', async () => {
             await homePage.myAccountLink.click();
         });
 
-        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async() => {
-        await accountSignInPage.signIn(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+            await accountSignInPage.signIn(testData_Prod_Checkout.signInUsername, testData_Prod_Checkout.signInPassword);
+
+        });
+
+        await test.step('Get Access Toekn', async () => {
+            accessToken = await page.evaluate('window.accessToken');
+        });
+
+        await test.step('Delete Cart', async () => {
+            await cartPage.deleteCartUsingAPI(accessToken);
+
+        });
+
 
     });
-
-    await test.step('Get Access Toekn', async() => {
-        accessToken= await page.evaluate('window.accessToken');
-        const cookies=await page.context().cookies();
-        console.log(cookies);
-        console.log(accessToken);
-
-    });
-
-    await test.step('Delete Cart', async() => {
-        await cartPage.deleteCartUsingAPI(accessToken);
-
-    });
-
-
-});
 
 });
