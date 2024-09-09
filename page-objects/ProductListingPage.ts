@@ -2,12 +2,10 @@ import { Locator, Page } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
 import { expect } from '@playwright/test';
-import { expect } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 
 export class ProductListingPage {
   private page: Page;
-  private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
   private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
 
   readonly changeSelectedStoreLink: Locator;
