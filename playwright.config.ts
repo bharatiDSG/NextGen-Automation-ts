@@ -12,7 +12,7 @@ import { MsTeamsReporterOptions } from 'playwright-msteams-reporter';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  timeout: 240000,
+  timeout: 180000,
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -58,9 +58,9 @@ export default defineConfig({
     screenshot: 'only-on-failure',
 
     // Timeout for page waits
-    actionTimeout: 40000,
+    actionTimeout: 20000,
 
-    video: 'on-first-retry',
+    //video: 'on-first-retry',
 
     // launchOptions: {
     //   slowMo: 50,

@@ -34,7 +34,7 @@ jobs:
       - name: Prod Checkout Regression Tests 
         run: |
           echo "Prod Checkout Regression Tests"
-          npx playwright test -g "47. Delete Cart for Signed In User"
+          npx playwright test tests/Checkout/Prod_Checkout_Regression_Tests.spec.ts
         env:
             ENV: dsg_prod    
 
@@ -53,7 +53,7 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in E2E checkout GG NP0 Playwright Test`}"   
+          title: "{title: `** ALERT ** Failure in E2E checkout GG NP0 Playwright Test`}"   
       
       #View report
       - name: Publish CTRF Detailed Test Summary Results
