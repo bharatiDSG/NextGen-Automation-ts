@@ -51,4 +51,4 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          overwrite: "{title: `** ALERT ** Failure in Smoke PLP Prod Playwright Test`}"
+          title: "{title: `** ALERT ** Failure in Smoke PLP Prod Playwright Test`}"
