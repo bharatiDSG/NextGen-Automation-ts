@@ -2228,6 +2228,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -2611,6 +2612,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
