@@ -2103,6 +2103,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -2263,6 +2264,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -2499,6 +2501,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -2561,6 +2564,7 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('Click on Cart icon', async () => {
             await checkoutPage.goBackToCart();
+            
         });
         await test.step('Make Cart Empty', async () => {
             await cartPage.deleteCartItems();
@@ -2642,6 +2646,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -3164,6 +3169,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
@@ -3308,6 +3314,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
 
