@@ -24,6 +24,7 @@ export class HomePage {
     async searchForProduct(searchInput: string): Promise<void> {
         await this.page.waitForLoadState('domcontentloaded');
         await expect(this.searchField).toBeAttached();
+        await expect(this.searchField).toBeEnabled();
         await this.searchField.scrollIntoViewIfNeeded();
         await this.searchField.click();
         await this.searchField.fill(searchInput);
