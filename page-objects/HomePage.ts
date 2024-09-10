@@ -25,6 +25,7 @@ export class HomePage {
         await this.page.waitForLoadState('domcontentloaded');
         await expect(this.searchField).toBeAttached();
         await expect(this.searchField).toBeEnabled();
+        await this.page.waitForLoadState('domcontentloaded');
         await this.searchField.scrollIntoViewIfNeeded();
         await this.searchField.click();
         await this.searchField.fill(searchInput);
