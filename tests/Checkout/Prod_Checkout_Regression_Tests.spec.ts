@@ -125,7 +125,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
         await test.step('Verify Promo Code', async () => {
-            await checkoutPage.verifyPromoCodeFunctionality('CLICKADO1205D');
+            await checkoutPage.verifyPromoCodeFunctionality('DSGSMSWELXK9NPCHDTND4');
 
         });
 
@@ -2231,6 +2231,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('When we search for "pelican kayak" keyword in the search box', async () => {
+            await expect(cartPage.cartCommonProgressSpinner).toHaveCount(0);
             await homePage.searchForProduct('pelican kayak');
         });
 
@@ -3167,6 +3168,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('When we search for "Nike socks" keyword in the search box', async () => {
+            await expect(cartPage.cartCommonProgressSpinner).toHaveCount(0);
             await homePage.searchForProduct('Nike socks');
         });
 
