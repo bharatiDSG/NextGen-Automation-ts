@@ -152,8 +152,8 @@ export class AccountSignInPage {
             expect(email.subject).toBe('Reset your password');
 
             // Get the reset link (TODO: use text instead of index in the future)
-            if (email.html && email.html.links && email.html.links[5]) {
-                const passwordResetLink = email.html.links[5].href as string;
+            if (email.html && email.html.links && email.html.links[4]) {
+                const passwordResetLink = email.html.links[4].href as string;
                 console.log('Reset Link: ' + passwordResetLink);
                 return passwordResetLink;
             } else {
