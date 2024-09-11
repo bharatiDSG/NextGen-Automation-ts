@@ -11,6 +11,7 @@ import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
 import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
 import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.ts';
+import exp from 'constants';
 
 
 test.describe('Prod Checkout tests', () => {
@@ -3208,6 +3209,7 @@ test.describe('Prod Checkout tests', () => {
             await productDisplayPage.addToCartButton.click();
             await page.waitForLoadState('load');
             await productDisplayPage.goToCartButtonProd.click();
+            await expect(cartPage.checkoutButton).toBeVisible();
 
         });
         await test.step('When we search for "hydroflask" keyword in the search box', async () => {
@@ -3889,7 +3891,8 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we set zip code to "15108"', async () => {
-            await page.waitForLoadState('networkidle');
+            //await page.waitForLoadState('networkidle');
+            await expect(productListingPage.loadingOverlay).toHaveCount(0);
             await productListingPage.setDeliveryZipPLP('15108');
         });
 

@@ -174,6 +174,7 @@ export class CartPage {
   }
   async clickCheckoutButton(): Promise<void> {
     await this.page.waitForLoadState('load');
+    await expect(this.checkoutButton).toBeVisible();
     await this.checkoutButton.scrollIntoViewIfNeeded();
     await this.checkoutButton.click();
 
