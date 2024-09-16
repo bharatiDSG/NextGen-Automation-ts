@@ -190,14 +190,14 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
 
     await test.step('Sign In', async () => {
       console.log('User gets the SignIn window');
-      if (await myAccount.continueWithoutPasskey.isVisible() && await myAccount.continueWithoutPasskey.isEnabled()) {
-        console.log('Clicked on the Continue button.');
+      // if (await myAccount.continueWithoutPasskey.isVisible() && await myAccount.continueWithoutPasskey.isEnabled()) {
+      //   console.log('Clicked on the Continue button.');
         await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser2, testData_smokePLP_prod.registeredUserPassword);
 
-      } else {
-        await myAccount.signIn(testData_smokePLP_prod.registeredUser2, testData_smokePLP_prod.registeredUserPassword);
+      // } else {
+      //   await myAccount.signIn(testData_smokePLP_prod.registeredUser2, testData_smokePLP_prod.registeredUserPassword);
 
-      }
+      // }
       console.log('SignIN successful');
 
     });

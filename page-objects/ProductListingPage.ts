@@ -93,7 +93,11 @@ export class ProductListingPage {
   readonly sponsoredItemCards: Locator;
   readonly totalItemCards: Locator;
   readonly resultPerPage: Locator;
-  readonly pageItems:Locator;
+  readonly pageItems: Locator;
+  readonly navListItems: Locator;
+  readonly marketingContent: Locator;
+  readonly linkToFamilyPages: Locator;
+  readonly linkProTips: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -208,6 +212,26 @@ export class ProductListingPage {
     this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
+
+    //Product Category
+    this.navListItems = page.locator('a[class*="list-item"]');
+    this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
+    this.linkToFamilyPages = page.locator('div.menu-container.expanded ul a.sublinks');
+    this.linkProTips = page.locator('a[data-em="Footer_PROTIPS"]');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -350,65 +374,99 @@ export class ProductListingPage {
     console.log('Total fpage count is: ' + totalCount);
     const sponsoredCount = await this.sponsoredItemCards.count();
     console.log('Total sponsored count is: ' + sponsoredCount);
-    const actualCount = totalCount-sponsoredCount;
+    const actualCount = totalCount - sponsoredCount;
     console.log('Actual count is: ' + actualCount);
     return actualCount;
-     
+
   }
-  async validateRandomPage(pageCount:any,pageNo:any) {
+  async validateRandomPage(pageCount: any, pageNo: any) {
     await this.pageItems.nth(pageNo).click();
     console.log('Clicked on any page number');
     await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
     const pageNumber = await this.highlightedPageNumberReact.textContent();
     expect(pageNumber?.trim()).toContain(String(pageNo));
-    console.log('Validated the page numver '+pageNo);
+    console.log('Validated the page numver ' + pageNo);
     const randomPageCount = await this.getActualPaginationCount();
     expect(pageCount).toBe(randomPageCount);
-    console.log('Validated the page count '+pageCount);
+    console.log('Validated the page count ' + pageCount);
   }
 
-  async validateResultsPerPage(pageNo:any) {
+  async validateResultsPerPage(pageNo: any) {
     let commonPage = new CommonPage(this.page)
-    await this.pageItems.nth(pageNo-1).click();
+    await this.pageItems.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
-    const count =  await this.resultPerPage.count();
-    console.log("The result per page count is: "+count);
+    const count = await this.resultPerPage.count();
+    console.log("The result per page count is: " + count);
     for (let i = 0; i < count; i++) {
-     await expect(this.resultPerPage.nth(i)).toBeVisible();
-     await this.resultPerPage.nth(i).click();
-     await commonPage.sleep(10);
-     const allItems =  this.resultPerPage.nth(i);
-     const allItemText = await allItems.textContent();
-     console.log("Result per page text is: "+allItemText);
-     const pageCount = await this.getActualPaginationCount();
-     expect(allItemText?.trim()).toContain(String(pageCount));
-     await expect(allItems).toHaveAttribute('class', /active/);
-     console.log('Results per page is: '+pageCount);
+      await expect(this.resultPerPage.nth(i)).toBeVisible();
+      await this.resultPerPage.nth(i).click();
+      await commonPage.sleep(10);
+      const allItems = this.resultPerPage.nth(i);
+      const allItemText = await allItems.textContent();
+      console.log("Result per page text is: " + allItemText);
+      const pageCount = await this.getActualPaginationCount();
+      expect(allItemText?.trim()).toContain(String(pageCount));
+      await expect(allItems).toHaveAttribute('class', /active/);
+      console.log('Results per page is: ' + pageCount);
     }
-   }
-   
-  async selectSortCategory(category:string, pageCount:any) {
+  }
+
+  async selectSortCategory(category: string, pageCount: any) {
     await this.sortOptionsAccordionButtonReact.click();
-    console.log('Validating sort category: '+category);
+    console.log('Validating sort category: ' + category);
     const count = await this.sortOptionsSelectionReact.count();
     let commonPage = new CommonPage(this.page);
-    console.log('Total sort options are :'+count);
+    console.log('Total sort options are :' + count);
     for (let i = 0; i < count; i++) {
-      const options =  this.sortOptionsSelectionReact.nth(i);
+      const options = this.sortOptionsSelectionReact.nth(i);
       const option = await options.textContent();
-      if(option===category)
-        {
-          await this.sortOptionsSelectionReact.nth(i).click();
-          await commonPage.sleep(5);
-          console.log('Sort option matched');
-          break;
-        }
+      if (option === category) {
+        await this.sortOptionsSelectionReact.nth(i).click();
+        await commonPage.sleep(5);
+        console.log('Sort option matched');
+        break;
+      }
     }
     const categorySelectedText = await this.sortSelectedReact.textContent();
     expect(categorySelectedText?.trim()).toContain(String(category));
-    console.log('Sort category '+categorySelectedText+' is successfuly selected');
+    console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
     const actualPageCount = await this.getActualPaginationCount();
     expect(pageCount).toBe(actualPageCount);
-  }   
-  
+  }
+
+  async validateProductCategoryWithMarketingContent() {
+    const elements = this.navListItems
+    const count = await elements.count();
+    console.log(`The total category is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
+        console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
+        await element.click();
+        this.validateMarketingContent();
+      } else {
+        console.log(`Category Element at index ${i + 1} is not visible.`);
+      }
+    }
+  }
+
+  async validateMarketingContent() {
+    const elements = this.marketingContent
+    const count = await elements.count();
+    console.log(`The total marketing content is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
+      } else {
+        console.log(`Marketing Content Element at index ${i + 1} is not visible.`);
+      }
+    }
+  }
+
 }

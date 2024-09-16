@@ -117,7 +117,7 @@ test.describe('PLP DSG Pagination Tests', () => {
   });
 
 
-  test.only('04. Pagination_Validating sort selection', async ({ page }) => {
+  test('04. Pagination_Validating sort selection', async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating sort selection', async () => {
     const firstPageCount = await productListingPage.getActualPaginationCount();
@@ -132,4 +132,33 @@ test.describe('PLP DSG Pagination Tests', () => {
 
   });
 
-});
+  test.only('05. Category_Validating main product categories and marketing content', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    await test.step('Validating main product categories', async () => {
+    productListingPage.validateProductCategoryWithMarketingContent();
+    console.log('Validation successful');
+    });
+
+  });
+
+  test('06. Category_Validating Pro Tips functionality', async ({ page}) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to click on the ProTips link');
+    await productListingPage.linkProTips.nth(1).click()
+    const newPageUrl =  page.url();
+    expect(newPageUrl).toContain('protip');
+    console.log('ProTips page opened');
+    console.log('Validation successful');
+    });
+
+  });
+
+
+
+
+
+
+
+
+
+
