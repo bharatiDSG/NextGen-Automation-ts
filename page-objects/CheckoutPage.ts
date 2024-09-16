@@ -124,7 +124,7 @@ export class CheckoutPage {
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
         this.changeContactInfo = page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
-        this.sameShippingAndBillingCheckbox = page.locator('//chk-billing-shipping-checkbox');
+        this.sameShippingAndBillingCheckbox = page.locator('//homefield-checkbox');
         this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' });
         this.billingShippingAddress = page.locator('[id="address"]');
@@ -633,7 +633,7 @@ export class CheckoutPage {
         expect(await this.creditCardErrormessage.innerText()).toContain(expectedErrorMessage);
     }
     async unCheckSameShippingAndBillingAddress() {
-        await this.sameShippingAndBillingCheckbox.click();
+        await this.sameShippingAndBillingCheckbox.first().click();
         await this.page.waitForTimeout(2000);
     }
     async goBackToCart() {

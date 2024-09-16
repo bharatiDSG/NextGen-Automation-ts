@@ -355,7 +355,7 @@ export class ProductDisplayPage {
   private skusWithAvailability: Set<string> = new Set<string>();
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
-    await expect(this.productTitle).toBeVisible();
+    await expect(this.productTitle.first()).toBeVisible();
     const hostUrl = getBaseUrl();
     let apiURL: string | null = null;
     if (hostUrl.includes('golfgalaxy')) {
@@ -388,7 +388,7 @@ export class ProductDisplayPage {
   }
 
   async verifyAttributesArePresentOrNotForBOPIS(zipCode: string, storeSearch: string): Promise<boolean> {
-    await expect(this.productTitle).toBeVisible();
+    await expect(this.productTitle.first()).toBeVisible();
     const hostUrl = getBaseUrl();
     let apiURL: string | null = null;
     if (hostUrl.includes('golfgalaxy')) {

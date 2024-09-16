@@ -327,6 +327,7 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('Select ShipToMe fulfillment option', async () => {
             await page.waitForLoadState('load');
+            await expect(productDisplayPage.productTitle.first()).toBeVisible();
             await expect(productDisplayPage.shipToMeFullfilmentButton).toBeVisible();
             await productDisplayPage.shipToMeFullfilmentButton.click();
         });
