@@ -1,12 +1,12 @@
 import { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
-import { expect } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
+import { all } from 'axios';
 
 export class ProductListingPage {
   private page: Page;
-  private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
 
   readonly changeSelectedStoreLink: Locator;
   readonly selectStoreZipField: Locator;
@@ -90,7 +90,14 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
-  readonly loadingOverlay:Locator;
+  readonly sponsoredItemCards: Locator;
+  readonly totalItemCards: Locator;
+  readonly resultPerPage: Locator;
+  readonly pageItems: Locator;
+  readonly navListItems: Locator;
+  readonly marketingContent: Locator;
+  readonly linkToFamilyPages: Locator;
+  readonly linkProTips: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -154,17 +161,21 @@ export class ProductListingPage {
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
     // pagination and breadcrumbs
+    this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
+    this.totalItemCards = page.locator('div.dsg-react-product-card');
+    this.resultPerPage = page.locator('a[class*="rs-page-count"]');
     this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
     this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
+    this.pageItems = page.locator('a[class*="rs-page-item"]');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
     this.sortOptionsAccordionButtonAngular = page.getByTitle('Select sort option');
-    this.sortOptionsSelectionReact = page.locator('li');
+    this.sortOptionsSelectionReact = page.locator('li[class*="option"] div.rs-sort-by-value-text');
     this.sortOptionsSelectionAngular = page.locator('option');
     this.sortSelectedReact = page.locator('[class="rs-selected-sort-text"]');
     this.sortSelectedAngular = page.locator('[class="ng-star-inserted"]').locator('[selected="true"]');
@@ -202,7 +213,25 @@ export class ProductListingPage {
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
 
-    this.loadingOverlay= page.locator('//div[@class="dsg-react-loading-overlay"]')
+    //Product Category
+    this.navListItems = page.locator('a[class*="list-item"]');
+    this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
+    this.linkToFamilyPages = page.locator('div.menu-container.expanded ul a.sublinks');
+    this.linkProTips = page.locator('a[data-em="Footer_PROTIPS"]');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -235,30 +264,21 @@ export class ProductListingPage {
   }
 
   async selectMatchingProduct(product: string): Promise<string> {
-    await this.page.waitForLoadState('domcontentloaded');
     await this.productNames.last().waitFor();
-
     const productNames = await this.productNames.allInnerTexts();
-    const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
-    //console.log({ productNamesLowerCase });
-    //console.log({productNames})
+
     console.log('product count: ' + productNames.length);
 
-    const matchValueLowerCase = product.toLowerCase();
-    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNamesLowerCase, matchValueLowerCase);
+    const matchValue = product;
+    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNames, matchValue);
+    const productName = productNames[indexOfProductFirstMatch];
 
-    const productMatchName = productNames[indexOfProductFirstMatch];
+    console.log('productName: ' + productName);
+    console.log('productIndex: ' + indexOfProductFirstMatch);
 
-    console.log('productMatchName: ' + productMatchName);
-    console.log('productMatchIndex: ' + indexOfProductFirstMatch);
-
-    if (productMatchName == undefined) {
-      console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1])
-    }
-  
     await this.productNames.nth(indexOfProductFirstMatch).click();
 
-    return productMatchName;
+    return productName;
   }
 
   async setDeliveryZipPLP(zip: string) {
@@ -267,7 +287,6 @@ export class ProductListingPage {
     await this.zipDeliveryInputField.first().click();
     await this.zipDeliveryInputField.first().fill(zip);
     await this.zipDeliveryUpdateButton.click();
-    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
   }
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
@@ -349,131 +368,105 @@ export class ProductListingPage {
 
 
   }
-  async selectAProductWithInGivenRange(withInRange:number) {
-    await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
-    console.log('product count: ' + productNames.length);
-    await this.productNames.nth(Math.floor(Math.random() * withInRange)).click();
 
+  async getActualPaginationCount() {
+    const totalCount = await this.totalItemCards.count();
+    console.log('Total fpage count is: ' + totalCount);
+    const sponsoredCount = await this.sponsoredItemCards.count();
+    console.log('Total sponsored count is: ' + sponsoredCount);
+    const actualCount = totalCount - sponsoredCount;
+    console.log('Actual count is: ' + actualCount);
+    return actualCount;
 
   }
+  async validateRandomPage(pageCount: any, pageNo: any) {
+    await this.pageItems.nth(pageNo).click();
+    console.log('Clicked on any page number');
+    await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+    const pageNumber = await this.highlightedPageNumberReact.textContent();
+    expect(pageNumber?.trim()).toContain(String(pageNo));
+    console.log('Validated the page numver ' + pageNo);
+    const randomPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(randomPageCount);
+    console.log('Validated the page count ' + pageCount);
+  }
 
-  async verifyAttributesArePresentOrNotForShipToMe():Promise<boolean>
-    {
-      // let hostUrl = getBaseUrl();
-      // let apiURL: string | null = null;
-      // console.log('The host Url is: '+hostUrl);
-      // if (hostUrl.includes('dksxchange')){
-      //   apiURL = config['app_dks_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('golfgalaxy')) {
-      //   apiURL = config['app_gg_api'].baseUrl as string;
-      // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
-      //   apiURL = config['app_dsg_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('pl')) {
-      //   apiURL = config['app_pl_api'].baseUrl as string;;
-      // } else {
-      //   console.info('Host did not contain appropriate name');
-      //   return false;
-      // }
+  async validateResultsPerPage(pageNo: any) {
+    let commonPage = new CommonPage(this.page)
+    await this.pageItems.nth(pageNo - 1).click();
+    console.log('Clicked on any page number');
+    const count = await this.resultPerPage.count();
+    console.log("The result per page count is: " + count);
+    for (let i = 0; i < count; i++) {
+      await expect(this.resultPerPage.nth(i)).toBeVisible();
+      await this.resultPerPage.nth(i).click();
+      await commonPage.sleep(10);
+      const allItems = this.resultPerPage.nth(i);
+      const allItemText = await allItems.textContent();
+      console.log("Result per page text is: " + allItemText);
+      const pageCount = await this.getActualPaginationCount();
+      expect(allItemText?.trim()).toContain(String(pageCount));
+      await expect(allItems).toHaveAttribute('class', /active/);
+      console.log('Results per page is: ' + pageCount);
+    }
+  }
 
-      // console.log('The api Url is: '+apiURL);
-      // const currentUrl = (await this.page).url();
-      // console.log('The current Url is: '+currentUrl);
-      // const productID = currentUrl.split('/')[4];
-      // const finalAPIURL = `${apiURL}${productID}`;
-      // console.log('The final Url is: '+finalAPIURL);
-
-      const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
-      if(await this.quickviewOpenATCButtonAngular.isVisible()){
-        await this.quickviewOpenATCButtonAngular.first().click();
-      } else {
-        await this.quickviewOpenATCButtonReact.first().click();
-      }
-      const res = await responsePromise;
-      const responseJson = await res.json();
-      // const attArray = await res.data.productsData[0].style.definingAttributes;
-      const attArray = await responseJson.productsData[0].style.definingAttributes;
-      if (attArray.length > 0) {
-        await this.getSKUsWithAttributes(responseJson);
-        console.log('Attributes present');
-        return true;
-      } else {
-        console.log('No Attributes present');
-        return false;
+  async selectSortCategory(category: string, pageCount: any) {
+    await this.sortOptionsAccordionButtonReact.click();
+    console.log('Validating sort category: ' + category);
+    const count = await this.sortOptionsSelectionReact.count();
+    let commonPage = new CommonPage(this.page);
+    console.log('Total sort options are :' + count);
+    for (let i = 0; i < count; i++) {
+      const options = this.sortOptionsSelectionReact.nth(i);
+      const option = await options.textContent();
+      if (option === category) {
+        await this.sortOptionsSelectionReact.nth(i).click();
+        await commonPage.sleep(5);
+        console.log('Sort option matched');
+        break;
       }
     }
-    async  getSKUsWithAttributes(res: any): Promise<void> {
-      this.skusWithAttributes.clear();
-      const jsonObj = res;
-      const skusArray = jsonObj.productsData[0].skus;
-      for (let i = 0; i < skusArray.length; i++) {
-        console.log(skusArray[i].shipQty);
-        if (skusArray[i].shipQty > 0) {
-          const a: string[] = [];
-          const definingAttr = skusArray[i].definingAttributes;
-          const price = `price - ${skusArray[i].prices.offerPrice}`;
-          a.push(price);
-          for (let j = 0; j < definingAttr.length; j++) {
-            const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
-            a.push(attr);
-          }
-          this.skusWithAttributes.set(skusArray[i].partNumber, a);
-        }
+    const categorySelectedText = await this.sortSelectedReact.textContent();
+    expect(categorySelectedText?.trim()).toContain(String(category));
+    console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
+    const actualPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(actualPageCount);
+  }
+
+  async validateProductCategoryWithMarketingContent() {
+    const elements = this.navListItems
+    const count = await elements.count();
+    console.log(`The total category is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
+        console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
+        await element.click();
+        this.validateMarketingContent();
+      } else {
+        console.log(`Category Element at index ${i + 1} is not visible.`);
       }
     }
+  }
 
-    async selectShipToMeAttributes(page: Page ): Promise<void> {
-      const commonPage = new CommonPage(this.page);
-      console.log("Skus with attributes - " + this.skusWithAttributes);
-      if (this.skusWithAttributes.size > 0) {
-        const keysAsArray = Array.from(this.skusWithAttributes.keys());
-        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-        const attr = this.skusWithAttributes.get(randomSku);
-        if (attr) {
-          for (const at of attr) {
-            const attributeSet = at.split(' - ');
-            console.log(attributeSet[0]);
-            console.log(attributeSet[1]);
-            switch (attributeSet[0]) {
-              case 'Color':
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
-                console.log(randomColorXpath);
-                const colorPdp = page.locator(randomColorXpath);
-                await colorPdp.first().waitFor();
-                await colorPdp.first().click();
-                break;
-              case 'Size':
-              case 'Shoe Size':
-              case 'Shoe Width':
-              case 'Flex':
-              case 'Hand':
-              case 'Shaft':
-              case 'Loft':
-              case 'Wedge Bounce':
-              case 'Wedge Grind/Sole':
-              case 'Frame Size':
-              case 'Wheel Size':
-              case 'Drivetrain Manufacturer':
-              case 'Sock Size':
-              case 'Capacity':
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                const paramPdp = page.locator(randomXpath);
-                await paramPdp.waitFor();
-                await paramPdp.click();
-                break;
-              case 'Length':
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
-                page.locator(randomLengthXpath).click();;
-                break;
-            }
-          }
-        }
+  async validateMarketingContent() {
+    const elements = this.marketingContent
+    const count = await elements.count();
+    console.log(`The total marketing content is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
       } else {
-        //throw new Error('This product is not eligible for Ship To Me');
-        console.info('This product is not eligible for Ship To Me');
+        console.log(`Marketing Content Element at index ${i + 1} is not visible.`);
       }
-      }
+    }
+  }
+
 }
