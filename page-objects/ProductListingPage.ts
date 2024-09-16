@@ -129,7 +129,7 @@ export class ProductListingPage {
     this.pickupFilterButtonAngular = page.getByRole('button', { name: 'Pickup', exact: true });
     this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship' });
     this.shipFilterButtonAngular = page.getByRole('button', { name: 'Ship', exact: true });
-    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery filter' });
+    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery', exact: true });
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
@@ -491,6 +491,13 @@ export class ProductListingPage {
     await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
     await this.pickupFilterButtonAngular.first().click();
     await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
+
+  async applySameDayDeliveryFilter(): Promise<void> {
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+    await this.sameDayDeliveryFilter.first().click();
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 }

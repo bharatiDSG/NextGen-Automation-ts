@@ -3543,8 +3543,8 @@ test.describe('Prod Checkout tests', () => {
         });
 
 
-        await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await productListingPage.applyPickupFilter();
+        await test.step('And we apply the "Same Day delivery filter" shipping option filter', async () => {
+            await productListingPage.applySameDayDeliveryFilter();
         });
         await test.step('Select a product', async () => {
 
@@ -3624,8 +3624,8 @@ test.describe('Prod Checkout tests', () => {
         });
 
 
-        await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            await productListingPage.applyPickupFilter();
+        await test.step('And we apply the "Same Day delivery filter" shipping option filter', async () => {
+            await productListingPage.applySameDayDeliveryFilter();
         });
         await test.step('Select a product', async () => {
 
