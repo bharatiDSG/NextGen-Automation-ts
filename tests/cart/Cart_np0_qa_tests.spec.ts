@@ -7,6 +7,7 @@ import { CartPage } from '../../page-objects/CartPage.js';
 import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 
 
+
 test.describe('E2E NP0 QA', () => {
     test.beforeEach(async ({ page }) => {
         const homePage = new HomePage(page);
@@ -23,12 +24,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('1: Cart product details', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
 
@@ -71,12 +68,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('2: Cart pricing details', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         await test.step('Search with product SKU number', async () => {
@@ -150,12 +143,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('3: Cart Fulfilment choice', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         await test.step('Search with product SKU number', async () => {
@@ -170,11 +159,10 @@ test.describe('E2E NP0 QA', () => {
 
         // Set store
         await test.step('Set zip code and select Store', async () => {
+            await commonPage.handlePromotionalPopup();
             await productDisplayPage.selectStorePickup('Select product options');
             await page.waitForLoadState('networkidle');
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.setStoreFromPDP(testData_e2e_np0_qa.zipCode, 'Robinson');
-            await page.waitForLoadState('networkidle');
             await productDisplayPage.selectProductByColor.click();
             console.log('Store setup done');
 
@@ -201,12 +189,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('4: Cart quantity functionality STH', { tag: '@regression' }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         // Search for product
@@ -274,12 +258,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('5: Cart quantity functionality Store Pickup', { tag: '@regression' }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
 
@@ -347,12 +327,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('6: Paypal checkout in Cart page', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
         await test.step('Search with product SKU number', async () => {
             console.log('Validating Paypal payment');
@@ -384,14 +360,10 @@ test.describe('E2E NP0 QA', () => {
         console.log('Validation successful');
     });
 
-    test.only('7: Cart page mixed order', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+    test('7: Cart page mixed order', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
 
@@ -456,12 +428,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('8: Cart page gift card and score card guest user', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         await test.step('Search with product SKU number', async () => {
@@ -501,12 +469,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('9: Empty cart functionality_Guest', { tag: '@regression' }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         await test.step('Search with product SKU number', async () => {
@@ -540,12 +504,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('10: Cart page gift card and score card guest user', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
 
@@ -584,12 +544,8 @@ test.describe('E2E NP0 QA', () => {
 
     test('11: Cart page save later', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
         const homePage = new HomePage(page);
-
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-
-
-
         const commonPage = new CommonPage(page);
 
         await test.step('Search with product SKU number', async () => {

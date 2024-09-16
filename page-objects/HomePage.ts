@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class HomePage {
     private page: Page;
@@ -22,6 +22,9 @@ export class HomePage {
     }
 
     async searchForProduct(searchInput: string): Promise<void> {
+        await this.page.waitForLoadState('domcontentloaded');
+        await expect(this.searchField).toBeAttached();
+        await expect(this.searchField).toBeEnabled();
         await this.page.waitForLoadState('domcontentloaded');
         await this.searchField.scrollIntoViewIfNeeded();
         await this.searchField.click();
