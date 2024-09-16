@@ -1,18 +1,16 @@
-import { test, expect, APIRequestContext } from '@playwright/test';
-import { getBaseUrl } from '../../globalSetup.ts';
-import { HomePage } from '../../page-objects/HomePage.ts';
+import { APIRequestContext, expect, test } from '@playwright/test';
 
-import { ProductListingPage } from '../../page-objects/ProductListingPage.ts';
-import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage.ts';
+import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
 import { CartPage } from '../../page-objects/CartPage.ts';
 import { CheckoutPage } from '../../page-objects/CheckoutPage.ts';
+import { HomePage } from '../../page-objects/HomePage.ts';
 import { OrderConfirmationPage } from '../../page-objects/OrderConfirmationPage.ts';
-import { AccountSignInPage } from '../../page-objects/AccountSignInPage.ts';
+import { ProductDisplayPage } from '../../page-objects/ProductDisplayPage.ts';
+import { ProductListingPage } from '../../page-objects/ProductListingPage.ts';
+import { getBaseUrl } from '../../globalSetup.ts';
+import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.ts';
 import { testData_e2e_np0_qa } from '../../test-data/e2eNP0QATestData.ts';
 import { testData_smokeCheckout_prod } from '../../test-data/smokeCheckoutProdTestData.js';
-import { testData_Prod_Checkout } from '../../test-data/ProdCheckoutTestData.ts';
-import exp from 'constants';
-
 
 test.describe('Prod Checkout tests', () => {
     let apiContext: APIRequestContext;
@@ -57,13 +55,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -180,13 +172,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -259,13 +245,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -338,13 +318,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -393,16 +367,12 @@ test.describe('Prod Checkout tests', () => {
 
         await test.step('When we search for "calia socks" keyword in the search box', async () => {
             await homePage.searchForProduct('calia socks');
+            
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+        
+           await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -475,13 +445,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -554,13 +518,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -633,13 +591,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -703,13 +655,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -771,13 +717,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -839,13 +779,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -912,13 +846,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -951,13 +879,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1023,13 +945,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1090,13 +1006,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1161,13 +1071,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1223,13 +1127,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1292,13 +1190,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1366,13 +1258,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1440,13 +1326,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1514,13 +1394,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1573,13 +1447,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1612,13 +1480,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1680,13 +1542,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1719,13 +1575,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1787,13 +1637,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1844,13 +1688,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1901,13 +1739,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -1958,13 +1790,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2015,13 +1841,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2077,13 +1897,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2113,7 +1927,8 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we set zip code to "15108"', async () => {
-            await page.waitForLoadState('networkidle');
+            await page.waitForLoadState('load');
+            await page.waitForLoadState('domcontentloaded');
             await productListingPage.setStoreFromPLP('Robinson');
             await expect(productListingPage.loadingOverlay).toHaveCount(0);
             //await expect(productListingPage.zipDeliveryLocationButton).toHaveText(new RegExp('.*15205.*'))
@@ -2121,14 +1936,7 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
-                await productListingPage.pickupFilterButtonReact.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            } else {
-                await productListingPage.pickupFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            }
-            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+           await productListingPage.applyPickupFilter();
         });
         await test.step('Select a product', async () => {
 
@@ -2202,13 +2010,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2239,13 +2041,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2281,14 +2077,8 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
-                await productListingPage.pickupFilterButtonReact.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            } else {
-                await productListingPage.pickupFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            }
-            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+            await productListingPage.applyPickupFilter();
+            
         });
         await test.step('Select a product', async () => {
 
@@ -2359,13 +2149,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2398,13 +2182,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2476,13 +2254,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2512,13 +2284,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2586,13 +2352,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2622,13 +2382,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2658,13 +2412,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2737,13 +2485,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2821,13 +2563,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2890,13 +2626,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -2969,13 +2699,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3048,13 +2772,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3145,13 +2863,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3182,13 +2894,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3212,18 +2918,12 @@ test.describe('Prod Checkout tests', () => {
             await expect(cartPage.checkoutButton).toBeVisible();
 
         });
-        await test.step('When we search for "hydroflask" keyword in the search box', async () => {
+        await test.step('When we search for "Pelican kayak" keyword in the search box', async () => {
             await homePage.searchForProduct('Pelican kayak');
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3291,13 +2991,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3327,13 +3021,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3389,13 +3077,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
             await expect(productListingPage.loadingOverlay).toHaveCount(0);
         });
         await test.step('Select a product', async () => {
@@ -3455,13 +3137,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3517,13 +3193,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3580,13 +3250,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3661,13 +3325,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3741,14 +3399,7 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            if (await productListingPage.pickupFilterButtonReact.first().isVisible()) {
-                await productListingPage.pickupFilterButtonReact.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            } else {
-                await productListingPage.pickupFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Pickup at Robinson.*'));
-            }
-            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+            await productListingPage.applyPickupFilter();
         });
         await test.step('Select a product', async () => {
 
@@ -3818,13 +3469,7 @@ test.describe('Prod Checkout tests', () => {
         });
 
         await test.step('And we apply the "Ship" shipping option filter', async () => {
-            if (await productListingPage.shipFilterButtonAngular.first().isVisible()) {
-                await productListingPage.shipFilterButtonAngular.first().click();
-                await expect(productListingPage.filterChipsAngular.first()).toContainText(new RegExp('.*Ship to.*'));
-            } else {
-                await productListingPage.shipFilterButtonReact.click();
-                await expect(productListingPage.filterChipsReact.first()).toContainText(new RegExp('.*Ship to.*'));
-            }
+            await productListingPage.applyShipFilter();
         });
         await test.step('Select a product', async () => {
             await productListingPage.selectAProduct();
@@ -3898,15 +3543,7 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            //await page.waitForTimeout(3000);
-            if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
-                await productListingPage.sameDayDeliveryFilter.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            } else {
-                await productListingPage.sameDayDeliveryFilter.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            }
-            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+            await productListingPage.applyPickupFilter();
         });
         await test.step('Select a product', async () => {
 
@@ -3987,15 +3624,7 @@ test.describe('Prod Checkout tests', () => {
 
 
         await test.step('And we apply the "Pick up" shipping option filter', async () => {
-            //await page.waitForLoadState('networkidle');
-            if (await productListingPage.sameDayDeliveryFilter.first().isVisible()) {
-                await productListingPage.sameDayDeliveryFilter.first().click();
-                await expect(productListingPage.filterChipsAngular.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            } else {
-                await productListingPage.sameDayDeliveryFilter.click();
-                await expect(productListingPage.filterChipsReact.or(productListingPage.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-            }
-            await expect(productListingPage.loadingOverlay).toHaveCount(0);
+            await productListingPage.applyPickupFilter();
         });
         await test.step('Select a product', async () => {
 

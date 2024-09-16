@@ -1,4 +1,5 @@
 import { FrameLocator, Locator, Page, expect } from '@playwright/test';
+
 import { AccountSignInPage } from './AccountSignInPage';
 import { CommonPage } from './CommonPage';
 
@@ -578,6 +579,7 @@ export class CheckoutPage {
 
     }
     async getOrderSubTotal(): Promise<number> {
+        await expect(this.orderSubTotal).toBeVisible();
         const subTotal: string = await this.orderSubTotal.innerText();
         console.log(Number.parseFloat(subTotal.toString().replace('$', '')));
         return Number.parseFloat(subTotal.toString().replace('$', ''));
@@ -865,7 +867,7 @@ export class CheckoutPage {
     async validateOrderSubtotal() {
         const calculatedOrderSubTotal = await this.calculateOrderSubTotal();
         const actualOrderSubTotalOnScreen = await this.getOrderSubTotal();
-        expect(calculatedOrderSubTotal).toEqual(actualOrderSubTotalOnScreen);
+        expect(calculatedOrderSubTotal.toFixed(2)).toEqual(actualOrderSubTotalOnScreen.toFixed(2));
     }
     async calculateOrderSubTotal(): Promise<number> {
         let orderSubTotal = 0;
