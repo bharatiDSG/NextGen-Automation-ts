@@ -291,7 +291,12 @@ export class ProductListingPage {
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
-    await plpProductStyle.nth(1).click();
+    const styleCount = await plpProductStyle.count();
+    console.log("The minimum product style variation in plp page: "+styleCount);
+    for (let i = 0; i < styleCount; i++) {
+      const style =  plpProductStyle.nth(i);
+      await expect(style).toBeVisible();
+    }
     const index = +itemVal;
     const eleFvrt = this.favorites.nth(index);
     await expect(eleFvrt).toBeVisible();
