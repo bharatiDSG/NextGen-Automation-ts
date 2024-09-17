@@ -118,7 +118,7 @@ test.describe('Prod Checkout tests', () => {
 
         });
         await test.step('Verify Promo Code', async () => {
-            await checkoutPage.verifyPromoCodeFunctionality('DSGSMSWELXK9NPCHDTND4');
+            await checkoutPage.verifyPromoCodeFunctionality('CLICKEMTEDSG1');
 
         });
 
