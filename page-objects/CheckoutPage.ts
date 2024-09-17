@@ -205,7 +205,7 @@ export class CheckoutPage {
         this.freeStorePickup = page.getByText('Free Store Pickup');
         this.dsgLogo = page.getByRole('link', { name: 'DICK\'S Sporting Goods' });
 
-        this.textMeOrderUpdates = page.getByText('Text me order updates');
+        this.textMeOrderUpdates = page.locator('//hmf-checkbox[@label="Text me order updates"]');
         this.addPickupPersonLink = page.locator("//span[@actiontype='AddAdditionalPickupPersonClick']");
         this.pickupFirstname = page.locator('#proxy-first-name');
         this.pickupLastname = page.locator('#proxy-last-name');
