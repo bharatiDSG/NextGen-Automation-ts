@@ -95,6 +95,7 @@ export class ProductDisplayPage {
   readonly sponsoredProductsSection: Locator;
   readonly customersAlsoBoughtSection: Locator;
   readonly recentlyViewedSection: Locator;
+  readonly productTitle: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -195,6 +196,8 @@ export class ProductDisplayPage {
     this.sponsoredProductsSection = page.getByText('Sponsored Products');
     this.customersAlsoBoughtSection = page.getByText('Customers Also Bought');
     this.recentlyViewedSection = page.getByText('Recently Viewed');
+
+    this.productTitle= page.locator('//h1[@itemprop="name"]');
   }
 
   async setStoreFromPDP(zipcode: string, store: string): Promise<string> {
@@ -352,6 +355,7 @@ export class ProductDisplayPage {
   private skusWithAvailability: Set<string> = new Set<string>();
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
+    await expect(this.productTitle.first()).toBeVisible();
     const hostUrl = getBaseUrl();
     let apiURL: string | null = null;
     if (hostUrl.includes('golfgalaxy')) {
@@ -384,6 +388,7 @@ export class ProductDisplayPage {
   }
 
   async verifyAttributesArePresentOrNotForBOPIS(zipCode: string, storeSearch: string): Promise<boolean> {
+    await expect(this.productTitle.first()).toBeVisible();
     const hostUrl = getBaseUrl();
     let apiURL: string | null = null;
     if (hostUrl.includes('golfgalaxy')) {
@@ -505,13 +510,13 @@ export class ProductDisplayPage {
           console.log(attributeSet[1]);
           switch (attributeSet[0]) {
             case 'Color':
-              console.info('Selecting attribute is: ' + attributeSet[0]);
+              { console.info('Selecting attribute is: ' + attributeSet[0]);
               const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
               console.log(randomColorXpath);
               await commonPage.sleep(5);
               const colorPdp = page.locator(randomColorXpath);
               await colorPdp.click();
-              break;
+              break; }
             case 'Size':
             case 'Shoe Size':
             case 'Shoe Width':
@@ -526,17 +531,17 @@ export class ProductDisplayPage {
             case 'Drivetrain Manufacturer':
             case 'Sock Size':
             case 'Capacity':
-              console.info('Selecting attribute is: ' + attributeSet[0]);
+              { console.info('Selecting attribute is: ' + attributeSet[0]);
               const randomXpath = `//button//span[text()='${attributeSet[1]}']`;
               await commonPage.sleep(5);
               const paramPdp = page.locator(randomXpath);
               await paramPdp.click();
-              break;
+              break; }
             case 'Length':
-              console.info('Selecting attribute is: ' + attributeSet[0]);
+              { console.info('Selecting attribute is: ' + attributeSet[0]);
               const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
               page.locator(randomLengthXpath).click();;
-              break;
+              break; }
           }
         }
       }
@@ -566,24 +571,24 @@ export class ProductDisplayPage {
           console.log(attributeSet[1]);
           switch (attributeSet[0].trim()) {
             case 'Color':
-              const randomColorXpath = `//img[@alt='${attributeSet[1].trim()}']/ancestor::button`;
+              { const randomColorXpath = `//img[@alt='${attributeSet[1].trim()}']/ancestor::button`;
               console.log('The color xpath is: ' + randomColorXpath);
               await commonPage.sleep(5);
               const paramPdp2 = page.locator(randomColorXpath);
               await paramPdp2.click();
-              break;
+              break; }
             case 'Size':
             case 'Shoe Size':
             case 'Shoe Width':
             case 'Flex':
             case 'Hand':
             case 'Shaft':
-              const randomShaftXpath = `//button//span[text()="${attributeSet[1].trim()}"]`;
+              { const randomShaftXpath = `//button//span[text()="${attributeSet[1].trim()}"]`;
               console.log('The size xpath is: ' + randomShaftXpath);
               await commonPage.sleep(5);
               const paramPdp1 = page.locator(randomShaftXpath);
               await paramPdp1.click();
-              break;
+              break; }
             case 'Loft':
             case 'Wedge Bounce':
             case 'Wedge Grind/Sole':
@@ -593,11 +598,11 @@ export class ProductDisplayPage {
             case 'Sock Size':
             case 'Capacity':
             case 'Grip':
-              const randomXpath = `//button//span[text()='${attributeSet[1].trim()}']`;
+              { const randomXpath = `//button//span[text()='${attributeSet[1].trim()}']`;
               await commonPage.sleep(5);
               const paramPdp = page.locator(randomXpath);
               await paramPdp.click();
-              break;
+              break; }
           }
         }
       }

@@ -1,4 +1,5 @@
 import { FrameLocator, Locator, Page, expect } from '@playwright/test';
+
 import { AccountSignInPage } from './AccountSignInPage';
 import { CommonPage } from './CommonPage';
 
@@ -123,7 +124,7 @@ export class CheckoutPage {
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
         this.changeContactInfo = page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
-        this.sameShippingAndBillingCheckbox = page.locator('//chk-billing-shipping-checkbox');
+        this.sameShippingAndBillingCheckbox = page.locator('//homefield-checkbox');
         this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' });
         this.billingShippingAddress = page.locator('[id="address"]');
@@ -578,6 +579,7 @@ export class CheckoutPage {
 
     }
     async getOrderSubTotal(): Promise<number> {
+        await expect(this.orderSubTotal).toBeVisible();
         const subTotal: string = await this.orderSubTotal.innerText();
         console.log(Number.parseFloat(subTotal.toString().replace('$', '')));
         return Number.parseFloat(subTotal.toString().replace('$', ''));
@@ -631,7 +633,7 @@ export class CheckoutPage {
         expect(await this.creditCardErrormessage.innerText()).toContain(expectedErrorMessage);
     }
     async unCheckSameShippingAndBillingAddress() {
-        await this.sameShippingAndBillingCheckbox.click();
+        await this.sameShippingAndBillingCheckbox.first().click();
         await this.page.waitForTimeout(2000);
     }
     async goBackToCart() {
@@ -865,7 +867,7 @@ export class CheckoutPage {
     async validateOrderSubtotal() {
         const calculatedOrderSubTotal = await this.calculateOrderSubTotal();
         const actualOrderSubTotalOnScreen = await this.getOrderSubTotal();
-        expect(calculatedOrderSubTotal).toEqual(actualOrderSubTotalOnScreen);
+        expect(calculatedOrderSubTotal.toFixed(2)).toEqual(actualOrderSubTotalOnScreen.toFixed(2));
     }
     async calculateOrderSubTotal(): Promise<number> {
         let orderSubTotal = 0;
