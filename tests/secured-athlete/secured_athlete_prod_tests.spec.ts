@@ -23,18 +23,18 @@ test.describe('Secured Athlete Prod Tests', () => {
         console.log('URL: ' + getBaseUrl());
 
         // Click the My Account link.
-        await test.step('Click my account link', async() => {
-        await homePage.myAccountLink.click();
-    });
+        await test.step('Click my account link', async () => {
+            await homePage.myAccountLink.click();
+        });
     });
 
     test('1: sign in', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
 
         // Sign In
-        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async() => {
-        await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
-    });
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+            await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
+        });
     });
 
     test('2: reset password and sign in', async ({ page }) => {
@@ -48,32 +48,32 @@ test.describe('Secured Athlete Prod Tests', () => {
         let newPassword: string;
 
         // Forgot password
-        await test.step('Click Forgot password', async() => {
-        dateSent = new Date();
-        await accountSignInPage.forgotPassword(resetEmail);
-        await commonPage.sleep(5);
-    });
+        await test.step('Click Forgot password', async () => {
+            dateSent = new Date();
+            await accountSignInPage.forgotPassword(resetEmail);
+            await commonPage.sleep(5);
+        });
         // get password reset link
-        await test.step('Get password reset link', async() => {
-        resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
-    });
+        await test.step('Get password reset link', async () => {
+            resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
+        });
         // Change password
-        await test.step('Change Password', async() => {
-        newPassword = dateSent.toISOString();
-        console.log('Email: ' + resetEmail);
-        console.log('New pw: ' + newPassword);
-        await page.goto(resetLink);
-        await accountSignInPage.changePassword(newPassword);
-    });
+        await test.step('Change Password', async () => {
+            newPassword = dateSent.toISOString();
+            console.log('Email: ' + resetEmail);
+            console.log('New pw: ' + newPassword);
+            await page.goto(resetLink);
+            await accountSignInPage.changePassword(newPassword);
+        });
         // Verify password reset
-        await test.step('Verify Password Reset', async() => {
-        // await expect(accountSignInPage.passwordChangedHeader).toBeVisible();
-        await accountSignInPage.backToSignInLink.click();
-    });
+        await test.step('Verify Password Reset', async () => {
+            // await expect(accountSignInPage.passwordChangedHeader).toBeVisible();
+            await accountSignInPage.backToSignInLink.click();
+        });
         // Sign In
-        await test.step('Sign in with new password. Verify Sign in is successful or not', async() => {
-        await accountSignInPage.signIn(resetEmail, newPassword);
-    });
+        await test.step('Sign in with new password. Verify Sign in is successful or not', async () => {
+            await accountSignInPage.signIn(resetEmail, newPassword);
+        });
     });
 
 });
