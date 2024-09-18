@@ -1,12 +1,13 @@
 import { Locator, Page } from '@playwright/test';
-import { expect } from '@playwright/test';
 
 import { CommonPage } from './CommonPage';
+import { expect } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { all } from 'axios';
 
 export class ProductListingPage {
   private page: Page;
+  private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
 
   readonly changeSelectedStoreLink: Locator;
   readonly selectStoreZipField: Locator;
@@ -98,6 +99,7 @@ export class ProductListingPage {
   readonly marketingContent: Locator;
   readonly linkToFamilyPages: Locator;
   readonly linkProTips: Locator;
+  readonly loadingOverlay: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -133,10 +135,10 @@ export class ProductListingPage {
 
     // shipping filters
     this.pickupFilterButtonReact = page.getByRole('button', { name: 'Pickup filter' });
-    this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
-    this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
-    this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
-    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery filter' });
+    this.pickupFilterButtonAngular = page.getByRole('button', { name: 'Pickup', exact: true });
+    this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship' });
+    this.shipFilterButtonAngular = page.getByRole('button', { name: 'Ship', exact: true });
+    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery', exact: true });
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
@@ -213,6 +215,7 @@ export class ProductListingPage {
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
 
+    this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
     //Product Category
     this.navListItems = page.locator('a[class*="list-item"]');
     this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
@@ -264,21 +267,30 @@ export class ProductListingPage {
   }
 
   async selectMatchingProduct(product: string): Promise<string> {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
 
+    const productNames = await this.productNames.allInnerTexts();
+    const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
+    //console.log({ productNamesLowerCase });
+    //console.log({productNames})
     console.log('product count: ' + productNames.length);
 
-    const matchValue = product;
-    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNames, matchValue);
-    const productName = productNames[indexOfProductFirstMatch];
+    const matchValueLowerCase = product.toLowerCase();
+    const indexOfProductFirstMatch = getIndexThatIncludesFirstMatch(productNamesLowerCase, matchValueLowerCase);
 
-    console.log('productName: ' + productName);
-    console.log('productIndex: ' + indexOfProductFirstMatch);
+    const productMatchName = productNames[indexOfProductFirstMatch];
+
+    console.log('productMatchName: ' + productMatchName);
+    console.log('productMatchIndex: ' + indexOfProductFirstMatch);
+
+    if (productMatchName == undefined) {
+      console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
+    }
 
     await this.productNames.nth(indexOfProductFirstMatch).click();
 
-    return productName;
+    return productMatchName;
   }
 
   async setDeliveryZipPLP(zip: string) {
@@ -287,6 +299,7 @@ export class ProductListingPage {
     await this.zipDeliveryInputField.first().click();
     await this.zipDeliveryInputField.first().fill(zip);
     await this.zipDeliveryUpdateButton.click();
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
   }
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
@@ -366,14 +379,18 @@ export class ProductListingPage {
   }
 
   async selectAProduct() {
-    await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
+    await this.productNamesAngular.last().waitFor();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
+    await this.productNamesAngular.nth(Math.floor(Math.random() * productNames.length)).click();
 
 
   }
-
+  async selectAProductWithInGivenRange(withInRange: number) {
+    await this.productNamesAngular.last().waitFor();
+    const productNames = await this.productNamesAngular.allInnerTexts();
+    console.log('product count: ' + productNames.length);
+    await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
   async getActualPaginationCount() {
     const totalCount = await this.totalItemCards.count();
     console.log('Total fpage count is: ' + totalCount);
@@ -382,7 +399,6 @@ export class ProductListingPage {
     const actualCount = totalCount - sponsoredCount;
     console.log('Actual count is: ' + actualCount);
     return actualCount;
-
   }
   async validateRandomPage(pageCount: any, pageNo: any) {
     await this.pageItems.nth(pageNo).click();
@@ -396,6 +412,148 @@ export class ProductListingPage {
     console.log('Validated the page count ' + pageCount);
   }
 
+  async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
+      // let hostUrl = getBaseUrl();
+      // let apiURL: string | null = null;
+      // console.log('The host Url is: '+hostUrl);
+      // if (hostUrl.includes('dksxchange')){
+      //   apiURL = config['app_dks_api'].baseUrl as string;;
+      // } else if (hostUrl.includes('golfgalaxy')) {
+      //   apiURL = config['app_gg_api'].baseUrl as string;
+      // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
+      //   apiURL = config['app_dsg_api'].baseUrl as string;;
+      // } else if (hostUrl.includes('pl')) {
+      //   apiURL = config['app_pl_api'].baseUrl as string;;
+      // } else {
+      //   console.info('Host did not contain appropriate name');
+      //   return false;
+      // }
+
+      // console.log('The api Url is: '+apiURL);
+      // const currentUrl = (await this.page).url();
+      // console.log('The current Url is: '+currentUrl);
+      // const productID = currentUrl.split('/')[4];
+      // const finalAPIURL = `${apiURL}${productID}`;
+      // console.log('The final Url is: '+finalAPIURL);
+
+      const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
+      if (await this.quickviewOpenATCButtonAngular.isVisible()) {
+        await this.quickviewOpenATCButtonAngular.first().click();
+      } else {
+        await this.quickviewOpenATCButtonReact.first().click();
+      }
+      const res = await responsePromise;
+      const responseJson = await res.json();
+      // const attArray = await res.data.productsData[0].style.definingAttributes;
+      const attArray = await responseJson.productsData[0].style.definingAttributes;
+      if (attArray.length > 0) {
+        await this.getSKUsWithAttributes(responseJson);
+        console.log('Attributes present');
+        return true;
+      } else {
+        console.log('No Attributes present');
+        return false;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async getSKUsWithAttributes(res: any): Promise<void> {
+      this.skusWithAttributes.clear();
+      const jsonObj = res;
+      const skusArray = jsonObj.productsData[0].skus;
+      for (let i = 0; i < skusArray.length; i++) {
+        console.log(skusArray[i].shipQty);
+        if (skusArray[i].shipQty > 0) {
+          const a: string[] = [];
+          const definingAttr = skusArray[i].definingAttributes;
+          const price = `price - ${skusArray[i].prices.offerPrice}`;
+          a.push(price);
+          for (let j = 0; j < definingAttr.length; j++) {
+            const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+            a.push(attr);
+          }
+          this.skusWithAttributes.set(skusArray[i].partNumber, a);
+        }
+      }
+    }
+
+    async selectShipToMeAttributes(page: Page): Promise<void> {
+      console.log('Skus with attributes - ' + this.skusWithAttributes);
+      if (this.skusWithAttributes.size > 0) {
+        const keysAsArray = Array.from(this.skusWithAttributes.keys());
+        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+        const attr = this.skusWithAttributes.get(randomSku);
+        if (attr) {
+          for (const at of attr) {
+            const attributeSet = at.split(' - ');
+            console.log(attributeSet[0]);
+            console.log(attributeSet[1]);
+            switch (attributeSet[0]) {
+              case 'Color':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+                  console.log(randomColorXpath);
+                  const colorPdp = page.locator(randomColorXpath);
+                  await colorPdp.first().waitFor();
+                  await colorPdp.first().click();
+                  break;
+                }
+              case 'Size':
+              case 'Shoe Size':
+              case 'Shoe Width':
+              case 'Flex':
+              case 'Hand':
+              case 'Shaft':
+              case 'Loft':
+              case 'Wedge Bounce':
+              case 'Wedge Grind/Sole':
+              case 'Frame Size':
+              case 'Wheel Size':
+              case 'Drivetrain Manufacturer':
+              case 'Sock Size':
+              case 'Capacity':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
+                  const paramPdp = page.locator(randomXpath);
+                  await paramPdp.waitFor();
+                  await paramPdp.click();
+                  break;
+                }
+              case 'Length':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+                  page.locator(randomLengthXpath).click();;
+                  break;
+                }
+            }
+          }
+        }
+      } else {
+        //throw new Error('This product is not eligible for Ship To Me');
+        console.info('This product is not eligible for Ship To Me');
+      }
+    }
+
+    async applyShipFilter(): Promise<void> {
+      await expect(this.shipFilterButtonAngular).toBeVisible();
+      await this.shipFilterButtonAngular.first().click();
+      await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
+    }
+    async applyPickupFilter(): Promise<void> {
+      await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
+      await this.pickupFilterButtonAngular.first().click();
+      await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+      await expect(this.loadingOverlay).toHaveCount(0);
+    }
+
+    async applySameDayDeliveryFilter(): Promise<void> {
+      await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+      await this.sameDayDeliveryFilter.first().click();
+      await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+      await expect(this.loadingOverlay).toHaveCount(0);
+    }
   async validateResultsPerPage(pageNo: any) {
     let commonPage = new CommonPage(this.page)
     await this.pageItems.nth(pageNo - 1).click();
@@ -415,7 +573,6 @@ export class ProductListingPage {
       console.log('Results per page is: ' + pageCount);
     }
   }
-
   async selectSortCategory(category: string, pageCount: any) {
     await this.sortOptionsAccordionButtonReact.click();
     console.log('Validating sort category: ' + category);
@@ -438,7 +595,6 @@ export class ProductListingPage {
     const actualPageCount = await this.getActualPaginationCount();
     expect(pageCount).toBe(actualPageCount);
   }
-
   async validateProductCategoryWithMarketingContent() {
     const elements = this.navListItems
     const count = await elements.count();
@@ -457,7 +613,6 @@ export class ProductListingPage {
       }
     }
   }
-
   async validateMarketingContent() {
     const elements = this.marketingContent
     const count = await elements.count();
@@ -473,5 +628,3 @@ export class ProductListingPage {
       }
     }
   }
-
-}

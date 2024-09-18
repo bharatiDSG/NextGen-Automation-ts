@@ -1,12 +1,12 @@
-// @ts-check
+/**  @ts-check */
 import { defineConfig, devices } from '@playwright/test';
+
 import { MsTeamsReporterOptions } from 'playwright-msteams-reporter';
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -29,15 +29,15 @@ export default defineConfig({
     ['playwright-ctrf-json-reporter', {}],
     [
       'playwright-msteams-reporter',
-      <MsTeamsReporterOptions>{
+      ({
         webhookUrl: process.env.WEB_HOOKS_URL,
-        webhookType: "powerautomate", // or "msteams"
+        webhookType: 'powerautomate', // or "msteams"
         linkToResultsUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
         title:`${process.env.GITHUB_WORKFLOW}-${process.env.GITHUB_RUN_NUMBER}`,
         notifyOnSuccess: process.env.NOTIFY_ON_SUCCESS === 'true',
         mentionOnFailure: `${process.env.MENTIONS}`,
-        mentionOnFailureText: "{mentions} check those failed tests!"
-      }
+        mentionOnFailureText: '{mentions} check those failed tests!'
+      } as MsTeamsReporterOptions)
     ]
   ]: [['html']],
   /* Wait timeout time */
