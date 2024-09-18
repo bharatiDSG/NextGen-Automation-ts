@@ -391,15 +391,8 @@ export class ProductListingPage {
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
-  async getActualPaginationCount() {
-    const totalCount = await this.totalItemCards.count();
-    console.log('Total fpage count is: ' + totalCount);
-    const sponsoredCount = await this.sponsoredItemCards.count();
-    console.log('Total sponsored count is: ' + sponsoredCount);
-    const actualCount = totalCount - sponsoredCount;
-    console.log('Actual count is: ' + actualCount);
-    return actualCount;
   }
+  
   async validateRandomPage(pageCount: any, pageNo: any) {
     await this.pageItems.nth(pageNo).click();
     console.log('Clicked on any page number');
@@ -595,6 +588,16 @@ export class ProductListingPage {
     const actualPageCount = await this.getActualPaginationCount();
     expect(pageCount).toBe(actualPageCount);
   }
+  async getActualPaginationCount() {
+    const totalCount = await this.totalItemCards.count();
+    console.log('Total fpage count is: ' + totalCount);
+    const sponsoredCount = await this.sponsoredItemCards.count();
+    console.log('Total sponsored count is: ' + sponsoredCount);
+    const actualCount = totalCount - sponsoredCount;
+    console.log('Actual count is: ' + actualCount);
+    return actualCount;
+
+  }
   async validateProductCategoryWithMarketingContent() {
     const elements = this.navListItems
     const count = await elements.count();
@@ -628,3 +631,4 @@ export class ProductListingPage {
       }
     }
   }
+}
