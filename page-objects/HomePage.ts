@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 export class HomePage {
     private page: Page;
@@ -30,6 +30,7 @@ export class HomePage {
         await this.searchField.click();
         await this.searchField.fill(searchInput);
         await this.searchField.press('Enter');
+        await this.page.waitForLoadState('load');
     }
 
     async searchForProductWithSlowTyping(searchInput: string): Promise<void> {

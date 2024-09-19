@@ -90,7 +90,7 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
-  readonly loadingOverlay:Locator;
+  readonly loadingOverlay: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -126,10 +126,10 @@ export class ProductListingPage {
 
     // shipping filters
     this.pickupFilterButtonReact = page.getByRole('button', { name: 'Pickup filter' });
-    this.pickupFilterButtonAngular = page.locator('[id="shipping-button"]');
-    this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship filter' });
-    this.shipFilterButtonAngular = page.locator('[id="shipping-button"]');
-    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery filter' });
+    this.pickupFilterButtonAngular = page.getByRole('button', { name: 'Pickup', exact: true });
+    this.shipFilterButtonReact = page.getByRole('button', { name: 'Ship' });
+    this.shipFilterButtonAngular = page.getByRole('button', { name: 'Ship', exact: true });
+    this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery', exact: true });
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
@@ -202,7 +202,7 @@ export class ProductListingPage {
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
 
-    this.loadingOverlay= page.locator('//div[@class="dsg-react-loading-overlay"]')
+    this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
 
 
 
@@ -253,9 +253,9 @@ export class ProductListingPage {
     console.log('productMatchIndex: ' + indexOfProductFirstMatch);
 
     if (productMatchName == undefined) {
-      console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1])
+      console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
     }
-  
+
     await this.productNames.nth(indexOfProductFirstMatch).click();
 
     return productMatchName;
@@ -342,100 +342,100 @@ export class ProductListingPage {
   }
 
   async selectAProduct() {
-    await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
+    await this.productNamesAngular.last().waitFor();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNames.nth(Math.floor(Math.random() * productNames.length)).click();
+    await this.productNamesAngular.nth(Math.floor(Math.random() * productNames.length)).click();
 
 
   }
-  async selectAProductWithInGivenRange(withInRange:number) {
-    await this.productNames.last().waitFor();
-    const productNames = await this.productNames.allInnerTexts();
+  async selectAProductWithInGivenRange(withInRange: number) {
+    await this.productNamesAngular.last().waitFor();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNames.nth(Math.floor(Math.random() * withInRange)).click();
+    await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
 
 
   }
 
-  async verifyAttributesArePresentOrNotForShipToMe():Promise<boolean>
-    {
-      // let hostUrl = getBaseUrl();
-      // let apiURL: string | null = null;
-      // console.log('The host Url is: '+hostUrl);
-      // if (hostUrl.includes('dksxchange')){
-      //   apiURL = config['app_dks_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('golfgalaxy')) {
-      //   apiURL = config['app_gg_api'].baseUrl as string;
-      // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
-      //   apiURL = config['app_dsg_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('pl')) {
-      //   apiURL = config['app_pl_api'].baseUrl as string;;
-      // } else {
-      //   console.info('Host did not contain appropriate name');
-      //   return false;
-      // }
+  async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
+    // let hostUrl = getBaseUrl();
+    // let apiURL: string | null = null;
+    // console.log('The host Url is: '+hostUrl);
+    // if (hostUrl.includes('dksxchange')){
+    //   apiURL = config['app_dks_api'].baseUrl as string;;
+    // } else if (hostUrl.includes('golfgalaxy')) {
+    //   apiURL = config['app_gg_api'].baseUrl as string;
+    // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
+    //   apiURL = config['app_dsg_api'].baseUrl as string;;
+    // } else if (hostUrl.includes('pl')) {
+    //   apiURL = config['app_pl_api'].baseUrl as string;;
+    // } else {
+    //   console.info('Host did not contain appropriate name');
+    //   return false;
+    // }
 
-      // console.log('The api Url is: '+apiURL);
-      // const currentUrl = (await this.page).url();
-      // console.log('The current Url is: '+currentUrl);
-      // const productID = currentUrl.split('/')[4];
-      // const finalAPIURL = `${apiURL}${productID}`;
-      // console.log('The final Url is: '+finalAPIURL);
+    // console.log('The api Url is: '+apiURL);
+    // const currentUrl = (await this.page).url();
+    // console.log('The current Url is: '+currentUrl);
+    // const productID = currentUrl.split('/')[4];
+    // const finalAPIURL = `${apiURL}${productID}`;
+    // console.log('The final Url is: '+finalAPIURL);
 
-      const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
-      if(await this.quickviewOpenATCButtonAngular.isVisible()){
-        await this.quickviewOpenATCButtonAngular.first().click();
-      } else {
-        await this.quickviewOpenATCButtonReact.first().click();
-      }
-      const res = await responsePromise;
-      const responseJson = await res.json();
-      // const attArray = await res.data.productsData[0].style.definingAttributes;
-      const attArray = await responseJson.productsData[0].style.definingAttributes;
-      if (attArray.length > 0) {
-        await this.getSKUsWithAttributes(responseJson);
-        console.log('Attributes present');
-        return true;
-      } else {
-        console.log('No Attributes present');
-        return false;
-      }
+    const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
+    if (await this.quickviewOpenATCButtonAngular.isVisible()) {
+      await this.quickviewOpenATCButtonAngular.first().click();
+    } else {
+      await this.quickviewOpenATCButtonReact.first().click();
     }
-    async  getSKUsWithAttributes(res: any): Promise<void> {
-      this.skusWithAttributes.clear();
-      const jsonObj = res;
-      const skusArray = jsonObj.productsData[0].skus;
-      for (let i = 0; i < skusArray.length; i++) {
-        console.log(skusArray[i].shipQty);
-        if (skusArray[i].shipQty > 0) {
-          const a: string[] = [];
-          const definingAttr = skusArray[i].definingAttributes;
-          const price = `price - ${skusArray[i].prices.offerPrice}`;
-          a.push(price);
-          for (let j = 0; j < definingAttr.length; j++) {
-            const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
-            a.push(attr);
-          }
-          this.skusWithAttributes.set(skusArray[i].partNumber, a);
+    const res = await responsePromise;
+    const responseJson = await res.json();
+    // const attArray = await res.data.productsData[0].style.definingAttributes;
+    const attArray = await responseJson.productsData[0].style.definingAttributes;
+    if (attArray.length > 0) {
+      await this.getSKUsWithAttributes(responseJson);
+      console.log('Attributes present');
+      return true;
+    } else {
+      console.log('No Attributes present');
+      return false;
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getSKUsWithAttributes(res: any): Promise<void> {
+    this.skusWithAttributes.clear();
+    const jsonObj = res;
+    const skusArray = jsonObj.productsData[0].skus;
+    for (let i = 0; i < skusArray.length; i++) {
+      console.log(skusArray[i].shipQty);
+      if (skusArray[i].shipQty > 0) {
+        const a: string[] = [];
+        const definingAttr = skusArray[i].definingAttributes;
+        const price = `price - ${skusArray[i].prices.offerPrice}`;
+        a.push(price);
+        for (let j = 0; j < definingAttr.length; j++) {
+          const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+          a.push(attr);
         }
+        this.skusWithAttributes.set(skusArray[i].partNumber, a);
       }
     }
+  }
 
-    async selectShipToMeAttributes(page: Page ): Promise<void> {
-      const commonPage = new CommonPage(this.page);
-      console.log("Skus with attributes - " + this.skusWithAttributes);
-      if (this.skusWithAttributes.size > 0) {
-        const keysAsArray = Array.from(this.skusWithAttributes.keys());
-        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-        const attr = this.skusWithAttributes.get(randomSku);
-        if (attr) {
-          for (const at of attr) {
-            const attributeSet = at.split(' - ');
-            console.log(attributeSet[0]);
-            console.log(attributeSet[1]);
-            switch (attributeSet[0]) {
-              case 'Color':
+  async selectShipToMeAttributes(page: Page): Promise<void> {
+    console.log('Skus with attributes - ' + this.skusWithAttributes);
+    if (this.skusWithAttributes.size > 0) {
+      const keysAsArray = Array.from(this.skusWithAttributes.keys());
+      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+      const attr = this.skusWithAttributes.get(randomSku);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0]) {
+            case 'Color':
+              {
                 console.info('Selecting attribute is: ' + attributeSet[0]);
                 const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
                 console.log(randomColorXpath);
@@ -443,37 +443,61 @@ export class ProductListingPage {
                 await colorPdp.first().waitFor();
                 await colorPdp.first().click();
                 break;
-              case 'Size':
-              case 'Shoe Size':
-              case 'Shoe Width':
-              case 'Flex':
-              case 'Hand':
-              case 'Shaft':
-              case 'Loft':
-              case 'Wedge Bounce':
-              case 'Wedge Grind/Sole':
-              case 'Frame Size':
-              case 'Wheel Size':
-              case 'Drivetrain Manufacturer':
-              case 'Sock Size':
-              case 'Capacity':
+              }
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+              {
                 console.info('Selecting attribute is: ' + attributeSet[0]);
                 const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
                 const paramPdp = page.locator(randomXpath);
                 await paramPdp.waitFor();
                 await paramPdp.click();
                 break;
-              case 'Length':
+              }
+            case 'Length':
+              {
                 console.info('Selecting attribute is: ' + attributeSet[0]);
                 const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
                 page.locator(randomLengthXpath).click();;
                 break;
-            }
+              }
           }
         }
-      } else {
-        //throw new Error('This product is not eligible for Ship To Me');
-        console.info('This product is not eligible for Ship To Me');
       }
-      }
+    } else {
+      //throw new Error('This product is not eligible for Ship To Me');
+      console.info('This product is not eligible for Ship To Me');
+    }
+  }
+
+  async applyShipFilter(): Promise<void> {
+    await expect(this.shipFilterButtonAngular).toBeVisible();
+    await this.shipFilterButtonAngular.first().click();
+    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
+  }
+  async applyPickupFilter(): Promise<void> {
+    await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
+    await this.pickupFilterButtonAngular.first().click();
+    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
+
+  async applySameDayDeliveryFilter(): Promise<void> {
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+    await this.sameDayDeliveryFilter.first().click();
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
 }
