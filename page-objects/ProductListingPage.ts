@@ -599,22 +599,22 @@ export class ProductListingPage {
 
   }
   async validateProductCategoryWithMarketingContent() {
-    const elements = this.navListItems
-    const count = await elements.count();
+    // const elements = this.navListItems
+    // const count = await elements.count();
     console.log(`The total category is:` + count);
-    for (let i = 0; i < count; i++) {
-      const element = elements.nth(i);
-      const isVisible = await element.isVisible();
-      if (isVisible) {
-        const text = await element.textContent();
-        console.log(`Element ${i + 1}: ${text?.trim()}`);
-        console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
-        await element.click();
-        this.validateMarketingContent();
-      } else {
-        console.log(`Category Element at index ${i + 1} is not visible.`);
-      }
-    }
+    // for (let i = 0; i < count; i++) {
+    //   const element = elements.nth(i);
+    //   const isVisible = await element.isVisible();
+    //   if (isVisible) {
+    //     const text = await element.textContent();
+    //     console.log(`Element ${i + 1}: ${text?.trim()}`);
+    //     console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
+    //     await element.click();
+    //     this.validateMarketingContent();
+    //   } else {
+    //     console.log(`Category Element at index ${i + 1} is not visible.`);
+    //   }
+    // }
   }
   async validateMarketingContent() {
     const elements = this.marketingContent

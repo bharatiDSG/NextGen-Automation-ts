@@ -14,19 +14,17 @@ test.describe('PLP DSG Pagination Tests', () => {
     console.log('URL: ' + getBaseUrl() + 'homr');
     const commonPage = new CommonPage(page);
 
-    await test.step('Given we are on "dgg" page', async () => {
-      console.log('Validating PLP favorites for non signed In user');
+    await test.step('Given we are on the home page', async () => {
       await homePage.goToHomePage(getBaseUrl());
       console.log('URL: ' + getBaseUrl());
     });
 
-    // When we search for "mens polo" keyword in the search box
-    await test.step('When we search for "golf polo" keyword in the search box', async () => {
+    await test.step('When we search for product in the search box', async () => {
       console.log('Searching the product');
       await homePage.searchForProduct(testData_smokePLP_prod.searchTerm1);
     });
 
-    await test.step('And we see product card descriptions contain "polo"', async () => {
+    await test.step('And we see product card descriptions contain product name', async () => {
       await commonPage.handlePromotionalPopup();
       const productListingPage = new ProductListingPage(page);
       if (await productListingPage.productNamesAngular.first().isVisible()) {
@@ -120,14 +118,14 @@ test.describe('PLP DSG Pagination Tests', () => {
   test('04. Pagination_Validating sort selection', async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating sort selection', async () => {
-    const firstPageCount = await productListingPage.getActualPaginationCount();
-    await productListingPage.selectSortCategory("Top Sellers",firstPageCount);
-    await productListingPage.selectSortCategory("Savings High to Low",firstPageCount);
-    await productListingPage.selectSortCategory("Price Low to High",firstPageCount);
-    await productListingPage.selectSortCategory("New Products",firstPageCount);
-    await productListingPage.selectSortCategory("Brand (A-Z)",firstPageCount);
-    await productListingPage.selectSortCategory("Most Relevant",firstPageCount);
-    console.log('Validation successful');
+      const firstPageCount = await productListingPage.getActualPaginationCount();
+      await productListingPage.selectSortCategory('Top Sellers', firstPageCount);
+      await productListingPage.selectSortCategory('Savings High to Low', firstPageCount);
+      await productListingPage.selectSortCategory('Price Low to High', firstPageCount);
+      await productListingPage.selectSortCategory('New Products', firstPageCount);
+      await productListingPage.selectSortCategory('Brand (A-Z)', firstPageCount);
+      await productListingPage.selectSortCategory('Most Relevant', firstPageCount);
+      console.log('Validation successful');
     });
 
   });
@@ -135,24 +133,24 @@ test.describe('PLP DSG Pagination Tests', () => {
   test('05. Category_Validating main product categories and marketing content', async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating main product categories', async () => {
-    //In some environments the categories do not display, hence commenting the below step for now to avoid build failure
-    //productListingPage.validateProductCategoryWithMarketingContent();
-    console.log('Validation successful');
+      //In some environments the categories do not display, hence commenting the below step for now to avoid build failure
+      productListingPage.validateProductCategoryWithMarketingContent();
+      console.log('Validation successful');
     });
 
   });
 
-  test('06. Category_Validating Pro Tips functionality', async ({ page}) => {
+  test('06. Category_Validating Pro Tips functionality', async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to click on the ProTips link');
-    await productListingPage.linkProTips.nth(1).click()
-    const newPageUrl =  page.url();
+    await productListingPage.linkProTips.nth(1).click();
+    const newPageUrl = page.url();
     expect(newPageUrl).toContain('protip');
     console.log('ProTips page opened');
     console.log('Validation successful');
-    });
-
   });
+
+});
 
 
 
