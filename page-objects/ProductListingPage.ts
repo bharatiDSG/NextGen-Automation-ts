@@ -123,7 +123,8 @@ export class ProductListingPage {
     this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
-    this.myAccount = page.locator('p.account-main-text');
+    // this.myAccount = page.locator('p.account-main-text');
+    this.myAccount = page.locator('button[class*="my-account"]');
     this.myAccountListSection = page.locator('ul.hmf-pl-0.hmf-mb-s li:nth-of-type(4) a');
     this.myAccountListSectionFavorite = page.locator('p.list-card-title');
     this.myAccountListSectionFavoriteProductName = page.locator('a.product-title-link');
