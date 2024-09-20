@@ -22,7 +22,7 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
 
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for non signed In user');
-      await homePage.goToHomePage(getBaseUrl());
+      await homePage.goToHomePage(getBaseUrl() + 'homr');
       console.log('URL: ' + getBaseUrl());
     });
 
@@ -69,8 +69,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
 
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for E-Code level_Add and Remove');
-      await homePage.goToHomePage(getBaseUrl());
-      console.log('URL: ' + getBaseUrl());
+      await homePage.goToHomePage(getBaseUrl() + 'homr');
+      console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
 
@@ -143,8 +143,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
 
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for Single SKU_Add and Remove');
-      await homePage.goToHomePage(getBaseUrl());
-      console.log('URL: ' + getBaseUrl());
+      await homePage.goToHomePage(getBaseUrl() + 'homr');
+      console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
 
@@ -305,8 +305,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
 
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for E-Code level_Add and Remove');
-      await homePage.goToHomePage(getBaseUrl());
-      console.log('URL: ' + getBaseUrl());
+      await homePage.goToHomePage(getBaseUrl() + 'homr');
+    console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
 
