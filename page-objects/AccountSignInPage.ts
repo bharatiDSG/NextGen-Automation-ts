@@ -26,8 +26,8 @@ export class AccountSignInPage {
     private continueWithAppleButton: Locator;
     private continueWithGoogleButton: Locator;
     private passwordError: Locator;
-    private continueButtonModern: Locator;
-    private continueWithoutPasskey: Locator;
+    public continueButtonModern: Locator;
+    public continueWithoutPasskey: Locator;
 
     // Account Page
     private accountUserInfo: Locator;

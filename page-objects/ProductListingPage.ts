@@ -91,6 +91,14 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
+  readonly sponsoredItemCards: Locator;
+  readonly totalItemCards: Locator;
+  readonly resultPerPage: Locator;
+  readonly pageItems: Locator;
+  readonly navListItems: Locator;
+  readonly marketingContent: Locator;
+  readonly linkToFamilyPages: Locator;
+  readonly linkProTips: Locator;
   readonly loadingOverlay: Locator;
 
   constructor(page: Page) {
@@ -115,7 +123,8 @@ export class ProductListingPage {
     this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
-    this.myAccount = page.locator('p.account-main-text');
+    // this.myAccount = page.locator('p.account-main-text');
+    this.myAccount = page.locator('button[class*="my-account"]');
     this.myAccountListSection = page.locator('ul.hmf-pl-0.hmf-mb-s li:nth-of-type(4) a');
     this.myAccountListSectionFavorite = page.locator('p.list-card-title');
     this.myAccountListSectionFavoriteProductName = page.locator('a.product-title-link');
@@ -155,17 +164,21 @@ export class ProductListingPage {
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
     // pagination and breadcrumbs
+    this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
+    this.totalItemCards = page.locator('div.dsg-react-product-card');
+    this.resultPerPage = page.locator('a[class*="rs-page-count"]');
     this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
     this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
+    this.pageItems = page.locator('a[class*="rs-page-item"]');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
     this.sortOptionsAccordionButtonAngular = page.getByTitle('Select sort option');
-    this.sortOptionsSelectionReact = page.locator('li');
+    this.sortOptionsSelectionReact = page.locator('li[class*="option"] div.rs-sort-by-value-text');
     this.sortOptionsSelectionAngular = page.locator('option');
     this.sortSelectedReact = page.locator('[class="rs-selected-sort-text"]');
     this.sortSelectedAngular = page.locator('[class="ng-star-inserted"]').locator('[selected="true"]');
@@ -204,6 +217,25 @@ export class ProductListingPage {
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
 
     this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
+    //Product Category
+    this.navListItems = page.locator('a[class*="list-item"]');
+    this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
+    this.linkToFamilyPages = page.locator('div.menu-container.expanded ul a.sublinks');
+    this.linkProTips = page.locator('a[data-em="Footer_PROTIPS"]');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -273,7 +305,12 @@ export class ProductListingPage {
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
-    await plpProductStyle.nth(1).click();
+    const styleCount = await plpProductStyle.count();
+    console.log("The minimum product style variation in plp page: "+styleCount);
+    for (let i = 0; i < styleCount; i++) {
+      const style =  plpProductStyle.nth(i);
+      await expect(style).toBeVisible();
+    }
     const index = +itemVal;
     const eleFvrt = this.favorites.nth(index);
     await expect(eleFvrt).toBeVisible();
@@ -355,8 +392,18 @@ export class ProductListingPage {
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
+  }
 
-
+  async validateRandomPage(pageCount: any, pageNo: any) {
+    await this.pageItems.nth(pageNo).click();
+    console.log('Clicked on any page number');
+    await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+    const pageNumber = await this.highlightedPageNumberReact.textContent();
+    expect(pageNumber?.trim()).toContain(String(pageNo));
+    console.log('Validated the page numver ' + pageNo);
+    const randomPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(randomPageCount);
+    console.log('Validated the page count ' + pageCount);
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
@@ -462,65 +509,65 @@ export class ProductListingPage {
     }
   }
 
-  async selectShipToMeAttributes(page: Page): Promise<void> {
-    console.log('Skus with attributes - ' + this.skusWithAttributes);
-    if (this.skusWithAttributes.size > 0) {
-      const keysAsArray = Array.from(this.skusWithAttributes.keys());
-      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-      const attr = this.skusWithAttributes.get(randomSku);
-      if (attr) {
-        for (const at of attr) {
-          const attributeSet = at.split(' - ');
-          console.log(attributeSet[0]);
-          console.log(attributeSet[1]);
-          switch (attributeSet[0]) {
-            case 'Color':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
-                console.log(randomColorXpath);
-                const colorPdp = page.locator(randomColorXpath);
-                await colorPdp.first().waitFor();
-                await colorPdp.first().click();
-                break;
-              }
-            case 'Size':
-            case 'Shoe Size':
-            case 'Shoe Width':
-            case 'Flex':
-            case 'Hand':
-            case 'Shaft':
-            case 'Loft':
-            case 'Wedge Bounce':
-            case 'Wedge Grind/Sole':
-            case 'Frame Size':
-            case 'Wheel Size':
-            case 'Drivetrain Manufacturer':
-            case 'Sock Size':
-            case 'Capacity':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                const paramPdp = page.locator(randomXpath);
-                await paramPdp.waitFor();
-                await paramPdp.click();
-                break;
-              }
-            case 'Length':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
-                page.locator(randomLengthXpath).click();;
-                break;
-              }
+    async selectShipToMeAttributes(page: Page): Promise<void> {
+      console.log('Skus with attributes - ' + this.skusWithAttributes);
+      if (this.skusWithAttributes.size > 0) {
+        const keysAsArray = Array.from(this.skusWithAttributes.keys());
+        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+        const attr = this.skusWithAttributes.get(randomSku);
+        if (attr) {
+          for (const at of attr) {
+            const attributeSet = at.split(' - ');
+            console.log(attributeSet[0]);
+            console.log(attributeSet[1]);
+            switch (attributeSet[0]) {
+              case 'Color':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+                  console.log(randomColorXpath);
+                  const colorPdp = page.locator(randomColorXpath);
+                  await colorPdp.first().waitFor();
+                  await colorPdp.first().click();
+                  break;
+                }
+              case 'Size':
+              case 'Shoe Size':
+              case 'Shoe Width':
+              case 'Flex':
+              case 'Hand':
+              case 'Shaft':
+              case 'Loft':
+              case 'Wedge Bounce':
+              case 'Wedge Grind/Sole':
+              case 'Frame Size':
+              case 'Wheel Size':
+              case 'Drivetrain Manufacturer':
+              case 'Sock Size':
+              case 'Capacity':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
+                  const paramPdp = page.locator(randomXpath);
+                  await paramPdp.waitFor();
+                  await paramPdp.click();
+                  break;
+                }
+              case 'Length':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+                  page.locator(randomLengthXpath).click();;
+                  break;
+                }
+            }
           }
         }
+      } else {
+        //throw new Error('This product is not eligible for Ship To Me');
+        console.info('This product is not eligible for Ship To Me');
       }
-    } else {
-      //throw new Error('This product is not eligible for Ship To Me');
-      console.info('This product is not eligible for Ship To Me');
     }
-  }
 
   async selectBOPISAttributes(page: Page): Promise<void> {
 
@@ -593,10 +640,94 @@ export class ProductListingPage {
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
-  async applySameDayDeliveryFilter(): Promise<void> {
-    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
-    await this.sameDayDeliveryFilter.first().click();
-    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-    await expect(this.loadingOverlay).toHaveCount(0);
+    async applySameDayDeliveryFilter(): Promise<void> {
+      await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+      await this.sameDayDeliveryFilter.first().click();
+      await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+      await expect(this.loadingOverlay).toHaveCount(0);
+    }
+  async validateResultsPerPage(pageNo: any) {
+    let commonPage = new CommonPage(this.page)
+    await this.pageItems.nth(pageNo - 1).click();
+    console.log('Clicked on any page number');
+    const count = await this.resultPerPage.count();
+    console.log("The result per page count is: " + count);
+    for (let i = 0; i < count; i++) {
+      await expect(this.resultPerPage.nth(i)).toBeVisible();
+      await this.resultPerPage.nth(i).click();
+      await commonPage.sleep(10);
+      const allItems = this.resultPerPage.nth(i);
+      const allItemText = await allItems.textContent();
+      console.log("Result per page text is: " + allItemText);
+      const pageCount = await this.getActualPaginationCount();
+      expect(allItemText?.trim()).toContain(String(pageCount));
+      await expect(allItems).toHaveAttribute('class', /active/);
+      console.log('Results per page is: ' + pageCount);
+    }
+  }
+  async selectSortCategory(category: string, pageCount: any) {
+    await this.sortOptionsAccordionButtonReact.click();
+    console.log('Validating sort category: ' + category);
+    const count = await this.sortOptionsSelectionReact.count();
+    let commonPage = new CommonPage(this.page);
+    console.log('Total sort options are :' + count);
+    for (let i = 0; i < count; i++) {
+      const options = this.sortOptionsSelectionReact.nth(i);
+      const option = await options.textContent();
+      if (option === category) {
+        await this.sortOptionsSelectionReact.nth(i).click();
+        await commonPage.sleep(5);
+        console.log('Sort option matched');
+        break;
+      }
+    }
+    const categorySelectedText = await this.sortSelectedReact.textContent();
+    expect(categorySelectedText?.trim()).toContain(String(category));
+    console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
+    const actualPageCount = await this.getActualPaginationCount();
+    expect(pageCount).toBe(actualPageCount);
+  }
+  async getActualPaginationCount() {
+    const totalCount = await this.totalItemCards.count();
+    console.log('Total fpage count is: ' + totalCount);
+    const sponsoredCount = await this.sponsoredItemCards.count();
+    console.log('Total sponsored count is: ' + sponsoredCount);
+    const actualCount = totalCount - sponsoredCount;
+    console.log('Actual count is: ' + actualCount);
+    return actualCount;
+
+  }
+  async validateProductCategoryWithMarketingContent() {
+    // const elements = this.navListItems
+    // const count = await elements.count();
+    //console.log(`The total category is:` + count);
+    // for (let i = 0; i < count; i++) {
+    //   const element = elements.nth(i);
+    //   const isVisible = await element.isVisible();
+    //   if (isVisible) {
+    //     const text = await element.textContent();
+    //     console.log(`Element ${i + 1}: ${text?.trim()}`);
+    //     console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
+    //     await element.click();
+    //     this.validateMarketingContent();
+    //   } else {
+    //     console.log(`Category Element at index ${i + 1} is not visible.`);
+    //   }
+    // }
+  }
+  async validateMarketingContent() {
+    const elements = this.marketingContent
+    const count = await elements.count();
+    console.log(`The total marketing content is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
+      } else {
+        console.log(`Marketing Content Element at index ${i + 1} is not visible.`);
+      }
+    }
   }
 }
