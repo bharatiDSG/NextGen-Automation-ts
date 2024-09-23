@@ -569,17 +569,6 @@ export class ProductListingPage {
       }
     }
 
-    async applyShipFilter(): Promise<void> {
-      await expect(this.shipFilterButtonAngular).toBeVisible();
-      await this.shipFilterButtonAngular.first().click();
-      await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
-    }
-    async applyPickupFilter(): Promise<void> {
-      await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
-      await this.pickupFilterButtonAngular.first().click();
-      await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
-      await expect(this.loadingOverlay).toHaveCount(0);
-    }
   async selectBOPISAttributes(page: Page): Promise<void> {
 
     const commonPage = new CommonPage(this.page);
@@ -711,7 +700,7 @@ export class ProductListingPage {
   async validateProductCategoryWithMarketingContent() {
     // const elements = this.navListItems
     // const count = await elements.count();
-    console.log(`The total category is:` + count);
+    //console.log(`The total category is:` + count);
     // for (let i = 0; i < count; i++) {
     //   const element = elements.nth(i);
     //   const isVisible = await element.isVisible();
