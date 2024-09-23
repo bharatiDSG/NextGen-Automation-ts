@@ -356,7 +356,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       });
     });
 
-    test.only('9: Quickview Add to Cart - PLP - BOPIS',
+    test('9: Quickview Add to Cart - PLP - BOPIS',
       { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
