@@ -31,7 +31,7 @@ jobs:
           echo "Run E2E PLP Pagination tests"
           npx playwright test tests/plp/dsg/plp_np0_prod_DSG_Pagination_test.spec.ts
         env:
-            ENV: gg_np0prod
+            ENV: dsg_np0prod
 
       - name: Upload Report     
         uses: actions/upload-artifact@v4
