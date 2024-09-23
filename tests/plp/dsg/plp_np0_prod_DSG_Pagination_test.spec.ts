@@ -14,7 +14,6 @@ test.describe('PLP DSG Pagination Tests', () => {
     const commonPage = new CommonPage(page);
 
     await test.step('Given we are on the home page', async () => {
-      await homePage.goToHomePage(getBaseUrl());
       console.log('URL: ' + getBaseUrl());
     });
 
