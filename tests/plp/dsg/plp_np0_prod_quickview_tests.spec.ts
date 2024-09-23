@@ -7,7 +7,7 @@ import { testData_e2e_np0_prod } from '../../../test-data/e2eNP0ProdTestData.js'
 import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 
 test.describe('PLP/SRLP DSG Smoke Tests', () => {
-    test.beforeEach(async ({ page, context }) => {
+    test.beforeEach(async ({ page }) => {
       const homePage = new HomePage(page);
 
       // Close popup(frame) listener
@@ -210,34 +210,6 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And open quickview with api intercept attribute selection for the first product in the grid
         await test.step('And open quickview with api intercept for attributes', async () => {
-          //will remove the below comments later
-            //   console.log("Before the waitForResponse");
-            //   const responsePromise = page.waitForResponse('**/catalog-productdetails/**');
-            //   if(await productListingPage.quickviewOpenATCButtonAngular.isVisible()){
-            //     await productListingPage.quickviewOpenATCButtonAngular.first().click();
-            // } else {
-            //     await productListingPage.quickviewOpenATCButtonReact.first().click();
-            // }
-            //   console.log("Before the responsePromise");
-            //   const response = await responsePromise;
-            //   console.log("This is the response status - "+response.status());
-            //   const newt = (await response.text()).match("parentPartNumber");
-            //   const newtt = (await response.text()).search("parentPartNumber");
-            //   const pos1 = (await response.text()).indexOf("parentPartNumber");
-            //   const newttt = (await response.text()).substring(pos1,(pos1+40));
-            //   console.log("This is the newt length - " +newt?.length);
-            //   console.log("This is the newt - " +newt);
-            //   console.log("This is the newtt - " +newtt);
-            //   console.log("This is the newttt - " +newttt);
-            //   console.log("Below is json");
-            //   console.log(await response.json());
-            //   const newz = await response.json();
-            //   const newzz = await response.json();
-            //   console.log(newz.productsData[0].style.definingAttributes);
-            //   const jsonString = JSON.stringify(newzz, null, 2);
-            //   console.log(jsonString);
-              // console.log("This is the response text - "+ await response.text());
-
           await productListingPage.verifyAttributesArePresentOrNotForShipToMe();
           await productListingPage.selectShipToMeAttributes(page);
         });
@@ -343,7 +315,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         });
     });
 
-    test('8: Quickview Add to Cart - SRLP',
+    test('8: Quickview Add to Cart - SRLP - Ship to me',
       { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
       async ({ page }) => {
       const homePage = new HomePage(page);
@@ -353,7 +325,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       // Given we are on "dsg" page
       await test.step('Given we are on "dsg" page', async () => {
         await homePage.goToHomePage(getBaseUrl());
-        console.log("URL: " + getBaseUrl());
+        console.log('URL: ' + getBaseUrl());
       });
 
       // When we search for "testData_smokePLP_prod.searchTerm1" keyword in the search box
@@ -375,6 +347,41 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       // And we should see text "Keep Shopping"
       await test.step('And we should see text "Keep Shopping"', async () => {
         await productListingPage.quickviewKeepShoppingButton.waitFor()
+        expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+      });
+
+      // And we should see text "View Cart"
+      await test.step('And we should see text "View Cart"', async () => {
+        expect (productListingPage.quickviewViewCartButton).toBeVisible();
+      });
+    });
+
+    test('9: Quickview Add to Cart - PLP - BOPIS',
+      { tag: ['@PLP', '@Smoke','@Regression', '@Prod', '@Preview', '@np0', '@AllEnv', '@DSG', '@GG', '@AllBrand'] },
+      async ({ page }) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+
+        // Given we are on "/f/mens-polo-shirts" page
+        await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
+        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+        console.log('URL: ' + getBaseUrl());
+        });
+
+      // And open quickview with api intercept attribute selection for the first product in the grid
+      await test.step('And open quickview with api intercept for attributes', async () => {
+        await productListingPage.verifyAttributesArePresentOrNotForBOPIS(testData_smokePLP_prod.zipCode, testData_smokePLP_prod.storeSearch, testData_smokePLP_prod.storeSearch);
+        await productListingPage.selectBOPISAttributes(page);
+      });
+
+      // And we click add to cart
+      await test.step('And we click add to cart', async () => {
+        await productListingPage.quickviewModalATCButton.first().click();
+      });
+
+      // And we should see text "Keep Shopping"
+      await test.step('And we should see text "Keep Shopping"', async () => {
+        await productListingPage.quickviewKeepShoppingButton.waitFor();
         expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
       });
 
