@@ -3,11 +3,11 @@ import { Locator, Page } from '@playwright/test';
 import { CommonPage } from './CommonPage';
 import { expect } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
-import { all } from 'axios';
 
 export class ProductListingPage {
   private page: Page;
   private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
+  private skusWithAvailability: Set<string> = new Set<string>();
 
   readonly changeSelectedStoreLink: Locator;
   readonly selectStoreZipField: Locator;
@@ -184,7 +184,7 @@ export class ProductListingPage {
     this.sortSelectedAngular = page.locator('[class="ng-star-inserted"]').locator('[selected="true"]');
 
     // quickview
-    this.quickviewOpenATCButtonReact = page.locator('[class="dsg-quickview-button-icon"]');
+    this.quickviewOpenATCButtonReact = page.locator('[alt="ADD TO CART"]');
     this.quickviewOpenATCButtonAngular = page.locator('[id="add-to-cart-button"]');
     this.quickviewColorAttribute = page.getByTitle('Black/Steel');
     this.quickviewColorAttribute2 = page.getByTitle('Black');
@@ -393,7 +393,7 @@ export class ProductListingPage {
     console.log('product count: ' + productNames.length);
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
   }
-  
+
   async validateRandomPage(pageCount: any, pageNo: any) {
     await this.pageItems.nth(pageNo).click();
     console.log('Clicked on any page number');
@@ -407,68 +407,107 @@ export class ProductListingPage {
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
-      // let hostUrl = getBaseUrl();
-      // let apiURL: string | null = null;
-      // console.log('The host Url is: '+hostUrl);
-      // if (hostUrl.includes('dksxchange')){
-      //   apiURL = config['app_dks_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('golfgalaxy')) {
-      //   apiURL = config['app_gg_api'].baseUrl as string;
-      // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
-      //   apiURL = config['app_dsg_api'].baseUrl as string;;
-      // } else if (hostUrl.includes('pl')) {
-      //   apiURL = config['app_pl_api'].baseUrl as string;;
-      // } else {
-      //   console.info('Host did not contain appropriate name');
-      //   return false;
-      // }
-
-      // console.log('The api Url is: '+apiURL);
-      // const currentUrl = (await this.page).url();
-      // console.log('The current Url is: '+currentUrl);
-      // const productID = currentUrl.split('/')[4];
-      // const finalAPIURL = `${apiURL}${productID}`;
-      // console.log('The final Url is: '+finalAPIURL);
-
-      const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
-      if (await this.quickviewOpenATCButtonAngular.isVisible()) {
-        await this.quickviewOpenATCButtonAngular.first().click();
-      } else {
-        await this.quickviewOpenATCButtonReact.first().click();
-      }
-      const res = await responsePromise;
-      const responseJson = await res.json();
-      // const attArray = await res.data.productsData[0].style.definingAttributes;
-      const attArray = await responseJson.productsData[0].style.definingAttributes;
-      if (attArray.length > 0) {
-        await this.getSKUsWithAttributes(responseJson);
-        console.log('Attributes present');
-        return true;
-      } else {
-        console.log('No Attributes present');
-        return false;
-      }
+    const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
+    if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
+      await this.quickviewOpenATCButtonAngular.first().click();
+    } else {
+      await this.quickviewOpenATCButtonReact.first().click();
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async getSKUsWithAttributes(res: any): Promise<void> {
-      this.skusWithAttributes.clear();
-      const jsonObj = res;
-      const skusArray = jsonObj.productsData[0].skus;
-      for (let i = 0; i < skusArray.length; i++) {
-        console.log(skusArray[i].shipQty);
-        if (skusArray[i].shipQty > 0) {
-          const a: string[] = [];
-          const definingAttr = skusArray[i].definingAttributes;
-          const price = `price - ${skusArray[i].prices.offerPrice}`;
-          a.push(price);
-          for (let j = 0; j < definingAttr.length; j++) {
-            const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
-            a.push(attr);
-          }
-          this.skusWithAttributes.set(skusArray[i].partNumber, a);
+    const res = await responsePromise;
+    const responseJson = await res.json();
+    const attArray = await responseJson.productsData[0].style.definingAttributes;
+    if (attArray.length > 0) {
+      await this.getSKUsWithAttributes(responseJson);
+      console.log('Attributes present');
+      return true;
+    } else {
+      console.log('No Attributes present');
+      return false;
+    }
+  }
+
+  async verifyAttributesArePresentOrNotForBOPIS(zipCode: string, storeSearch: string, storeName: string | null): Promise<boolean> {
+    if (!storeName) {
+      storeName = 'robinson';
+    }
+
+    // Declare objects for api responses
+    const responsePromiseProductDetails = this.page.waitForResponse('**/catalog-productdetails/**');
+    const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
+
+    // Click add to cart button on plp page
+    if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
+      await this.quickviewOpenATCButtonAngular.first().click();
+    } else {
+      await this.quickviewOpenATCButtonReact.first().click();
+    }
+
+    // Response object manipulation
+    const resProductDetails = await responsePromiseProductDetails;
+    const resOmni = await responsePromiseOmni;
+    console.log('this is the resOmni.url - ' +resOmni.url());
+    console.log('this is the resOmni.status - ' +resOmni.status());
+
+    const responseJsonProductDetails = await resProductDetails.json();
+    const responseJsonOmni = await resOmni.json();
+    // console.log(responseJsonOmni);
+    // console.log(responseJsonProductDetails);
+
+    const attArray = await responseJsonProductDetails.productsData[0].style.definingAttributes;
+    const quantityResponse = await responseJsonOmni.data;
+    // console.log(attArray);
+    // console.log(quantityResponse);
+
+    const skusArray = await quantityResponse.results;
+    console.log(skusArray);
+    const s = new Map<string, string>();
+
+    for (const store of skusArray) {
+      if (store.store.name.toUpperCase() === storeName.toUpperCase()) {
+        for (const skuItem of store.skus) {
+          const sku = skuItem.sku;
+          const quantity = skuItem.qty.isa;
+          s.set(sku, quantity);
         }
+        break;
       }
     }
+
+    const skusWithQuantity = Array.from(s.entries())
+      .filter(([_, value]) => value !== '0')
+      .map(([key, _]) => key);
+
+    this.skusWithAvailability = new Set(skusWithQuantity);
+
+    if (attArray.length > 0) {
+      await this.getSKUsWithAttributes(responseJsonProductDetails);
+      return true;
+    } else {
+      console.log('No Attributes present');
+      return false;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getSKUsWithAttributes(res: any): Promise<void> {
+    this.skusWithAttributes.clear();
+    const jsonObj = res;
+    const skusArray = jsonObj.productsData[0].skus;
+    for (let i = 0; i < skusArray.length; i++) {
+      console.log(skusArray[i].shipQty);
+      if (skusArray[i].shipQty > 0) {
+        const a: string[] = [];
+        const definingAttr = skusArray[i].definingAttributes;
+        const price = `price - ${skusArray[i].prices.offerPrice}`;
+        a.push(price);
+        for (let j = 0; j < definingAttr.length; j++) {
+          const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+          a.push(attr);
+        }
+        this.skusWithAttributes.set(skusArray[i].partNumber, a);
+      }
+    }
+  }
 
     async selectShipToMeAttributes(page: Page): Promise<void> {
       console.log('Skus with attributes - ' + this.skusWithAttributes);
@@ -541,6 +580,76 @@ export class ProductListingPage {
       await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
       await expect(this.loadingOverlay).toHaveCount(0);
     }
+  async selectBOPISAttributes(page: Page): Promise<void> {
+
+    const commonPage = new CommonPage(this.page);
+    console.log('The skus with availability size is:  ' + this.skusWithAvailability.size);
+    if (this.skusWithAvailability.size > 0) {
+      console.log('The skus with attributes: ' + JSON.stringify(Array.from(this.skusWithAttributes.entries())));
+      console.log('The skus with availabilities: ' + JSON.stringify(Array.from(this.skusWithAvailability)));
+      const skusArray = Array.from(this.skusWithAvailability);
+      const randomItem = Math.floor(Math.random() * skusArray.length);
+      const randomSKU = skusArray[randomItem];
+      const attr = this.skusWithAttributes.get(randomSKU);
+      console.log('The random SKU is: ' + attr);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0].trim()) {
+            case 'Color':
+              { const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
+              console.log('The color xpath is: ' + randomColorXpath);
+              await commonPage.sleep(5);
+              const paramPdp2 = page.locator(randomColorXpath);
+              await paramPdp2.click();
+              break; }
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+              { const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
+              console.log('The size xpath is: ' + randomShaftXpath);
+              await commonPage.sleep(5);
+              const paramPdp1 = page.locator(randomShaftXpath);
+              await paramPdp1.click();
+              break; }
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+            case 'Grip':
+              { const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
+              await commonPage.sleep(5);
+              const paramPdp = page.locator(randomXpath);
+              await paramPdp.click();
+              break; }
+          }
+        }
+      }
+    } else {
+      //throw new Error('This product is not eligible for BOPIS');
+    }
+  }
+
+  async applyShipFilter(): Promise<void> {
+    await expect(this.shipFilterButtonAngular).toBeVisible();
+    await this.shipFilterButtonAngular.first().click();
+    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
+  }
+  async applyPickupFilter(): Promise<void> {
+    await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
+    await this.pickupFilterButtonAngular.first().click();
+    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
 
     async applySameDayDeliveryFilter(): Promise<void> {
       await expect(this.sameDayDeliveryFilter.first()).toBeVisible();

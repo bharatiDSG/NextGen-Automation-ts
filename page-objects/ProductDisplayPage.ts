@@ -2,7 +2,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { CommonPage } from './CommonPage';
 import axios from 'axios';
-import { getBaseUrl } from '../globalSetup';
+
+
 import config from '../globalEnvironments.json';
 
 export class ProductDisplayPage {
