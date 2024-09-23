@@ -23,7 +23,7 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for non signed In user');
       await homePage.goToHomePage(getBaseUrl() + 'homr');
-      console.log('URL: ' + getBaseUrl());
+      console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
     // When we search for product in the search box
@@ -306,7 +306,7 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     await test.step('Given we are on the home page', async () => {
       console.log('Validating PLP favorites for E-Code level_Add and Remove');
       await homePage.goToHomePage(getBaseUrl() + 'homr');
-    console.log('URL: ' + getBaseUrl() + 'homr');
+      console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
 

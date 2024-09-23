@@ -10,11 +10,11 @@ test.describe('PLP DSG Pagination Tests', () => {
 
   test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
-    await homePage.goToHomePage(getBaseUrl() + 'homr');
     const commonPage = new CommonPage(page);
 
     await test.step('Given we are on the home page', async () => {
-      console.log('URL: ' + getBaseUrl());
+      await homePage.goToHomePage(getBaseUrl() + 'homr');
+      console.log('URL: ' + getBaseUrl() + 'homr');
     });
 
     await test.step('When we search for product in the search box', async () => {
