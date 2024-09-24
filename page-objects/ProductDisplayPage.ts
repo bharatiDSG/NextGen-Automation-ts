@@ -244,6 +244,12 @@ export class ProductDisplayPage {
     };
   }
 
+  async verifyProductDisplayPage(): Promise<void> {
+    expect(this.page.url()).toContain(getBaseUrl() + 'p/');
+    await expect(this.productName.first()).toBeVisible();
+    await expect (this.productPrice).toBeVisible();
+  }
+
   async verifyProductAvailability(expectedStatus: string | number): Promise<void> {
     // Fetch the text of the input field
     const availabilityStatus = await this.productAvailability.textContent();

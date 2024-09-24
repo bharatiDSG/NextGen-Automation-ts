@@ -72,7 +72,7 @@ export class AccountSignInPage {
     }
 
     async signIn(email: string, password: string): Promise<void> {
-        await this.page.waitForURL('https://sso.dickssportinggoods.com/u/login**');
+        await this.page.waitForURL('**/*.dickssportinggoods.com/u/**');
         await this.page.waitForTimeout(5000);
 
         await expect(this.signInPageHeader).toBeVisible();
