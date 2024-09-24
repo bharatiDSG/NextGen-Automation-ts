@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { CommonPage } from './CommonPage';
+import { getBaseUrl } from '../globalSetup.js';
 import axios from 'axios';
 
 
