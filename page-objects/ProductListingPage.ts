@@ -95,6 +95,7 @@ export class ProductListingPage {
   readonly totalItemCards: Locator;
   readonly resultPerPage: Locator;
   readonly pageItems: Locator;
+  readonly pageTitle: Locator;
   readonly navListItems: Locator;
   readonly marketingContent: Locator;
   readonly linkToFamilyPages: Locator;
@@ -174,6 +175,7 @@ export class ProductListingPage {
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
     this.pageItems = page.locator('a[class*="rs-page-item"]');
+    this.pageTitle = page.getByTestId('pageTitle').getByRole('heading');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
@@ -215,8 +217,8 @@ export class ProductListingPage {
     this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
-
     this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
+
     //Product Category
     this.navListItems = page.locator('a[class*="list-item"]');
     this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
