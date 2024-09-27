@@ -28,6 +28,7 @@ export class ProductListingPage {
   readonly sizeFilterValueAngular: Locator;
   readonly filterChipsReact: Locator;
   readonly filterChipsAngular: Locator;
+  readonly pinnedContent: Locator;
   readonly productNames: Locator;
   readonly productNamesAngular: Locator;
   readonly productPromotionsReact: Locator;
@@ -163,6 +164,7 @@ export class ProductListingPage {
     this.productAvailabilityAngular = page.locator('[class="availability hmf-display-flex hmf-flex-wrap hmf-justify-content-between hmf-align-items-center hmf-align-content-center"]');
     this.productPriceReact = page.locator('[class="rs_product_price"]');
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
+    this.pinnedContent = page.locator('//plp-srlp-pinned-content');
 
     // pagination and breadcrumbs
     this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
@@ -438,6 +440,8 @@ export class ProductListingPage {
     const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
 
     // Click add to cart button on plp page
+    expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {
