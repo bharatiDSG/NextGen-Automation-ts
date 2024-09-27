@@ -8,10 +8,6 @@ import { AccountSignInPage } from '../../../page-objects/AccountSignInPage.ts';
 
 test.describe('PLP/SRLP GG Favorites Tests', () => {
 
-  test.beforeEach(async ({ page }) => {
-    const homePage = new HomePage(page);
-  });
-
   test('01. PLP Favorites_Non SignedIn user', async ({ page }) => {
 
     const homePage = new HomePage(page);
