@@ -11,10 +11,10 @@ test.describe('Bat Genie', () => {
         const homePage = new HomePage(page);
 
         // Go to baseUrl set in .env
-        await test.step('Navigate to Home page', async() => {
-        await homePage.goToHomePage(getBaseUrl());
-        console.log('URL: ' + getBaseUrl());
-    });
+        await test.step('Navigate to Home page', async () => {
+            await homePage.goToHomePage(getBaseUrl());
+            console.log('URL: ' + getBaseUrl());
+        });
     });
 
 
@@ -22,9 +22,9 @@ test.describe('Bat Genie', () => {
         const accountSignInPage = new AccountSignInPage(page);
 
         // Sign In
-        await test.step('Sign In', async() => {
-        await accountSignInPage.signInBatGenie(testData_BatGenie.email, testData_BatGenie.password);
-    });
+        await test.step('Sign In', async () => {
+            await accountSignInPage.signInBatGenie(testData_BatGenie.email, testData_BatGenie.password);
+        });
     });
 
 
@@ -38,32 +38,32 @@ test.describe('Bat Genie', () => {
         let newPassword;
 
         // Forgot password
-        await test.step('Forgot Password', async() => {
-        dateSent = new Date();
-        await accountSignInPage.forgotPassword(resetEmail);
-        await commonPage.sleep(5);
-    });
+        await test.step('Forgot Password', async () => {
+            dateSent = new Date();
+            await accountSignInPage.forgotPassword(resetEmail);
+            await commonPage.sleep(5);
+        });
 
         // get password reset link
-        await test.step('Get password reset link', async() => {
-        resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
-    });
+        await test.step('Get password reset link', async () => {
+            resetLink = await accountSignInPage.extractChangeEmailPasswordLink(emailServerId, resetEmail, dateSent);
+        });
         // Change password
-        await test.step('Change password', async() => {
-        newPassword = dateSent.toISOString();
-        console.log('Email: ' + resetEmail);
-        console.log('New pw: ' + newPassword);
-        await page.goto(resetLink);
-        await accountSignInPage.changePassword(newPassword);
-    });
+        await test.step('Change password', async () => {
+            newPassword = dateSent.toISOString();
+            console.log('Email: ' + resetEmail);
+            console.log('New pw: ' + newPassword);
+            await page.goto(resetLink);
+            await accountSignInPage.changePassword(newPassword);
+        });
         // Verify password reset
-        await test.step('Verify password reset', async() => {
-        await expect(accountSignInPage.passwordChangedHeader).toBeVisible();
-        await accountSignInPage.backToSignInLink.click();
-    });
+        await test.step('Verify password reset', async () => {
+            await expect(accountSignInPage.passwordChangedHeader).toBeVisible();
+            await accountSignInPage.backToSignInLink.click();
+        });
         // Sign In
-        await test.step('Sign in with new password', async() => {
-        await accountSignInPage.signInBatGenie(resetEmail, newPassword);
-    });
+        await test.step('Sign in with new password', async () => {
+            await accountSignInPage.signInBatGenie(resetEmail, newPassword);
+        });
     });
 });

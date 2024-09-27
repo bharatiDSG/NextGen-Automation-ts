@@ -258,7 +258,7 @@ export class ProductDisplayPage {
     expect(availabilityStatus?.trim()).toBe(String(expectedStatus));
   }
 
-  async selectStorePickup(exectedStatus: string): Promise<void> {
+  async selectStorePickup(): Promise<void> {
     await this.storePickup.click();
     // Fetch the text of the input field
     //const avlblStatus = await this.productAvailabilitystorePickup.textContent();
@@ -296,8 +296,6 @@ export class ProductDisplayPage {
   }
 
   async validateImageViewer() {
-    const commonPage = new CommonPage(this.page);
-
     if (await this.viewAllImagesBtn.isVisible()) {
       await this.viewAllImagesBtn.click();
     } else {
@@ -477,8 +475,8 @@ export class ProductDisplayPage {
     }
 
     const skusWithQuantity = Array.from(s.entries())
-      .filter(([_, value]) => value !== '0')
-      .map(([key, _]) => key);
+      .filter(([ , value]) => value !== '0')
+      .map(([key ]) => key);
 
     this.skusWithAvailability = new Set(skusWithQuantity);
   }
@@ -494,7 +492,7 @@ export class ProductDisplayPage {
         const a: string[] = [];
         const definingAttr = skusArray[i].definingAttributes;
         const price = `price - ${skusArray[i].prices.offerPrice}`;
-        a.push(price);
+        a.push(price);        
         for (let j = 0; j < definingAttr.length; j++) {
           const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
           a.push(attr);
