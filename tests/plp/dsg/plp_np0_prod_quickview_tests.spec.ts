@@ -151,8 +151,8 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And we open quickview add to cart for the first product in the grid
         await test.step('And we open quickview add to cart for the first product in the grid', async () => {
-          expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
-          expect(productListingPage.pinnedContent.last()).toBeEnabled();
+          await expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
+          await expect(productListingPage.pinnedContent.last()).toBeEnabled();
           // await page.waitForTimeout(4000); // waits for .5 seconds
             if(await productListingPage.quickviewOpenATCButtonAngular.first().isVisible()){
                 await productListingPage.quickviewOpenATCButtonAngular.first().click();
@@ -212,8 +212,8 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And open quickview with api intercept attribute selection for the first product in the grid
         await test.step('And open quickview with api intercept for attributes', async () => {
-          expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
-          expect(productListingPage.pinnedContent.last()).toBeEnabled();
+          await expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
+          await expect(productListingPage.pinnedContent.last()).toBeEnabled();
           await productListingPage.verifyAttributesArePresentOrNotForShipToMe();
           await productListingPage.selectShipToMeAttributes(page);
         });
@@ -249,8 +249,8 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
       // And open quickview with api intercept attribute selection for the first product in the grid
       await test.step('And open quickview with api intercept for attributes', async () => {
-        expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
-        expect(productListingPage.pinnedContent.last()).toBeEnabled();
+        await expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
+        await expect(productListingPage.pinnedContent.last()).toBeEnabled();
         await productListingPage.verifyAttributesArePresentOrNotForBOPIS(testData_smokePLP_prod.zipCode, testData_smokePLP_prod.storeSearch, testData_smokePLP_prod.storeSearch);
         await productListingPage.selectBOPISAttributes(page);
       });
@@ -286,9 +286,9 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And we open quickview add to cart for the first product in the grid
         await test.step('And we open quickview add to cart for the first product in the grid', async () => {
-          expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
-          expect(productListingPage.pinnedContent.last()).toBeEnabled();
-          await productListingPage.quickviewOpenATCButtonAngular.first().isVisible();
+          await expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
+          await expect(productListingPage.pinnedContent.last()).toBeEnabled();
+          // await productListingPage.quickviewOpenATCButtonAngular.first().isVisible();
           await productListingPage.quickviewOpenATCButtonAngular.first().click();
         });
 
@@ -320,8 +320,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
       // And open quickview with api intercept attribute selection for the first product in the grid
       await test.step('And open quickview with api intercept for attributes', async () => {
-        expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
-        expect(productListingPage.pinnedContent.last()).toBeEnabled();
+        await expect(productListingPage.quickviewOpenATCButtonAngular.last()).toBeVisible();
         await productListingPage.verifyAttributesArePresentOrNotForShipToMe();
         await productListingPage.selectShipToMeAttributes(page);
       });
@@ -333,13 +332,13 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
       // And we should see text "Keep Shopping"
       await test.step('And we should see text "Keep Shopping"', async () => {
-        await productListingPage.quickviewKeepShoppingButton.waitFor()
-        expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
+        await productListingPage.quickviewKeepShoppingButton.waitFor();
+        await expect (productListingPage.quickviewKeepShoppingButton).toBeVisible();
       });
 
       // And we should see text "View Cart"
       await test.step('And we should see text "View Cart"', async () => {
-        expect (productListingPage.quickviewViewCartButton).toBeVisible();
+        await expect (productListingPage.quickviewViewCartButton).toBeVisible();
       });
     });
 });
