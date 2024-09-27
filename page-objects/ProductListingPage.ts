@@ -28,6 +28,7 @@ export class ProductListingPage {
   readonly sizeFilterValueAngular: Locator;
   readonly filterChipsReact: Locator;
   readonly filterChipsAngular: Locator;
+  readonly pinnedContent: Locator;
   readonly productNames: Locator;
   readonly productNamesAngular: Locator;
   readonly productPromotionsReact: Locator;
@@ -95,6 +96,7 @@ export class ProductListingPage {
   readonly totalItemCards: Locator;
   readonly resultPerPage: Locator;
   readonly pageItems: Locator;
+  readonly pageTitle: Locator;
   readonly navListItems: Locator;
   readonly marketingContent: Locator;
   readonly linkToFamilyPages: Locator;
@@ -162,6 +164,7 @@ export class ProductListingPage {
     this.productAvailabilityAngular = page.locator('[class="availability hmf-display-flex hmf-flex-wrap hmf-justify-content-between hmf-align-items-center hmf-align-content-center"]');
     this.productPriceReact = page.locator('[class="rs_product_price"]');
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
+    this.pinnedContent = page.locator('//plp-srlp-pinned-content');
 
     // pagination and breadcrumbs
     // this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]'); // div.product-card-wrapper div.sponsored
@@ -179,6 +182,7 @@ export class ProductListingPage {
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
     // this.pageItems = page.locator('a[class*="rs-page-item"]');   // button[class*='pagination-number']
     this.pageItems = page.locator('button[class*="pagination-number"]');
+    this.pageTitle = page.getByTestId('pageTitle').getByRole('heading');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
@@ -220,8 +224,8 @@ export class ProductListingPage {
     this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
-
     this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
+
     //Product Category
     this.navListItems = page.locator('a[class*="list-item"]');
     this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
@@ -445,6 +449,8 @@ export class ProductListingPage {
     const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
 
     // Click add to cart button on plp page
+    expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {
@@ -454,8 +460,8 @@ export class ProductListingPage {
     // Response object manipulation
     const resProductDetails = await responsePromiseProductDetails;
     const resOmni = await responsePromiseOmni;
-    console.log('this is the resOmni.url - ' + resOmni.url());
-    console.log('this is the resOmni.status - ' + resOmni.status());
+    console.log('this is the resOmni.url - ' +resOmni.url());
+    console.log('this is the resOmni.status - ' +resOmni.status());
 
     const responseJsonProductDetails = await resProductDetails.json();
     const responseJsonOmni = await resOmni.json();
@@ -518,65 +524,65 @@ export class ProductListingPage {
     }
   }
 
-  async selectShipToMeAttributes(page: Page): Promise<void> {
-    console.log('Skus with attributes - ' + this.skusWithAttributes);
-    if (this.skusWithAttributes.size > 0) {
-      const keysAsArray = Array.from(this.skusWithAttributes.keys());
-      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-      const attr = this.skusWithAttributes.get(randomSku);
-      if (attr) {
-        for (const at of attr) {
-          const attributeSet = at.split(' - ');
-          console.log(attributeSet[0]);
-          console.log(attributeSet[1]);
-          switch (attributeSet[0]) {
-            case 'Color':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
-                console.log(randomColorXpath);
-                const colorPdp = page.locator(randomColorXpath);
-                await colorPdp.first().waitFor();
-                await colorPdp.first().click();
-                break;
-              }
-            case 'Size':
-            case 'Shoe Size':
-            case 'Shoe Width':
-            case 'Flex':
-            case 'Hand':
-            case 'Shaft':
-            case 'Loft':
-            case 'Wedge Bounce':
-            case 'Wedge Grind/Sole':
-            case 'Frame Size':
-            case 'Wheel Size':
-            case 'Drivetrain Manufacturer':
-            case 'Sock Size':
-            case 'Capacity':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                const paramPdp = page.locator(randomXpath);
-                await paramPdp.waitFor();
-                await paramPdp.click();
-                break;
-              }
-            case 'Length':
-              {
-                console.info('Selecting attribute is: ' + attributeSet[0]);
-                const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
-                page.locator(randomLengthXpath).click();;
-                break;
-              }
+    async selectShipToMeAttributes(page: Page): Promise<void> {
+      console.log('Skus with attributes - ' + this.skusWithAttributes);
+      if (this.skusWithAttributes.size > 0) {
+        const keysAsArray = Array.from(this.skusWithAttributes.keys());
+        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+        const attr = this.skusWithAttributes.get(randomSku);
+        if (attr) {
+          for (const at of attr) {
+            const attributeSet = at.split(' - ');
+            console.log(attributeSet[0]);
+            console.log(attributeSet[1]);
+            switch (attributeSet[0]) {
+              case 'Color':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+                  console.log(randomColorXpath);
+                  const colorPdp = page.locator(randomColorXpath);
+                  await colorPdp.first().waitFor();
+                  await colorPdp.first().click();
+                  break;
+                }
+              case 'Size':
+              case 'Shoe Size':
+              case 'Shoe Width':
+              case 'Flex':
+              case 'Hand':
+              case 'Shaft':
+              case 'Loft':
+              case 'Wedge Bounce':
+              case 'Wedge Grind/Sole':
+              case 'Frame Size':
+              case 'Wheel Size':
+              case 'Drivetrain Manufacturer':
+              case 'Sock Size':
+              case 'Capacity':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
+                  const paramPdp = page.locator(randomXpath);
+                  await paramPdp.waitFor();
+                  await paramPdp.click();
+                  break;
+                }
+              case 'Length':
+                {
+                  console.info('Selecting attribute is: ' + attributeSet[0]);
+                  const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+                  page.locator(randomLengthXpath).click();;
+                  break;
+                }
+            }
           }
         }
+      } else {
+        //throw new Error('This product is not eligible for Ship To Me');
+        console.info('This product is not eligible for Ship To Me');
       }
-    } else {
-      //throw new Error('This product is not eligible for Ship To Me');
-      console.info('This product is not eligible for Ship To Me');
     }
-  }
 
   async selectBOPISAttributes(page: Page): Promise<void> {
 
@@ -597,28 +603,24 @@ export class ProductListingPage {
           console.log(attributeSet[1]);
           switch (attributeSet[0].trim()) {
             case 'Color':
-              {
-                const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
-                console.log('The color xpath is: ' + randomColorXpath);
-                await commonPage.sleep(5);
-                const paramPdp2 = page.locator(randomColorXpath);
-                await paramPdp2.click();
-                break;
-              }
+              { const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
+              console.log('The color xpath is: ' + randomColorXpath);
+              await commonPage.sleep(5);
+              const paramPdp2 = page.locator(randomColorXpath);
+              await paramPdp2.click();
+              break; }
             case 'Size':
             case 'Shoe Size':
             case 'Shoe Width':
             case 'Flex':
             case 'Hand':
             case 'Shaft':
-              {
-                const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
-                console.log('The size xpath is: ' + randomShaftXpath);
-                await commonPage.sleep(5);
-                const paramPdp1 = page.locator(randomShaftXpath);
-                await paramPdp1.click();
-                break;
-              }
+              { const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
+              console.log('The size xpath is: ' + randomShaftXpath);
+              await commonPage.sleep(5);
+              const paramPdp1 = page.locator(randomShaftXpath);
+              await paramPdp1.click();
+              break; }
             case 'Loft':
             case 'Wedge Bounce':
             case 'Wedge Grind/Sole':
@@ -628,13 +630,11 @@ export class ProductListingPage {
             case 'Sock Size':
             case 'Capacity':
             case 'Grip':
-              {
-                const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
-                await commonPage.sleep(5);
-                const paramPdp = page.locator(randomXpath);
-                await paramPdp.click();
-                break;
-              }
+              { const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
+              await commonPage.sleep(5);
+              const paramPdp = page.locator(randomXpath);
+              await paramPdp.click();
+              break; }
           }
         }
       }
@@ -655,12 +655,12 @@ export class ProductListingPage {
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
-  async applySameDayDeliveryFilter(): Promise<void> {
-    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
-    await this.sameDayDeliveryFilter.first().click();
-    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-    await expect(this.loadingOverlay).toHaveCount(0);
-  }
+    async applySameDayDeliveryFilter(): Promise<void> {
+      await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+      await this.sameDayDeliveryFilter.first().click();
+      await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+      await expect(this.loadingOverlay).toHaveCount(0);
+    }
   async validateResultsPerPage(pageNo: any) {
     let commonPage = new CommonPage(this.page)
     await this.pageItems.nth(pageNo - 1).click();

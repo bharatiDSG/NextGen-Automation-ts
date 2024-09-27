@@ -1,11 +1,17 @@
 import { expect, test } from '@playwright/test';
-import { HomePage } from '../../page-objects/HomePage';
-import { ProductListingPage } from '../../page-objects/ProductListingPage';
-import { getBaseUrl } from '../../globalSetup';
-import { CommonPage } from '../../page-objects/CommonPage';
+import { HomePage } from '../../../page-objects/HomePage';
+import { ProductListingPage } from '../../../page-objects/ProductListingPage';
+import { getBaseUrl } from '../../../globalSetup';
+import { CommonPage } from '../../../page-objects/CommonPage';
+import { ProductDisplayPage } from '../../../page-objects/ProductDisplayPage';
+import { AccountSignInPage } from '../../../page-objects/AccountSignInPage';
+import { testData_DSG_PL_GG } from '../../../test-data/securedAthleteTestData';
 
 
 test.describe('Search Tests - GG NP0 Prod', () => {
+
+    const firstSearchTerm = 'golf footwear';
+    const secondSearchTerm = 'golf glove';
 
     test.beforeEach(async ({ page, context }) => {
         const commonPage = new CommonPage(page);
@@ -167,9 +173,195 @@ test.describe('Search Tests - GG NP0 Prod', () => {
     });
 
 
+    test('05: Search from PDP', async ({ page }) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+        const productDisplayPage = new ProductDisplayPage(page);
+
+        await test.step('Search for a product: ' + firstSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(firstSearchTerm);
+        });
+
+        await test.step('Validate search results: ' + firstSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(firstSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(firstSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+        await test.step('Select a product', async () => {
+            await productListingPage.selectMatchingProduct('shoes');
+        });
+
+        await test.step('Verify PDP Page', async () => {
+            await productDisplayPage.verifyProductDisplayPage();
+        });
+
+        await test.step('Search from PDP Page' + secondSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(secondSearchTerm);
+        });
+
+        await test.step('Validate search results from PDP: ' + secondSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(secondSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(secondSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+    });
+
+    test('06: Search from SRLP', async ({ page }) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+
+        await test.step('Search for a product: ' + firstSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(firstSearchTerm);
+        });
+
+        await test.step('Validate search results: ' + firstSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // Validate SRLP URL
+            expect(page.url()).toContain(getBaseUrl() + 'search/');
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(firstSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(firstSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+        await test.step('Search from SRLP Page' + secondSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(secondSearchTerm);
+        });
+
+        await test.step('Validate search results from SRLP: ' + secondSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(secondSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(secondSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+    });
+
+    test('07: Search from PLP', async ({ page }) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+
+        const plpPage = "Men's Golf Shoes";
+
+        await test.step('Navigate to PLP', async () => {
+            await page.goto(getBaseUrl() + 'f/mens-golf-shoes');
+        });
+
+        await test.step('Validate search results: ' + plpPage, async () => {
+            // Validate SRLP URL
+            expect(page.url()).toContain(getBaseUrl() + 'f/');
+
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // Page Title
+            await expect(productListingPage.pageTitle).toContainText(plpPage);
+            const text = await productListingPage.pageTitle.allTextContents();
+            console.log('PLP title: ' + text);
+        });
+
+        await test.step('Search from PLP Page' + secondSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(secondSearchTerm);
+        });
+
+        await test.step('Validate search results from PLP: ' + secondSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(secondSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(secondSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+    });
+
+    test('08: Search from My Account', async ({ page }) => {
+        const homePage = new HomePage(page);
+        const productListingPage = new ProductListingPage(page);
+        const accountSignInPage = new AccountSignInPage(page);
+
+        await test.step('Click my account link', async () => {
+            await homePage.myAccountLink.click();
+        });
+
+        // Sign In
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+            await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
+        });
+
+        await test.step('Search from My Account Page' + secondSearchTerm, async () => {
+            await homePage.searchForProductWithSlowTyping(secondSearchTerm);
+        });
+
+        await test.step('Validate search results from My Account: ' + secondSearchTerm, async () => {
+            // validate products display
+            await productListingPage.productNames.last().waitFor();
+
+            // validate search term
+            await expect(productListingPage.breadcrumbSearchTerm).toContainText(secondSearchTerm);
+            const text = await productListingPage.breadcrumbSearchTerm.allTextContents();
+            console.log('text: ' + text);
+
+            // validate search count title
+            await expect(productListingPage.searchCountTitle).toContainText(secondSearchTerm);
+            await expect(productListingPage.searchCountTitle).not.toContainText("We're sorry, we did not find any matches.");
+            const title = await productListingPage.searchCountTitle.innerText();
+            console.log('title: ' + title);
+        });
+
+    });
+
+
     // Trending search links do not display in np0_prod
     if (process.env.ENV == 'gg_prod') {
-        test('05: Search - Trending Search Links', async ({ page }) => {
+        test('09: Search - Trending Search Links', async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
 
@@ -190,8 +382,11 @@ test.describe('Search Tests - GG NP0 Prod', () => {
                         await productListingPage.productNames.last().waitFor();
 
                         // Update trending search name for validating the following page
-                        if (trendingSearch.includes('Savings')) {
+                        if (trendingSearch.includes('Top Deals')) {
                             trendingSearch = "This Week's Deals";
+                        }
+                        if (trendingSearch.includes('Rangefinder')) {
+                            trendingSearch = 'Golf Electronic Deals';
                         }
 
                         // validate search count title

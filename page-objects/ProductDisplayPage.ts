@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 import { CommonPage } from './CommonPage';
+import { getBaseUrl } from '../globalSetup.js';
 import axios from 'axios';
 
 
@@ -241,6 +242,12 @@ export class ProductDisplayPage {
       price: price?.trim() || ''
 
     };
+  }
+
+  async verifyProductDisplayPage(): Promise<void> {
+    expect(this.page.url()).toContain(getBaseUrl() + 'p/');
+    await expect(this.productName.first()).toBeVisible();
+    await expect (this.productPrice).toBeVisible();
   }
 
   async verifyProductAvailability(expectedStatus: string | number): Promise<void> {
