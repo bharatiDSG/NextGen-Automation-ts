@@ -440,7 +440,8 @@ export class ProductListingPage {
     const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
 
     // Click add to cart button on plp page
-    expect(this.quickviewOpenATCButtonAngular.first()).toBeVisible();
+    expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {
