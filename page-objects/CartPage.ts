@@ -231,7 +231,8 @@ export class CartPage {
 
   async verifyPShippingMedium(status: string): Promise<void> {
     // Fetch the shipping medium
-    await expect(this.page.locator('mat-radio-button[id*="cart-' + status + '"][class*="checked"]')).toBeVisible();
+    const isCheckedElement =  this.page.locator('[id*="cart-' + status + '"]').first();
+    await expect(isCheckedElement).toBeChecked();
     // Assert the quantity is as expected
   }
 

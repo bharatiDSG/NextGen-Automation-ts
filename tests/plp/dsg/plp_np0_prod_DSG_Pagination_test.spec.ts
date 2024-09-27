@@ -43,12 +43,12 @@ test.describe('PLP DSG Pagination Tests', () => {
 
     await test.step('Validating the next arrow', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      // await page.waitForTimeout(20000);
+      await page.waitForTimeout(20000);
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -60,19 +60,20 @@ test.describe('PLP DSG Pagination Tests', () => {
 
     await test.step('Validating the back arrow', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      // await page.waitForTimeout(20000);
+      await page.waitForTimeout(20000);
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
-      await expect(productListingPage.rightChevronNextButtonReact.first()).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular.first()).toBeVisible();
       console.log('Left arrow is visible');
-      await productListingPage.rightChevronNextButtonReact.first().click();
+      await productListingPage.rightChevronNextButtonAngular.first().click();
       console.log('Clicked on left arrow');
+      await page.waitForTimeout(20000);
       const firstPageCountAfterClickingLeftArrow = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(firstPageCountAfterClickingLeftArrow);
       console.log('Left arrow is working as expected');
@@ -82,14 +83,14 @@ test.describe('PLP DSG Pagination Tests', () => {
   });
 
   test('03. Pagination_Validating page numbers', async ({ page }) => {
-
     await test.step('Validating any random page number', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
+      await page.waitForTimeout(20000);
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');

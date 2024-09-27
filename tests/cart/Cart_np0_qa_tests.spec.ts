@@ -30,8 +30,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart product details');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             console.log('Product is searchable');
 
@@ -40,11 +39,11 @@ test.describe('E2E NP0 QA', () => {
 
 
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.selectProductByColor.click();
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
             console.log('Clicking Go to Cart');
+            await commonPage.sleep(3);
 
         });
 
@@ -72,8 +71,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart pricing  details');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             console.log('Product is searchable');
 
@@ -88,9 +86,9 @@ test.describe('E2E NP0 QA', () => {
         });
 
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to the Cart');
             console.log('Validation successful');
 
@@ -147,8 +145,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart fulfillment choice details');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             console.log('Product is searchable');
 
@@ -156,7 +153,6 @@ test.describe('E2E NP0 QA', () => {
 
         // Set store
         await test.step('Set zip code and select Store', async () => {
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.selectStorePickup('Select product options');
             await page.waitForLoadState('networkidle');
             await productDisplayPage.selectProductByColor.click();
@@ -169,6 +165,7 @@ test.describe('E2E NP0 QA', () => {
 
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
         });
@@ -193,8 +190,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart quantity functionality');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product is searchable');
@@ -207,9 +203,9 @@ test.describe('E2E NP0 QA', () => {
         console.log('Product is available');
 
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
         });
@@ -262,8 +258,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Cart quantity validation for store pick up');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             console.log('Product is visible');
 
@@ -273,8 +268,6 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Set zip code and select Store', async () => {
 
             await productDisplayPage.selectStorePickup('Select product options');
-            await page.waitForLoadState('networkidle');
-            await commonPage.handlePromotionalPopup();
             console.log('Store setup completed');
             await productDisplayPage.selectProductByColor.click();
             //Selecting store pickup and validating stock is present
@@ -283,9 +276,10 @@ test.describe('E2E NP0 QA', () => {
         });
 
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-
+            await commonPage.handlePromotionalPopup();
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
         });
@@ -326,12 +320,11 @@ test.describe('E2E NP0 QA', () => {
         const cartPage = new CartPage(page);
         const commonPage = new CommonPage(page);
         await test.step('Search with product SKU number', async () => {
-            console.log('Validating Paypal payment');
-            await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
-            await expect(productDisplayPage.addToCartButton).toBeVisible();
-            await productDisplayPage.selectProductByColor.click();
+        console.log('Validating Paypal payment');
+        await homePage.searchForProduct(testData_e2e_np0_qa.sku);
+        await commonPage.handlePromotionalPopup();
+        await expect(productDisplayPage.addToCartButton).toBeVisible();
+        await productDisplayPage.selectProductByColor.click();
 
         });
 
@@ -340,9 +333,9 @@ test.describe('E2E NP0 QA', () => {
         await productDisplayPage.verifyProductAvailability('Available');
         console.log('Product is available');
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-            await commonPage.handlePromotionalPopup();
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
         });
@@ -365,8 +358,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating mixed order in cart page');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
 
         });
@@ -375,8 +367,6 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Set zip code and select Store', async () => {
 
             await productDisplayPage.selectStorePickup('Select product options');
-            await page.waitForLoadState('networkidle');
-            await commonPage.handlePromotionalPopup();
             console.log('Store setup completed');
             await productDisplayPage.selectProductByColor.click();
             //Selecting store pickup and validating stock is present
@@ -385,9 +375,9 @@ test.describe('E2E NP0 QA', () => {
         });
 
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
-
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to Cart');
 
         });
@@ -398,8 +388,7 @@ test.describe('E2E NP0 QA', () => {
 
         await test.step('Search with product SKU number', async () => {
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product selected');
@@ -408,6 +397,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
         });
 
@@ -429,8 +419,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating gift card and score card');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product is selected');
@@ -439,6 +428,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
         });
@@ -470,8 +460,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validating empty cart functionality');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product is selected');
@@ -480,6 +469,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
 
@@ -501,13 +491,11 @@ test.describe('E2E NP0 QA', () => {
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
         const commonPage = new CommonPage(page);
-
-
+        
         await test.step('Search with product SKU number', async () => {
             console.log('Validating gift and score card for guest user');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product is selected');
@@ -517,6 +505,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
 
@@ -545,8 +534,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Search with product SKU number', async () => {
             console.log('Validate save later functionality');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
-                await page.waitForLoadState('load');
-            await commonPage.waitUntilPageLoads();
+            await commonPage.handlePromotionalPopup();
             await expect(productDisplayPage.addToCartButton).toBeVisible();
             await productDisplayPage.selectProductByColor.click();
             console.log('Product is selected');
@@ -556,6 +544,7 @@ test.describe('E2E NP0 QA', () => {
         await test.step('Clicking on Add To Cart button and click Go to Cart', async () => {
             await productDisplayPage.addToCartButton.click();
             await productDisplayPage.goToCartButton.click();
+            await commonPage.sleep(3);
             console.log('Going to cart');
 
 

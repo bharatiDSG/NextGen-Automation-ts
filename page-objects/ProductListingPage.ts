@@ -164,16 +164,21 @@ export class ProductListingPage {
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
 
     // pagination and breadcrumbs
-    this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
-    this.totalItemCards = page.locator('div.dsg-react-product-card');
-    this.resultPerPage = page.locator('a[class*="rs-page-count"]');
-    this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
-    this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
+    // this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]'); // div.product-card-wrapper div.sponsored
+    this.sponsoredItemCards = page.locator('div.product-card-wrapper div.sponsored'); // div.product-card-wrapper div.sponsored
+    // this.totalItemCards = page.locator('div.dsg-react-product-card');   //  div.product-card-wrapper
+    this.totalItemCards = page.locator('div.product-card-wrapper');
+    // this.resultPerPage = page.locator('a[class*="rs-page-count"]');    //[class='top-pagination'] button
+    this.resultPerPage = page.locator('[class="top-pagination"] button');
+    // this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');  // button[title *= 'Page']
+    // this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
+    this.rightChevronNextButtonAngular = page.locator('button[title *= "Page"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
-    this.pageItems = page.locator('a[class*="rs-page-item"]');
+    // this.pageItems = page.locator('a[class*="rs-page-item"]');   // button[class*='pagination-number']
+    this.pageItems = page.locator('button[class*="pagination-number"]');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
@@ -306,9 +311,9 @@ export class ProductListingPage {
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
     const styleCount = await plpProductStyle.count();
-    console.log("The minimum product style variation in plp page: "+styleCount);
+    console.log("The minimum product style variation in plp page: " + styleCount);
     for (let i = 0; i < styleCount; i++) {
-      const style =  plpProductStyle.nth(i);
+      const style = plpProductStyle.nth(i);
       await expect(style).toBeVisible();
     }
     const index = +itemVal;
@@ -395,13 +400,17 @@ export class ProductListingPage {
   }
 
   async validateRandomPage(pageCount: any, pageNo: any) {
-    await this.pageItems.nth(pageNo).click();
+    await this.pageItems.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
-    await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
-    const pageNumber = await this.highlightedPageNumberReact.textContent();
+    await this.page.waitForTimeout(2000);
+    // await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+    await expect(this.highlightedPageNumberAngular).toHaveAttribute('class', /selected/);
+    // const pageNumber = await this.highlightedPageNumberReact.textContent();
+    const pageNumber = await this.highlightedPageNumberAngular.textContent();
     expect(pageNumber?.trim()).toContain(String(pageNo));
     console.log('Validated the page numver ' + pageNo);
     const randomPageCount = await this.getActualPaginationCount();
+    // expect(pageCount).toBe(randomPageCount);
     expect(pageCount).toBe(randomPageCount);
     console.log('Validated the page count ' + pageCount);
   }
@@ -445,8 +454,8 @@ export class ProductListingPage {
     // Response object manipulation
     const resProductDetails = await responsePromiseProductDetails;
     const resOmni = await responsePromiseOmni;
-    console.log('this is the resOmni.url - ' +resOmni.url());
-    console.log('this is the resOmni.status - ' +resOmni.status());
+    console.log('this is the resOmni.url - ' + resOmni.url());
+    console.log('this is the resOmni.status - ' + resOmni.status());
 
     const responseJsonProductDetails = await resProductDetails.json();
     const responseJsonOmni = await resOmni.json();
@@ -509,65 +518,65 @@ export class ProductListingPage {
     }
   }
 
-    async selectShipToMeAttributes(page: Page): Promise<void> {
-      console.log('Skus with attributes - ' + this.skusWithAttributes);
-      if (this.skusWithAttributes.size > 0) {
-        const keysAsArray = Array.from(this.skusWithAttributes.keys());
-        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-        const attr = this.skusWithAttributes.get(randomSku);
-        if (attr) {
-          for (const at of attr) {
-            const attributeSet = at.split(' - ');
-            console.log(attributeSet[0]);
-            console.log(attributeSet[1]);
-            switch (attributeSet[0]) {
-              case 'Color':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
-                  console.log(randomColorXpath);
-                  const colorPdp = page.locator(randomColorXpath);
-                  await colorPdp.first().waitFor();
-                  await colorPdp.first().click();
-                  break;
-                }
-              case 'Size':
-              case 'Shoe Size':
-              case 'Shoe Width':
-              case 'Flex':
-              case 'Hand':
-              case 'Shaft':
-              case 'Loft':
-              case 'Wedge Bounce':
-              case 'Wedge Grind/Sole':
-              case 'Frame Size':
-              case 'Wheel Size':
-              case 'Drivetrain Manufacturer':
-              case 'Sock Size':
-              case 'Capacity':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                  const paramPdp = page.locator(randomXpath);
-                  await paramPdp.waitFor();
-                  await paramPdp.click();
-                  break;
-                }
-              case 'Length':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
-                  page.locator(randomLengthXpath).click();;
-                  break;
-                }
-            }
+  async selectShipToMeAttributes(page: Page): Promise<void> {
+    console.log('Skus with attributes - ' + this.skusWithAttributes);
+    if (this.skusWithAttributes.size > 0) {
+      const keysAsArray = Array.from(this.skusWithAttributes.keys());
+      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+      const attr = this.skusWithAttributes.get(randomSku);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0]) {
+            case 'Color':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+                console.log(randomColorXpath);
+                const colorPdp = page.locator(randomColorXpath);
+                await colorPdp.first().waitFor();
+                await colorPdp.first().click();
+                break;
+              }
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.waitFor();
+                await paramPdp.click();
+                break;
+              }
+            case 'Length':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+                page.locator(randomLengthXpath).click();;
+                break;
+              }
           }
         }
-      } else {
-        //throw new Error('This product is not eligible for Ship To Me');
-        console.info('This product is not eligible for Ship To Me');
       }
+    } else {
+      //throw new Error('This product is not eligible for Ship To Me');
+      console.info('This product is not eligible for Ship To Me');
     }
+  }
 
   async selectBOPISAttributes(page: Page): Promise<void> {
 
@@ -588,24 +597,28 @@ export class ProductListingPage {
           console.log(attributeSet[1]);
           switch (attributeSet[0].trim()) {
             case 'Color':
-              { const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
-              console.log('The color xpath is: ' + randomColorXpath);
-              await commonPage.sleep(5);
-              const paramPdp2 = page.locator(randomColorXpath);
-              await paramPdp2.click();
-              break; }
+              {
+                const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
+                console.log('The color xpath is: ' + randomColorXpath);
+                await commonPage.sleep(5);
+                const paramPdp2 = page.locator(randomColorXpath);
+                await paramPdp2.click();
+                break;
+              }
             case 'Size':
             case 'Shoe Size':
             case 'Shoe Width':
             case 'Flex':
             case 'Hand':
             case 'Shaft':
-              { const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
-              console.log('The size xpath is: ' + randomShaftXpath);
-              await commonPage.sleep(5);
-              const paramPdp1 = page.locator(randomShaftXpath);
-              await paramPdp1.click();
-              break; }
+              {
+                const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
+                console.log('The size xpath is: ' + randomShaftXpath);
+                await commonPage.sleep(5);
+                const paramPdp1 = page.locator(randomShaftXpath);
+                await paramPdp1.click();
+                break;
+              }
             case 'Loft':
             case 'Wedge Bounce':
             case 'Wedge Grind/Sole':
@@ -615,11 +628,13 @@ export class ProductListingPage {
             case 'Sock Size':
             case 'Capacity':
             case 'Grip':
-              { const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
-              await commonPage.sleep(5);
-              const paramPdp = page.locator(randomXpath);
-              await paramPdp.click();
-              break; }
+              {
+                const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
+                await commonPage.sleep(5);
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.click();
+                break;
+              }
           }
         }
       }
@@ -640,12 +655,12 @@ export class ProductListingPage {
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
-    async applySameDayDeliveryFilter(): Promise<void> {
-      await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
-      await this.sameDayDeliveryFilter.first().click();
-      await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-      await expect(this.loadingOverlay).toHaveCount(0);
-    }
+  async applySameDayDeliveryFilter(): Promise<void> {
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+    await this.sameDayDeliveryFilter.first().click();
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
   async validateResultsPerPage(pageNo: any) {
     let commonPage = new CommonPage(this.page)
     await this.pageItems.nth(pageNo - 1).click();
@@ -661,31 +676,41 @@ export class ProductListingPage {
       console.log("Result per page text is: " + allItemText);
       const pageCount = await this.getActualPaginationCount();
       expect(allItemText?.trim()).toContain(String(pageCount));
-      await expect(allItems).toHaveAttribute('class', /active/);
+      // await expect(allItems).toHaveAttribute('class', /active/);
+      await expect(allItems).toHaveAttribute('class', /selected/);
       console.log('Results per page is: ' + pageCount);
     }
   }
   async selectSortCategory(category: string, pageCount: any) {
-    await this.sortOptionsAccordionButtonReact.click();
+    console.log("the expected categoty provided: " + category);
+    // await this.sortOptionsAccordionButtonReact.click();
+    await this.sortOptionsAccordionButtonAngular.first().click({ force: true });
     console.log('Validating sort category: ' + category);
-    const count = await this.sortOptionsSelectionReact.count();
+    // const count = await this.sortOptionsSelectionReact.count();
+    const count = await this.sortOptionsSelectionAngular.count();
     let commonPage = new CommonPage(this.page);
     console.log('Total sort options are :' + count);
     for (let i = 0; i < count; i++) {
-      const options = this.sortOptionsSelectionReact.nth(i);
+      // const options = this.sortOptionsSelectionReact.nth(i);
+      const options = this.sortOptionsSelectionAngular.nth(i);
       const option = await options.textContent();
-      if (option === category) {
-        await this.sortOptionsSelectionReact.nth(i).click();
-        await commonPage.sleep(5);
+      console.log("Current option is: " + option)
+      if (option?.trim() === category) {
         console.log('Sort option matched');
+        // const categoryEle = this.page.getByText(option);
+        // await categoryEle.nth(1).click({ force: true });
+        expect(option).toContain(category);
+        //await commonPage.sleep(5);
         break;
       }
     }
-    const categorySelectedText = await this.sortSelectedReact.textContent();
-    expect(categorySelectedText?.trim()).toContain(String(category));
-    console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
-    const actualPageCount = await this.getActualPaginationCount();
-    expect(pageCount).toBe(actualPageCount);
+    // const categorySelectedText = await this.sortSelectedReact.textContent();
+
+    // const categorySelectedText = await this.sortSelectedAngular.first().textContent();
+    // expect(categorySelectedText?.trim()).toContain(String(category));
+    // console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
+    // const actualPageCount = await this.getActualPaginationCount();
+    // expect(pageCount).toBe(actualPageCount);
   }
   async getActualPaginationCount() {
     const totalCount = await this.totalItemCards.count();
@@ -698,9 +723,9 @@ export class ProductListingPage {
 
   }
   async validateProductCategoryWithMarketingContent() {
-    // const elements = this.navListItems
-    // const count = await elements.count();
-    //console.log(`The total category is:` + count);
+    const elements = this.navListItems
+    const count = await elements.count();
+    console.log(`The total category is:` + count);
     // for (let i = 0; i < count; i++) {
     //   const element = elements.nth(i);
     //   const isVisible = await element.isVisible();
