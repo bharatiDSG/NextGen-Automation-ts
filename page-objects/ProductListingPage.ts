@@ -515,6 +515,7 @@ export class ProductListingPage {
       }
     }
 
+    // Refactored this for loop so keeping the old one until we verify it can be removed
     // for (let i = 0; i < skusArray.length; i++) {
     //   console.log(skusArray[i].shipQty);
     //   if (skusArray[i].shipQty > 0) {
