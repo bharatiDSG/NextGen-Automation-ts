@@ -67,7 +67,7 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
   });
 
 
-  test.only('02. PLP Favorites_E-code level_Add and Remove favorites', async ({ page }) => {
+  test('02. PLP Favorites_E-code level_Add and Remove favorites', async ({ page }) => {
     const homePage = new HomePage(page);
     const productListingPage = new ProductListingPage(page);
     const commonPage = new CommonPage(page);
@@ -104,7 +104,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     await test.step('Select fevorite item', async () => {
       console.log('Trying to add the favorites for non signed In user');
       await productListingPage.favorites.nth(index).click();
-      await page.pause()
       await commonPage.sleep(5);
     });
 
