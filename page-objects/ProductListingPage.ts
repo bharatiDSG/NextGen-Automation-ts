@@ -480,10 +480,8 @@ export class ProductListingPage {
     }
 
     const skusWithQuantity = Array.from(s.entries())
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([_, value]) => value !== '0')
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(([key, _]) => key);
+      .filter(([, value]) => value !== '0')
+      .map(([key]) => key);
 
     this.skusWithAvailability = new Set(skusWithQuantity);
 
