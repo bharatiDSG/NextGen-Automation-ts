@@ -48,7 +48,9 @@ test.describe('PLP DSG Pagination Tests', () => {
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      await page.waitForTimeout(20000);
+      //await page.waitForTimeout(20000);
+      await productListingPage.page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCards.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -65,7 +67,9 @@ test.describe('PLP DSG Pagination Tests', () => {
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      await page.waitForTimeout(20000);
+      //await page.waitForTimeout(20000);
+      await productListingPage.page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCards.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -90,7 +94,9 @@ test.describe('PLP DSG Pagination Tests', () => {
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      await page.waitForTimeout(20000);
+      //await page.waitForTimeout(20000);
+      await productListingPage.page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCards.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -148,6 +154,20 @@ test.describe('PLP DSG Pagination Tests', () => {
     console.log('ProTips page opened');
     console.log('Validation successful');
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
 

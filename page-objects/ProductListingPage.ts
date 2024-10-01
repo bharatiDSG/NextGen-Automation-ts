@@ -167,20 +167,20 @@ export class ProductListingPage {
     this.pinnedContent = page.locator('//plp-srlp-pinned-content');
 
     // pagination and breadcrumbs
-    // this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]'); // div.product-card-wrapper div.sponsored
-    this.sponsoredItemCards = page.locator('div.product-card-wrapper div.sponsored'); // div.product-card-wrapper div.sponsored
-    // this.totalItemCards = page.locator('div.dsg-react-product-card');   //  div.product-card-wrapper
+    // this.sponsoredItemCardsReact = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');  
+    this.sponsoredItemCards = page.locator('div.product-card-wrapper div.sponsored'); 
+    // this.totalItemCardsReact = page.locator('div.dsg-react-product-card');   
     this.totalItemCards = page.locator('div.product-card-wrapper');
-    // this.resultPerPage = page.locator('a[class*="rs-page-count"]');    //[class='top-pagination'] button
+    // this.resultPerPageReact = page.locator('a[class*="rs-page-count"]');   
     this.resultPerPage = page.locator('[class="top-pagination"] button');
-    // this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');  // button[title *= 'Page']
+    // this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');  
     // this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
     this.rightChevronNextButtonAngular = page.locator('button[title *= "Page"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
-    // this.pageItems = page.locator('a[class*="rs-page-item"]');   // button[class*='pagination-number']
+    // this.pageItemsReact = page.locator('a[class*="rs-page-item"]');   
     this.pageItems = page.locator('button[class*="pagination-number"]');
     this.pageTitle = page.getByTestId('pageTitle').getByRole('heading');
 
@@ -700,7 +700,6 @@ export class ProductListingPage {
         // const categoryEle = this.page.getByText(option);
         // await categoryEle.nth(1).click({ force: true });
         expect(option).toContain(category);
-        //await commonPage.sleep(5);
         break;
       }
     }

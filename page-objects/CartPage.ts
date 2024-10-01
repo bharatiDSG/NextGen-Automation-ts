@@ -170,7 +170,6 @@ export class CartPage {
     await this.quantityInputText.fill(quantity.toString());
     await this.productLabel.click();
     await commonPage.sleep(2);
-    await this.page.waitForLoadState('networkidle');
   }
   async clickCheckoutButton(): Promise<void> {
     await this.page.waitForLoadState('load');
@@ -183,24 +182,23 @@ export class CartPage {
     const commonPage = new CommonPage(this.page);
     await commonPage.waitUntilPageLoads();
     await this.checkoutButton.scrollIntoViewIfNeeded();
-    await this.page.waitForLoadState('networkidle');
     commonPage.sleep(3);
     await commonPage.waitUntilPageLoads();
     await expect(this.paypalCheckoutButton).toBeVisible();
 
   }
   async verifyPayPalCheckout(): Promise<void> {
-    const pagePromise = this.page.context().waitForEvent('page');
+    const pagePromise = await this.page.context().waitForEvent('page');
     await this.paypalCheckoutButton.click();
-    const newPage = await pagePromise;
+    const newPage =  pagePromise;
     console.log(await newPage.title());
     newPage.close();
 
   }
   async doPayPalCheckout(): Promise<void> {
-    const pagePromise = this.page.context().waitForEvent('page');
+    const pagePromise = await this.page.context().waitForEvent('page');
     await this.paypalCheckoutButton.click();
-    const newPage = await pagePromise;
+    const newPage =  pagePromise;
     console.log(await newPage.title());
 
   }
@@ -226,7 +224,6 @@ export class CartPage {
     // Assert the quantity is as expected
     await this.cartProductName.first().click();
     await expect(this.cartCommonProgressSpinner).toHaveCount(0);
-    await this.page.waitForLoadState('networkidle');
   }
 
   async verifyPShippingMedium(status: string): Promise<void> {
@@ -241,7 +238,7 @@ export class CartPage {
 
       const frameLocator = await this.paypalIframe.locator('div.paypal-button');
       const [multiPage] = await Promise.all([
-        this.page.waitForEvent('popup'),
+        await this.page.waitForEvent('popup'),
         await frameLocator.click()
       ]);
       await multiPage.waitForLoadState();
@@ -280,7 +277,6 @@ export class CartPage {
     for (let index = 0; index < noOfProductsToBeDeleted; index++) {
       await this.deleteIcon.nth(1).click();
       // await this.page.locator("(//img[@class='delete-icon'])[1]").click();
-      await this.page.waitForLoadState('networkidle');
     }
   }
 
