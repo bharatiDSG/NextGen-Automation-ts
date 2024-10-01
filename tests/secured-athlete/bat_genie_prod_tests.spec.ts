@@ -41,6 +41,7 @@ test.describe('Bat Genie', () => {
         await test.step('Forgot Password', async () => {
             dateSent = new Date();
             await accountSignInPage.forgotPassword(resetEmail);
+            // Sleep is discouraged but needed here to wait for the email to be sent to mailosaur
             await commonPage.sleep(5);
         });
 
