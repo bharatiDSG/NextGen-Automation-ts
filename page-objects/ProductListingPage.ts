@@ -273,9 +273,9 @@ export class ProductListingPage {
 
   async selectMatchingProduct(product: string): Promise<string> {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.productNames.last().waitFor();
+    await this.productNamesAngular.last().waitFor();
 
-    const productNames = await this.productNames.allInnerTexts();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
     //console.log({ productNamesLowerCase });
     //console.log({productNames})
@@ -293,7 +293,7 @@ export class ProductListingPage {
       console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
     }
 
-    await this.productNames.nth(indexOfProductFirstMatch).click();
+    await this.productNamesAngular.nth(indexOfProductFirstMatch).click();
 
     return productMatchName;
   }
@@ -310,9 +310,9 @@ export class ProductListingPage {
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
     const styleCount = await plpProductStyle.count();
-    console.log("The minimum product style variation in plp page: "+styleCount);
+    console.log('The minimum product style variation in plp page: ' + styleCount);
     for (let i = 0; i < styleCount; i++) {
-      const style =  plpProductStyle.nth(i);
+      const style = plpProductStyle.nth(i);
       await expect(style).toBeVisible();
     }
     const index = +itemVal;
@@ -398,7 +398,7 @@ export class ProductListingPage {
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
   }
 
-  async validateRandomPage(pageCount: any, pageNo: any) {
+  async validateRandomPage(pageCount: number, pageNo: number) {
     await this.pageItems.nth(pageNo).click();
     console.log('Clicked on any page number');
     await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
@@ -451,8 +451,8 @@ export class ProductListingPage {
     // Response object manipulation
     const resProductDetails = await responsePromiseProductDetails;
     const resOmni = await responsePromiseOmni;
-    console.log('this is the resOmni.url - ' +resOmni.url());
-    console.log('this is the resOmni.status - ' +resOmni.status());
+    console.log('this is the resOmni.url - ' + resOmni.url());
+    console.log('this is the resOmni.status - ' + resOmni.status());
 
     const responseJsonProductDetails = await resProductDetails.json();
     const responseJsonOmni = await resOmni.json();
@@ -480,8 +480,8 @@ export class ProductListingPage {
     }
 
     const skusWithQuantity = Array.from(s.entries())
-      .filter(([_, value]) => value !== '0')
-      .map(([key, _]) => key);
+      .filter(([, value]) => value !== '0')
+      .map(([key]) => key);
 
     this.skusWithAvailability = new Set(skusWithQuantity);
 
@@ -499,81 +499,99 @@ export class ProductListingPage {
     this.skusWithAttributes.clear();
     const jsonObj = res;
     const skusArray = jsonObj.productsData[0].skus;
-    for (let i = 0; i < skusArray.length; i++) {
-      console.log(skusArray[i].shipQty);
-      if (skusArray[i].shipQty > 0) {
+
+    for (const sku of skusArray) {
+      console.log(sku.shipQty);
+      if (sku.shipQty > 0) {
         const a: string[] = [];
-        const definingAttr = skusArray[i].definingAttributes;
-        const price = `price - ${skusArray[i].prices.offerPrice}`;
+        const definingAttr = sku.definingAttributes;
+        const price = `price - ${sku.prices.offerPrice}`;
         a.push(price);
-        for (let j = 0; j < definingAttr.length; j++) {
-          const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+        for (const attribute of definingAttr) {
+          const attr = `${attribute.name} - ${attribute.value}`;
           a.push(attr);
         }
-        this.skusWithAttributes.set(skusArray[i].partNumber, a);
+        this.skusWithAttributes.set(sku.partNumber, a);
       }
     }
+
+    // Refactored this for loop so keeping the old one until we verify it can be removed
+    // for (let i = 0; i < skusArray.length; i++) {
+    //   console.log(skusArray[i].shipQty);
+    //   if (skusArray[i].shipQty > 0) {
+    //     const a: string[] = [];
+    //     const definingAttr = skusArray[i].definingAttributes;
+    //     const price = `price - ${skusArray[i].prices.offerPrice}`;
+    //     a.push(price);
+    //     for (let j = 0; j < definingAttr.length; j++) {
+    //       const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+    //       a.push(attr);
+    //     }
+    //     this.skusWithAttributes.set(skusArray[i].partNumber, a);
+    //   }
+    // }
+
   }
 
-    async selectShipToMeAttributes(page: Page): Promise<void> {
-      console.log('Skus with attributes - ' + this.skusWithAttributes);
-      if (this.skusWithAttributes.size > 0) {
-        const keysAsArray = Array.from(this.skusWithAttributes.keys());
-        const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
-        const attr = this.skusWithAttributes.get(randomSku);
-        if (attr) {
-          for (const at of attr) {
-            const attributeSet = at.split(' - ');
-            console.log(attributeSet[0]);
-            console.log(attributeSet[1]);
-            switch (attributeSet[0]) {
-              case 'Color':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
-                  console.log(randomColorXpath);
-                  const colorPdp = page.locator(randomColorXpath);
-                  await colorPdp.first().waitFor();
-                  await colorPdp.first().click();
-                  break;
-                }
-              case 'Size':
-              case 'Shoe Size':
-              case 'Shoe Width':
-              case 'Flex':
-              case 'Hand':
-              case 'Shaft':
-              case 'Loft':
-              case 'Wedge Bounce':
-              case 'Wedge Grind/Sole':
-              case 'Frame Size':
-              case 'Wheel Size':
-              case 'Drivetrain Manufacturer':
-              case 'Sock Size':
-              case 'Capacity':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
-                  const paramPdp = page.locator(randomXpath);
-                  await paramPdp.waitFor();
-                  await paramPdp.click();
-                  break;
-                }
-              case 'Length':
-                {
-                  console.info('Selecting attribute is: ' + attributeSet[0]);
-                  const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
-                  page.locator(randomLengthXpath).click();;
-                  break;
-                }
-            }
+  async selectShipToMeAttributes(page: Page): Promise<void> {
+    console.log('Skus with attributes - ' + this.skusWithAttributes);
+    if (this.skusWithAttributes.size > 0) {
+      const keysAsArray = Array.from(this.skusWithAttributes.keys());
+      const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
+      const attr = this.skusWithAttributes.get(randomSku);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0]) {
+            case 'Color':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomColorXpath = `//img[@alt='${attributeSet[1]}']`;
+                console.log(randomColorXpath);
+                const colorPdp = page.locator(randomColorXpath);
+                await colorPdp.first().waitFor();
+                await colorPdp.first().click();
+                break;
+              }
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomXpath = `//div//p[text()='${attributeSet[1]}']`;
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.waitFor();
+                await paramPdp.click();
+                break;
+              }
+            case 'Length':
+              {
+                console.info('Selecting attribute is: ' + attributeSet[0]);
+                const randomLengthXpath = `//button//span[contains(text(),"${attributeSet[1].split('"')[0]}")]`;
+                page.locator(randomLengthXpath).click();;
+                break;
+              }
           }
         }
-      } else {
-        //throw new Error('This product is not eligible for Ship To Me');
-        console.info('This product is not eligible for Ship To Me');
       }
+    } else {
+      //throw new Error('This product is not eligible for Ship To Me');
+      console.info('This product is not eligible for Ship To Me');
     }
+  }
 
   async selectBOPISAttributes(page: Page): Promise<void> {
 
@@ -594,24 +612,28 @@ export class ProductListingPage {
           console.log(attributeSet[1]);
           switch (attributeSet[0].trim()) {
             case 'Color':
-              { const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
-              console.log('The color xpath is: ' + randomColorXpath);
-              await commonPage.sleep(5);
-              const paramPdp2 = page.locator(randomColorXpath);
-              await paramPdp2.click();
-              break; }
+              {
+                const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
+                console.log('The color xpath is: ' + randomColorXpath);
+                await commonPage.sleep(5);
+                const paramPdp2 = page.locator(randomColorXpath);
+                await paramPdp2.click();
+                break;
+              }
             case 'Size':
             case 'Shoe Size':
             case 'Shoe Width':
             case 'Flex':
             case 'Hand':
             case 'Shaft':
-              { const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
-              console.log('The size xpath is: ' + randomShaftXpath);
-              await commonPage.sleep(5);
-              const paramPdp1 = page.locator(randomShaftXpath);
-              await paramPdp1.click();
-              break; }
+              {
+                const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
+                console.log('The size xpath is: ' + randomShaftXpath);
+                await commonPage.sleep(5);
+                const paramPdp1 = page.locator(randomShaftXpath);
+                await paramPdp1.click();
+                break;
+              }
             case 'Loft':
             case 'Wedge Bounce':
             case 'Wedge Grind/Sole':
@@ -621,11 +643,13 @@ export class ProductListingPage {
             case 'Sock Size':
             case 'Capacity':
             case 'Grip':
-              { const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
-              await commonPage.sleep(5);
-              const paramPdp = page.locator(randomXpath);
-              await paramPdp.click();
-              break; }
+              {
+                const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
+                await commonPage.sleep(5);
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.click();
+                break;
+              }
           }
         }
       }
@@ -646,36 +670,36 @@ export class ProductListingPage {
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
-    async applySameDayDeliveryFilter(): Promise<void> {
-      await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
-      await this.sameDayDeliveryFilter.first().click();
-      await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
-      await expect(this.loadingOverlay).toHaveCount(0);
-    }
-  async validateResultsPerPage(pageNo: any) {
-    let commonPage = new CommonPage(this.page)
+  async applySameDayDeliveryFilter(): Promise<void> {
+    await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
+    await this.sameDayDeliveryFilter.first().click();
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+    await expect(this.loadingOverlay).toHaveCount(0);
+  }
+  async validateResultsPerPage(pageNo: number) {
+    const commonPage = new CommonPage(this.page);
     await this.pageItems.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
     const count = await this.resultPerPage.count();
-    console.log("The result per page count is: " + count);
+    console.log('The result per page count is: ' + count);
     for (let i = 0; i < count; i++) {
       await expect(this.resultPerPage.nth(i)).toBeVisible();
       await this.resultPerPage.nth(i).click();
       await commonPage.sleep(10);
       const allItems = this.resultPerPage.nth(i);
       const allItemText = await allItems.textContent();
-      console.log("Result per page text is: " + allItemText);
+      console.log('Result per page text is: ' + allItemText);
       const pageCount = await this.getActualPaginationCount();
       expect(allItemText?.trim()).toContain(String(pageCount));
       await expect(allItems).toHaveAttribute('class', /active/);
       console.log('Results per page is: ' + pageCount);
     }
   }
-  async selectSortCategory(category: string, pageCount: any) {
+  async selectSortCategory(category: string, pageCount: number) {
     await this.sortOptionsAccordionButtonReact.click();
     console.log('Validating sort category: ' + category);
     const count = await this.sortOptionsSelectionReact.count();
-    let commonPage = new CommonPage(this.page);
+    const commonPage = new CommonPage(this.page);
     console.log('Total sort options are :' + count);
     for (let i = 0; i < count; i++) {
       const options = this.sortOptionsSelectionReact.nth(i);
@@ -722,7 +746,7 @@ export class ProductListingPage {
     // }
   }
   async validateMarketingContent() {
-    const elements = this.marketingContent
+    const elements = this.marketingContent;
     const count = await elements.count();
     console.log(`The total marketing content is:` + count);
     for (let i = 0; i < count; i++) {

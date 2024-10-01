@@ -326,6 +326,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
         const accountSignInPage = new AccountSignInPage(page);
+        const commonPage = new CommonPage(page);
 
         await test.step('Click my account link', async () => {
             await homePage.myAccountLink.click();
@@ -333,7 +334,11 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
         // Sign In
         await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
-            await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
+            if (process.env.ENV == 'gg_prod') {
+                await accountSignInPage.signIn(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
+            } else {
+                await accountSignInPage.accountSignInModern(testData_DSG_PL_GG.email, testData_DSG_PL_GG.password);
+            }
         });
 
         await test.step('Search from My Account Page' + secondSearchTerm, async () => {
@@ -341,6 +346,9 @@ test.describe('Search Tests - GG NP0 Prod', () => {
         });
 
         await test.step('Validate search results from My Account: ' + secondSearchTerm, async () => {
+            // handle iframe popup  
+            commonPage.handleIframePopupSignUpViaTextForOffers();
+
             // validate products display
             await productListingPage.productNames.last().waitFor();
 
