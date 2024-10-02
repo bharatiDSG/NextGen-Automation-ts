@@ -167,7 +167,7 @@ export class ProductListingPage {
     this.brandAccordionFilterSearchBoxAngular = page.locator('input[placeholder="Search Brands"]');
     this.filterPaginationResults = page.locator('[class*="top-pagination-product-number"]');
 
-
+    
     this.saleAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-sale"]');
     this.saleAccordionFilterButtonAngular = page.locator('[aria-controls="Sale-accordion-panel"]');
     this.sizeFilterValueReact = page.getByLabel('L', { exact: true });
