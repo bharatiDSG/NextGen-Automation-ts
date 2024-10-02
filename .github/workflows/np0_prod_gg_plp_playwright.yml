@@ -29,11 +29,11 @@ jobs:
       - name: NP0_PROD GG Search Tests
         run: |
           echo "Run E2E NP0 GG Search Tests"
-          npx playwright test search_gg_np0_prod_tests.spec.ts
+          npx playwright test --grep '(?=.*@PLP)(?=.*@np0Prod)(?=.*@GG)'
         env:
-            ENV: gg_np0prod    
+            ENV: gg_np0prod
 
-      - name: Upload Report      
+      - name: Upload Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -48,6 +48,5 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          title: "{title: `** ALERT ** Failure in Search GG NP0 Playwright Test`}"     
+          title: "{title: `** ALERT ** Failure in Search GG NP0 Playwright Test`}"
 
-         
