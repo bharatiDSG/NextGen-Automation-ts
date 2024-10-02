@@ -6,7 +6,7 @@ import { getBaseUrl } from '../../../globalSetup.ts';
 import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 import { CommonPage } from '../../../page-objects/CommonPage.ts';
 
-test.describe('PLP DSG Pagination Tests', () => {
+test.describe('PLP Pagination Tests', () => {
 
   test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
@@ -49,8 +49,8 @@ test.describe('PLP DSG Pagination Tests', () => {
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
       //await page.waitForTimeout(20000);
-      await productListingPage.page.waitForLoadState('domcontentloaded');
-      await productListingPage.totalItemCards.last().waitFor();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -68,8 +68,8 @@ test.describe('PLP DSG Pagination Tests', () => {
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
       //await page.waitForTimeout(20000);
-      await productListingPage.page.waitForLoadState('domcontentloaded');
-      await productListingPage.totalItemCards.last().waitFor();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -95,8 +95,8 @@ test.describe('PLP DSG Pagination Tests', () => {
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
       //await page.waitForTimeout(20000);
-      await productListingPage.page.waitForLoadState('domcontentloaded');
-      await productListingPage.totalItemCards.last().waitFor();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -152,6 +152,24 @@ test.describe('PLP DSG Pagination Tests', () => {
     const newPageUrl = page.url();
     expect(newPageUrl).toContain('protip');
     console.log('ProTips page opened');
+    console.log('Validation successful');
+  });
+
+  test.only('07. Validating Brand filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the brand filter is working as expected');
+    const brandName1 = await productListingPage.brandAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log("The brand selected is: "+brandName1);
+    const brandNameTrimmed1 = brandName1?.trim();
+    await productListingPage.validateBrandFilter(brandNameTrimmed1,0);
+    const brandName2 = await productListingPage.brandAccordionFilterLabelsAngular.nth(1).textContent();
+    console.log("The brand selected is: "+brandName2);
+    const brandNameTrimmed2 = brandName2?.trim();
+    await productListingPage.validateBrandFilter(brandNameTrimmed2,1);
+    const brandName3 = await productListingPage.brandAccordionFilterLabelsAngular.nth(2).textContent();
+    console.log("The brand selected is: "+brandName3);
+    const brandNameTrimmed3 = brandName3?.trim();
+    await productListingPage.validateBrandFilter(brandNameTrimmed3,2);
     console.log('Validation successful');
   });
 
