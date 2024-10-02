@@ -143,13 +143,25 @@ In this example, the linter does not like using ‘let’ instead of ‘const’
 
 <img src="images/eslintDisableLine.png" alt="text" width="800"/>
 
-## Tagging and Filename conventions
+## Tagging, filename conventions, and yml files
 
-*With PLP as an example below, provide similar tagging and filenaming conventions within your .ts files
+With PLP as an example below, provide similar tagging and filenaming conventions within your .ts files
 
 Sample Tags:  @PLP, @Smoke, @Regression, Env(@Prod, @Preview, @np0Prod, @All), Brand(@DSG, @GG, @All)
 Spec Files :
-PLP_QuickView
-PLP_Search
-PLP_Favorites
-PLP_Smoke
+* PLP_QuickView
+* PLP_Search
+* PLP_Favorites
+* PLP_Smoke
+
+Github actions with workflow yml files is how we will organize and run tests. Using PLP as an example we will organize tests by functional area (ex: PLP), then environment and brand. Yml organization example - 
+
+PLP - 
+    * NP0 Prod DSG PLP
+    * NP0 Prod GG PLP
+    * Prod DSG PLP
+    * Prod GG PLP
+    * Preview DSG PLP
+    * Preview GG PLP
+    * PLP Smoke test
+    * PLP Regression
