@@ -49,7 +49,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And we Validate Add to Cart is available on majority of Product Cards
         await test.step('And we Validate Add to Cart is available on majority of Product Cards', async () => {
-          await page.waitForLoadState('load');
+          await page.waitForLoadState('networkidle');
           if(await productListingPage.quickviewOpenATCButtonAngular.first().isVisible()){
               // await page.waitForTimeout(6000); // waits for 6 seconds
               const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
@@ -84,7 +84,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
 
         // And we Validate Add to Cart is not visible on custom products
         await test.step('Validate Add to Cart is not visible on custom products', async () => {
-          await page.waitForLoadState('load');
+          await page.waitForLoadState('networkidle');
           if(await productListingPage.quickviewOpenATCButtonAngular.isVisible()){
               // await page.waitForTimeout(6000); // waits for 6 seconds
               const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
