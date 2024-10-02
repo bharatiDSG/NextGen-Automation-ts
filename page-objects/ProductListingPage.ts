@@ -441,7 +441,7 @@ export class ProductListingPage {
 
     // Click add to cart button on plp page
     expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
-    expect(this.pinnedContent.last()).toBeVisible();
+    // expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {

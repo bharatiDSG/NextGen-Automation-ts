@@ -32,7 +32,7 @@ jobs:
       - name: np0 DSG PLP Regression Playwright Tests
         run: |
           echo "np0 DSG PLP Regression Playwright Tests"
-          npx playwright test --grep @PLP --grep @np0
+          npx playwright test --grep '(?=.*@PLP)(?=.*@np0Prod)(?=.*@DSG)'
         env:
             ENV: dsg_prod
 

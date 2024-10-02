@@ -147,7 +147,7 @@ In this example, the linter does not like using ‘let’ instead of ‘const’
 
 *With PLP as an example below, provide similar tagging and filenaming conventions within your .ts files
 
-Sample Tags:  @PLP, @Smoke, @Regression, Env(@Prod, @Preview, @np0, @All), Brand(@DSG, @GG, @All)
+Sample Tags:  @PLP, @Smoke, @Regression, Env(@Prod, @Preview, @np0Prod, @All), Brand(@DSG, @GG, @All)
 Spec Files :
 PLP_QuickView
 PLP_Search
