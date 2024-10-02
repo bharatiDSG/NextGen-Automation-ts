@@ -38,7 +38,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
 
     test('01: Search - Top 3 Searches',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -72,7 +72,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
 
     test('02: Search - Top 3 Search Suggestions',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -115,7 +115,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
 
     test('03: Search - No Search Results',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -146,7 +146,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
 
     test('04: Search - Corrected Search',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -182,7 +182,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
 
     test('05: Search from PDP',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -239,7 +239,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
         });
 
     test('06: Search from SRLP',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -290,7 +290,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
         });
 
     test('07: Search from PLP',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -337,7 +337,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
         });
 
     test('08: Search from My Account',
-        { tag: ['@PLP', '@GG', '@np0Prod', '@Prod', '@Preview'] },
+        { tag: ['@PLP', '@Search', '@GG', '@np0Prod', '@Prod', '@Preview'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
@@ -385,7 +385,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
 
     // Trending search links do not display in np0_prod
     test('09: Search - Trending Search Links',
-        { tag: ['@PLP', '@GG', '@Prod'] },
+        { tag: ['@PLP', '@Search', '@GG', '@Prod'] },
         async ({ page }) => {
             const homePage = new HomePage(page);
             const productListingPage = new ProductListingPage(page);
