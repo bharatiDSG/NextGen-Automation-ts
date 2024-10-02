@@ -66,7 +66,6 @@ test.describe('PLP Pagination Tests', () => {
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      //await page.waitForTimeout(20000);
       await page.waitForLoadState('domcontentloaded');
       await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
@@ -76,7 +75,8 @@ test.describe('PLP Pagination Tests', () => {
       console.log('Left arrow is visible');
       await productListingPage.rightChevronNextButtonAngular.first().click();
       console.log('Clicked on left arrow');
-      await page.waitForTimeout(20000);
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const firstPageCountAfterClickingLeftArrow = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(firstPageCountAfterClickingLeftArrow);
       console.log('Left arrow is working as expected');
@@ -93,7 +93,6 @@ test.describe('PLP Pagination Tests', () => {
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      //await page.waitForTimeout(20000);
       await page.waitForLoadState('domcontentloaded');
       await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
