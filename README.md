@@ -79,6 +79,8 @@ This will run the same tests on the public lands prod site.
 * Link to ESLint Playwright Plugin: https://github.com/playwright-community/eslint-plugin-playwright
 * Link to ESLint Stylistic Plugin: https://eslint.style/guide/getting-started
 
+* Bonus: You can install the ESLint extension in VSCode and it will show you errors and warning in real time!
+
 ## Formatting:
 
 * Use the VSCode built in formatter prior to committing and pushing code
@@ -101,7 +103,9 @@ This will run the same tests on the public lands prod site.
 ## Waits:
 
 * No Sleeps - unless absolutely necessary
+    * If a sleep is necessary, add a comment to the code describing the reason
 * No page.waitForTimeout()
+    * If a waitForTimeout() is necessary, add a comment to the code describing the reason
 * Use Locator actions and web assertions that wait automatically
     * Example which waits for the last product to load in PLP: await productListingPage.productNames.last().waitFor();
 * May also try using:
@@ -109,6 +113,14 @@ This will run the same tests on the public lands prod site.
     * page.waitForLoadState('load');
 * Last resort but use sparingly because it slows down tests substantially:
     * page.waitForLoadState(’networkidle)
+
+## Assertions:
+
+* Expect library is preferred
+* https://playwright.dev/docs/test-assertions
+* Example: 
+    * Use this: await expect(this.forgotPasswordHeader).toBeVisible();
+    * Not this: await this.forgotPasswordHeader.isVisible();
 
 ## Try/Catch:
 
@@ -131,13 +143,25 @@ In this example, the linter does not like using ‘let’ instead of ‘const’
 
 <img src="images/eslintDisableLine.png" alt="text" width="800"/>
 
-## Tagging and Filename conventions
+## Tagging, filename conventions, and yml files
 
-*With PLP as an example below, provide similar tagging and filenaming conventions within your .ts files
+With PLP as an example below, provide similar tagging and filenaming conventions within your .ts files
 
-Sample Tags:  @PLP, @Smoke, @Regression, Env(@Prod, @Preview, @np0, @All), Brand(@DSG, @GG, @All)
+Sample Tags:  @PLP, @Smoke, @Regression, Env(@Prod, @Preview, @np0Prod, @All), Brand(@DSG, @GG, @All)
 Spec Files :
-PLP_QuickView
-PLP_Search
-PLP_Favorites
-PLP_Smoke
+* PLP_QuickView
+* PLP_Search
+* PLP_Favorites
+* PLP_Smoke
+
+Github actions with workflow yml files is how we will organize and run tests. Using PLP as an example we will organize tests by functional area (ex: PLP), then environment and brand. Yml organization example - 
+
+PLP - 
+    * NP0 Prod DSG PLP
+    * NP0 Prod GG PLP
+    * Prod DSG PLP
+    * Prod GG PLP
+    * Preview DSG PLP
+    * Preview GG PLP
+    * PLP Smoke test
+    * PLP Regression

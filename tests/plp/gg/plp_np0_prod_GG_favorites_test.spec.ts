@@ -29,7 +29,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForTimeout(20000);
       await commonPage.handlePromotionalPopup();
       if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
@@ -77,7 +76,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForTimeout(20000);
       await commonPage.handlePromotionalPopup();
       if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
@@ -151,7 +149,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForTimeout(20000);
       await commonPage.handlePromotionalPopup();
       if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
@@ -313,7 +310,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForTimeout(20000);
       await commonPage.handlePromotionalPopup();
       if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();

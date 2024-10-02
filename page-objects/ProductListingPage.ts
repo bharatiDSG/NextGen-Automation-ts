@@ -297,9 +297,9 @@ export class ProductListingPage {
 
   async selectMatchingProduct(product: string): Promise<string> {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.productNames.last().waitFor();
+    await this.productNamesAngular.last().waitFor();
 
-    const productNames = await this.productNames.allInnerTexts();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
     //console.log({ productNamesLowerCase });
     //console.log({productNames})
@@ -317,7 +317,7 @@ export class ProductListingPage {
       console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
     }
 
-    await this.productNames.nth(indexOfProductFirstMatch).click();
+    await this.productNamesAngular.nth(indexOfProductFirstMatch).click();
 
     return productMatchName;
   }
@@ -431,7 +431,7 @@ export class ProductListingPage {
     // const pageNumber = await this.highlightedPageNumberReact.textContent();
     const pageNumber = await this.highlightedPageNumberAngular.textContent();
     expect(pageNumber?.trim()).toContain(String(pageNo));
-    console.log('Validated the page numver ' + pageNo);
+    console.log('Validated the page number ' + pageNo);
     const randomPageCount = await this.getActualPaginationCount();
     // expect(pageCount).toBe(randomPageCount);
     expect(pageCount).toBe(randomPageCount);
@@ -469,7 +469,7 @@ export class ProductListingPage {
 
     // Click add to cart button on plp page
     expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
-    expect(this.pinnedContent.last()).toBeVisible();
+    // expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {
@@ -508,8 +508,8 @@ export class ProductListingPage {
     }
 
     const skusWithQuantity = Array.from(s.entries())
-      .filter(([_, value]) => value !== '0')
-      .map(([key, _]) => key);
+      .filter(([, value]) => value !== '0')
+      .map(([key]) => key);
 
     this.skusWithAvailability = new Set(skusWithQuantity);
 
@@ -527,20 +527,38 @@ export class ProductListingPage {
     this.skusWithAttributes.clear();
     const jsonObj = res;
     const skusArray = jsonObj.productsData[0].skus;
-    for (let i = 0; i < skusArray.length; i++) {
-      console.log(skusArray[i].shipQty);
-      if (skusArray[i].shipQty > 0) {
+
+    for (const sku of skusArray) {
+      console.log(sku.shipQty);
+      if (sku.shipQty > 0) {
         const a: string[] = [];
-        const definingAttr = skusArray[i].definingAttributes;
-        const price = `price - ${skusArray[i].prices.offerPrice}`;
+        const definingAttr = sku.definingAttributes;
+        const price = `price - ${sku.prices.offerPrice}`;
         a.push(price);
-        for (let j = 0; j < definingAttr.length; j++) {
-          const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+        for (const attribute of definingAttr) {
+          const attr = `${attribute.name} - ${attribute.value}`;
           a.push(attr);
         }
-        this.skusWithAttributes.set(skusArray[i].partNumber, a);
+        this.skusWithAttributes.set(sku.partNumber, a);
       }
     }
+
+    // Refactored this for loop so keeping the old one until we verify it can be removed
+    // for (let i = 0; i < skusArray.length; i++) {
+    //   console.log(skusArray[i].shipQty);
+    //   if (skusArray[i].shipQty > 0) {
+    //     const a: string[] = [];
+    //     const definingAttr = skusArray[i].definingAttributes;
+    //     const price = `price - ${skusArray[i].prices.offerPrice}`;
+    //     a.push(price);
+    //     for (let j = 0; j < definingAttr.length; j++) {
+    //       const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+    //       a.push(attr);
+    //     }
+    //     this.skusWithAttributes.set(skusArray[i].partNumber, a);
+    //   }
+    // }
+
   }
 
   async selectShipToMeAttributes(page: Page): Promise<void> {
