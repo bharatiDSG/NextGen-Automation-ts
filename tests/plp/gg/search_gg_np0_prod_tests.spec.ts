@@ -209,7 +209,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
             });
 
             await test.step('Select a product', async () => {
-                await productListingPage.selectMatchingProduct('shoes');
+                await productListingPage.selectMatchingProduct('air');
             });
 
             await test.step('Verify PDP Page', async () => {
