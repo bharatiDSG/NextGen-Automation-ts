@@ -7,6 +7,17 @@ import { CommonPage } from '../../../page-objects/CommonPage.ts';
 import { AccountSignInPage } from '../../../page-objects/AccountSignInPage.ts';
 
 test.describe('PLP/SRLP GG Favorites Tests', () => {
+  
+  test.beforeEach(async ({ page, context }) => {
+    const commonPage = new CommonPage(page);
+
+    // grant permission for location
+    await context.grantPermissions(['geolocation'], { origin: getBaseUrl() });
+    console.log('geolocation granted for: ' + getBaseUrl());
+
+    // handle iframe popup  
+    commonPage.handleIframePopupSignUpViaTextForOffers();
+  });
 
   test('01. PLP Favorites_Non SignedIn user', async ({ page }) => {
 
