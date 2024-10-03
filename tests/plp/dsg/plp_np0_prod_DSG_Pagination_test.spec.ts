@@ -147,6 +147,7 @@ test.describe('PLP Pagination Tests', () => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to click on the ProTips link');
     await productListingPage.linkProTips.nth(1).click();
+    await page.waitForLoadState('domcontentloaded');
     const newPageUrl = page.url();
     expect(newPageUrl).toContain('protip');
     console.log('ProTips page opened');
