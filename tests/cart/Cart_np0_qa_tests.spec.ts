@@ -176,7 +176,7 @@ test.describe('E2E NP0 QA', () => {
 
     });
 
-    test.only('4: Cart quantity functionality STH', { tag: '@regression' }, async ({ page }) => {
+    test('4: Cart quantity functionality STH', { tag: '@regression' }, async ({ page }) => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
@@ -209,7 +209,6 @@ test.describe('E2E NP0 QA', () => {
         await cartPage.updateProductQuantity(1, '100');
         console.log('Vquantity updated to 100');
         await page.waitForLoadState('domcontentloaded');
-        await commonPage.sleep(5);
         await cartPage.verifyProductQuantity(1, '99');
         const alertMessage1 = await cartPage.cartAlertMessage.nth(0).innerText();
         expect(alertMessage1.trim()).toContain('unavailable. We have updated the quantity to the maximum available.');

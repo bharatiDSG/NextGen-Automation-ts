@@ -214,7 +214,7 @@ export class CartPage {
     // Fetch the value attribute of the input field
     const quantityValue = await this.cartProductQuantity.nth(lineItem - 1).inputValue();
     // Assert the quantity is as expected
-    expect(quantityValue.trim()).toBe(String(expectedQuantity));
+    await expect( this.cartProductQuantity.nth(lineItem - 1)).toHaveValue(expectedQuantity);
   }
 
 
