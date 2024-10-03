@@ -211,8 +211,6 @@ export class CartPage {
 
 
   async verifyProductQuantity(lineItem: number, expectedQuantity: string): Promise<void> {
-    // Fetch the value attribute of the input field
-    const quantityValue = await this.cartProductQuantity.nth(lineItem - 1).inputValue();
     // Assert the quantity is as expected
     await expect( this.cartProductQuantity.nth(lineItem - 1)).toHaveValue(expectedQuantity);
   }

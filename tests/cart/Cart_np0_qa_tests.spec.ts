@@ -23,7 +23,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
         // Search for product
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart product details');
@@ -63,8 +62,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart pricing  details');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
@@ -138,8 +135,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart fulfillment choice details');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
@@ -180,8 +175,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         // Search for product
         await test.step('Search with product SKU number', async () => {
             console.log('Validating cart quantity functionality');
@@ -229,9 +222,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
-
         await test.step('Search with product SKU number', async () => {
             console.log('Cart quantity validation for store pick up');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
@@ -292,7 +282,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
         await test.step('Search with product SKU number', async () => {
         console.log('Validating Paypal payment');
         await homePage.searchForProduct(testData_e2e_np0_qa.sku);
@@ -325,9 +314,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validating mixed order in cart page');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku);
@@ -385,8 +371,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validating gift card and score card');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
@@ -425,8 +409,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validating empty cart functionality');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
@@ -459,8 +441,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-        
         await test.step('Search with product SKU number', async () => {
             console.log('Validating gift and score card for guest user');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
@@ -497,8 +477,6 @@ test.describe('E2E NP0 QA', () => {
         const homePage = new HomePage(page);
         const productDisplayPage = new ProductDisplayPage(page);
         const cartPage = new CartPage(page);
-        const commonPage = new CommonPage(page);
-
         await test.step('Search with product SKU number', async () => {
             console.log('Validate save later functionality');
             await homePage.searchForProduct(testData_e2e_np0_qa.sku2);
