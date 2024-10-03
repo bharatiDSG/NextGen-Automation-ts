@@ -160,15 +160,15 @@ test.describe('PLP Pagination Tests', () => {
     const brandName1 = await productListingPage.brandAccordionFilterLabelsAngular.nth(0).textContent();
     console.log('The brand selected is: '+brandName1);
     const brandNameTrimmed1 = brandName1?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed1, 0);
+    await productListingPage.validateBrandFilter(0);
     const brandName2 = await productListingPage.brandAccordionFilterLabelsAngular.nth(1).textContent();
     console.log('The brand selected is: '+brandName2);
     const brandNameTrimmed2 = brandName2?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed2, 1);
+    await productListingPage.validateBrandFilter(1);
     const brandName3 = await productListingPage.brandAccordionFilterLabelsAngular.nth(2).textContent();
     console.log('The brand selected is: '+brandName3);
     const brandNameTrimmed3 = brandName3?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed3, 2);
+    await productListingPage.validateBrandFilter(2);
     console.log('Validation successful');
   });
 

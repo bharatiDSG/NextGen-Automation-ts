@@ -422,7 +422,7 @@ export class ProductListingPage {
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
   }
 
-  async validateRandomPage(pageCount: string, pageNo: number) {
+  async validateRandomPage(pageCount: number, pageNo: number) {
     await this.pageItemsAngular.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
     await this.page.waitForTimeout(2000);
@@ -798,7 +798,7 @@ export class ProductListingPage {
     }
   }
 
-  async validateBrandFilter(brand:string, index:number) {
+  async validateBrandFilter(index:number) {
     await this.page.waitForLoadState('domcontentloaded');
     await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
     await this.page.waitForLoadState('domcontentloaded');
