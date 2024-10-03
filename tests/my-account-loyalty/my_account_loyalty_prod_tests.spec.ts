@@ -25,7 +25,29 @@ test.describe('My Account Loyalty Prod Tests', () => {
 
     });
 
-    test('01: validate the account summary tab headers', async ({ page }) => {
+    test.only('01: validate the account summary tab headers', async ({ page }) => {
+        const accountSignInPage = new AccountSignInPage(page);
+        const homePage = new HomePage(page);
+
+        // Click the My Account link.
+        await test.step('Click my account link', async () => {
+            await homePage.myAccountLink.click();
+    
+        });
+
+        // Sign In
+        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+            await accountSignInPage.signIn('dcsgorgs+5@gmail.com', '345CourtStreet!');
+        });
+
+        await test.step('Verify recent order and score more rewards headers', async () => {
+            await expect(accountSignInPage.recentOrderText).toBeVisible();
+            await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
+            await page.pause()
+            
+        });
+    });
+    test('02: validate the account summary tab headers firstname lastname', async ({ page }) => {
         const accountSignInPage = new AccountSignInPage(page);
         const homePage = new HomePage(page);
 
@@ -40,13 +62,21 @@ test.describe('My Account Loyalty Prod Tests', () => {
         });
 
 
-        await test.step('Verify recent order and score more rewards headers', async () => {
-            await expect(accountSignInPage.recentOrderText).toBeVisible();
-            await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
-            //await page.pause()
+        await test.step('Verify fistname and lastname headers', async () => {
+            await expect(accountSignInPage.hiUserNameText).toContainText('Hi, ');
+            //await expect(accountSignInPage.recentOrderText).toBeVisible();
+            //await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
+            await page.pause()
             
+//getByText('Hi, garence!')
+//"//span[contains(@class,'user-name')]
+
+
+
         });
 
 
     });
+
+
 });
