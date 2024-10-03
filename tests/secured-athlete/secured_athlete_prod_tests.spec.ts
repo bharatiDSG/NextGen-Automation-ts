@@ -51,6 +51,7 @@ test.describe('Secured Athlete Prod Tests', () => {
         await test.step('Click Forgot password', async () => {
             dateSent = new Date();
             await accountSignInPage.forgotPassword(resetEmail);
+            // Sleep is discouraged but needed here to wait for the email to be sent to mailosaur
             await commonPage.sleep(5);
         });
         // get password reset link

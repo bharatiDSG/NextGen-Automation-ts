@@ -32,7 +32,7 @@ jobs:
       - name: np0 DSG PLP Regression Playwright Tests
         run: |
           echo "np0 DSG PLP Regression Playwright Tests"
-          npx playwright test --grep @PLP --grep @np0
+          npx playwright test --grep '(?=.*@PLP)(?=.*@np0Prod)(?=.*@DSG)'
         env:
             ENV: dsg_prod
 
@@ -52,3 +52,12 @@ jobs:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
           title: "{title: `** ALERT ** Failure in DSG PLP Regression Playwright Tests`}"
+
+                #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+      # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()
