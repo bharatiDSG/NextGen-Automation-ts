@@ -258,7 +258,7 @@ export class ProductDisplayPage {
     expect(availabilityStatus?.trim()).toBe(String(expectedStatus));
   }
 
-  async selectStorePickup(): Promise<void> {
+  async selectStorePickup(status:any): Promise<void> {
     await this.storePickup.click();
     // Fetch the text of the input field
     //const avlblStatus = await this.productAvailabilitystorePickup.textContent();
