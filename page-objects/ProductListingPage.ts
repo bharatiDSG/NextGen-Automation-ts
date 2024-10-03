@@ -334,7 +334,7 @@ export class ProductListingPage {
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
     const styleCount = await plpProductStyle.count();
-    console.log("The minimum product style variation in plp page: " + styleCount);
+    console.log('The minimum product style variation in plp page: ' + styleCount);
     for (let i = 0; i < styleCount; i++) {
       const style = plpProductStyle.nth(i);
       await expect(style).toBeVisible();
@@ -422,7 +422,7 @@ export class ProductListingPage {
     await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
   }
 
-  async validateRandomPage(pageCount: any, pageNo: any) {
+  async validateRandomPage(pageCount: string, pageNo: number) {
     await this.pageItemsAngular.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
     await this.page.waitForTimeout(2000);
@@ -704,19 +704,19 @@ export class ProductListingPage {
     await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
     await expect(this.loadingOverlay).toHaveCount(0);
   }
-  async validateResultsPerPage(pageNo: any) {
-    let commonPage = new CommonPage(this.page)
+  async validateResultsPerPage(pageNo: number) {
+    const commonPage = new CommonPage(this.page);
     await this.pageItemsAngular.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
     const count = await this.resultPerPageAngular.count();
-    console.log("The result per page count is: " + count);
+    console.log('The result per page count is: ' + count);
     for (let i = 0; i < count; i++) {
       await expect(this.resultPerPageAngular.nth(i)).toBeVisible();
       await this.resultPerPageAngular.nth(i).click();
       await commonPage.sleep(10);
       const allItems = this.resultPerPageAngular.nth(i);
       const allItemText = await allItems.textContent();
-      console.log("Result per page text is: " + allItemText);
+      console.log('Result per page text is: ' + allItemText);
       const pageCount = await this.getActualPaginationCount();
       expect(allItemText?.trim()).toContain(String(pageCount));
       // await expect(allItems).toHaveAttribute('class', /active/);
@@ -724,20 +724,20 @@ export class ProductListingPage {
       console.log('Results per page is: ' + pageCount);
     }
   }
-  async selectSortCategory(category: string, pageCount: any) {
-    console.log("the expected categoty provided: " + category);
+  async selectSortCategory(category: string, pageCount: number) {
+    console.log('the expected categoty provided: ' + category);
+    console.log('The page count is: '+pageCount);
     // await this.sortOptionsAccordionButtonReact.click();
     await this.sortOptionsAccordionButtonAngular.first().click({ force: true });
     console.log('Validating sort category: ' + category);
     // const count = await this.sortOptionsSelectionReact.count();
     const count = await this.sortOptionsSelectionAngular.count();
-    let commonPage = new CommonPage(this.page);
     console.log('Total sort options are :' + count);
     for (let i = 0; i < count; i++) {
       // const options = this.sortOptionsSelectionReact.nth(i);
       const options = this.sortOptionsSelectionAngular.nth(i);
       const option = await options.textContent();
-      console.log("Current option is: " + option)
+      console.log('Current option is: ' + option);
       if (option?.trim() === category) {
         console.log('Sort option matched');
         // const categoryEle = this.page.getByText(option);
@@ -765,7 +765,7 @@ export class ProductListingPage {
 
   }
   async validateProductCategoryWithMarketingContent() {
-    const elements = this.navListItems
+    const elements = this.navListItems;
     const count = await elements.count();
     console.log(`The total category is:` + count);
     // for (let i = 0; i < count; i++) {
@@ -783,7 +783,7 @@ export class ProductListingPage {
     // }
   }
   async validateMarketingContent() {
-    const elements = this.marketingContent
+    const elements = this.marketingContent;
     const count = await elements.count();
     console.log(`The total marketing content is:` + count);
     for (let i = 0; i < count; i++) {
@@ -798,18 +798,17 @@ export class ProductListingPage {
     }
   }
 
-  async validateBrandFilter(brand:any, index:any) {
-    const commonPage = new CommonPage(this.page);
+  async validateBrandFilter(brand:string, index:number) {
     await this.page.waitForLoadState('domcontentloaded');
     await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
     await this.page.waitForLoadState('domcontentloaded');
     await this.totalItemCardsAngular.last().waitFor();
     const filterValueExpected = await this.brandAccordionFilterResultsAngular.nth(index).textContent();
-    console.log("The expected filter value is: "+filterValueExpected);
+    console.log('The expected filter value is: '+filterValueExpected);
     const paginationValueActual = await this.filterPaginationResults.first().textContent();
-    console.log("The actual filter value is: "+paginationValueActual);
+    console.log('The actual filter value is: '+paginationValueActual);
     expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
-    console.log("Filter results are matching");
+    console.log('Filter results are matching');
     await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
     await this.page.waitForLoadState('domcontentloaded');
     await this.totalItemCardsAngular.last().waitFor();
