@@ -7,7 +7,7 @@ import { CommonPage } from '../../../page-objects/CommonPage.ts';
 import { AccountSignInPage } from '../../../page-objects/AccountSignInPage.ts';
 
 test.describe('PLP/SRLP GG Favorites Tests', () => {
-
+  
   test.beforeEach(async ({ page, context }) => {
     const commonPage = new CommonPage(page);
 
@@ -40,9 +40,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForLoadState('load');
-
-      if (await productListingPage.productNamesAngular.last().isVisible()) {
+      await commonPage.handlePromotionalPopup();
+      if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
         console.log('Product name - ' + loweredProductName);
         expect(loweredProductName).toContain(testData_smokePLP_prod.productMatch1);
@@ -88,9 +87,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForLoadState('load');
-
-      if (await productListingPage.productNamesAngular.last().isVisible()) {
+      await commonPage.handlePromotionalPopup();
+      if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
         console.log('Product name - ' + loweredProductName);
         expect(loweredProductName).toContain(testData_smokePLP_prod.productMatch1);
@@ -162,9 +160,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForLoadState('load');
-
-      if (await productListingPage.productNamesAngular.last().isVisible()) {
+      await commonPage.handlePromotionalPopup();
+      if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
         console.log('Product name - ' + loweredProductName);
         expect(loweredProductName).toContain(testData_smokePLP_prod.productMatch1);
@@ -175,7 +172,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
       }
       console.log('Product search completed');
     });
-
     await test.step('Select fevorite item', async () => {
       console.log('Trying to add the favorites for non signed In user');
       await productListingPage.favorites.nth(index).click();
@@ -325,9 +321,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
     });
 
     await test.step('And we see product card descriptions contain "polo"', async () => {
-      await page.waitForLoadState('load');
-
-      if (await productListingPage.productNamesAngular.last().isVisible()) {
+      await commonPage.handlePromotionalPopup();
+      if (await productListingPage.productNamesAngular.first().isVisible()) {
         const loweredProductName = (await productListingPage.productNamesAngular.first().allInnerTexts()).toString().toLowerCase();
         console.log('Product name - ' + loweredProductName);
         expect(loweredProductName).toContain(testData_smokePLP_prod.productMatch2);
@@ -338,7 +333,6 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
       }
       console.log('Product search completed');
     });
-
     await test.step('Select fevorite item', async () => {
       console.log('Trying to add the favorites for non signed In user');
       await productListingPage.favorites.nth(index).click();
@@ -349,6 +343,8 @@ test.describe('PLP/SRLP GG Favorites Tests', () => {
       console.log('User gets the SignIn window');
       await myAccount.accountSignInModern(testData_smokePLP_prod.registeredUser3, testData_smokePLP_prod.registeredUserPassword);
       console.log('SignIN successful');
+
+
 
     });
 
