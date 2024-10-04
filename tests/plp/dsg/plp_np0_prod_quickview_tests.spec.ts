@@ -23,7 +23,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('1: Validate Add to Cart is available on majority of Product Cards',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
@@ -56,7 +56,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('2: Validate Add to Cart is not visible on custom products',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
@@ -76,7 +76,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
         // And we Validate Add to Cart is not visible on custom products
         await test.step('Validate Add to Cart is not visible on custom products', async () => {
           await page.waitForLoadState('networkidle');
-          if(await productListingPage.quickviewOpenATCButtonAngular.isVisible()){
+          if(await productListingPage.quickviewOpenATCButtonAngular.first().isVisible()){
               const ATCbuttonCountAngular = await(productListingPage.quickviewOpenATCButtonAngular.count());
               console.log('ATC button count Angular = ' + ATCbuttonCountAngular);
               expect(ATCbuttonCountAngular).toBe(0);
@@ -89,7 +89,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('3: Validate Add to Cart is not visible on personalized products',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
@@ -121,14 +121,18 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('4: Validate Quickview - Product name, image carousel',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          if(getBaseUrl().includes('dickssportinggoods')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          } else if(getBaseUrl().includes('golfgalaxy')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/golf-shirts-for-men');
+          }
         console.log('URL: ' + getBaseUrl());
         });
 
@@ -172,14 +176,18 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('5: Select different fulfillment options - Ship',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          if(getBaseUrl().includes('dickssportinggoods')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          } else if(getBaseUrl().includes('golfgalaxy')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/golf-shirts-for-men');
+          }
         console.log('URL: ' + getBaseUrl());
         });
 
@@ -207,14 +215,18 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('6: Select different fulfillment options - Store',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
         const homePage = new HomePage(page);
         const productListingPage = new ProductListingPage(page);
 
         // Given we are on "/f/mens-polo-shirts" page
         await test.step('Given we are on "/f/mens-polo-shirts" page', async () => {
-        await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          if(getBaseUrl().includes('dickssportinggoods')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/mens-polo-shirts');
+          } else if(getBaseUrl().includes('golfgalaxy')){
+            await homePage.goToHomePage(getBaseUrl() + '/f/golf-shirts-for-men');
+          }
         console.log('URL: ' + getBaseUrl());
         });
 
@@ -243,6 +255,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
       });
   });
 
+    // Same Day Delivery functionality does not currently exist on GG
     test('7: Select different fulfillment options - Same Day Delivery',
       { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
       async ({ page }) => {
@@ -269,7 +282,7 @@ test.describe('PLP/SRLP DSG Smoke Tests', () => {
     });
 
     test('8: Quickview Add to Cart - SRLP - Ship to me',
-      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG'] },
+      { tag: ['@PLP',  '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG'] },
       async ({ page }) => {
       const homePage = new HomePage(page);
       const productListingPage = new ProductListingPage(page);
