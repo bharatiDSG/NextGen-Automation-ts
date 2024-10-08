@@ -6,7 +6,7 @@ import { getBaseUrl } from '../../../globalSetup.ts';
 import { testData_smokePLP_prod } from '../../../test-data/smokePLPProdTestData.js';
 import { CommonPage } from '../../../page-objects/CommonPage.ts';
 
-test.describe('PLP DSG Pagination Tests', () => {
+test.describe('PLP Pagination Tests', () => {
 
   test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
@@ -43,12 +43,13 @@ test.describe('PLP DSG Pagination Tests', () => {
 
     await test.step('Validating the next arrow', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      // await page.waitForTimeout(20000);
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -60,19 +61,22 @@ test.describe('PLP DSG Pagination Tests', () => {
 
     await test.step('Validating the back arrow', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
-      // await page.waitForTimeout(20000);
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
-      await expect(productListingPage.rightChevronNextButtonReact.first()).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular.first()).toBeVisible();
       console.log('Left arrow is visible');
-      await productListingPage.rightChevronNextButtonReact.first().click();
+      await productListingPage.rightChevronNextButtonAngular.first().click();
       console.log('Clicked on left arrow');
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const firstPageCountAfterClickingLeftArrow = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(firstPageCountAfterClickingLeftArrow);
       console.log('Left arrow is working as expected');
@@ -82,14 +86,15 @@ test.describe('PLP DSG Pagination Tests', () => {
   });
 
   test('03. Pagination_Validating page numbers', async ({ page }) => {
-
     await test.step('Validating any random page number', async () => {
       const productListingPage = new ProductListingPage(page);
-      await expect(productListingPage.rightChevronNextButtonReact).toBeVisible();
+      await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
       const firstPageCount = await productListingPage.getActualPaginationCount();
-      await productListingPage.rightChevronNextButtonReact.click();
+      await productListingPage.rightChevronNextButtonAngular.click();
       console.log('Clicked on the right arrow');
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const secondPageCount = await productListingPage.getActualPaginationCount();
       expect(firstPageCount).toBe(secondPageCount);
       console.log('Page count matched between pages');
@@ -142,11 +147,41 @@ test.describe('PLP DSG Pagination Tests', () => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to click on the ProTips link');
     await productListingPage.linkProTips.nth(1).click();
+    await page.waitForLoadState('domcontentloaded');
     const newPageUrl = page.url();
     expect(newPageUrl).toContain('protip');
     console.log('ProTips page opened');
     console.log('Validation successful');
   });
+
+  test('07. Validating Brand filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the brand filter is working as expected');
+    const brandName1 = await productListingPage.brandAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The brand selected is: '+brandName1);
+    await productListingPage.validateBrandFilter(0);
+    const brandName2 = await productListingPage.brandAccordionFilterLabelsAngular.nth(1).textContent();
+    console.log('The brand selected is: '+brandName2);
+    await productListingPage.validateBrandFilter(1);
+    const brandName3 = await productListingPage.brandAccordionFilterLabelsAngular.nth(2).textContent();
+    console.log('The brand selected is: '+brandName3);
+    await productListingPage.validateBrandFilter(2);
+    console.log('Validation successful');
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
 
