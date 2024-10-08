@@ -345,17 +345,23 @@ export class ProductListingPage {
     await this.productNamesAngular.last().waitFor();
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNamesAngular.nth(Math.floor(Math.random() * productNames.length)).click();
+    await this.productNamesAngular.nth(await this.getRandomNumber(productNames.length)).click();
 
 
   }
+  
   async selectAProductWithInGivenRange(withInRange: number) {
     await this.productNamesAngular.last().waitFor();
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
+    await this.productNamesAngular.nth(await this.getRandomNumber(withInRange)).click();
 
 
+  }
+  async getRandomNumber(maxRange: number): Promise<number> {
+    const buf = new Uint8Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0]%maxRange;
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
@@ -406,24 +412,24 @@ export class ProductListingPage {
     this.skusWithAttributes.clear();
     const jsonObj = res;
     const skusArray = jsonObj.productsData[0].skus;
-    for (let i = 0; i < skusArray.length; i++) {
-      console.log(skusArray[i].shipQty);
-      if (skusArray[i].shipQty > 0) {
+    for (const element of skusArray) {
+      console.log(element.shipQty);
+      if (element.shipQty > 0) {
         const a: string[] = [];
-        const definingAttr = skusArray[i].definingAttributes;
-        const price = `price - ${skusArray[i].prices.offerPrice}`;
+        const definingAttr = element.definingAttributes;
+        const price = `price - ${element.prices.offerPrice}`;
         a.push(price);
-        for (let j = 0; j < definingAttr.length; j++) {
-          const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
+        for (const element of definingAttr) {
+          const attr = `${element.name} - ${element.value}`;
           a.push(attr);
         }
-        this.skusWithAttributes.set(skusArray[i].partNumber, a);
+        this.skusWithAttributes.set(element.partNumber, a);
       }
     }
   }
 
   async selectShipToMeAttributes(page: Page): Promise<void> {
-    console.log('Skus with attributes - ' + this.skusWithAttributes);
+    console.log(`Skus with attributes - ${this.skusWithAttributes}`);
     if (this.skusWithAttributes.size > 0) {
       const keysAsArray = Array.from(this.skusWithAttributes.keys());
       const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
@@ -477,7 +483,6 @@ export class ProductListingPage {
         }
       }
     } else {
-      //throw new Error('This product is not eligible for Ship To Me');
       console.info('This product is not eligible for Ship To Me');
     }
   }
@@ -485,19 +490,19 @@ export class ProductListingPage {
   async applyShipFilter(): Promise<void> {
     await expect(this.shipFilterButtonAngular).toBeVisible();
     await this.shipFilterButtonAngular.first().click();
-    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
+    await expect(this.filterChipsAngular.first()).toContainText(/.* Ship .*/);
   }
   async applyPickupFilter(): Promise<void> {
     await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
     await this.pickupFilterButtonAngular.first().click();
-    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+    await expect(this.filterChipsAngular.first()).toContainText(/.*Pickup atRobinson.*/);
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
   async applySameDayDeliveryFilter(): Promise<void> {
     await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
     await this.sameDayDeliveryFilter.first().click();
-    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(/.*Same Day Delivery to.*/);
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 }
