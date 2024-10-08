@@ -4,7 +4,6 @@ import { AccountSignInPage } from '../../page-objects/AccountSignInPage';
 import { CommonPage } from '../../page-objects/CommonPage';
 import { HomePage } from '../../page-objects/HomePage';
 import { getBaseUrl } from '../../globalSetup';
-import { testData_DSG_PL_GG } from '../../test-data/securedAthleteTestData';
 
 test.describe('My Account Loyalty Prod Tests', () => {
     test.beforeEach(async ({ page, context }) => {
@@ -25,58 +24,56 @@ test.describe('My Account Loyalty Prod Tests', () => {
 
     });
 
-    test.only('01: validate the account summary tab headers', async ({ page }) => {
-        const accountSignInPage = new AccountSignInPage(page);
-        const homePage = new HomePage(page);
+    test('01: validate the account summary tab headers',
+        { tag: ['@MyAccount', '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG', '@PL'] },
+        async ({ page }) => {
+            const accountSignInPage = new AccountSignInPage(page);
+            const homePage = new HomePage(page);
 
-        // Click the My Account link.
-        await test.step('Click my account link', async () => {
-            await homePage.myAccountLink.click();
-    
+            // Click the My Account link.
+            await test.step('Click my account link', async () => {
+                await homePage.myAccountLink.click();
+
+            });
+
+            // Sign In
+            await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+                await accountSignInPage.signIn('dcsgorgs+5@gmail.com', '345CourtStreet!');
+            });
+
+            await test.step('Verify recent order and score more rewards headers', async () => {
+                await expect(accountSignInPage.recentOrderText).toBeVisible();
+                await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
+
+            });
         });
+    test('02: validate the account summary tab headers firstname lastname',
+        { tag: ['@MyAccount', '@Prod', '@Preview', '@np0Prod', '@DSG', '@GG', '@PL'] },
+        async ({ page }) => {
+            const accountSignInPage = new AccountSignInPage(page);
+            const homePage = new HomePage(page);
 
-        // Sign In
-        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
-            await accountSignInPage.signIn('dcsgorgs+5@gmail.com', '345CourtStreet!');
-        });
+            // Click the My Account link.
+            await test.step('Click my account link', async () => {
+                await homePage.myAccountLink.click();
+            });
 
-        await test.step('Verify recent order and score more rewards headers', async () => {
-            await expect(accountSignInPage.recentOrderText).toBeVisible();
-            await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
-            await page.pause()
-            
-        });
-    });
-    test('02: validate the account summary tab headers firstname lastname', async ({ page }) => {
-        const accountSignInPage = new AccountSignInPage(page);
-        const homePage = new HomePage(page);
-
-        // Click the My Account link.
-        await test.step('Click my account link', async () => {
-            await homePage.myAccountLink.click();
-        });
-
-        // Sign In
-        await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
-            await accountSignInPage.signIn('dcsgorgs+5@gmail.com', '345CourtStreet!');
-        });
+            // Sign In
+            await test.step('Sign in With valid credentails and verify the sign in is successful or not', async () => {
+                await accountSignInPage.signIn('dcsgorgs+5@gmail.com', '345CourtStreet!');
+            });
 
 
-        await test.step('Verify fistname and lastname headers', async () => {
-            await expect(accountSignInPage.hiUserNameText).toContainText('Hi, ');
-            //await expect(accountSignInPage.recentOrderText).toBeVisible();
-            //await expect(accountSignInPage.scoreMoreRewardsText).toBeVisible();
-            await page.pause()
-            
-//getByText('Hi, garence!')
-//"//span[contains(@class,'user-name')]
+            await test.step('Verify fistname and lastname headers', async () => {
+                await expect(accountSignInPage.hiUserNameText).toContainText('Hi, ');
 
+
+
+
+            });
 
 
         });
-
-
-    });
 
 
 });
