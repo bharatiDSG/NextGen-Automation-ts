@@ -117,19 +117,19 @@ export class CheckoutPage {
         this.checkoutContinueButton = page.getByRole('button', { name: 'Continue' });
         this.standardFreeShippingRadioButton = page.getByLabel('Standard Shipping – FREE');
 
-        this.contactInfoFirstName = page.locator('[id="contact-first-name"]');
-        this.contactInfoLastName = page.locator('[id="contact-last-name"]');
-        this.contactInfoEmail = page.locator('[id="contact-email"]');
-        this.contactInfoPhoneNumber = page.locator('[id="contact-phone"]');
+        this.contactInfoFirstName = page.locator('[id="homefield-textinput-contact-first-name"]');
+        this.contactInfoLastName = page.locator('[id="homefield-textinput-contact-last-name"]');
+        this.contactInfoEmail = page.locator('[id="homefield-textinput-contact-email"]');
+        this.contactInfoPhoneNumber = page.locator('[id="homefield-textinput-contact-phone"]');
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
         this.changeContactInfo = page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
         this.sameShippingAndBillingCheckbox = page.locator('//homefield-checkbox');
         this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' });
-        this.billingShippingAddress = page.locator('[id="address"]');
-        this.billingShippingAddress2 = page.locator('[id="address2"]');
-        this.billingShippingZipcode = page.locator('[id="zipcode"]');
+        this.billingShippingAddress = page.locator('[id="homefield-textinput-billingaddress"]');
+        this.billingShippingAddress2 = page.locator('[id="homefield-textinput-billingaddress2"]');
+        this.billingShippingZipcode = page.locator('[id="homefield-textinput-billingzipcode"]');
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByLabel('completed').getByRole('img');
         this.changeBillingShippingInfo = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
         this.billingShippingLabel = page.locator("//h2[contains(text(),'Address')]");
