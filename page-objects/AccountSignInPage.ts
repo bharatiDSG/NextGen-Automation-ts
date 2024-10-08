@@ -26,8 +26,8 @@ export class AccountSignInPage {
     private continueWithAppleButton: Locator;
     private continueWithGoogleButton: Locator;
     private passwordError: Locator;
-    private continueButtonModern: Locator;
-    private continueWithoutPasskey: Locator;
+    public continueButtonModern: Locator;
+    public continueWithoutPasskey: Locator;
 
     // Account Page
     private accountUserInfo: Locator;
@@ -72,7 +72,7 @@ export class AccountSignInPage {
     }
 
     async signIn(email: string, password: string): Promise<void> {
-        await this.page.waitForURL('https://sso.dickssportinggoods.com/u/login**');
+        await this.page.waitForURL('**/*.dickssportinggoods.com/u/**');
         await this.page.waitForTimeout(5000);
 
         await expect(this.signInPageHeader).toBeVisible();
@@ -152,8 +152,8 @@ export class AccountSignInPage {
             expect(email.subject).toBe('Reset your password');
 
             // Get the reset link (TODO: use text instead of index in the future)
-            if (email.html && email.html.links && email.html.links[5]) {
-                const passwordResetLink = email.html.links[5].href as string;
+            if (email.html && email.html.links && email.html.links[4]) {
+                const passwordResetLink = email.html.links[4].href as string;
                 console.log('Reset Link: ' + passwordResetLink);
                 return passwordResetLink;
             } else {

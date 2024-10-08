@@ -7,6 +7,7 @@ import { getIndexThatIncludesFirstMatch } from '../lib/functions';
 export class ProductListingPage {
   private page: Page;
   private skusWithAttributes: Map<string, string[]> = new Map<string, string[]>();
+  private skusWithAvailability: Set<string> = new Set<string>();
 
   readonly changeSelectedStoreLink: Locator;
   readonly selectStoreZipField: Locator;
@@ -27,6 +28,7 @@ export class ProductListingPage {
   readonly sizeFilterValueAngular: Locator;
   readonly filterChipsReact: Locator;
   readonly filterChipsAngular: Locator;
+  readonly pinnedContent: Locator;
   readonly productNames: Locator;
   readonly productNamesAngular: Locator;
   readonly productPromotionsReact: Locator;
@@ -90,7 +92,27 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
+  readonly sponsoredItemCardsAngular: Locator;
+  readonly totalItemCardsAngular: Locator;
+  readonly resultPerPageAngular: Locator;
+  readonly pageItemsAngular: Locator;
+  readonly pageTitle: Locator;
+  readonly navListItems: Locator;
+  readonly marketingContent: Locator;
+  readonly linkToFamilyPages: Locator;
+  readonly linkProTips: Locator;
   readonly loadingOverlay: Locator;
+  readonly pageItemsReact: Locator;
+  readonly resultPerPageReact: Locator;
+  readonly totalItemCardsReact: Locator;
+  readonly sponsoredItemCardsReact: Locator;
+  readonly brandAccordionFilterButtonAngular: Locator;
+  readonly brandAccordionFilterCheckboxesAngular: Locator;
+  readonly brandAccordionFilterResultsAngular: Locator;
+  readonly brandAccordionFilterSearchBoxAngular: Locator;
+  readonly filterPaginationResults: Locator;
+  readonly brandAccordionFilterLabelsAngular: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
@@ -114,7 +136,8 @@ export class ProductListingPage {
     this.favorites = page.locator('div.dsg-react-product-card button.plp-add-favorite-button');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
     this.favoritesToastMsg = page.locator('span.toasty-inline-message span');
-    this.myAccount = page.locator('p.account-main-text');
+    // this.myAccount = page.locator('p.account-main-text');
+    this.myAccount = page.locator('button[class*="my-account"]');
     this.myAccountListSection = page.locator('ul.hmf-pl-0.hmf-mb-s li:nth-of-type(4) a');
     this.myAccountListSectionFavorite = page.locator('p.list-card-title');
     this.myAccountListSectionFavoriteProductName = page.locator('a.product-title-link');
@@ -133,9 +156,18 @@ export class ProductListingPage {
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
+
     // product attribute filters
     this.sizeAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-size"]');
     this.sizeAccordionFilterButtonAngular = page.locator('[aria-controls="Size-accordion-panel"]');
+    this.brandAccordionFilterButtonAngular = page.locator('[aria-controls="Brand-accordion-panel"]').first();
+    this.brandAccordionFilterCheckboxesAngular = page.locator('#Brand-accordion-panel label[class *="checkbox"]');
+    this.brandAccordionFilterResultsAngular = page.locator('#Brand-accordion-panel div[class*="single-filter"] div:nth-child(2)');
+    this.brandAccordionFilterLabelsAngular = page.locator('#Brand-accordion-panel  div[class*="single-filter"] label');
+    this.brandAccordionFilterSearchBoxAngular = page.locator('input[placeholder="Search Brands"]');
+    this.filterPaginationResults = page.locator('[class*="top-pagination-product-number"]');
+
+    
     this.saleAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-sale"]');
     this.saleAccordionFilterButtonAngular = page.locator('[aria-controls="Sale-accordion-panel"]');
     this.sizeFilterValueReact = page.getByLabel('L', { exact: true });
@@ -152,25 +184,35 @@ export class ProductListingPage {
     this.productAvailabilityAngular = page.locator('[class="availability hmf-display-flex hmf-flex-wrap hmf-justify-content-between hmf-align-items-center hmf-align-content-center"]');
     this.productPriceReact = page.locator('[class="rs_product_price"]');
     this.productPriceAngular = page.locator('[class="price-text ng-star-inserted"]');
+    this.pinnedContent = page.locator('//plp-srlp-pinned-content');
 
     // pagination and breadcrumbs
+    this.sponsoredItemCardsReact = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
+    this.sponsoredItemCardsAngular = page.locator('div.product-card-wrapper div.sponsored');
+    this.totalItemCardsReact = page.locator('div.dsg-react-product-card');
+    this.totalItemCardsAngular = page.locator('div.product-card-wrapper');
+    this.resultPerPageReact = page.locator('a[class*="rs-page-count"]');
+    this.resultPerPageAngular = page.locator('[class="top-pagination"] button');
     this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
-    this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
+    this.rightChevronNextButtonAngular = page.locator('button[title *= "Page"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
+    this.pageItemsReact = page.locator('a[class*="rs-page-item"]');
+    this.pageItemsAngular = page.locator('button[class*="pagination-number"]');
+    this.pageTitle = page.getByTestId('pageTitle').getByRole('heading');
 
     // sorting options
     this.sortOptionsAccordionButtonReact = page.locator('[class="rs-sort-opn-close-icon"]');
     this.sortOptionsAccordionButtonAngular = page.getByTitle('Select sort option');
-    this.sortOptionsSelectionReact = page.locator('li');
+    this.sortOptionsSelectionReact = page.locator('li[class*="option"] div.rs-sort-by-value-text');
     this.sortOptionsSelectionAngular = page.locator('option');
     this.sortSelectedReact = page.locator('[class="rs-selected-sort-text"]');
     this.sortSelectedAngular = page.locator('[class="ng-star-inserted"]').locator('[selected="true"]');
 
     // quickview
-    this.quickviewOpenATCButtonReact = page.locator('[class="dsg-quickview-button-icon"]');
+    this.quickviewOpenATCButtonReact = page.locator('[alt="ADD TO CART"]');
     this.quickviewOpenATCButtonAngular = page.locator('[id="add-to-cart-button"]');
     this.quickviewColorAttribute = page.getByTitle('Black/Steel');
     this.quickviewColorAttribute2 = page.getByTitle('Black');
@@ -201,8 +243,27 @@ export class ProductListingPage {
     this.breadcrumbSearchTerm = page.getByTestId('searchPageBreadcrumbSearchTerm');
     this.alternateSearchTitle = page.getByTestId('searchDYMAlternateSearch');
     this.saytSuggestedKeywords = page.getByTestId('sayt-suggested-keywords');
-
     this.loadingOverlay = page.locator('//div[@class="dsg-react-loading-overlay"]');
+
+    //Product Category
+    this.navListItems = page.locator('a[class*="list-item"]');
+    this.marketingContent = page.locator('div.menu-container.expanded ul a:nth-of-type(1)');
+    this.linkToFamilyPages = page.locator('div.menu-container.expanded ul a.sublinks');
+    this.linkProTips = page.locator('a[data-em="Footer_PROTIPS"]');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -236,9 +297,9 @@ export class ProductListingPage {
 
   async selectMatchingProduct(product: string): Promise<string> {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.productNames.last().waitFor();
+    await this.productNamesAngular.last().waitFor();
 
-    const productNames = await this.productNames.allInnerTexts();
+    const productNames = await this.productNamesAngular.allInnerTexts();
     const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
     //console.log({ productNamesLowerCase });
     //console.log({productNames})
@@ -256,7 +317,7 @@ export class ProductListingPage {
       console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
     }
 
-    await this.productNames.nth(indexOfProductFirstMatch).click();
+    await this.productNamesAngular.nth(indexOfProductFirstMatch).click();
 
     return productMatchName;
   }
@@ -272,7 +333,12 @@ export class ProductListingPage {
 
   async verifyFavoritesPresentInMyAccounts(itemVal: string) {
     const plpProductStyle = this.page.locator('div.dsg-react-product-card:nth-of-type(' + itemVal + ')  div.rs-fswatch li');
-    await plpProductStyle.nth(1).click();
+    const styleCount = await plpProductStyle.count();
+    console.log('The minimum product style variation in plp page: ' + styleCount);
+    for (let i = 0; i < styleCount; i++) {
+      const style = plpProductStyle.nth(i);
+      await expect(style).toBeVisible();
+    }
     const index = +itemVal;
     const eleFvrt = this.favorites.nth(index);
     await expect(eleFvrt).toBeVisible();
@@ -365,38 +431,14 @@ export class ProductListingPage {
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
-    // let hostUrl = getBaseUrl();
-    // let apiURL: string | null = null;
-    // console.log('The host Url is: '+hostUrl);
-    // if (hostUrl.includes('dksxchange')){
-    //   apiURL = config['app_dks_api'].baseUrl as string;;
-    // } else if (hostUrl.includes('golfgalaxy')) {
-    //   apiURL = config['app_gg_api'].baseUrl as string;
-    // } else if (hostUrl.includes('dsg')||hostUrl.includes('dickssportinggoods')) {
-    //   apiURL = config['app_dsg_api'].baseUrl as string;;
-    // } else if (hostUrl.includes('pl')) {
-    //   apiURL = config['app_pl_api'].baseUrl as string;;
-    // } else {
-    //   console.info('Host did not contain appropriate name');
-    //   return false;
-    // }
-
-    // console.log('The api Url is: '+apiURL);
-    // const currentUrl = (await this.page).url();
-    // console.log('The current Url is: '+currentUrl);
-    // const productID = currentUrl.split('/')[4];
-    // const finalAPIURL = `${apiURL}${productID}`;
-    // console.log('The final Url is: '+finalAPIURL);
-
     const responsePromise = this.page.waitForResponse('**/catalog-productdetails/**');
-    if (await this.quickviewOpenATCButtonAngular.isVisible()) {
+    if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
     } else {
       await this.quickviewOpenATCButtonReact.first().click();
     }
     const res = await responsePromise;
     const responseJson = await res.json();
-    // const attArray = await res.data.productsData[0].style.definingAttributes;
     const attArray = await responseJson.productsData[0].style.definingAttributes;
     if (attArray.length > 0) {
       await this.getSKUsWithAttributes(responseJson);
@@ -407,6 +449,76 @@ export class ProductListingPage {
       return false;
     }
   }
+
+  async verifyAttributesArePresentOrNotForBOPIS(zipCode: string, storeSearch: string, storeName: string | null): Promise<boolean> {
+    if (!storeName) {
+      storeName = 'robinson';
+    }
+
+    // Declare objects for api responses
+    const responsePromiseProductDetails = this.page.waitForResponse('**/catalog-productdetails/**');
+    const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
+
+    // Click add to cart button on plp page
+    // expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    if(await this.quickviewOpenATCButtonAngular.first().isVisible()){
+      expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    } else {
+      expect(this.quickviewOpenATCButtonReact.last()).toBeVisible();
+    }
+    // expect(this.pinnedContent.last()).toBeVisible();
+    if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
+      await this.quickviewOpenATCButtonAngular.first().click();
+    } else {
+      await this.quickviewOpenATCButtonReact.first().click();
+    }
+
+    // Response object manipulation
+    const resProductDetails = await responsePromiseProductDetails;
+    const resOmni = await responsePromiseOmni;
+    console.log('this is the resOmni.url - ' + resOmni.url());
+    console.log('this is the resOmni.status - ' + resOmni.status());
+
+    const responseJsonProductDetails = await resProductDetails.json();
+    const responseJsonOmni = await resOmni.json();
+    // console.log(responseJsonOmni);
+    // console.log(responseJsonProductDetails);
+
+    const attArray = await responseJsonProductDetails.productsData[0].style.definingAttributes;
+    const quantityResponse = await responseJsonOmni.data;
+    // console.log(attArray);
+    // console.log(quantityResponse);
+
+    const skusArray = await quantityResponse.results;
+    console.log(skusArray);
+    const s = new Map<string, string>();
+
+    for (const store of skusArray) {
+      if (store.store.name.toUpperCase() === storeName.toUpperCase()) {
+        for (const skuItem of store.skus) {
+          const sku = skuItem.sku;
+          const quantity = skuItem.qty.isa;
+          s.set(sku, quantity);
+        }
+        break;
+      }
+    }
+
+    const skusWithQuantity = Array.from(s.entries())
+      .filter(([, value]) => value !== '0')
+      .map(([key]) => key);
+
+    this.skusWithAvailability = new Set(skusWithQuantity);
+
+    if (attArray.length > 0) {
+      await this.getSKUsWithAttributes(responseJsonProductDetails);
+      return true;
+    } else {
+      console.log('No Attributes present');
+      return false;
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getSKUsWithAttributes(res: any): Promise<void> {
     this.skusWithAttributes.clear();
@@ -487,6 +599,71 @@ export class ProductListingPage {
     }
   }
 
+  async selectBOPISAttributes(page: Page): Promise<void> {
+
+    const commonPage = new CommonPage(this.page);
+    console.log('The skus with availability size is:  ' + this.skusWithAvailability.size);
+    if (this.skusWithAvailability.size > 0) {
+      console.log('The skus with attributes: ' + JSON.stringify(Array.from(this.skusWithAttributes.entries())));
+      console.log('The skus with availabilities: ' + JSON.stringify(Array.from(this.skusWithAvailability)));
+      const skusArray = Array.from(this.skusWithAvailability);
+      const randomItem = Math.floor(Math.random() * skusArray.length);
+      const randomSKU = skusArray[randomItem];
+      const attr = this.skusWithAttributes.get(randomSKU);
+      console.log('The random SKU is: ' + attr);
+      if (attr) {
+        for (const at of attr) {
+          const attributeSet = at.split(' - ');
+          console.log(attributeSet[0]);
+          console.log(attributeSet[1]);
+          switch (attributeSet[0].trim()) {
+            case 'Color':
+              {
+                const randomColorXpath = `//div/img[@alt='${attributeSet[1].trim()}']`;
+                console.log('The color xpath is: ' + randomColorXpath);
+                await commonPage.sleep(5);
+                const paramPdp2 = page.locator(randomColorXpath);
+                await paramPdp2.click();
+                break;
+              }
+            case 'Size':
+            case 'Shoe Size':
+            case 'Shoe Width':
+            case 'Flex':
+            case 'Hand':
+            case 'Shaft':
+              {
+                const randomShaftXpath = `//div/p[text()="${attributeSet[1].trim()}"]`;
+                console.log('The size xpath is: ' + randomShaftXpath);
+                await commonPage.sleep(5);
+                const paramPdp1 = page.locator(randomShaftXpath);
+                await paramPdp1.click();
+                break;
+              }
+            case 'Loft':
+            case 'Wedge Bounce':
+            case 'Wedge Grind/Sole':
+            case 'Frame Size':
+            case 'Wheel Size':
+            case 'Drivetrain Manufacturer':
+            case 'Sock Size':
+            case 'Capacity':
+            case 'Grip':
+              {
+                const randomXpath = `//div/p[text()='${attributeSet[1].trim()}']`;
+                await commonPage.sleep(5);
+                const paramPdp = page.locator(randomXpath);
+                await paramPdp.click();
+                break;
+              }
+          }
+        }
+      }
+    } else {
+      //throw new Error('This product is not eligible for BOPIS');
+    }
+  }
+
   async applyShipFilter(): Promise<void> {
     await expect(this.shipFilterButtonAngular).toBeVisible();
     await this.shipFilterButtonAngular.first().click();
@@ -505,4 +682,114 @@ export class ProductListingPage {
     await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(/.*Same Day Delivery to.*/);
     await expect(this.loadingOverlay).toHaveCount(0);
   }
-}
+  async validateResultsPerPage(pageNo: number) {
+    const commonPage = new CommonPage(this.page);
+    await this.pageItemsAngular.nth(pageNo - 1).click();
+    console.log('Clicked on any page number');
+    const count = await this.resultPerPageAngular.count();
+    console.log('The result per page count is: ' + count);
+    for (let i = 0; i < count; i++) {
+      await expect(this.resultPerPageAngular.nth(i)).toBeVisible();
+      await this.resultPerPageAngular.nth(i).click();
+      await commonPage.sleep(10);
+      const allItems = this.resultPerPageAngular.nth(i);
+      const allItemText = await allItems.textContent();
+      console.log('Result per page text is: ' + allItemText);
+      const pageCount = await this.getActualPaginationCount();
+      expect(allItemText?.trim()).toContain(String(pageCount));
+      // await expect(allItems).toHaveAttribute('class', /active/);
+      await expect(allItems).toHaveAttribute('class', /selected/);
+      console.log('Results per page is: ' + pageCount);
+    }
+  }
+  async selectSortCategory(category: string, pageCount: number) {
+    console.log('the expected categoty provided: ' + category);
+    console.log('The page count is: '+pageCount);
+    // await this.sortOptionsAccordionButtonReact.click();
+    await this.sortOptionsAccordionButtonAngular.first().click({ force: true });
+    console.log('Validating sort category: ' + category);
+    // const count = await this.sortOptionsSelectionReact.count();
+    const count = await this.sortOptionsSelectionAngular.count();
+    console.log('Total sort options are :' + count);
+    for (let i = 0; i < count; i++) {
+      // const options = this.sortOptionsSelectionReact.nth(i);
+      const options = this.sortOptionsSelectionAngular.nth(i);
+      const option = await options.textContent();
+      console.log('Current option is: ' + option);
+      if (option?.trim() === category) {
+        console.log('Sort option matched');
+        // const categoryEle = this.page.getByText(option);
+        // await categoryEle.nth(1).click({ force: true });
+        expect(option).toContain(category);
+        break;
+      }
+    }
+    // const categorySelectedText = await this.sortSelectedReact.textContent();
+
+    // const categorySelectedText = await this.sortSelectedAngular.first().textContent();
+    // expect(categorySelectedText?.trim()).toContain(String(category));
+    // console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
+    // const actualPageCount = await this.getActualPaginationCount();
+    // expect(pageCount).toBe(actualPageCount);
+  }
+  async getActualPaginationCount() {
+    const totalCount = await this.totalItemCardsAngular.count();
+    console.log('Total fpage count is: ' + totalCount);
+    const sponsoredCount = await this.sponsoredItemCardsAngular.count();
+    console.log('Total sponsored count is: ' + sponsoredCount);
+    const actualCount = totalCount - sponsoredCount;
+    console.log('Actual count is: ' + actualCount);
+    return actualCount;
+
+  }
+  async validateProductCategoryWithMarketingContent() {
+    const elements = this.navListItems;
+    const count = await elements.count();
+    console.log(`The total category is:` + count);
+    // for (let i = 0; i < count; i++) {
+    //   const element = elements.nth(i);
+    //   const isVisible = await element.isVisible();
+    //   if (isVisible) {
+    //     const text = await element.textContent();
+    //     console.log(`Element ${i + 1}: ${text?.trim()}`);
+    //     console.log(`Element at index ${i + 1} is visible. Clicking on it.`);
+    //     await element.click();
+    //     this.validateMarketingContent();
+    //   } else {
+    //     console.log(`Category Element at index ${i + 1} is not visible.`);
+    //   }
+    // }
+  }
+  async validateMarketingContent() {
+    const elements = this.marketingContent;
+    const count = await elements.count();
+    console.log(`The total marketing content is:` + count);
+    for (let i = 0; i < count; i++) {
+      const element = elements.nth(i);
+      const isVisible = await element.isVisible();
+      if (isVisible) {
+        const text = await element.textContent();
+        console.log(`Element ${i + 1}: ${text?.trim()}`);
+      } else {
+        console.log(`Marketing Content Element at index ${i + 1} is not visible.`);
+      }
+    }
+  }
+
+  async validateBrandFilter(index:number) {
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.brandAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: '+filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: '+paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    console.log('Filter results are matching');
+    await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    }
+  }
+

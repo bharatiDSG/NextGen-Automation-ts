@@ -11,7 +11,7 @@ export class HomePage {
     constructor(page: Page) {
         this.page = page;
         this.searchField = page.locator('[id="searchInput"]').nth(1);
-        this.myAccountLink = page.getByRole('link', { name: 'My Account Sign In to Earn' });
+        this.myAccountLink = page.getByLabel('My Account: My Account');
         this.navigateToHomePageLink = page.getByRole('link', { name: 'Navigate to homepage' });
         this.trendingSearchesText = page.getByText('Trending Searches');
         this.trendingSearchesLinks = page.locator('[class="button-navigation"]');
