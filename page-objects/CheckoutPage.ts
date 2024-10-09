@@ -179,11 +179,11 @@ export class CheckoutPage {
         this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:');
         this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']");
 
-        this.shippingFirstName = page.locator('#shipping-form-card #shipFirstName');
-        this.shippingLastName = page.locator('#shipping-form-card #shipLastName');
-        this.shippingAddress = page.locator('#shipping-form-card #address');
-        this.shippingAddressLine2 = page.locator('#shipping-form-card #address2');
-        this.shippingZipcode = page.locator('#shipping-form-card #zipcode');
+        this.shippingFirstName = page.getByText('Recipient\'s First Name');
+        this.shippingLastName = page.getByText('Recipient\'s Last Name');
+        this.shippingAddress = page.locator('//input[@id="homefield-textinput-shippingaddress"]');
+        this.shippingAddressLine2 = page.locator('//input[@id="homefield-textinput-shippingaddress2"]');
+        this.shippingZipcode = page.locator('//input[@id="homefield-textinput-shippingzipcode"]');
 
         this.billingFirstName = page.locator('#billing-form-card #shipFirstName');
         this.billingLastName = page.locator('#billing-form-card #shipLastName');
