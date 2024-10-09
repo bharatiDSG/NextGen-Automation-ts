@@ -870,6 +870,22 @@ export class ProductListingPage {
         expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
         }
 
+        async validateRandomPage(pageCount: number, pageNo: number) {
+          await this.pageItemsAngular.nth(pageNo - 1).click();
+          console.log('Clicked on any page number');
+          await this.page.waitForTimeout(2000);
+          // await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+          await expect(this.highlightedPageNumberAngular).toHaveAttribute('class', /selected/);
+          // const pageNumber = await this.highlightedPageNumberReact.textContent();
+          const pageNumber = await this.highlightedPageNumberAngular.textContent();
+          expect(pageNumber?.trim()).toContain(String(pageNo));
+          console.log('Validated the page number ' + pageNo);
+          const randomPageCount = await this.getActualPaginationCount();
+          // expect(pageCount).toBe(randomPageCount);
+          expect(pageCount).toBe(randomPageCount);
+          console.log('Validated the page count ' + pageCount);
+        }
+
         
 
 
