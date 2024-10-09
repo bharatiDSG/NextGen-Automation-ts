@@ -32,6 +32,9 @@ export class AccountSignInPage {
     // Account Page
     private accountUserInfo: Locator;
     private summaryLink: Locator;
+    public recentOrderText: Locator;
+    public scoreMoreRewardsText: Locator;
+    public hiUserNameText: Locator;
 
     private verifyHuman: Locator;
     private verifyHumanSuccessMsg: Locator;
@@ -66,7 +69,10 @@ export class AccountSignInPage {
         // Account Page
         this.accountUserInfo = page.locator('[class="user-info"]');
         this.summaryLink = page.getByRole('link', { name: 'Summary' });
+        this.recentOrderText = page.getByText('Recent Order');
+        this.scoreMoreRewardsText = page.getByText('Score More Rewards');
         this.continueButtonModern = page.getByRole('button', { name: 'Continue', exact: true });
+        this.hiUserNameText = page.locator("//span[contains(@class,'user-name')]");
         this.verifyHuman= page.locator('#ulp-auth0-v2-captcha #shadow-root #cf-chl-widget-wcuyd html body #shadow-root').locator('//span[text()="Verify you are human"]');
         this.verifyHumanSuccessMsg= page.locator('#ulp-auth0-v2-captcha #shadow-root #cf-chl-widget-wcuyd html body #shadow-root').locator('//span[text()="Success!"]');
     }
