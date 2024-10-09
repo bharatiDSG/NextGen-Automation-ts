@@ -191,6 +191,27 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
+  test.only('09. Validating Color filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the color filter is working as expected');
+    await productListingPage.colorAccordionFilterButtonAngular.click();
+    const color1 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The size selected is: '+color1);
+    const colorTrimmed1 = color1?.trim();
+    await productListingPage.validateSizeFilter(colorTrimmed1,0);
+    const color2 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The size selected is: '+color1);
+    const colorTrimmed2 = color2?.trim();
+    await productListingPage.validateSizeFilter(colorTrimmed2,0);
+    const color3 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The size selected is: '+color3);
+    const colorTrimmed3 = color3?.trim();
+    await productListingPage.validateSizeFilter(colorTrimmed3,0);
+    console.log('Validation successful');
+  });
+
+
+
 
 
 

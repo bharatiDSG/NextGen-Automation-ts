@@ -868,6 +868,32 @@ export class ProductListingPage {
       expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
       }
 
+      async validateColorFilter(color:any, index:number) { // eslint-disable-line
+        await this.page.waitForLoadState('domcontentloaded');
+        const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+        await this.colorAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.totalItemCardsAngular.last().waitFor();
+        const filterValueExpected = await this.colorAccordionFilterResultsAngular.nth(index).textContent();
+        console.log('The expected filter value is: '+filterValueExpected);
+        const paginationValueActual = await this.filterPaginationResults.first().textContent();
+        console.log('The actual filter value is: '+paginationValueActual);
+        expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+        const colorNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+        console.log('The Size filtered is'+colorNameFiltered);
+        expect(colorNameFiltered).toContain(color);
+        console.log('Filter results are matching');
+        await this.clearAllFilter.nth(1).waitFor();
+        await this.clearAllFilter.nth(1).click();
+        await this.page.waitForLoadState('domcontentloaded');
+        await this.totalItemCardsAngular.last().waitFor();
+        console.log('Filter reset successful and initial value restored');
+        const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+        expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
+        }
+
+        
+
 
 
 
