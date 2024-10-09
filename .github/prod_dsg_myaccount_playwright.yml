@@ -1,0 +1,63 @@
+name: Prod DSG My Account Playwright Tests
+
+on:
+  schedule:
+    - cron: '45 09 * * */1'  # At 09:45 on every day-of-week - https://crontab.guru/#0_03_*_*_*/1
+  workflow_dispatch:
+env:
+  MENTIONS: gary.shiring@dcsg.com,jacob.jarosz@dcsg.com
+  WEB_HOOKS_URL: https://prod-190.westus.logic.azure.com:443/workflows/1101ef5f567542bdb2eb85bc992c1298/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=f7slGQG3iqjN6h2AiNVnIeEAv6tCcTeWkHo-x3-lZRM
+  NOTIFY_ON_SUCCESS: ${{true}}
+jobs:
+  playwright:
+    name: 'Prod DSG My Account Playwright Tests'
+    runs-on: [ self-hosted, azure ]
+    container:
+      image: mcr.microsoft.com/playwright:v1.46.0-jammy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      # - uses: actions/setup-node@v4
+        # with:
+          # node-version: 20
+
+      - name: Install Dependencies
+        run: |
+          echo "Install dependencies from lock file"
+          npm ci
+
+          echo "Install Playwright and dependencies"
+          npx playwright install --with-deps
+
+      - name: Prod DSG My Account Playwright Tests
+        run: |
+          echo "Prod DSG My Account Playwright Tests"
+          npx playwright test --grep '(?=.*@MyAccount)(?=.*@Prod)(?=.*@DSG)'
+        env:
+            ENV: dsg_prod
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 2`
+
+      # - uses: actions/checkout@master
+      - name: Microsoft Teams Alert Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          job: ${{ toJson(job) }}
+          title: "{title: `** ALERT ** Failure in DSG My Account Playwright Tests`}"
+
+                #View report
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        if: always()
+      # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        if: always()

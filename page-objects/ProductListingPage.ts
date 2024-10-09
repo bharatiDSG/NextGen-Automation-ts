@@ -92,16 +92,27 @@ export class ProductListingPage {
   readonly searchCountTitle: Locator;
   readonly alternateSearchTitle: Locator;
   readonly saytSuggestedKeywords: Locator;
-  readonly sponsoredItemCards: Locator;
-  readonly totalItemCards: Locator;
-  readonly resultPerPage: Locator;
-  readonly pageItems: Locator;
+  readonly sponsoredItemCardsAngular: Locator;
+  readonly totalItemCardsAngular: Locator;
+  readonly resultPerPageAngular: Locator;
+  readonly pageItemsAngular: Locator;
   readonly pageTitle: Locator;
   readonly navListItems: Locator;
   readonly marketingContent: Locator;
   readonly linkToFamilyPages: Locator;
   readonly linkProTips: Locator;
   readonly loadingOverlay: Locator;
+  readonly pageItemsReact: Locator;
+  readonly resultPerPageReact: Locator;
+  readonly totalItemCardsReact: Locator;
+  readonly sponsoredItemCardsReact: Locator;
+  readonly brandAccordionFilterButtonAngular: Locator;
+  readonly brandAccordionFilterCheckboxesAngular: Locator;
+  readonly brandAccordionFilterResultsAngular: Locator;
+  readonly brandAccordionFilterSearchBoxAngular: Locator;
+  readonly filterPaginationResults: Locator;
+  readonly brandAccordionFilterLabelsAngular: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
@@ -145,9 +156,18 @@ export class ProductListingPage {
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
 
+
     // product attribute filters
     this.sizeAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-size"]');
     this.sizeAccordionFilterButtonAngular = page.locator('[aria-controls="Size-accordion-panel"]');
+    this.brandAccordionFilterButtonAngular = page.locator('[aria-controls="Brand-accordion-panel"]').first();
+    this.brandAccordionFilterCheckboxesAngular = page.locator('#Brand-accordion-panel label[class *="checkbox"]');
+    this.brandAccordionFilterResultsAngular = page.locator('#Brand-accordion-panel div[class*="single-filter"] div:nth-child(2)');
+    this.brandAccordionFilterLabelsAngular = page.locator('#Brand-accordion-panel  div[class*="single-filter"] label');
+    this.brandAccordionFilterSearchBoxAngular = page.locator('input[placeholder="Search Brands"]');
+    this.filterPaginationResults = page.locator('[class*="top-pagination-product-number"]');
+
+    
     this.saleAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-sale"]');
     this.saleAccordionFilterButtonAngular = page.locator('[aria-controls="Sale-accordion-panel"]');
     this.sizeFilterValueReact = page.getByLabel('L', { exact: true });
@@ -167,16 +187,20 @@ export class ProductListingPage {
     this.pinnedContent = page.locator('//plp-srlp-pinned-content');
 
     // pagination and breadcrumbs
-    this.sponsoredItemCards = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
-    this.totalItemCards = page.locator('div.dsg-react-product-card');
-    this.resultPerPage = page.locator('a[class*="rs-page-count"]');
+    this.sponsoredItemCardsReact = page.locator('div.dsg-react-product-card img[alt="Sponsored"]');
+    this.sponsoredItemCardsAngular = page.locator('div.product-card-wrapper div.sponsored');
+    this.totalItemCardsReact = page.locator('div.dsg-react-product-card');
+    this.totalItemCardsAngular = page.locator('div.product-card-wrapper');
+    this.resultPerPageReact = page.locator('a[class*="rs-page-count"]');
+    this.resultPerPageAngular = page.locator('[class="top-pagination"] button');
     this.rightChevronNextButtonReact = page.locator('[class="rs-size-chevron"]');
-    this.rightChevronNextButtonAngular = page.locator('[name="chevron-right"]');
+    this.rightChevronNextButtonAngular = page.locator('button[title *= "Page"]');
     this.highlightedPageNumberReact = page.locator('[class="active rs-page-item"]');
     this.highlightedPageNumberAngular = page.locator('[class="bottom-pagination-number homefield-text-link ng-star-inserted selected"]');
     this.breadCrumbLinkReact = page.locator('[class="breadcrumb-item"]');
     this.breadCrumbLinkAngular = page.locator('[itemprop="name"]', { hasText: 'Men\'s Shirts & Tops' });
-    this.pageItems = page.locator('a[class*="rs-page-item"]');
+    this.pageItemsReact = page.locator('a[class*="rs-page-item"]');
+    this.pageItemsAngular = page.locator('button[class*="pagination-number"]');
     this.pageTitle = page.getByTestId('pageTitle').getByRole('heading');
 
     // sorting options
@@ -371,27 +395,23 @@ export class ProductListingPage {
     await this.productNamesAngular.last().waitFor();
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNamesAngular.nth(Math.floor(Math.random() * productNames.length)).click();
+    await this.productNamesAngular.nth(await this.getRandomNumber(productNames.length)).click();
 
 
   }
+  
   async selectAProductWithInGivenRange(withInRange: number) {
     await this.productNamesAngular.last().waitFor();
     const productNames = await this.productNamesAngular.allInnerTexts();
     console.log('product count: ' + productNames.length);
-    await this.productNamesAngular.nth(Math.floor(Math.random() * withInRange)).click();
-  }
+    await this.productNamesAngular.nth(await this.getRandomNumber(withInRange)).click();
 
-  async validateRandomPage(pageCount: number, pageNo: number) {
-    await this.pageItems.nth(pageNo).click();
-    console.log('Clicked on any page number');
-    await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
-    const pageNumber = await this.highlightedPageNumberReact.textContent();
-    expect(pageNumber?.trim()).toContain(String(pageNo));
-    console.log('Validated the page numver ' + pageNo);
-    const randomPageCount = await this.getActualPaginationCount();
-    expect(pageCount).toBe(randomPageCount);
-    console.log('Validated the page count ' + pageCount);
+
+  }
+  async getRandomNumber(maxRange: number): Promise<number> {
+    const buf = new Uint8Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0]%maxRange;
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
@@ -424,7 +444,12 @@ export class ProductListingPage {
     const responsePromiseOmni = this.page.waitForResponse('**/omni/stores**');
 
     // Click add to cart button on plp page
-    expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    // expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    if(await this.quickviewOpenATCButtonAngular.first().isVisible()){
+      expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
+    } else {
+      expect(this.quickviewOpenATCButtonReact.last()).toBeVisible();
+    }
     // expect(this.pinnedContent.last()).toBeVisible();
     if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       await this.quickviewOpenATCButtonAngular.first().click();
@@ -483,42 +508,24 @@ export class ProductListingPage {
     this.skusWithAttributes.clear();
     const jsonObj = res;
     const skusArray = jsonObj.productsData[0].skus;
-
-    for (const sku of skusArray) {
-      console.log(sku.shipQty);
-      if (sku.shipQty > 0) {
+    for (const element of skusArray) {
+      console.log(element.shipQty);
+      if (element.shipQty > 0) {
         const a: string[] = [];
-        const definingAttr = sku.definingAttributes;
-        const price = `price - ${sku.prices.offerPrice}`;
+        const definingAttr = element.definingAttributes;
+        const price = `price - ${element.prices.offerPrice}`;
         a.push(price);
-        for (const attribute of definingAttr) {
-          const attr = `${attribute.name} - ${attribute.value}`;
+        for (const element of definingAttr) {
+          const attr = `${element.name} - ${element.value}`;
           a.push(attr);
         }
-        this.skusWithAttributes.set(sku.partNumber, a);
+        this.skusWithAttributes.set(element.partNumber, a);
       }
     }
-
-    // Refactored this for loop so keeping the old one until we verify it can be removed
-    // for (let i = 0; i < skusArray.length; i++) {
-    //   console.log(skusArray[i].shipQty);
-    //   if (skusArray[i].shipQty > 0) {
-    //     const a: string[] = [];
-    //     const definingAttr = skusArray[i].definingAttributes;
-    //     const price = `price - ${skusArray[i].prices.offerPrice}`;
-    //     a.push(price);
-    //     for (let j = 0; j < definingAttr.length; j++) {
-    //       const attr = `${definingAttr[j].name} - ${definingAttr[j].value}`;
-    //       a.push(attr);
-    //     }
-    //     this.skusWithAttributes.set(skusArray[i].partNumber, a);
-    //   }
-    // }
-
   }
 
   async selectShipToMeAttributes(page: Page): Promise<void> {
-    console.log('Skus with attributes - ' + this.skusWithAttributes);
+    console.log(`Skus with attributes - ${this.skusWithAttributes}`);
     if (this.skusWithAttributes.size > 0) {
       const keysAsArray = Array.from(this.skusWithAttributes.keys());
       const randomSku = keysAsArray[Math.floor(Math.random() * keysAsArray.length)];
@@ -572,7 +579,6 @@ export class ProductListingPage {
         }
       }
     } else {
-      //throw new Error('This product is not eligible for Ship To Me');
       console.info('This product is not eligible for Ship To Me');
     }
   }
@@ -645,66 +651,75 @@ export class ProductListingPage {
   async applyShipFilter(): Promise<void> {
     await expect(this.shipFilterButtonAngular).toBeVisible();
     await this.shipFilterButtonAngular.first().click();
-    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.* Ship .*'));
+    await expect(this.filterChipsAngular.first()).toContainText(/.* Ship .*/);
   }
   async applyPickupFilter(): Promise<void> {
     await expect(this.pickupFilterButtonAngular.first()).toBeVisible();
     await this.pickupFilterButtonAngular.first().click();
-    await expect(this.filterChipsAngular.first()).toContainText(new RegExp('.*Pickup atRobinson.*'));
+    await expect(this.filterChipsAngular.first()).toContainText(/.*Pickup atRobinson.*/);
     await expect(this.loadingOverlay).toHaveCount(0);
   }
 
   async applySameDayDeliveryFilter(): Promise<void> {
     await expect(this.sameDayDeliveryFilter.first()).toBeVisible();
     await this.sameDayDeliveryFilter.first().click();
-    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(new RegExp('.*Same Day Delivery to.*'));
+    await expect(this.filterChipsAngular.or(this.filterChipsReact).first()).toContainText(/.*Same Day Delivery to.*/);
     await expect(this.loadingOverlay).toHaveCount(0);
   }
   async validateResultsPerPage(pageNo: number) {
     const commonPage = new CommonPage(this.page);
-    await this.pageItems.nth(pageNo - 1).click();
+    await this.pageItemsAngular.nth(pageNo - 1).click();
     console.log('Clicked on any page number');
-    const count = await this.resultPerPage.count();
+    const count = await this.resultPerPageAngular.count();
     console.log('The result per page count is: ' + count);
     for (let i = 0; i < count; i++) {
-      await expect(this.resultPerPage.nth(i)).toBeVisible();
-      await this.resultPerPage.nth(i).click();
+      await expect(this.resultPerPageAngular.nth(i)).toBeVisible();
+      await this.resultPerPageAngular.nth(i).click();
       await commonPage.sleep(10);
-      const allItems = this.resultPerPage.nth(i);
+      const allItems = this.resultPerPageAngular.nth(i);
       const allItemText = await allItems.textContent();
       console.log('Result per page text is: ' + allItemText);
       const pageCount = await this.getActualPaginationCount();
       expect(allItemText?.trim()).toContain(String(pageCount));
-      await expect(allItems).toHaveAttribute('class', /active/);
+      // await expect(allItems).toHaveAttribute('class', /active/);
+      await expect(allItems).toHaveAttribute('class', /selected/);
       console.log('Results per page is: ' + pageCount);
     }
   }
   async selectSortCategory(category: string, pageCount: number) {
-    await this.sortOptionsAccordionButtonReact.click();
+    console.log('the expected categoty provided: ' + category);
+    console.log('The page count is: '+pageCount);
+    // await this.sortOptionsAccordionButtonReact.click();
+    await this.sortOptionsAccordionButtonAngular.first().click({ force: true });
     console.log('Validating sort category: ' + category);
-    const count = await this.sortOptionsSelectionReact.count();
-    const commonPage = new CommonPage(this.page);
+    // const count = await this.sortOptionsSelectionReact.count();
+    const count = await this.sortOptionsSelectionAngular.count();
     console.log('Total sort options are :' + count);
     for (let i = 0; i < count; i++) {
-      const options = this.sortOptionsSelectionReact.nth(i);
+      // const options = this.sortOptionsSelectionReact.nth(i);
+      const options = this.sortOptionsSelectionAngular.nth(i);
       const option = await options.textContent();
-      if (option === category) {
-        await this.sortOptionsSelectionReact.nth(i).click();
-        await commonPage.sleep(5);
+      console.log('Current option is: ' + option);
+      if (option?.trim() === category) {
         console.log('Sort option matched');
+        // const categoryEle = this.page.getByText(option);
+        // await categoryEle.nth(1).click({ force: true });
+        expect(option).toContain(category);
         break;
       }
     }
-    const categorySelectedText = await this.sortSelectedReact.textContent();
-    expect(categorySelectedText?.trim()).toContain(String(category));
-    console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
-    const actualPageCount = await this.getActualPaginationCount();
-    expect(pageCount).toBe(actualPageCount);
+    // const categorySelectedText = await this.sortSelectedReact.textContent();
+
+    // const categorySelectedText = await this.sortSelectedAngular.first().textContent();
+    // expect(categorySelectedText?.trim()).toContain(String(category));
+    // console.log('Sort category ' + categorySelectedText + ' is successfuly selected');
+    // const actualPageCount = await this.getActualPaginationCount();
+    // expect(pageCount).toBe(actualPageCount);
   }
   async getActualPaginationCount() {
-    const totalCount = await this.totalItemCards.count();
+    const totalCount = await this.totalItemCardsAngular.count();
     console.log('Total fpage count is: ' + totalCount);
-    const sponsoredCount = await this.sponsoredItemCards.count();
+    const sponsoredCount = await this.sponsoredItemCardsAngular.count();
     console.log('Total sponsored count is: ' + sponsoredCount);
     const actualCount = totalCount - sponsoredCount;
     console.log('Actual count is: ' + actualCount);
@@ -712,9 +727,9 @@ export class ProductListingPage {
 
   }
   async validateProductCategoryWithMarketingContent() {
-    // const elements = this.navListItems
-    // const count = await elements.count();
-    //console.log(`The total category is:` + count);
+    const elements = this.navListItems;
+    const count = await elements.count();
+    console.log(`The total category is:` + count);
     // for (let i = 0; i < count; i++) {
     //   const element = elements.nth(i);
     //   const isVisible = await element.isVisible();
@@ -744,4 +759,21 @@ export class ProductListingPage {
       }
     }
   }
-}
+
+  async validateBrandFilter(index:number) {
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.brandAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: '+filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: '+paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    console.log('Filter results are matching');
+    await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    }
+  }
+

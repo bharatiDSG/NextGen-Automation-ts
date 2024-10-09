@@ -117,19 +117,19 @@ export class CheckoutPage {
         this.checkoutContinueButton = page.getByRole('button', { name: 'Continue' });
         this.standardFreeShippingRadioButton = page.getByLabel('Standard Shipping – FREE');
 
-        this.contactInfoFirstName = page.locator('[id="contact-first-name"]');
-        this.contactInfoLastName = page.locator('[id="contact-last-name"]');
-        this.contactInfoEmail = page.locator('[id="contact-email"]');
-        this.contactInfoPhoneNumber = page.locator('[id="contact-phone"]');
+        this.contactInfoFirstName = page.locator('[id="homefield-textinput-contact-first-name"]');
+        this.contactInfoLastName = page.locator('[id="homefield-textinput-contact-last-name"]');
+        this.contactInfoEmail = page.locator('[id="homefield-textinput-contact-email"]');
+        this.contactInfoPhoneNumber = page.locator('[id="homefield-textinput-contact-phone"]');
         this.contactInfoCompletedCheckmarkImg = page.locator('#contact-info-card-form').getByLabel('completed').getByRole('img');
         this.changeContactInfo = page.locator('#contact-info-card-form').getByRole('button', { name: 'Change' });
 
         this.sameShippingAndBillingCheckbox = page.locator('//homefield-checkbox');
         this.shippingBillingFirstName = page.getByRole('textbox', { name: 'First Name' });
         this.shippingBillingLastName = page.getByRole('textbox', { name: 'Last Name' });
-        this.billingShippingAddress = page.locator('[id="address"]');
-        this.billingShippingAddress2 = page.locator('[id="address2"]');
-        this.billingShippingZipcode = page.locator('[id="zipcode"]');
+        this.billingShippingAddress = page.locator('[id="homefield-textinput-billingaddress"]');
+        this.billingShippingAddress2 = page.locator('[id="homefield-textinput-billingaddress2"]');
+        this.billingShippingZipcode = page.locator('[id="homefield-textinput-billingzipcode"]');
         this.billingShippingCompletedCheckmarkImg = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByLabel('completed').getByRole('img');
         this.changeBillingShippingInfo = page.locator('#billing-form-card').or(page.locator('#shipping-form-card')).getByRole('button', { name: 'Change' });
         this.billingShippingLabel = page.locator("//h2[contains(text(),'Address')]");
@@ -671,17 +671,11 @@ export class CheckoutPage {
                 .or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
         }
 
-        // for (let index = 0; index < details.length; index++) {
-        //     const element = details[index];
-        //     console.log(element);
-        //     await expect((this.page.locator("//div[text()='" + element + "']").or(this.page.locator("//p[text()='" + element + "']")).or(this.page.locator("//span[text()='" + element + "']"))).first()).toBeVisible();
-        // }
-
     }
 
     async firstNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
-        for (let index = 0; index < listOfFirstNames.length; index++) {
-            const firstName = listOfFirstNames[index];
+        for (const element of listOfFirstNames) {
+            const firstName = element;
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoFirstName.click();
@@ -706,8 +700,8 @@ export class CheckoutPage {
 
     }
     async firstNameValidationsWithValidNames(listOfFirstNames: string[]) {
-        for (let index = 0; index < listOfFirstNames.length; index++) {
-            const firstName = listOfFirstNames[index];
+        for (const element of listOfFirstNames) {
+            const firstName = element;
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoFirstName.click();
@@ -733,8 +727,8 @@ export class CheckoutPage {
     }
 
     async lastNameValidationsWithInvalidNames(listOfFirstNames: string[]) {
-        for (let index = 0; index < listOfFirstNames.length; index++) {
-            const firstName = listOfFirstNames[index];
+        for (const element of listOfFirstNames) {
+            const firstName = element;
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoLastName.click();
@@ -759,8 +753,8 @@ export class CheckoutPage {
 
     }
     async lastNameValidationsWithValidNames(listOfFirstNames: string[]) {
-        for (let index = 0; index < listOfFirstNames.length; index++) {
-            const firstName = listOfFirstNames[index];
+        for (const element of listOfFirstNames) {
+            const firstName = element;
             console.log(firstName);
             if (await this.contactInfoFirstName.isVisible()) {
                 await this.contactInfoLastName.click();
@@ -786,8 +780,8 @@ export class CheckoutPage {
     }
 
     async emailFieldValidationsWithInvalidDetails(listOfEmails: string[]) {
-        for (let index = 0; index < listOfEmails.length; index++) {
-            const email = listOfEmails[index];
+        for (const element of listOfEmails) {
+            const email = element;
             console.log(email);
             await this.contactInfoEmail.click();
             await this.contactInfoEmail.fill(email);
@@ -798,8 +792,8 @@ export class CheckoutPage {
 
     }
     async emailFieldValidationsWithValidDetails(listOfEmails: string[]) {
-        for (let index = 0; index < listOfEmails.length; index++) {
-            const email = listOfEmails[index];
+        for (const element of listOfEmails) {
+            const email = element;
             console.log(email);
             await this.contactInfoEmail.click();
             await this.contactInfoEmail.fill(email);
@@ -810,8 +804,8 @@ export class CheckoutPage {
 
     }
     async phoneNumberFieldValidationsWithInvalidDetails(listOfPhoneNumbers: string[]) {
-        for (let index = 0; index < listOfPhoneNumbers.length; index++) {
-            const phoneNumber = listOfPhoneNumbers[index];
+        for (const element of listOfPhoneNumbers) {
+            const phoneNumber = element;
             console.log(phoneNumber);
             await this.contactInfoPhoneNumber.click();
             await this.contactInfoPhoneNumber.fill(phoneNumber);
@@ -822,8 +816,8 @@ export class CheckoutPage {
 
     }
     async phoneNumberFieldValidationsWithValidDetails(listOfPhoneNumbers: string[]) {
-        for (let index = 0; index < listOfPhoneNumbers.length; index++) {
-            const phoneNumber = listOfPhoneNumbers[index];
+        for (const element of listOfPhoneNumbers) {
+            const phoneNumber = element;
             console.log(phoneNumber);
             await this.contactInfoPhoneNumber.click();
             await this.contactInfoPhoneNumber.fill(phoneNumber);
@@ -834,8 +828,8 @@ export class CheckoutPage {
 
     }
     async zipcodeFieldValidationsWithInvalidDetails(listOfZipCodes: string[]) {
-        for (let index = 0; index < listOfZipCodes.length; index++) {
-            const zipcode = listOfZipCodes[index];
+        for (const element of listOfZipCodes) {
+            const zipcode = element;
             console.log(zipcode);
             await this.billingShippingZipcode.click();
             await this.billingShippingZipcode.fill(zipcode);
@@ -846,8 +840,8 @@ export class CheckoutPage {
 
     }
     async zipcodeFieldValidationsWithValidDetails(listOfZipCodes: string[]) {
-        for (let index = 0; index < listOfZipCodes.length; index++) {
-            const zipcode = listOfZipCodes[index];
+        for (const element of listOfZipCodes) {
+            const zipcode = element;
             console.log(zipcode);
             await this.billingShippingZipcode.click();
             await this.billingShippingZipcode.fill(zipcode);

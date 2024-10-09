@@ -7,7 +7,7 @@ import { CommonPage } from '../../../page-objects/CommonPage.ts';
 import { AccountSignInPage } from '../../../page-objects/AccountSignInPage.ts';
 
 test.describe('PLP/SRLP GG Favorites Tests', () => {
-
+  
   test.beforeEach(async ({ page, context }) => {
     const commonPage = new CommonPage(page);
 
