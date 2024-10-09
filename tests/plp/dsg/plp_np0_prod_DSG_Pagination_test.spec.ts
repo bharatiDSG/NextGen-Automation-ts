@@ -158,17 +158,17 @@ test.describe('PLP Pagination Tests', () => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the brand filter is working as expected');
     const brandName1 = await productListingPage.brandAccordionFilterLabelsAngular.nth(0).textContent();
-    console.log('The brand selected is: '+brandName1);
+    console.log('The brand selected is: ' + brandName1);
     const brandNameTrimmed1 = brandName1?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed1,0);
+    await productListingPage.validateBrandFilter(brandNameTrimmed1, 0);
     const brandName2 = await productListingPage.brandAccordionFilterLabelsAngular.nth(1).textContent();
-    console.log('The brand selected is: '+brandName2);
+    console.log('The brand selected is: ' + brandName2);
     const brandNameTrimmed2 = brandName2?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed2,1);
+    await productListingPage.validateBrandFilter(brandNameTrimmed2, 1);
     const brandName3 = await productListingPage.brandAccordionFilterLabelsAngular.nth(2).textContent();
-    console.log('The brand selected is: '+brandName3);
+    console.log('The brand selected is: ' + brandName3);
     const brandNameTrimmed3 = brandName3?.trim();
-    await productListingPage.validateBrandFilter(brandNameTrimmed3,2);
+    await productListingPage.validateBrandFilter(brandNameTrimmed3, 2);
     console.log('Validation successful');
   });
 
@@ -177,54 +177,89 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Going to validate the size filter is working as expected');
     await productListingPage.sizeAccordionFilterButtonAngular.click();
     const size1 = await productListingPage.sizeAccordionFilterLabelsAngular.nth(0).textContent();
-    console.log('The size selected is: '+size1);
+    console.log('The size selected is: ' + size1);
     const size1Trimmed1 = size1?.trim();
-    await productListingPage.validateSizeFilter(size1Trimmed1,0);
+    await productListingPage.validateSizeFilter(size1Trimmed1, 0);
     const size2 = await productListingPage.sizeAccordionFilterLabelsAngular.nth(1).textContent();
-    console.log('The size selected is: '+size2);
+    console.log('The size selected is: ' + size2);
     const size1Trimmed2 = size2?.trim();
-    await productListingPage.validateSizeFilter(size1Trimmed2,1);
+    await productListingPage.validateSizeFilter(size1Trimmed2, 1);
     const size3 = await productListingPage.sizeAccordionFilterLabelsAngular.nth(2).textContent();
-    console.log('The size selected is: '+size3);
+    console.log('The size selected is: ' + size3);
     const size3Trimmed = size3?.trim();
-    await productListingPage.validateSizeFilter(size3Trimmed,2);
+    await productListingPage.validateSizeFilter(size3Trimmed, 2);
     console.log('Validation successful');
   });
 
-  test.only('09. Validating Color filter functionality', async ({ page }) => {
+  test('09. Validating Color filter functionality', async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the color filter is working as expected');
     await productListingPage.colorAccordionFilterButtonAngular.click();
     const color1 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
-    console.log('The size selected is: '+color1);
+    console.log('The color selected is: ' + color1);
     const colorTrimmed1 = color1?.trim();
-    await productListingPage.validateSizeFilter(colorTrimmed1,0);
-    const color2 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
-    console.log('The size selected is: '+color1);
+    await productListingPage.validateColorFilter(colorTrimmed1, 0);
+    const color2 = await productListingPage.colorAccordionFilterLabelsAngular.nth(1).textContent();
+    console.log('The color selected is: ' + color1);
     const colorTrimmed2 = color2?.trim();
-    await productListingPage.validateSizeFilter(colorTrimmed2,0);
-    const color3 = await productListingPage.colorAccordionFilterLabelsAngular.nth(0).textContent();
-    console.log('The size selected is: '+color3);
+    await productListingPage.validateColorFilter(colorTrimmed2, 1);
+    const color3 = await productListingPage.colorAccordionFilterLabelsAngular.nth(2).textContent();
+    console.log('The color selected is: ' + color3);
     const colorTrimmed3 = color3?.trim();
-    await productListingPage.validateSizeFilter(colorTrimmed3,0);
+    await productListingPage.validateColorFilter(colorTrimmed3, 2);
     console.log('Validation successful');
   });
 
+  test('10. Validating Gender filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the gender filter is working as expected');
+    const gender1 = await productListingPage.genderAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The gender selected is: ' + gender1);
+    const genderTrimmed1 = gender1?.trim();
+    await productListingPage.validateGendedFilter(genderTrimmed1, 0);
+    const gender2 = await productListingPage.genderAccordionFilterLabelsAngular.nth(1).textContent();
+    console.log('The gender selected is: ' + gender2);
+    const genderTrimmed2 = gender2?.trim();
+    await productListingPage.validateGendedFilter(genderTrimmed2, 1);
+    const gender3 = await productListingPage.genderAccordionFilterLabelsAngular.nth(2).textContent();
+    console.log('The gender selected is: ' + gender3);
+    const genderTrimmed3 = gender3?.trim();
+    await productListingPage.validateGendedFilter(genderTrimmed3, 2);
+    console.log('Validation successful');
+  });
 
+  test('11. Validating Product Type filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the product type filter is working as expected');
+    await productListingPage.productTypeAccordionFilterButtonAngular.click();
+    const product11 = await productListingPage.productTypeAccordionFilterLabelsAngular.nth(0).textContent();
+    console.log('The product type selected is: ' + product11);
+    const productTrimmed1 = product11?.trim();
+    await productListingPage.validateProductTypeFilter(productTrimmed1, 0);
+    const product2 = await productListingPage.productTypeAccordionFilterLabelsAngular.nth(1).textContent();
+    console.log('The product type selected is: ' + product2);
+    const productTrimmed2 = product2?.trim();
+    await productListingPage.validateProductTypeFilter(productTrimmed2, 1);
+    const product3 = await productListingPage.productTypeAccordionFilterLabelsAngular.nth(2).textContent();
+    console.log('The product type selected is: ' + product3);
+    const productTrimmed3 = product3?.trim();
+    await productListingPage.validateProductTypeFilter(productTrimmed3, 2);
+    console.log('Validation successful');
+  });
 
+  test('12. Validating Shipping filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the shipping filter is working as expected');
+    await productListingPage.validateShippingFilter();
+    console.log('Validation successful');
+  });
 
-
-
-
-
-
-
-
-
-
-
-
-
+  test('13. Validating Shipping filter functionality', async ({ page }) => {
+    const productListingPage = new ProductListingPage(page);
+    console.log('Going to validate the mixed filter is working as expected');
+    await productListingPage.validateMixedFilter();
+    console.log('Validation successful');
+  });
 
 });
 
