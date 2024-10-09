@@ -413,6 +413,9 @@ test.describe('Search Tests - GG NP0 Prod', () => {
                         if (trendingSearch.includes('Rangefinder')) {
                             trendingSearch = 'Golf Electronic Deals';
                         }
+                        if (trendingSearch.includes('PING G430')) {
+                            trendingSearch = 'PING G430 Golf Clubs';
+                        }
 
                         // validate search count title
                         await expect(productListingPage.searchCountTitle).toContainText(trendingSearch);
