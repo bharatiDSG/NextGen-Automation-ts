@@ -403,7 +403,7 @@ test.describe('Search Tests - GG NP0 Prod', () => {
                 for (let [index, trendingSearch] of trendingSearches.entries()) { // eslint-disable-line
                     await test.step('Validate trending searches links: ' + trendingSearch, async () => {
                         console.log(index + ': ' + trendingSearch);
-                        await page.locator('[class="button-navigation"]').nth(index).click();
+                        await homePage.trendingSearchesLinks.nth(index).click();
                         await productListingPage.productNames.last().waitFor();
 
                         // Update trending search name for validating the following page
