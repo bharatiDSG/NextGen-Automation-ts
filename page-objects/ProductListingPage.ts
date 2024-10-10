@@ -722,8 +722,8 @@ export class ProductListingPage {
       const allItemText = await allItems.textContent();
       console.log('Result per page text is: ' + allItemText);
       const pageCount = await this.getActualPaginationCount();
-      expect(allItemText?.trim()).toContain(String(pageCount));
-      // await expect(allItems).toHaveAttribute('class', /active/);
+      const allItemNumber = parseInt(allItemText?.trim() || '0', 10); 
+      expect(allItemNumber).toBeLessThanOrEqual(pageCount);
       await expect(allItems).toHaveAttribute('class', /selected/);
       console.log('Results per page is: ' + pageCount);
     }

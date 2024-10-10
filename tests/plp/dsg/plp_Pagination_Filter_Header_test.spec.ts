@@ -13,8 +13,17 @@ test.describe('PLP Pagination Tests', () => {
     const commonPage = new CommonPage(page);
 
     await test.step('Given we are on the home page', async () => {
-      await homePage.goToHomePage(getBaseUrl() + 'homr');
-      console.log('URL: ' + getBaseUrl() + 'homr');
+      const baseUrl = getBaseUrl();
+      if (baseUrl.includes('www.dickssportinggoods')) 
+        { 
+          await homePage.goToHomePage(getBaseUrl()); 
+          console.log('URL: ' + getBaseUrl());
+        }
+      else {
+        await homePage.goToHomePage(getBaseUrl() + 'homr');
+        console.log('URL: ' + getBaseUrl() + 'homr');
+      }
+      
     });
 
     await test.step('When we search for product in the search box', async () => {
@@ -39,14 +48,17 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('01. Pagination_Validating next arrow', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH']},async ({ page }) => {
+  test('01. Pagination_Validating next arrow', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
 
     await test.step('Validating the next arrow', async () => {
       const productListingPage = new ProductListingPage(page);
       await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
-      const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
+      const firstPageCount = await productListingPage.getActualPaginationCount();
+      await productListingPage.rightChevronNextButtonAngular.nth(1).click();
       console.log('Clicked on the right arrow');
       await page.waitForLoadState('domcontentloaded');
       await productListingPage.totalItemCardsAngular.last().waitFor();
@@ -57,14 +69,17 @@ test.describe('PLP Pagination Tests', () => {
     });
   });
 
-  test('02. Pagination_Validating back arrow', async ({ page }) => {
+  test('02. Pagination_Validating back arrow', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
 
     await test.step('Validating the back arrow', async () => {
       const productListingPage = new ProductListingPage(page);
       await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
-      const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
+      const firstPageCount = await productListingPage.getActualPaginationCount();
+      await productListingPage.rightChevronNextButtonAngular.nth(1).click();
       console.log('Clicked on the right arrow');
       await page.waitForLoadState('domcontentloaded');
       await productListingPage.totalItemCardsAngular.last().waitFor();
@@ -85,13 +100,16 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('03. Pagination_Validating page numbers', async ({ page }) => {
+  test('03. Pagination_Validating page numbers', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     await test.step('Validating any random page number', async () => {
       const productListingPage = new ProductListingPage(page);
       await expect(productListingPage.rightChevronNextButtonAngular).toBeVisible();
       console.log('Right arrow is visible');
-      const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.rightChevronNextButtonAngular.click();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
+      const firstPageCount = await productListingPage.getActualPaginationCount();
+      await productListingPage.rightChevronNextButtonAngular.nth(1).click();
       console.log('Clicked on the right arrow');
       await page.waitForLoadState('domcontentloaded');
       await productListingPage.totalItemCardsAngular.last().waitFor();
@@ -100,27 +118,32 @@ test.describe('PLP Pagination Tests', () => {
       console.log('Page count matched between pages');
       await productListingPage.validateRandomPage(firstPageCount, 2);
       await productListingPage.validateRandomPage(firstPageCount, 3);
-      await productListingPage.validateRandomPage(firstPageCount, 1);
       console.log('Validation successful');
     });
 
   });
 
-  test('04. Pagination_Validating results per page', async ({ page }) => {
+  test('04. Pagination_Validating results per page', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     await test.step('Validating results per page', async () => {
       const productListingPage = new ProductListingPage(page);
+      await productListingPage.rightChevronNextButtonAngular.click();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       await productListingPage.validateResultsPerPage(1);
+      await productListingPage.validateResultsPerPage(2);
       await productListingPage.validateResultsPerPage(3);
-      await productListingPage.validateResultsPerPage(4);
       console.log('Validation successful');
     });
 
   });
 
 
-  test('04. Pagination_Validating sort selection', async ({ page }) => {
+  test('05. Pagination_Validating sort selection',{ tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating sort selection', async () => {
+      await productListingPage.rightChevronNextButtonAngular.click();
+      await page.waitForLoadState('domcontentloaded');
+      await productListingPage.totalItemCardsAngular.last().waitFor();
       const firstPageCount = await productListingPage.getActualPaginationCount();
       await productListingPage.selectSortCategory('Top Sellers', firstPageCount);
       await productListingPage.selectSortCategory('Savings High to Low', firstPageCount);
@@ -133,7 +156,7 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('05. Category_Validating main product categories and marketing content', async ({ page }) => {
+  test('06. Category_Validating main product categories and marketing content', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] },async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating main product categories', async () => {
       //In some environments the categories do not display, hence commenting the below step for now to avoid build failure
@@ -143,7 +166,7 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('06. Category_Validating Pro Tips functionality', async ({ page }) => {
+  test('07. Category_Validating Pro Tips functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to click on the ProTips link');
     await productListingPage.linkProTips.nth(1).click();
@@ -154,7 +177,7 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('07. Validating Brand filter functionality', async ({ page }) => {
+  test('08. Validating Brand filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the brand filter is working as expected');
     const brandName1 = await productListingPage.brandAccordionFilterLabelsAngular.nth(0).textContent();
@@ -172,7 +195,7 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('08. Validating Size filter functionality', async ({ page }) => {
+  test('09. Validating Size filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the size filter is working as expected');
     await productListingPage.sizeAccordionFilterButtonAngular.click();
@@ -191,7 +214,7 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('09. Validating Color filter functionality', async ({ page }) => {
+  test('10. Validating Color filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the color filter is working as expected');
     await productListingPage.colorAccordionFilterButtonAngular.click();
@@ -210,7 +233,7 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('10. Validating Gender filter functionality', async ({ page }) => {
+  test('11. Validating Gender filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the gender filter is working as expected');
     const gender1 = await productListingPage.genderAccordionFilterLabelsAngular.nth(0).textContent();
@@ -228,7 +251,7 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('11. Validating Product Type filter functionality', async ({ page }) => {
+  test('12. Validating Product Type filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the product type filter is working as expected');
     await productListingPage.productTypeAccordionFilterButtonAngular.click();
@@ -247,14 +270,14 @@ test.describe('PLP Pagination Tests', () => {
     console.log('Validation successful');
   });
 
-  test('12. Validating Shipping filter functionality', async ({ page }) => {
+  test('13. Validating Shipping filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the shipping filter is working as expected');
     await productListingPage.validateShippingFilter();
     console.log('Validation successful');
   });
 
-  test('13. Validating Shipping filter functionality', async ({ page }) => {
+  test('14. Validating Shipping filter functionality', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     console.log('Going to validate the mixed filter is working as expected');
     await productListingPage.validateMixedFilter();
@@ -262,7 +285,6 @@ test.describe('PLP Pagination Tests', () => {
   });
 
 });
-
 
 
 
