@@ -14,12 +14,10 @@ test.describe('PLP Pagination Tests', () => {
 
     await test.step('Given we are on the home page', async () => {
       const baseUrl = getBaseUrl();
-      if (baseUrl.includes('www.dickssportinggoods')) 
-        { 
+      if (baseUrl.includes('www.dickssportinggoods')) { 
           await homePage.goToHomePage(getBaseUrl()); 
           console.log('URL: ' + getBaseUrl());
-        }
-      else {
+        } else {
         await homePage.goToHomePage(getBaseUrl() + 'homr');
         console.log('URL: ' + getBaseUrl() + 'homr');
       }
@@ -138,7 +136,7 @@ test.describe('PLP Pagination Tests', () => {
   });
 
 
-  test('05. Pagination_Validating sort selection',{ tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
+  test('05. Pagination_Validating sort selection', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating sort selection', async () => {
       await productListingPage.rightChevronNextButtonAngular.click();
@@ -156,7 +154,7 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('06. Category_Validating main product categories and marketing content', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] },async ({ page }) => {
+  test('06. Category_Validating main product categories and marketing content', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH'] }, async ({ page }) => {
     const productListingPage = new ProductListingPage(page);
     await test.step('Validating main product categories', async () => {
       //In some environments the categories do not display, hence commenting the below step for now to avoid build failure
