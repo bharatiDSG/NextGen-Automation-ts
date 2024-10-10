@@ -39,7 +39,7 @@ test.describe('PLP Pagination Tests', () => {
 
   });
 
-  test('01. Pagination_Validating next arrow', async ({ page }) => {
+  test('01. Pagination_Validating next arrow', { tag: ['@NP0_Prod_DSG_PLP_PFH', '@Prod_DSG_PLP_PFH', '@Preview_DSG_PLP_PFH']},async ({ page }) => {
 
     await test.step('Validating the next arrow', async () => {
       const productListingPage = new ProductListingPage(page);
