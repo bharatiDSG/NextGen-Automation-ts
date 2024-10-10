@@ -323,9 +323,9 @@ export class ProductListingPage {
 
   async selectMatchingProduct(product: string): Promise<string> {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.productNamesAngular.last().waitFor();
+    await this.productNames.last().waitFor();
 
-    const productNames = await this.productNamesAngular.allInnerTexts();
+    const productNames = await this.productNames.allInnerTexts();
     const productNamesLowerCase = productNames.map(arr => arr.toLowerCase());
     //console.log({ productNamesLowerCase });
     //console.log({productNames})
@@ -343,7 +343,7 @@ export class ProductListingPage {
       console.warn('No Matching Product - Defaults to last Product: \n' + productNames[productNames.length - 1]);
     }
 
-    await this.productNamesAngular.nth(indexOfProductFirstMatch).click();
+    await this.productNames.nth(indexOfProductFirstMatch).click();
 
     return productMatchName;
   }
