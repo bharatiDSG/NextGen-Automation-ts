@@ -179,8 +179,8 @@ export class CheckoutPage {
         this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:');
         this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']");
 
-        this.shippingFirstName = page.getByText('Recipient\'s First Name');
-        this.shippingLastName = page.getByText('Recipient\'s Last Name');
+        this.shippingFirstName = page.getByText('Recipient\'s First Name', { exact: true });
+        this.shippingLastName = page.getByText('Recipient\'s Last Name', { exact: true });
         this.shippingAddress = page.locator('//input[@id="homefield-textinput-shippingaddress"]');
         this.shippingAddressLine2 = page.locator('//input[@id="homefield-textinput-shippingaddress2"]');
         this.shippingZipcode = page.locator('//input[@id="homefield-textinput-shippingzipcode"]');
@@ -212,8 +212,8 @@ export class CheckoutPage {
         this.pickupEmail = page.locator('#homefield-textinput-proxy-email');
         this.pickUpContinue = page.getByRole('button', { name: 'Continue' }).first();
 
-        this.giftReceipientEmail = page.getByLabel('gift recipient', { exact: true });
-        this.giftReceipientFirstName = page.getByLabel('gift recipient name');
+        this.giftReceipientEmail = page.getByLabel('Gift Recipient\'s Email Address');
+        this.giftReceipientFirstName = page.getByText('Gift Recipient\'s First Name');;
         this.giftReceipientDescription = page.getByLabel('Gift Message (optional)');
         this.sameDayDeliveryTip = page.locator("//h2[contains(text(),'Same Day Delivery Tip')]");
 
@@ -264,13 +264,13 @@ export class CheckoutPage {
             await this.editBillingShippingInfo.click();
             await this.page.waitForLoadState('domcontentloaded');
         }
-        if (await this.shippingBillingFirstName.isVisible()) {
-            await this.shippingBillingFirstName.click();
-            await this.shippingBillingFirstName.fill(firstName);
-            await this.shippingBillingFirstName.press('Tab');
-            await this.shippingBillingLastName.fill(lastName);
-            await this.shippingBillingLastName.press('Tab');
-        }
+        // if (await this.shippingBillingFirstName.isEnabled()) {
+        //     await this.shippingBillingFirstName.click();
+        //     await this.shippingBillingFirstName.fill(firstName);
+        //     await this.shippingBillingFirstName.press('Tab');
+        //     await this.shippingBillingLastName.fill(lastName);
+        //     await this.shippingBillingLastName.press('Tab');
+        // }
         await this.billingShippingAddress.first().click();
         await this.billingShippingAddress.first().fill(address);
         await this.billingShippingAddress.first().press('Tab');
