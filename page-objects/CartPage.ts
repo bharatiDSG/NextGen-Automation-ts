@@ -1,7 +1,8 @@
 import { FrameLocator, Locator, Page, expect } from '@playwright/test';
 import { getNextValueFromArray, removeAllMatchingItemsFromArray } from '../lib/functions';
-import { CommonPage } from './CommonPage';
+
 import { AccountSignInPage } from './AccountSignInPage';
+import { CommonPage } from './CommonPage';
 import axios from 'axios';
 import { getBaseUrl } from '../globalSetup';
 
@@ -88,7 +89,7 @@ export class CartPage {
     this.giftOption = page.locator('//homefield-checkbox');
     this.shipToZipCode = page.locator("//a[contains(@class,'zip-code')]");
     this.zipCodeInput = page.locator("//input[@type='number']");
-    this.updateZipCodeButton = page.getByTestId('button');
+    this.updateZipCodeButton = page.getByTestId('button').first();
     this.sameDayDeliveryRadioButton = page.locator("//p[contains(text(),'Same Day Delivery')]");
     this.confirmAndCheckoutBtn = page.getByRole('button', { name: 'Confirm and Checkout' });
     this.cartCommonProgressSpinner = page.locator('//common-loading-overlay/div');
