@@ -179,11 +179,11 @@ export class CheckoutPage {
         this.largeItemShippingMethods = page.getByText('Large Item Shipping Methods:');
         this.creditCardErrormessage = page.locator("//div[@class='credit-card-form-errors' and @style='']");
 
-        this.shippingFirstName = page.locator('#shipping-form-card #shipFirstName');
-        this.shippingLastName = page.locator('#shipping-form-card #shipLastName');
-        this.shippingAddress = page.locator('#shipping-form-card #address');
-        this.shippingAddressLine2 = page.locator('#shipping-form-card #address2');
-        this.shippingZipcode = page.locator('#shipping-form-card #zipcode');
+        this.shippingFirstName = page.getByText('Recipient\'s First Name');
+        this.shippingLastName = page.getByText('Recipient\'s Last Name');
+        this.shippingAddress = page.locator('//input[@id="homefield-textinput-shippingaddress"]');
+        this.shippingAddressLine2 = page.locator('//input[@id="homefield-textinput-shippingaddress2"]');
+        this.shippingZipcode = page.locator('//input[@id="homefield-textinput-shippingzipcode"]');
 
         this.billingFirstName = page.locator('#billing-form-card #shipFirstName');
         this.billingLastName = page.locator('#billing-form-card #shipLastName');
@@ -200,16 +200,16 @@ export class CheckoutPage {
 
         this.estDeliveryDates = page.locator("//span[contains(text(),' Est. Delivery: ')]");
         this.individualProductName = page.locator("//p[contains(@class,'product-name')]/span");
-        this.storeDetails = page.locator('//chk-store-details');
-        this.storename = page.locator('//chk-store-details/div/div');
+        this.storeDetails = page.locator('//cart-checkout-checkout-components-store-details');
+        this.storename = page.locator('//cart-checkout-checkout-components-store-details/div/div');
         this.freeStorePickup = page.getByText('Free Store Pickup');
         this.dsgLogo = page.getByRole('link', { name: 'DICK\'S Sporting Goods' });
 
         this.textMeOrderUpdates = page.locator('//hmf-checkbox[@label="Text me order updates"]');
         this.addPickupPersonLink = page.locator("//span[@actiontype='AddAdditionalPickupPersonClick']");
-        this.pickupFirstname = page.locator('#proxy-first-name');
-        this.pickupLastname = page.locator('#proxy-last-name');
-        this.pickupEmail = page.locator('#proxy-email');
+        this.pickupFirstname = page.locator('#homefield-textinput-proxy-first-name');
+        this.pickupLastname = page.locator('#homefield-textinput-proxy-last-name');
+        this.pickupEmail = page.locator('#homefield-textinput-proxy-email');
         this.pickUpContinue = page.getByRole('button', { name: 'Continue' }).first();
 
         this.giftReceipientEmail = page.getByLabel('gift recipient', { exact: true });
@@ -219,7 +219,7 @@ export class CheckoutPage {
 
         this.sameDayDevlieryTipAmount = page.locator("//button[@aria-pressed='true']/span");
         this.otherTipLink = page.getByLabel('Custom tip selection');
-        this.tipAmountInput = page.getByPlaceholder('Enter tip amount');
+        this.tipAmountInput = page.locator('//input[@placeholder="Enter tip amount"]');
         this.applyTipAmount = page.getByRole('button', { name: 'Apply', exact: true });
         this.tipChangeLink = page.locator('#same-day-card').getByRole('button', { name: 'Change' });
 
