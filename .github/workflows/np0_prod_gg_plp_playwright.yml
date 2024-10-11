@@ -1,4 +1,4 @@
-name: NP0_PROD GG Search Playwright Tests
+name: NP0_PROD GG PLP Playwright Tests
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   playwright:
-    name: 'NP0_PROD GG Search Playwright'
+    name: 'NP0_PROD GG PLP Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.46.0-jammy
@@ -26,10 +26,10 @@ jobs:
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
 
-      - name: NP0_PROD GG Search Tests
+      - name: NP0_PROD GG PLP Search Tests
         run: |
-          echo "Run E2E NP0 GG Search Tests"
-          npx playwright test --grep '(?=.*@PLP)(?=.*@np0Prod)(?=.*@GG)'
+          echo "Run E2E NP0 GG PLP Search Tests"
+          npx playwright test --grep '(?=.*@PLP)(?=.*@Search)(?=.*@np0Prod)(?=.*@GG)'
         env:
             ENV: gg_np0prod
 
@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-PLP-Search
           path: playwright-report/
           retention-days: 2`
 
@@ -48,5 +48,46 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          title: "{title: `** ALERT ** Failure in Search GG NP0 Playwright Test`}"
+          title: "{title: `** ALERT ** Failure in Search PL GG NP0 Playwright Test`}"
+
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json --title 'Search'
+        if: always()
+        # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json --title 'Search'
+        if: always()
+
+      - name: NP0_PROD GG PLP Favorites Tests
+        if: always()  
+        run: |
+          echo "Run E2E NP0 GG PLP Favorites Tests"
+          npx playwright test --grep '(?=.*@PLP)(?=.*@Favorites)(?=.*@np0Prod)(?=.*@GG)'
+        env:
+            ENV: gg_np0prod
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-PLP-Favorites
+          path: playwright-report/
+          retention-days: 2`
+
+      # - uses: actions/checkout@master
+      - name: Microsoft Teams Alert Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          job: ${{ toJson(job) }}
+          title: "{title: `** ALERT ** Failure in Search PL GG NP0 Playwright Test`}"
+
+      - name: Publish CTRF Detailed Test Summary Results
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json --title 'Favorites'
+        if: always()
+        # View only failed summary report with Stack trace
+      - name: Publish CTRF Failed Test Summary Results
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json --title 'Favorites'
+        if: always()
 
