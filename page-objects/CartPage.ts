@@ -84,7 +84,7 @@ export class CartPage {
     this.emptyCartButtonSinIn = page.locator('button#empty-cart-sign-in-button');
     this.noRewardText = page.locator('p.no-reward-text');
     this.cartSaveLaterLink = page.locator('a.save-for-later-link');
-    this.deleteIcon = page.locator('//img[@class="delete-icon"]');
+    this.deleteIcon = page.locator('.delete-icon > svg');
     this.individualProductName = page.locator("//p[contains(@class,'product-name')]");
     this.giftOption = page.locator('//homefield-checkbox');
     this.shipToZipCode = page.locator("//a[contains(@class,'zip-code')]");
