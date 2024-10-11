@@ -119,7 +119,7 @@ export class ProductListingPage {
 
 
     // Select Store and delivery zip
-    this.changeSelectedStoreLink = page.getByLabel('Change selected store from').or(this.page.locator('.header-my-store'));
+    this.changeSelectedStoreLink = page.locator('//button[@data-testid="my-store-new"]');
     this.selectStoreZipField = page.getByPlaceholder('Enter Zip code');
     this.selectStoreSearchButton = page.getByLabel('SEARCH', { exact: true });
     this.selectStoreNames = page.locator('[class="hmf-text-transform-capitalize"]');
@@ -255,8 +255,8 @@ export class ProductListingPage {
 
   async setStoreFromPLP(store: string): Promise<string> {
     const commonPage = new CommonPage(this.page);
-    await this.changeSelectedStoreLink.isVisible();
-    await this.changeSelectedStoreLink.click();
+    await this.changeSelectedStoreLink.first().isVisible();
+    await this.changeSelectedStoreLink.first().click();
     await this.selectStoreZipField.click();
     await this.selectStoreZipField.fill('15108');
     await this.selectStoreSearchButton.click();
