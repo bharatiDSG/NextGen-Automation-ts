@@ -5,7 +5,7 @@ export const testData_smokeCheckout_prod = {
     email: 'AutomationTestingDSG@gmail.com',
     firstname: 'Tiger',
     lastName: 'King',
-    phoneNumber: '72427334008',
+    phoneNumber: '7242733408',
     address: '345 Court St. Coraopolis',
     address2: '',
     zipCode: '15108',

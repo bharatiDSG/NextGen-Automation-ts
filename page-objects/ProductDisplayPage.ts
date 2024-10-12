@@ -199,7 +199,7 @@ export class ProductDisplayPage {
     this.customersAlsoBoughtSection = page.getByText('Customers Also Bought');
     this.recentlyViewedSection = page.getByText('Recently Viewed');
 
-    this.productTitle = page.locator('//h1[@itemprop="name"]');
+    this.productTitle = page.locator('//div[contains(@class,"product-info-main-desktop")]//h1[@itemprop="name"]');
   }
 
   async setStoreFromPDP(zipcode: string, store: string): Promise<string> {
