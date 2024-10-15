@@ -145,7 +145,7 @@ test.describe('E2E NP0 QA', () => {
 
         // Set store
         await test.step('Set zip code and select Store', async () => {
-            await productDisplayPage.selectStorePickup('Select product options');
+            await productDisplayPage.selectStorePickup('Select product options',testData_e2e_np0_qa.zipCode,testData_e2e_np0_qa.storeSearch);
             await productDisplayPage.selectProductByColor.click();
             console.log('Store setup done');
 
@@ -233,11 +233,11 @@ test.describe('E2E NP0 QA', () => {
         // Set store
         await test.step('Set zip code and select Store', async () => {
 
-            await productDisplayPage.selectStorePickup('Select product options');
+            await productDisplayPage.selectStorePickup('Select product options',testData_e2e_np0_qa.zipCode,testData_e2e_np0_qa.storeSearch);
             console.log('Store setup completed');
             await productDisplayPage.selectProductByColor.click();
             //Selecting store pickup and validating stock is present
-            await productDisplayPage.selectStorePickup('In stock');
+            await productDisplayPage.selectStorePickup('Select product options',testData_e2e_np0_qa.zipCode,testData_e2e_np0_qa.storeSearch);
             console.log('CProduct in stock for BOPIS');
         });
 
@@ -324,11 +324,11 @@ test.describe('E2E NP0 QA', () => {
         // Set store
         await test.step('Set zip code and select Store', async () => {
 
-            await productDisplayPage.selectStorePickup('Select product options');
+            await productDisplayPage.selectStorePickup('Select product options',testData_e2e_np0_qa.zipCode,testData_e2e_np0_qa.storeSearch);
             console.log('Store setup completed');
             await productDisplayPage.selectProductByColor.click();
             //Selecting store pickup and validating stock is present
-            await productDisplayPage.selectStorePickup('In stock');
+            await productDisplayPage.selectStorePickup('Select product options',testData_e2e_np0_qa.zipCode,testData_e2e_np0_qa.storeSearch);ss
             console.log('Product In stock');
         });
 

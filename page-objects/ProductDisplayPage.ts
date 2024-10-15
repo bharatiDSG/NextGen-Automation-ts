@@ -258,10 +258,10 @@ export class ProductDisplayPage {
     expect(availabilityStatus?.trim()).toBe(String(expectedStatus));
   }
 
-  async selectStorePickup(status:string): Promise<void> {
+  async selectStorePickup(status:string, zip:string, store:string): Promise<void> {
     console.log('The status is: '+status);
     await this.storePickup.click();
-    await this.setStoreFromPDP('15108', 'Robinson');
+    await this.setStoreFromPDP(zip, store);
   }
 
 

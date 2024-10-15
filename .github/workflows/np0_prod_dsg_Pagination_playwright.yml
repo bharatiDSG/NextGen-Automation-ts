@@ -1,43 +1,43 @@
-name: E2E DSG NP0 Prod PLP Pagination_Filter_Header playwright Tests
+name: NP0_PROD DSG Pagination Tests
 
 on:
   schedule:
     - cron: '*/30 * * * *'  # Run every half hour
   workflow_dispatch:
 
-
-
 jobs:
   playwright:
-    name: 'E2E DSG NP0 Prod PLP Pagination_Filter_Header playwright Tests'
+    name: 'NP0_PROD DSG Pagination Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.46.0-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      # - uses: actions/setup-node@v4
-        # with:
-          # node-version: 20
+          # - uses: actions/setup-node@v4
+          # with:
+        # node-version: 20
 
       - name: Install Dependencies
         run: |
           echo "Install dependencies from lock file"
           npm ci
+
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
-      - name: E2E DSG NP0 Prod PLP Pagination_Filter_Header playwright Tests
-        run: |
-          echo "Run E2E PLP Pagination tests"
-          npx playwright test tests/plp/dsg/plp_Pagination_Filter_Header_test.spec.ts
-        env:
-            ENV: dsg_np0prod
 
-      - name: Upload Report     
+      - name: NP0_PROD DSG Pagination Tests
+        run: |
+          echo "Run E2E NP0 DSG Pagination Tests"
+          npx playwright test --grep '(?=.*@PLP)(?=.*@Pagination)(?=.*@np0Prod)(?=.*@DSG)'
+        env:
+          ENV: dsg_np0prod
+
+      - name: Upload Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-PLP-Search
           path: playwright-report/
           retention-days: 2`
 
@@ -48,13 +48,15 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          title: "{title: `** ALERT ** Failure in E2E DSG NP0 Prod PLP Pagination_Filter_Header playwright Tests`}"
+          title: "{title: `** ALERT ** Failure in Pagination NP0 Prod DSG Playwright Test`}"
 
-      #View report
       - name: Publish CTRF Detailed Test Summary Results
-        run: npx github-actions-ctrf tests ctrf/ctrf-report.json
+        run: npx github-actions-ctrf tests ctrf/ctrf-report.json --title 'Search'
         if: always()
-      # View only failed summary report with Stack trace
+        # View only failed summary report with Stack trace
       - name: Publish CTRF Failed Test Summary Results
-        run: npx github-actions-ctrf failed ctrf/ctrf-report.json
+        run: npx github-actions-ctrf failed ctrf/ctrf-report.json --title 'Search'
         if: always()
+
+
+
