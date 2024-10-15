@@ -172,7 +172,7 @@ test.describe('PLP Pagination Tests', () => {
       expect(newPageUrl).toContain('protip');
       console.log('ProTips page opened');
       console.log('Validation successful');
-    })
+    });
   });
 
 
@@ -194,7 +194,7 @@ test.describe('PLP Pagination Tests', () => {
       const brandNameTrimmed3 = brandName3?.trim();
       await productListingPage.validateBrandFilter(brandNameTrimmed3, 2);
       console.log('Validation successful');
-    })
+    });
 
   });
 
@@ -215,7 +215,7 @@ test.describe('PLP Pagination Tests', () => {
       const size3Trimmed = size3?.trim();
       await productListingPage.validateSizeFilter(size3Trimmed, 2);
       console.log('Validation successful');
-    })
+    });
   });
 
   test('10. Validating Color filter functionality', { tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
@@ -235,7 +235,7 @@ test.describe('PLP Pagination Tests', () => {
       const colorTrimmed3 = color3?.trim();
       await productListingPage.validateColorFilter(colorTrimmed3, 2);
       console.log('Validation successful');
-    })
+    });
   });
 
   test('11. Validating Gender filter functionality', { tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
@@ -254,10 +254,10 @@ test.describe('PLP Pagination Tests', () => {
       const genderTrimmed3 = gender3?.trim();
       await productListingPage.validateGendedFilter(genderTrimmed3, 2);
       console.log('Validation successful');
-    })
+    });
   });
 
-  test('12. Validating Product Type filter functionality',{ tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
+  test('12. Validating Product Type filter functionality', { tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
     await test.step('Going to validate the product type filter is working as expected', async () => {
       const productListingPage = new ProductListingPage(page);
       await productListingPage.productTypeAccordionFilterButtonAngular.click();
@@ -274,7 +274,7 @@ test.describe('PLP Pagination Tests', () => {
       const productTrimmed3 = product3?.trim();
       await productListingPage.validateProductTypeFilter(productTrimmed3, 2);
       console.log('Validation successful');
-    })
+    });
   });
 
   test('13. Validating Shipping filter functionality', { tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
@@ -283,7 +283,7 @@ test.describe('PLP Pagination Tests', () => {
       console.log('Going to validate the shipping filter is working as expected');
       await productListingPage.validateShippingFilter();
       console.log('Validation successful');
-    })
+    });
   });
 
   test('14. Validating Shipping filter functionality', { tag: ['@PLP', '@Pagination', '@DSG', '@np0Prod', '@Prod', '@Preview'] }, async ({ page }) => {
@@ -292,7 +292,7 @@ test.describe('PLP Pagination Tests', () => {
       console.log('Going to validate the mixed filter is working as expected');
       await productListingPage.validateMixedFilter();
       console.log('Validation successful');
-    })
+    });
   });
 
 
