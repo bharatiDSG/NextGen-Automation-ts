@@ -258,13 +258,10 @@ export class ProductDisplayPage {
     expect(availabilityStatus?.trim()).toBe(String(expectedStatus));
   }
 
-  async selectStorePickup(status:string): Promise<void> {
+  async selectStorePickup(status:string, zip:string, store:string): Promise<void> {
     console.log('The status is: '+status);
     await this.storePickup.click();
-    // Fetch the text of the input field
-    //const avlblStatus = await this.productAvailabilitystorePickup.textContent();
-    // Assert the quantity is as expected
-    //expect(avlblStatus?.trim()).toContain(String(exectedStatus));
+    await this.setStoreFromPDP(zip, store);
   }
 
 

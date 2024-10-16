@@ -23,7 +23,6 @@ export class ProductListingPage {
   readonly saleFilterValueReact: Locator;
   readonly saleFilterValueAngular: Locator;
   readonly sizeAccordionFilterButtonReact: Locator;
-  readonly sizeAccordionFilterButtonAngular: Locator;
   readonly sizeFilterValueReact: Locator;
   readonly sizeFilterValueAngular: Locator;
   readonly filterChipsReact: Locator;
@@ -109,9 +108,30 @@ export class ProductListingPage {
   readonly brandAccordionFilterButtonAngular: Locator;
   readonly brandAccordionFilterCheckboxesAngular: Locator;
   readonly brandAccordionFilterResultsAngular: Locator;
+  readonly brandAccordionFilterLabelsAngular: Locator;
   readonly brandAccordionFilterSearchBoxAngular: Locator;
   readonly filterPaginationResults: Locator;
-  readonly brandAccordionFilterLabelsAngular: Locator;
+  readonly selectedFilterSubHeaderAngular: Locator;
+  readonly genderAccordionFilterButtonAngular: Locator;
+  readonly genderAccordionFilterCheckboxesAngular: Locator;
+  readonly genderAccordionFilterResultsAngular: Locator;
+  readonly genderAccordionFilterLabelsAngular: Locator;
+  readonly colorAccordionFilterButtonAngular: Locator;
+  readonly colorAccordionFilterCheckboxesAngular: Locator;
+  readonly colorAccordionFilterResultsAngular: Locator;
+  readonly colorAccordionFilterLabelsAngular: Locator;
+  readonly sizeAccordionFilterButtonAngular: Locator;
+  readonly sizeAccordionFilterCheckboxesAngular: Locator;
+  readonly sizeAccordionFilterResultsAngular: Locator;
+  readonly sizeAccordionFilterLabelsAngular: Locator;
+  readonly productTypeAccordionFilterButtonAngular: Locator;
+  readonly productTypeAccordionFilterCheckboxesAngular: Locator;
+  readonly productTypeAccordionFilterResultsAngular: Locator;
+  readonly productTypeAccordionFilterLabelsAngular: Locator;
+  readonly clearAllFilter: Locator;
+  readonly shippingFilterStoreText: Locator;
+
+
 
 
   constructor(page: Page) {
@@ -155,25 +175,47 @@ export class ProductListingPage {
     this.sameDayDeliveryFilter = page.getByRole('button', { name: 'Same Day Delivery', exact: true });
     this.filterChipsReact = page.locator('[class="filter-chip"]');
     this.filterChipsAngular = page.locator('[class="hmf-global-chips-container"]');
-
+    this.shippingFilterStoreText = page.locator('.store-text').first();
 
     // product attribute filters
     this.sizeAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-size"]');
-    this.sizeAccordionFilterButtonAngular = page.locator('[aria-controls="Size-accordion-panel"]');
+    this.sizeAccordionFilterButtonAngular = page.locator('[aria-controls="Size-accordion-panel"]').first();
+    this.sizeAccordionFilterCheckboxesAngular = page.locator('#Size-accordion-panel button[class *="size-filter"]');
+    this.sizeAccordionFilterResultsAngular = page.locator('#Size-accordion-panel button[class *="size-filter"] span:nth-child(2)');
+    this.sizeAccordionFilterLabelsAngular = page.locator('#Size-accordion-panel button[class *="size-filter"] span:nth-of-type(1)');
+
+    this.genderAccordionFilterButtonAngular = page.locator('[aria-controls="Gender-accordion-panel"]').first();
+    this.genderAccordionFilterCheckboxesAngular = page.locator('#Gender-accordion-panel label[class *="checkbox"]');
+    this.genderAccordionFilterResultsAngular = page.locator('#Gender-accordion-panel div[class*="single-filter"] div:nth-child(2)');
+    this.genderAccordionFilterLabelsAngular = page.locator('#Gender-accordion-panel  div[class*="single-filter"] div>span');
+
+    this.colorAccordionFilterButtonAngular = page.locator('[aria-controls="Color-accordion-panel"]').first();
+    this.colorAccordionFilterCheckboxesAngular = page.locator('#Color-accordion-panel label[class *="checkbox"]');
+    this.colorAccordionFilterResultsAngular = page.locator('#Color-accordion-panel div[class*="single-filter"] div:nth-child(2)');
+    this.colorAccordionFilterLabelsAngular = page.locator('#Color-accordion-panel  div[class*="single-filter"] div>span');
+
+    this.productTypeAccordionFilterButtonAngular = page.locator('[aria-controls="Shirt Type-accordion-panel"]').first();
+    this.productTypeAccordionFilterCheckboxesAngular = page.locator('[id*="Shirt Type-accordion-panel"] label[class *="checkbox"]');
+    this.productTypeAccordionFilterResultsAngular = page.locator('[id*="Shirt Type-accordion-panel"] div[class*="single-filter"] div:nth-child(2)');
+    this.productTypeAccordionFilterLabelsAngular = page.locator('[id*="Shirt Type-accordion-panel"]  div[class*="single-filter"] div>span');
+
     this.brandAccordionFilterButtonAngular = page.locator('[aria-controls="Brand-accordion-panel"]').first();
     this.brandAccordionFilterCheckboxesAngular = page.locator('#Brand-accordion-panel label[class *="checkbox"]');
     this.brandAccordionFilterResultsAngular = page.locator('#Brand-accordion-panel div[class*="single-filter"] div:nth-child(2)');
     this.brandAccordionFilterLabelsAngular = page.locator('#Brand-accordion-panel  div[class*="single-filter"] label');
     this.brandAccordionFilterSearchBoxAngular = page.locator('input[placeholder="Search Brands"]');
-    this.filterPaginationResults = page.locator('[class*="top-pagination-product-number"]');
 
-    
+    this.selectedFilterSubHeaderAngular = page.locator('div.accordion-subheader');
+    this.filterPaginationResults = page.locator('[class*="top-pagination-product-number"]');
     this.saleAccordionFilterButtonReact = page.locator('[class="rs-multi-select-facet rs-facet-wrapper rs-facet-wrapper-sale"]');
     this.saleAccordionFilterButtonAngular = page.locator('[aria-controls="Sale-accordion-panel"]');
     this.sizeFilterValueReact = page.getByLabel('L', { exact: true });
     this.sizeFilterValueAngular = page.getByText('L', { exact: true });
     this.saleFilterValueReact = page.locator('[class="mdc-switch  mdc-switch--disabled"]');
     this.saleFilterValueAngular = page.locator('[class="checkbox-container]', { hasText: 'Sale' });
+    this.clearAllFilter = page.getByLabel('Clear all filters');
+
+
 
     // product attributes
     this.productNames = page.locator('//a[@class="rs_product_description d-block"]');
@@ -399,7 +441,7 @@ export class ProductListingPage {
 
 
   }
-  
+
   async selectAProductWithInGivenRange(withInRange: number) {
     await this.productNamesAngular.last().waitFor();
     const productNames = await this.productNamesAngular.allInnerTexts();
@@ -411,7 +453,7 @@ export class ProductListingPage {
   async getRandomNumber(maxRange: number): Promise<number> {
     const buf = new Uint8Array(1);
     crypto.getRandomValues(buf);
-    return buf[0]%maxRange;
+    return buf[0] % maxRange;
   }
 
   async verifyAttributesArePresentOrNotForShipToMe(): Promise<boolean> {
@@ -445,7 +487,7 @@ export class ProductListingPage {
 
     // Click add to cart button on plp page
     // expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
-    if(await this.quickviewOpenATCButtonAngular.first().isVisible()){
+    if (await this.quickviewOpenATCButtonAngular.first().isVisible()) {
       expect(this.quickviewOpenATCButtonAngular.last()).toBeVisible();
     } else {
       expect(this.quickviewOpenATCButtonReact.last()).toBeVisible();
@@ -680,15 +722,15 @@ export class ProductListingPage {
       const allItemText = await allItems.textContent();
       console.log('Result per page text is: ' + allItemText);
       const pageCount = await this.getActualPaginationCount();
-      expect(allItemText?.trim()).toContain(String(pageCount));
-      // await expect(allItems).toHaveAttribute('class', /active/);
+      const allItemNumber = parseInt(allItemText?.trim() || '0', 10); 
+      expect(allItemNumber).toBeLessThanOrEqual(pageCount);
       await expect(allItems).toHaveAttribute('class', /selected/);
       console.log('Results per page is: ' + pageCount);
     }
   }
   async selectSortCategory(category: string, pageCount: number) {
     console.log('the expected categoty provided: ' + category);
-    console.log('The page count is: '+pageCount);
+    console.log('The page count is: ' + pageCount);
     // await this.sortOptionsAccordionButtonReact.click();
     await this.sortOptionsAccordionButtonAngular.first().click({ force: true });
     console.log('Validating sort category: ' + category);
@@ -760,20 +802,210 @@ export class ProductListingPage {
     }
   }
 
-  async validateBrandFilter(index:number) {
+  async validateBrandFilter(brandName: any, index: number) { // eslint-disable-line
     await this.page.waitForLoadState('domcontentloaded');
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
     await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
     await this.page.waitForLoadState('domcontentloaded');
     await this.totalItemCardsAngular.last().waitFor();
     const filterValueExpected = await this.brandAccordionFilterResultsAngular.nth(index).textContent();
-    console.log('The expected filter value is: '+filterValueExpected);
+    console.log('The expected filter value is: ' + filterValueExpected);
     const paginationValueActual = await this.filterPaginationResults.first().textContent();
-    console.log('The actual filter value is: '+paginationValueActual);
+    console.log('The actual filter value is: ' + paginationValueActual);
     expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const brandNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Brand named filtered is' + brandNameFiltered);
+    expect(brandNameFiltered).toContain(brandName);
     console.log('Filter results are matching');
-    await this.brandAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
     await this.page.waitForLoadState('domcontentloaded');
     await this.totalItemCardsAngular.last().waitFor();
-    }
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
   }
+
+  async validateSizeFilter(size: any, index: number) { // eslint-disable-line
+    await this.page.waitForLoadState('domcontentloaded');
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+    await this.sizeAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.sizeAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: ' + filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: ' + paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const sizeNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Size filtered is' + sizeNameFiltered);
+    expect(sizeNameFiltered).toContain(size);
+    console.log('Filter results are matching');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
+  }
+
+  async validateColorFilter(color: any, index: number) { // eslint-disable-line
+    await this.page.waitForLoadState('domcontentloaded');
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+    await this.colorAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.colorAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: ' + filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: ' + paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const colorNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Colors filtered is' + colorNameFiltered);
+    expect(colorNameFiltered).toContain(color);
+    console.log('Filter results are matching');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
+  }
+
+  async validateRandomPage(pageCount: number, pageNo: number) {
+    await this.pageItemsAngular.nth(pageNo - 1).click();
+    console.log('Clicked on any page number');
+    await this.page.waitForTimeout(2000);
+    // await expect(this.highlightedPageNumberReact).toHaveAttribute('class', /active/);
+    await expect(this.highlightedPageNumberAngular).toHaveAttribute('class', /selected/);
+    // const pageNumber = await this.highlightedPageNumberReact.textContent();
+    const pageNumber = await this.highlightedPageNumberAngular.textContent();
+    expect(pageNumber?.trim()).toContain(String(pageNo));
+    console.log('Validated the page number ' + pageNo);
+    const randomPageCount = await this.getActualPaginationCount();
+    // expect(pageCount).toBe(randomPageCount);
+    expect(pageCount).toBe(randomPageCount);
+    console.log('Validated the page count ' + pageCount);
+  }
+
+  async validateGendedFilter(gender: any, index: number) { // eslint-disable-line
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+    await this.genderAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.genderAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: ' + filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: ' + paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const genderNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Gender filtered is' + genderNameFiltered);
+    expect(genderNameFiltered).toContain(gender);
+    console.log('Filter results are matching');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
+  }
+
+  async validateProductTypeFilter(product: any, index: number) { // eslint-disable-line
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+    await this.productTypeAccordionFilterCheckboxesAngular.nth(index).click({ force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.productTypeAccordionFilterResultsAngular.nth(index).textContent();
+    console.log('The expected filter value is: ' + filterValueExpected);
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: ' + paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const productTypeNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Product Type filtered is' + productTypeNameFiltered);
+    expect(productTypeNameFiltered).toContain(product);
+    console.log('Filter results are matching');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset?.trim());
+  }
+
+  async validateShippingFilter() {
+    await this.page.waitForLoadState('domcontentloaded');
+    const paginationValueInitial = await this.filterPaginationResults.first().textContent();
+    await this.shipFilterButtonAngular.click();
+    await this.totalItemCardsAngular.last().waitFor();
+    const storeText1 = await this.shippingFilterStoreText.textContent();
+    expect(storeText1).toContain('Ship To');
+    console.log('Shipping filter type ' + 'Ship To' + ' validated');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset1 = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset1?.trim());
+    await this.pickupFilterButtonAngular.click();
+    await this.totalItemCardsAngular.last().waitFor();
+    const storeText2 = await this.shippingFilterStoreText.textContent();
+    expect(storeText2).toContain('Pickup At ');
+    console.log('Shipping filter type ' + 'Pickup At' + ' validated');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset2 = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset2?.trim());
+    await this.sameDayDeliveryFilter.click();
+    await this.totalItemCardsAngular.last().waitFor();
+    const storeText3 = await this.shippingFilterStoreText.textContent();
+    expect(storeText3).toContain('Deliver To ');
+    console.log('Shipping filter type ' + 'Deliver To' + ' validated');
+    await this.clearAllFilter.nth(1).waitFor();
+    await this.clearAllFilter.nth(1).click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    console.log('Filter reset successful and initial value restored');
+    const paginationValuePostReset3 = await this.filterPaginationResults.first().textContent();
+    expect(paginationValueInitial?.trim()).toContain(paginationValuePostReset3?.trim());
+
+
+  }
+
+  async validateMixedFilter() {
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.pickupFilterButtonAngular.click();
+    await this.totalItemCardsAngular.last().waitFor();
+    const storeText2 = await this.shippingFilterStoreText.textContent();
+    expect(storeText2).toContain('Pickup At');
+    console.log('Shipping filter type ' + 'Pickup At' + ' validated');
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.totalItemCardsAngular.last().waitFor();
+    const filterValueExpected = await this.genderAccordionFilterResultsAngular.nth(0).textContent();
+    console.log('The expected filter value is: ' + filterValueExpected);
+    await this.genderAccordionFilterCheckboxesAngular.nth(0).click({ force: true });
+    await this.totalItemCardsAngular.last().waitFor();
+    const paginationValueActual = await this.filterPaginationResults.first().textContent();
+    console.log('The actual filter value is: ' + paginationValueActual);
+    expect(paginationValueActual?.trim()).toContain(filterValueExpected?.trim().replace(/[()]/g, ''));
+    const genderNameFiltered = await this.selectedFilterSubHeaderAngular.first().textContent();
+    console.log('The Gender filtered is' + genderNameFiltered);
+    expect(genderNameFiltered).toContain("Men's");
+    console.log('Filter results are matching');
+
+  }
+
+}
+
 

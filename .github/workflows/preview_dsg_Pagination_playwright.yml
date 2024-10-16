@@ -1,4 +1,4 @@
-name: NP0_PROD DSG Pagination Tests
+name: PREVIEW DSG Pagination Tests
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   playwright:
-    name: 'NP0_PROD DSG Pagination Playwright'
+    name: 'PREVIEW DSG Pagination Playwright'
     runs-on: [ self-hosted, azure ]
     container:
       image: mcr.microsoft.com/playwright:v1.46.0-jammy
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
           # - uses: actions/setup-node@v4
-          # with:
+        # with:
         # node-version: 20
 
       - name: Install Dependencies
@@ -26,12 +26,12 @@ jobs:
           echo "Install Playwright and dependencies"
           npx playwright install --with-deps
 
-      - name: NP0_PROD DSG Pagination Tests
+      - name: PREVIEW DSG Pagination Tests
         run: |
-          echo "Run E2E NP0 DSG Pagination Tests"
-          npx playwright test --grep '(?=.*@PLP)(?=.*@Pagination)(?=.*@np0Prod)(?=.*@DSG)'
+          echo "Run E2E PREVIEW DSG Pagination Tests"
+          npx playwright test --grep '(?=.*@PLP)(?=.*@Pagination)(?=.*@Preview)(?=.*@DSG)'
         env:
-          ENV: dsg_np0prod
+          ENV: dsg_preview
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
@@ -48,7 +48,7 @@ jobs:
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
           job: ${{ toJson(job) }}
-          title: "{title: `** ALERT ** Failure in Pagination NP0 Prod DSG Playwright Test`}"
+          title: "{title: `** ALERT ** Failure in Pagination Preview DSG Playwright Test`}"
 
       - name: Publish CTRF Detailed Test Summary Results
         run: npx github-actions-ctrf tests ctrf/ctrf-report.json --title 'Search'
