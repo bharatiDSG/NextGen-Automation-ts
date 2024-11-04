@@ -6,6 +6,7 @@
         "baseUrl": "https://www.golfgalaxy.com/"
     },
     "pl_prod": {
+
         "baseUrl": "https://www.publiclands.com/"
     },
     "dsg_np0prod": {
@@ -46,5 +47,9 @@
     },
     "dsg_np3": {
         "baseUrl": "https://dks-qa1.dksxchange.com/"
+    },
+
+    "dsg_mawm_qa": {
+        "baseUrl": "https://dsgis.sce.manh.com/udc/index.html"
     }
 }
