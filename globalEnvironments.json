@@ -1,55 +1,5 @@
-{
-    "dsg_prod": {
-        "baseUrl": "https://www.dickssportinggoods.com/"
-    },
-    "gg_prod": {
-        "baseUrl": "https://www.golfgalaxy.com/"
-    },
-    "pl_prod": {
-
-        "baseUrl": "https://www.publiclands.com/"
-    },
-    "dsg_np0prod": {
-        "baseUrl": "https://prod-dickssportinggoods.dksxchange.com/"
-    },
-    "gg_np0prod": {
-        "baseUrl": "https://prod-golfgalaxy.dksxchange.com/"
-    },
-    "batgenie_prod": {
-        "baseUrl": "https://sso.dickssportinggoods.com/authorize?redirect_uri=com.batgenie://sso.dickssportinggoods.com/android/com.batgenie/callback&client_id=nG4ftngDcW7UADr5mi8M32HupYaXbdzQ&audience=dsg-jwts&scope=openid%20profile%20email%20read%3Aidentity%20offline_access%20read%3Aauthenticators%20remove%3Aauthenticators%20enroll&response_type=code&state=eyJ0YXJnZXRVcmwiOiJodHRwczovL3d3dy5kaWNrc3Nwb3J0aW5nZ29vZHMuY29tIiwic2tpcENvbXBsZXRlUHJvZmlsZSI6ZmFsc2V9/"
-    },
-    "dsg_preview": {
-        "baseUrl": "https://preview.dickssportinggoods.com/"
-    },
-    "gg_np0qa": {
-        "baseUrl": "https://golfgalaxy.dksxchange.com/"
-    },
-    "app_dsg_api": {
-        "baseUrl": "https://api-search.dickssportinggoods.com/catalog-productdetails/v4/byURL/15108?inventory=true&active=true&skus=true&url="
-    },
-    "app_gg_api": {
-        "baseUrl": "https://api-search.golfgalaxy.com/catalog-productdetails/v4/byURL/10701?inventory=true&active=true&skus=true&url="
-    },
-    "app_pl_api": {
-        "baseUrl": "https://api-search.publiclands.com/catalog-productdetails/v4/byURL/16066?inventory=true&active=true&skus=true&url="
-    },
-    "app_mj_api": {
-        "baseUrl": "https://api-search.moosejaw.com/catalog-productdetails/v4/byURL/16066?inventory=true&active=true&skus=true&url="
-    },
-    "app_dsg_avail_api": {
-        "baseUrl": "https://availability.dickssportinggoods.com/ws/v3/omni/stores?"
-    },
-    "app_gg_dks_avail_api": {
-        "baseUrl": "https://availability.dksxchange.com/ws/v3/omni/stores?"
-    },
-    "dsg_delta": {
-        "baseUrl": "https://delta.dickssportinggoods.com"
-    },
-    "dsg_np3": {
-        "baseUrl": "https://dks-qa1.dksxchange.com/"
-    },
-
-    "dsg_mawm_qa": {
+{   
+     "dsg_mawm_qa": {
         "baseUrl": "https://dsgis.sce.manh.com/udc/index.html"
     }
 }
